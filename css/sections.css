@@ -282,18 +282,16 @@ html:not(.s03-motion) .s03__stage {
 /* =========================================================
    03 — Por que isso importa?
    ========================================================= */
-/* Mesmo fundo da seção 03: o campo de luz no estado bege (#B8AA96) aparece através da seção; sem WebGL, o bege
-   sólido de .surface-beige. Texto grafite, secundário em marrom (AA no bege); acentos decorativos em bronze, porque o
-   champagne some no bege. Os cards do exemplo continuam escuros (Café), com texto marfim. */
+/* Fundo igual ao da Hero: o campo de luz escuro (js/light-field.js volta do bege ao escuro no topo desta seção)
+   aparece através dela; sem WebGL, o grafite sólido de .surface-dark. Os focos de luz bronze/champagne do campo
+   passam atrás do texto pequeno: um véu Carvão de 50% (o mesmo recurso da Hero atrás da headline) mantém o texto
+   secundário acima de 4,5:1 no ponto mais claro medido; o rótulo do exemplo usa o Champagne Claro. */
 .has-light-field .why {
-  background: transparent;
-  /* o campo tem sombras mais fundas que o #B8AA96: o marrom cairia abaixo de 4,5:1 nas letras pequenas; a hierarquia
-     do texto secundário fica no tamanho, em grafite */
-  --text-2: var(--color-text-on-light);
+  background: rgb(20 18 16 / 0.5);
 }
 
 .has-light-field .why .example__label {
-  color: var(--color-text-on-light);
+  color: var(--color-champagne-light);
 }
 
 .why__head {
@@ -328,7 +326,7 @@ html:not(.s03-motion) .s03__stage {
   left: 0;
   right: 0;
   height: 1px;
-  background: rgb(138 106 75 / 0.55);
+  background: rgb(195 168 129 / 0.4);
 }
 
 .journey__stage {
@@ -343,13 +341,13 @@ html:not(.s03-motion) .s03__stage {
   left: 0;
   width: 15px;
   height: 15px;
-  border: 1px solid var(--color-bronze);
+  border: 1px solid var(--color-brand-accent);
   border-radius: 50%;
-  background: var(--color-bg-secondary);
+  background: var(--color-bg-primary);
 }
 
 .journey__stage:last-child::before {
-  background: var(--color-bronze);
+  background: var(--color-brand-accent);
 }
 
 .journey__name {
@@ -389,7 +387,7 @@ html:not(.s03-motion) .s03__stage {
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--font-tracking-micro);
   text-transform: uppercase;
-  color: var(--color-brown);
+  color: var(--color-brand-accent);
 }
 
 .example__grid {
@@ -400,13 +398,10 @@ html:not(.s03-motion) .s03__stage {
 }
 
 .example__card {
-  --text-2: rgb(243 237 227 / var(--color-text-secondary-opacity));
-  --rule: var(--color-border-on-dark);
   padding: var(--card-padding, 32px);
   border: var(--border-width-default) solid var(--rule);
   border-radius: var(--radius-md);
   background: var(--color-surface-dark);
-  color: var(--color-text-on-dark);
 }
 
 .example__card--strategic {

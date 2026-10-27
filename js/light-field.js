@@ -187,6 +187,8 @@ void main() {
   // frente escuro → claro: sobe de baixo para cima, borda difusa ondulada pelo mesmo Silk
   float front = u_state.x + (s - 0.5) * 2.0 * u_state.w;
   float m = smoothstep(0.0, 1.0, (front - (1.0 - uv.y)) / max(u_state.y, 0.0001));
+  // volta ao escuro da Hero abaixo do topo da seção 04 (borda nítida, como a divisa de qualquer seção)
+  m *= 1.0 - smoothstep(0.0, 1.0, (u_state.z - (1.0 - uv.y)) / 0.004);
   // um só campo; cada rampa só é calculada onde aparece (toda escura na Hero/close, toda clara na seção 03)
   float light = field(Pw, aspect, s, silk);
   vec3 lab = m < 1.0 ? paletteLab(light) : beigeLab(light);
@@ -295,8 +297,15 @@ void main() {
     return [1 - next.getBoundingClientRect().top / Math.max(1, canvas.clientHeight), 0.004, 0];
   };
 
+  // Seção 04 ("Por que isso importa?"): o fundo volta ao campo escuro da Hero a partir do topo dela, em fração da
+  // altura a partir de baixo (negativa enquanto ela está abaixo da tela)
+  const why = document.querySelector("#por-que-importa");
+  const returnFront = () => (why ? 1 - why.getBoundingClientRect().top / Math.max(1, canvas.clientHeight) : -1);
+
   const sectionTarget = () => {
     if (!document.documentElement.classList.contains("js-story")) return 0;
+    // seção 04 ocupando a maior parte da tela: composição de luz da abertura da Hero (não a do close)
+    if (returnFront() > 0.5) return 0;
     const r = hero.getBoundingClientRect();
     const span = Math.max(1, hero.offsetHeight - window.innerHeight);
     const p = Math.min(1, Math.max(0, -r.top / span));
@@ -317,7 +326,7 @@ void main() {
     gl.uniform2f(loc.res, w, h);
     gl.uniform4f(loc.time, t * 0.2, t * 0.12, silk, section);
     gl.uniform4f(loc.look, layout, 0.16 - 0.04 * section, 0.024, 1 / Math.max(pixelScale, 0.01));
-    gl.uniform4f(loc.state, front, soft, 0, warp);
+    gl.uniform4f(loc.state, front, soft, returnFront(), warp);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   };
 
@@ -365,8 +374,7 @@ void main() {
   });
   io.observe(hero);
   if (next) io.observe(next);
-  // seção 04 ("Por que isso importa?"): o mesmo fundo bege da 03 continua animado enquanto ela está na tela
-  const why = document.querySelector("#por-que-importa");
+  // seção 04: o mesmo campo escuro da Hero continua animado enquanto ela está na tela
   if (why) io.observe(why);
   const onScrollReduced = () => reduce.matches && update();
   document.addEventListener("visibilitychange", update);

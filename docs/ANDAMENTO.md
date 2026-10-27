@@ -1,5 +1,28 @@
 # Andamento — VIPZUE 2026
 
+## 27/10/2026 — Seção 04 com o fundo da Seção 01 (Hero) — substitui a entrada "fundo da Seção 03" abaixo
+
+**Pedido:** "deixa o fundo da seção 4 igual da 1".
+
+**Feito:**
+- **Campo de luz (`js/light-field.js`):** ganhou uma segunda frente, de bege para escuro, presa ao topo da S04, com borda nítida como a divisa original entre a S03 bege e a S04 escura.
+  - Com a S04 ocupando mais da metade da tela, o campo usa a composição de luz da abertura da Hero, não a do close.
+  - O campo segue animado enquanto a S04 está na tela.
+- **S04 (`index.html`, `css/sections.css`):** de volta a `surface-dark`, com as cores originais (marfim, champagne na jornada). Com o campo ativo, o fundo é um véu Carvão de 50% sobre ele; sem WebGL, fica o grafite sólido.
+  - Medido: os focos de luz do campo chegam a ~149,119,87 atrás do texto. Sem véu, o texto secundário a 75% caía para 2,7–3,3:1 e o rótulo champagne para 2:1.
+  - O rótulo "Exemplo" agora usa Champagne Claro.
+- **Desfeito:** o degradê na base da águia de perfil do desktop, criado só para o fundo bege contínuo. Com a S04 escura, a divisa volta a ser o fim natural do recorte. Desktop 1440 idêntico ao baseline.
+- O CSS da S04 voltou ao estado de antes da entrada "fundo da Seção 03", mais o véu.
+
+**Verificado (Chrome headless com a aba em primeiro plano):**
+- Numa aba oculta, o campo pausa (correto) e as capturas saem com um quadro atrasado.
+- Contraste medido sobre o fundo real capturado, em várias posições de rolagem:
+  - 0 falhas em 390×844 e 768×1024.
+  - Em 1440, as 4 leituras abaixo do mínimo eram amostras dentro da própria headline.
+- Sem erros no console.
+- Evidência em `docs/qa/secao04-fundo/escuro-*.jpg`.
+- `site-vercel/` remontada. Nada enviado ao GitHub.
+
 ## 27/10/2026 — Seção 04 ("Seu cliente encontrou sua empresa. E depois?") com o fundo da Seção 03
 
 **Pedido:** "coloca o mesmo fundo da seção 03 na seção 04".

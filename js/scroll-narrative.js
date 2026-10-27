@@ -193,28 +193,9 @@
         },
       },
     });
-    // Saída do palco: a seção seguinte tem o mesmo fundo bege, então o recorte da águia na base do palco viraria uma
-    // linha reta sobre o bege. Enquanto o palco está fixo nada muda; quando ele começa a subir, a base da águia ganha
-    // um degradê que cresce 1:1 com a rolagem (até 30% da tela).
-    let lastCut = -1;
-    const setCut = (self) => {
-      if (!figure) return;
-      const cut = Math.round(Math.min(self.progress * window.innerHeight, window.innerHeight * 0.3));
-      if (cut === lastCut) return;
-      lastCut = cut;
-      const mask = cut > 0 ? `linear-gradient(to top, transparent 0, #000 ${cut}px)` : "";
-      figure.style.webkitMaskImage = figure.style.maskImage = mask;
-    };
-    const exitCut = ScrollTrigger.create({
-      trigger: section,
-      start: "bottom bottom",
-      end: "bottom top",
-      onUpdate: setCut,
-      onRefresh: setCut,
-    });
     measure();
     render(proxy.p);
-    state = { tween, exitCut };
+    state = { tween };
     // as caixas das palavras dependem das fontes reais: remede quando elas terminam de carregar
     document.fonts?.ready.then(() => {
       if (state?.tween !== tween) return;
@@ -227,8 +208,6 @@
     if (!state) return;
     state.tween.scrollTrigger?.kill();
     state.tween.kill();
-    state.exitCut.kill();
-    if (figure) figure.style.webkitMaskImage = figure.style.maskImage = "";
     originals.forEach((html, el) => {
       el.innerHTML = html;
       el.removeAttribute("style");
