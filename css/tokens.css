@@ -1,0 +1,140 @@
+/* VIPZUE — Design Tokens (fonte: documento-mestre v2, UI.19). Não alterar valores sem decisão registrada. */
+:root {
+  /* 01. Brand */
+  --color-brand-primary: #22201D;
+  --color-brand-secondary: #F3EDE3;
+  --color-brand-accent: #C3A881;
+  --color-charcoal: #141210;
+  --color-coffee: #2F251F;
+  --color-brown: #4A372B;
+  --color-bronze: #8A6A4B;
+  --color-beige: #B8AA96;
+  --color-champagne-light: #E7D6B7;
+
+  /* 02. Semantic */
+  --color-bg-primary: #22201D;
+  --color-bg-secondary: #B8AA96;
+  --color-bg-deep: #141210;
+  --color-surface-dark: #2F251F;
+  --color-surface-light: #F3EDE3;
+  --color-text-on-dark: #F3EDE3;
+  --color-text-on-light: #22201D;
+  --color-text-secondary-opacity: 0.75;
+  --color-text-muted-opacity: 0.50;
+  --color-border-on-dark: rgba(243, 237, 227, 0.12);
+  --color-border-on-light: rgba(34, 32, 29, 0.12);
+  --color-border-interactive-on-dark: rgba(243, 237, 227, 0.18);
+  --color-border-interactive-on-light: rgba(34, 32, 29, 0.20);
+  --color-link-on-dark: #C3A881;
+  --color-link-on-dark-hover: #E7D6B7;
+  --color-link-on-light: #4A372B;
+  --color-link-on-light-hover: #22201D;
+
+  /* 03. CTA */
+  --color-cta-primary-dark-bg: #C3A881;
+  --color-cta-primary-dark-text: #22201D;
+  --color-cta-primary-dark-hover: #E7D6B7;
+  --color-cta-primary-light-bg: #22201D;
+  --color-cta-primary-light-text: #F3EDE3;
+  --color-cta-primary-light-hover: #141210;
+
+  /* 04–07. Typography */
+  --font-display: "Gloock", serif;
+  --font-body: "Switzer", sans-serif;
+  --font-accent: "Clash Display", sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  --font-size-display-xl: clamp(52px, 6.7vw, 96px);
+  --font-line-display-xl: 0.95;
+  --font-tracking-display-xl: -0.035em;
+  --font-size-display-lg: clamp(40px, 4.45vw, 64px);
+  --font-line-display-lg: 1.00;
+  --font-tracking-display-lg: -0.025em;
+  --font-size-display-md: clamp(32px, 3.33vw, 48px);
+  --font-line-display-md: 1.05;
+  --font-tracking-display-md: -0.02em;
+
+  --font-size-heading: 24px;
+  --font-line-heading: 1.20;
+  --font-tracking-heading: -0.01em;
+  --font-size-body-lg: 20px;
+  --font-line-body-lg: 1.50;
+  --font-size-body: 16px;
+  --font-line-body: 1.60;
+  --font-size-small: 14px;
+  --font-line-small: 1.50;
+  --font-size-micro: 12px;
+  --font-line-micro: 1.40;
+  --font-tracking-micro: 0.08em;
+  --font-size-button: 15px;
+  --font-line-button: 1;
+  --font-tracking-button: -0.01em;
+
+  /* 09. Spacing */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 40px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 80px;
+  --space-5xl: 96px;
+  --space-6xl: 120px;
+  --space-7xl: 160px;
+
+  /* 10–11. Section / content spacing */
+  --section-space-default: 120px;
+  --space-headline-to-subheadline: 24px;
+  --space-content-to-cta: 32px;
+
+  /* 13–15. Radius, border, shadow */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-pill: 999px; /* CTA principal em cápsula — decisão do usuário em 24/10/2026 (substitui radius-sm no CTA) */
+  --border-width-default: 1px;
+  --shadow-sm: 0 4px 12px rgba(20, 18, 16, 0.06);
+
+  /* Motion (CONTEXTO §14) */
+  --duration-press: 100ms;
+  --duration-fast: 180ms;
+  --duration-base: 220ms;
+  --duration-entrance: 400ms;
+  --duration-slow: 500ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Grid (CONTEXTO §10) */
+  --container-max: 1200px;
+  --grid-gutter: 32px;
+  --page-margin: 40px;
+
+  /* Header (CONTEXTO §12) */
+  --header-height: 96px;
+  --logo-width: 156px;
+
+  /* Micrograin (CONTEXTO §8) */
+  --grain-opacity: 0.03;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --page-margin: 32px;
+    --grid-gutter: 24px; /* decisão técnica: gutter tablet não definido na fonte */
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --page-margin: 24px;
+    --grid-gutter: 16px; /* decisão técnica: gutter mobile não definido na fonte */
+    --header-height: 72px;
+    --logo-width: 124px;
+    --section-space-default: 80px; /* section-space-default-mobile */
+    --font-size-heading: 22px;
+    --font-size-body-lg: 18px;
+  }
+}

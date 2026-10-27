@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="pt-BR" class="is-loading">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>VIPZUE — Landing Pages Estratégicas</title>
+  <meta name="description" content="Criamos Landing Pages estratégicas para apresentar sua empresa, antecipar dúvidas e conduzir potenciais clientes ao próximo passo.">
+  <meta name="theme-color" content="#141210">
+
+  <script>
+    // Ativa o storytelling antes da primeira pintura para evitar salto de layout.
+    (function () {
+      var root = document.documentElement;
+      // Mesma condição de js/hero.js (STORY_QUERY).
+      var story = "(prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 560px), (prefers-reduced-motion: no-preference) and (max-width: 767px) and (min-height: 700px)";
+      if (window.matchMedia && matchMedia(story).matches) root.classList.add("js-story");
+      // Entradas simples das seções 03–08 (somente com movimento permitido)
+      if (window.matchMedia && matchMedia("(prefers-reduced-motion: no-preference)").matches) root.classList.add("js-reveal");
+      setTimeout(function () { if (!window.__vzRevealReady) root.classList.remove("js-reveal"); }, 3000);
+      // Seção 03: palco de narrativa por rolagem só no desktop (≥ 1024px) com movimento permitido; se o script não
+      // assumir, volta ao fluxo normal. Abaixo de 1024px a seção é sempre fluxo (painéis numerados).
+      if (window.matchMedia && matchMedia("(prefers-reduced-motion: no-preference) and (min-height: 560px) and (min-width: 1024px)").matches) root.classList.add("s03-motion");
+      setTimeout(function () { if (!window.__vzS03Ready) root.classList.remove("s03-motion"); }, 3000);
+      // Segurança: nunca deixar o conteúdo oculto se o JS de motion não carregar.
+      setTimeout(function () { root.classList.remove("is-loading"); }, 2500);
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&display=swap">
+
+  <link rel="preload" as="image" href="assets/hero/aguia-1400.webp" media="(min-width: 768px)">
+  <link rel="preload" as="image" href="assets/hero/aguia-900.webp" media="(max-width: 767px)">
+
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/sections.css">
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="site-header" data-header>
+    <div class="container site-header__inner">
+      <a class="site-header__logo" href="./" aria-label="VIPZUE — início">
+        <img src="assets/brand/vipzue-logo-marfim.png" width="1200" height="206" alt="VIPZUE">
+      </a>
+
+      <nav class="site-nav" aria-label="Principal">
+        <ul>
+          <li><a href="#o-que-fazemos">O que fazemos</a></li>
+          <li><a href="#metodo">Método</a></li>
+          <li><a href="#para-quem-e">Para quem é</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-mobile" data-menu-open>
+        <span class="visually-hidden">Abrir menu</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="menu-overlay" id="menu-mobile" role="dialog" aria-modal="true" aria-label="Menu" hidden data-menu>
+    <div class="container menu-overlay__top">
+      <img src="assets/brand/vipzue-logo-marfim.png" width="1200" height="206" alt="VIPZUE" class="menu-overlay__logo">
+      <button class="menu-toggle menu-toggle--close" type="button" data-menu-close>
+        <span class="visually-hidden">Fechar menu</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <nav class="container menu-overlay__nav" aria-label="Principal (mobile)">
+      <ul>
+        <li><a href="#o-que-fazemos">O que fazemos</a></li>
+        <li><a href="#metodo">Método</a></li>
+        <li><a href="#para-quem-e">Para quem é</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <!-- Destino real do WhatsApp pendente (AUDITORIA §D). -->
+      <a class="btn btn--primary-dark menu-overlay__cta" href="#contato" data-cta="whatsapp">Quero criar uma Landing Page estratégica</a>
+    </nav>
+  </div>
+
+  <main id="conteudo">
+    <!-- 01 — HERO: ~3 telas de rolagem (apresentação → transformação → passagem ao conteúdo) -->
+    <section class="hero" aria-labelledby="hero-title" data-hero>
+      <div class="hero__stage">
+        <!-- Ambiente low-key de estúdio: parede, luz principal superior-esquerda, sombra e textura (CSS) -->
+        <div class="hero__bg" aria-hidden="true">
+          <div class="hero__light" data-hero-light></div>
+          <div class="hero__sheen"></div>
+          <div class="hero__shadow"></div>
+          <div class="hero__vignette"></div>
+          <div class="hero__grain"></div>
+        </div>
+
+        <div class="hero__figure" aria-hidden="true" data-hero-figure>
+          <div class="hero__eagle" data-hero-eagle>
+            <picture>
+              <source media="(max-width: 767px)" srcset="assets/hero/aguia-900.webp">
+              <img src="assets/hero/aguia-1400.webp" width="1043" height="1377" alt="" decoding="async" fetchpriority="high">
+            </picture>
+          </div>
+        </div>
+
+        <!-- Atmosfera de base: o peito da águia afunda na sombra e a legenda ganha apoio -->
+        <div class="hero__atmosphere" aria-hidden="true"></div>
+
+        <div class="container hero__content">
+          <!-- Headline (24/10). Quebras manuais próprias: 4 linhas no desktop (coluna à esquerda da cabeça),
+               3 linhas no mobile (topo). Único destaque: "presença digital" em champagne; no desktop a quebra
+               fica dentro do destaque, que une as duas palavras. Sai com a rolagem e volta ao subir (js/hero.js). -->
+          <h1 class="hero__title" id="hero-title" data-hero-title>Seu negócio pode<br class="br-d"> ter<br class="br-m"> crescido mais<br class="br-d"> do que<br class="br-m"> a <span class="hero__accent">presença<br class="br-d"> digital</span> dele.</h1>
+
+          <!-- CTA da Hero (ShinyButton na identidade VIPZUE). Destino real do projeto: data-cta="whatsapp"
+               (wa.me quando o número estiver em js/config.js; até lá, leva à seção #contato). -->
+          <div class="hero__cta">
+            <a class="shiny-cta" href="#contato" data-cta="whatsapp" data-hero-cta><span>Quero uma Landing Page estratégica</span></a>
+          </div>
+
+          <!-- Subheadline e CTA preservados para reintrodução futura (template não é renderizado,
+               não ocupa espaço, não recebe foco nem cliques). -->
+          <template data-hero-copy>
+            <div class="hero__legend" data-hero-legend>
+              <p class="hero__subtitle" data-hero-fade>Criamos Landing Pages estratégicas para apresentar sua empresa, antecipar dúvidas e conduzir potenciais clientes ao próximo passo.</p>
+              <div class="hero__actions" data-hero-fade>
+                <a class="btn btn--primary-dark" href="#contato" data-cta="whatsapp">Quero criar uma Landing Page estratégica</a>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- VISÃO: águia → close do olho → mensagem única → passagem para "O que fazemos".
+             Revisão 24/10: sem rótulos, anéis ou pupila artificial; a águia continua visível no close. -->
+        <div class="visao-shade" aria-hidden="true" data-visao-shade></div>
+
+        <!-- "O que fazemos" revelada pela luz. Cópia visual do topo da seção real (preenchida por hero.js). -->
+        <div class="next-section next-section--ghost" aria-hidden="true" inert data-visao-reveal></div>
+
+        <!-- Narrativa do close (revisão 24/10): contador, linha de progresso e três frases, uma por vez,
+             no alto da cena. As frases abaixo são a fonte única da copy (js/hero.js as lê). Com storytelling,
+             a troca segue o progresso da rolagem; sem ele, as três ficam em fluxo sobre um recorte do olho. -->
+        <div class="visao-narrativa" data-visao-narrative>
+          <div class="container visao-narrativa__inner">
+            <div class="visao-narrativa__block">
+              <p class="visao-narrativa__count" aria-hidden="true" data-narrative-count><span data-narrative-num>01</span> / 03</p>
+              <div class="visao-narrativa__track" aria-hidden="true" data-narrative-track><span class="visao-narrativa__progress" data-narrative-progress></span></div>
+              <div class="visao-narrativa__phrases" data-narrative-phrases>
+                <p class="visao-narrativa__phrase" data-narrative-phrase><span class="visao-narrativa__line">Páginas estratégicas para</span> <span class="visao-narrativa__line">apresentar melhor o seu negócio.</span></p>
+                <p class="visao-narrativa__phrase" data-narrative-phrase><span class="visao-narrativa__line">Para antecipar as dúvidas</span> <span class="visao-narrativa__line">dos seus potenciais clientes.</span></p>
+                <p class="visao-narrativa__phrase" data-narrative-phrase><span class="visao-narrativa__line">E conduzi-los</span> <span class="visao-narrativa__line">ao próximo passo.</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 — POR QUE ISSO IMPORTA? Desktop (≥ 1024px): uma cena com quatro estados — a headline em Gloock se forma,
+         assenta no alto e permanece; abaixo, um único espaço narrativo recebe os três parágrafos, revelados palavra a
+         palavra. Abaixo de 1024px: fluxo normal com três painéis numerados que acendem com a rolagem. Ambos em
+         js/scroll-narrative.js; sem JS ou com movimento reduzido, tudo fica legível no estado final.
+         A seção revelada no fim da Visão (data-next) continua sendo o ponto de passagem da Hero. -->
+    <section class="next-section s03" id="o-que-fazemos" aria-labelledby="s03-title" data-next data-s03>
+      <div class="s03__stage" data-s03-stage>
+        <div class="s03__figure" data-s03-figure aria-hidden="true">
+          <img class="s03__eagle" src="assets/secao03/aguia-perfil-941.webp" width="941" height="1672" alt="" decoding="async" loading="lazy" draggable="false">
+        </div>
+        <div class="container s03__grid">
+          <h2 class="s03__title" id="s03-title" data-s03-scene="title">Apenas encontrar sua empresa não é suficiente.</h2>
+          <!-- Fonte única da copy: no desktop os três textos se sucedem no mesmo lugar do palco; abaixo de 1024px viram
+               três painéis numerados no fluxo (o número ordena argumentos; a lista ordenada já comunica a ordem). -->
+          <ol class="s03__slot s03__list" data-s03-slot>
+            <li class="s03__panel" data-s03-panel>
+              <div class="s03__card">
+                <span class="s03__card-surface" aria-hidden="true"></span>
+                <span class="s03__card-light" aria-hidden="true"></span>
+                <div class="s03__panel-body">
+                  <span class="s03__num" aria-hidden="true">01</span>
+                  <p class="s03__text" data-s03-scene="p1">Entre descobrir o seu negócio e decidir entrar em contato, seu cliente precisa de respostas: o que você oferece, se faz sentido para ele, como funciona e qual é o próximo passo.</p>
+                </div>
+              </div>
+            </li>
+            <li class="s03__panel" data-s03-panel>
+              <div class="s03__card">
+                <span class="s03__card-surface" aria-hidden="true"></span>
+                <span class="s03__card-light" aria-hidden="true"></span>
+                <div class="s03__panel-body">
+                  <span class="s03__num" aria-hidden="true">02</span>
+                  <p class="s03__text" data-s03-scene="p2">Quando essas informações estão espalhadas, cada dúvida vira atrito. E o cliente chega ao contato menos seguro, menos informado e ainda depende da sua equipe para entender o básico.</p>
+                </div>
+              </div>
+            </li>
+            <li class="s03__panel" data-s03-panel>
+              <div class="s03__card">
+                <span class="s03__card-surface" aria-hidden="true"></span>
+                <span class="s03__card-light" aria-hidden="true"></span>
+                <div class="s03__panel-body">
+                  <span class="s03__num" aria-hidden="true">03</span>
+                  <p class="s03__text s03__text--close" data-s03-scene="p3">Uma presença digital estratégica faz esse trabalho antes da conversa comercial começar.</p>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Divisa 03 → seguinte (abaixo de 1024px): âncora de altura zero na junção real das seções. A águia em voo fica
+         absoluta nela, à direita, atravessando os dois fundos (asa no fim da 03, garras no começo da seguinte); as
+         seções reservam o espaço dela. Decorativa. -->
+    <div class="s03-seam" data-s03-seam aria-hidden="true">
+      <div class="s03-seam__pos">
+        <div class="s03-seam__move" data-s03-seam-move>
+          <img class="s03-seam__eagle" src="assets/secao03/aguia-voo-640.webp" srcset="assets/secao03/aguia-voo-640.webp 640w, assets/secao03/aguia-voo-1024.webp 1024w" sizes="(min-width: 768px) min(72vw, 360px), min(72vw, 320px)" width="1024" height="1536" alt="" decoding="async" loading="lazy" draggable="false">
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 — POR QUE ISSO IMPORTA? (8.4). Jornada Descoberta → Informação → Confiança → Contato: proposta de
+         visualização da lógica do documento; perguntas e exemplo da clínica vêm da fonte. -->
+    <section class="section surface-beige why" id="por-que-importa" aria-labelledby="why-title">
+      <div class="container">
+        <header class="why__head">
+          <h2 class="t-display-l why__title" id="why-title" data-reveal>Seu cliente encontrou sua empresa. <span class="why__title-turn">E depois?</span></h2>
+          <p class="t-body-lg why__lead" data-reveal>Entre descobrir uma empresa e decidir entrar em contato, o potencial cliente procura respostas.</p>
+        </header>
+
+        <ol class="journey" aria-label="Jornada do potencial cliente">
+          <li class="journey__stage" data-reveal>
+            <h3 class="journey__name">Descoberta</h3>
+            <ul class="journey__questions">
+              <li>O que essa empresa faz?</li>
+              <li>Esse serviço serve para mim?</li>
+            </ul>
+          </li>
+          <li class="journey__stage" data-reveal>
+            <h3 class="journey__name">Informação</h3>
+            <ul class="journey__questions">
+              <li>Como funciona?</li>
+              <li>Onde fica?</li>
+            </ul>
+          </li>
+          <li class="journey__stage" data-reveal>
+            <h3 class="journey__name">Confiança</h3>
+            <ul class="journey__questions">
+              <li>Posso confiar?</li>
+              <li>Quem já comprou?</li>
+            </ul>
+          </li>
+          <li class="journey__stage" data-reveal>
+            <h3 class="journey__name">Contato</h3>
+            <ul class="journey__questions">
+              <li>Qual é o próximo passo?</li>
+            </ul>
+          </li>
+        </ol>
+
+        <p class="t-display-m why__statement" data-reveal>Quando essas respostas não estão organizadas, surge atrito. <span>A Landing Page funciona como um ponto estratégico dessa jornada.</span></p>
+
+        <!-- Exemplo ilustrativo do documento (não é um case da VIPZUE) -->
+        <figure class="example" data-reveal>
+          <figcaption class="example__label">Exemplo: clínica odontológica</figcaption>
+          <div class="example__grid">
+            <div class="example__card">
+              <h3 class="example__title">Sem estrutura digital adequada</h3>
+              <ol class="flow">
+                <li>Instagram / anúncio</li>
+                <li>O potencial cliente se interessa.</li>
+                <li>
+                  WhatsApp:
+                  <ul class="flow__quotes">
+                    <li>“Vocês fazem implante?”</li>
+                    <li>“Onde fica a clínica?”</li>
+                    <li>“Quais profissionais atendem?”</li>
+                    <li>“Como funciona a avaliação?”</li>
+                    <li>“Tem depoimentos?”</li>
+                  </ul>
+                </li>
+                <li>A equipe precisa responder manualmente informações básicas antes de iniciar uma conversa comercial mais relevante.</li>
+              </ol>
+            </div>
+            <div class="example__card example__card--strategic">
+              <h3 class="example__title">Com Landing Page estratégica</h3>
+              <ol class="flow">
+                <li>Instagram / anúncio</li>
+                <li>
+                  Landing Page:
+                  <ul class="flow__items">
+                    <li>Serviços</li>
+                    <li>Estrutura da clínica</li>
+                    <li>Profissionais</li>
+                    <li>Depoimentos</li>
+                    <li>Perguntas frequentes</li>
+                    <li>Localização</li>
+                    <li>Informações importantes</li>
+                    <li>CTA</li>
+                  </ul>
+                </li>
+                <li>WhatsApp / agendamento</li>
+                <li>O potencial cliente chega mais informado e com menos dúvidas básicas.</li>
+              </ol>
+            </div>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 04 — MÉTODO (8.5) -->
+    <section class="section surface-ivory method" id="metodo" aria-labelledby="method-title">
+      <div class="container method__grid">
+        <header class="method__head">
+          <h2 class="t-display-l" id="method-title" data-reveal>Como fazemos</h2>
+          <p class="t-body-lg method__lead" data-reveal>Antes de construir, entendemos qual função a página precisa cumprir dentro da empresa.</p>
+        </header>
+
+        <ol class="steps" aria-label="Método: entender, definir, construir">
+          <li class="step" data-reveal>
+            <span class="step__number" aria-hidden="true">01</span>
+            <h3 class="step__name">Diagnóstico</h3>
+            <p class="step__accent">Entendemos o negócio.</p>
+            <p class="step__detail">Empresa, serviço, público, dúvidas, objeções, objetivo, como o cliente chega e qual caminho percorre até o contato.</p>
+          </li>
+          <li class="step" data-reveal>
+            <span class="step__number" aria-hidden="true">02</span>
+            <h3 class="step__name">Estratégia</h3>
+            <p class="step__accent">Definimos a função da página.</p>
+            <p class="step__detail">Objetivo da página, informações necessárias, hierarquia, argumentos, provas, jornada, direção e CTA principal.</p>
+          </li>
+          <li class="step" data-reveal>
+            <span class="step__number" aria-hidden="true">03</span>
+            <h3 class="step__name">Construção</h3>
+            <p class="step__accent">Transformamos estratégia em experiência.</p>
+            <p class="step__detail">Arquitetura da informação, wireframe e UX, interface, desenvolvimento e publicação.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 05 — PARA QUEM É (8.6). Títulos curtos de cada situação: proposta para leitura rápida; frases da fonte. -->
+    <section class="section surface-beige audience" id="para-quem-e" aria-labelledby="audience-title">
+      <div class="container audience__grid">
+        <header class="audience__head">
+          <h2 class="t-display-l" id="audience-title" data-reveal>Para quem são nossas Landing Pages Estratégicas?</h2>
+          <p class="t-body-lg audience__lead" data-reveal>Para empresas que:</p>
+        </header>
+        <ul class="situations">
+          <li class="situation" data-reveal>
+            <h3 class="situation__key">Site desatualizado</h3>
+            <p>Já possuem um site, mas ele está desatualizado ou não representa mais o nível atual do negócio.</p>
+          </li>
+          <li class="situation" data-reveal>
+            <h3 class="situation__key">Site sem função comercial</h3>
+            <p>Possuem um site que existe, mas não cumpre uma função comercial clara.</p>
+          </li>
+          <li class="situation" data-reveal>
+            <h3 class="situation__key">Sem presença estruturada</h3>
+            <p>Ainda não possuem uma presença digital estruturada.</p>
+          </li>
+          <li class="situation" data-reveal>
+            <h3 class="situation__key">Dúvidas repetidas</h3>
+            <p>Gastam tempo respondendo repetidamente informações que poderiam estar organizadas e acessíveis ao potencial cliente.</p>
+          </li>
+          <li class="situation" data-reveal>
+            <h3 class="situation__key">Apresentação profissional</h3>
+            <p>Querem apresentar seus serviços, diferenciais e provas de maneira mais profissional.</p>
+          </li>
+          <li class="situation" data-reveal>
+            <h3 class="situation__key">Atrito até o contato</h3>
+            <p>Precisam diminuir o atrito entre o momento em que alguém conhece a empresa e o momento em que decide entrar em contato.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 06 — CTA FINAL (8.7). Headline e subheadline: direção de copy da fonte. Nota de redução de fricção: proposta. -->
+    <section class="section surface-dark closing" id="contato" aria-labelledby="closing-title">
+      <div class="container closing__grid">
+        <h2 class="t-display-xl closing__title" id="closing-title" data-reveal>Sua empresa já cresceu. <span>Sua presença digital acompanhou?</span></h2>
+        <div class="closing__action" data-reveal>
+          <p class="t-body-lg closing__lead">Estruture uma Landing Page pensada para o seu negócio, seu cliente e o próximo passo que você quer que ele realize.</p>
+          <a class="btn btn--primary-dark" data-cta="whatsapp" data-cta-final>Quero criar minha Landing Page estratégica</a>
+          <p class="closing__note">Ao clicar, você será direcionado ao WhatsApp para conversar sobre o seu projeto e o orçamento. Não é uma compra: é o início da conversa.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 — FAQ (8.8). Somente perguntas com resposta sustentada pelo documento. Pendentes (sem resposta autorizada):
+         prazo de desenvolvimento, materiais para começar, o que está incluído, o que acontece depois da entrega. -->
+    <section class="section surface-ivory faq" id="faq" aria-labelledby="faq-title">
+      <div class="container faq__grid">
+        <h2 class="t-display-l faq__title" id="faq-title" data-reveal>Perguntas frequentes</h2>
+        <div class="accordion" data-accordion data-reveal>
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-1" id="faq-1-btn">
+                <span>O que é uma Landing Page Estratégica?</span>
+                <svg class="accordion__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              </button>
+            </h3>
+            <div class="accordion__panel" id="faq-1" role="region" aria-labelledby="faq-1-btn">
+              <p>É uma página criada a partir do negócio, do cliente ideal e da função que ela precisa cumprir dentro da jornada comercial. Ela organiza as informações importantes, antecipa dúvidas e conduz o potencial cliente ao próximo passo.</p>
+            </div>
+          </div>
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-2" id="faq-2-btn">
+                <span>Qual a diferença para um site comum?</span>
+                <svg class="accordion__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              </button>
+            </h3>
+            <div class="accordion__panel" id="faq-2" role="region" aria-labelledby="faq-2-btn">
+              <p>A diferença está no ponto de partida. A construção não começa apenas pelo layout e pela estética, e sim pelo negócio, pelo cliente e pelo objetivo. Cada informação está na página para apresentar melhor a empresa, construir confiança e facilitar o caminho até o contato.</p>
+            </div>
+          </div>
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-3" id="faq-3-btn">
+                <span>Minha empresa já possui um site. Ainda faz sentido?</span>
+                <svg class="accordion__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              </button>
+            </h3>
+            <div class="accordion__panel" id="faq-3" role="region" aria-labelledby="faq-3-btn">
+              <p>Faz sentido quando o site está desatualizado, não representa mais o nível atual do negócio ou não cumpre uma função comercial clara. Esses são alguns dos cenários para os quais as Landing Pages Estratégicas foram pensadas.</p>
+            </div>
+          </div>
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-4" id="faq-4-btn">
+                <span>A VIPZUE também desenvolve o design e o site?</span>
+                <svg class="accordion__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              </button>
+            </h3>
+            <div class="accordion__panel" id="faq-4" role="region" aria-labelledby="faq-4-btn">
+              <p>Sim. Depois do diagnóstico e da estratégia, transformamos a estratégia em experiência: arquitetura da informação, wireframe e UX, interface, desenvolvimento e publicação.</p>
+            </div>
+          </div>
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-5" id="faq-5-btn">
+                <span>Como funciona o processo após solicitar o projeto?</span>
+                <svg class="accordion__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              </button>
+            </h3>
+            <div class="accordion__panel" id="faq-5" role="region" aria-labelledby="faq-5-btn">
+              <p>O contato começa por uma conversa pelo WhatsApp. O projeto segue três etapas: diagnóstico, para entender o negócio; estratégia, para definir a função da página; e construção, para transformar a estratégia em experiência.</p>
+            </div>
+          </div>
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-6" id="faq-6-btn">
+                <span>Como funciona o orçamento?</span>
+                <svg class="accordion__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              </button>
+            </h3>
+            <div class="accordion__panel" id="faq-6" role="region" aria-labelledby="faq-6-btn">
+              <p>O orçamento é solicitado pelo WhatsApp. O clique não representa uma compra: ele inicia uma conversa para entender sua empresa e as possibilidades do projeto.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 08 — FOOTER (8.9 / UI.12). Destinos de Instagram, WhatsApp, Privacidade e Termos pendentes:
+       sem destino real, os itens ficam visíveis mas não simulam links funcionais (ver js/config.js). -->
+  <footer class="site-footer">
+    <div class="container site-footer__grid">
+      <img class="site-footer__logo" src="assets/brand/vipzue-logo-marrom.png" width="1200" height="205" alt="VIPZUE" loading="lazy">
+      <ul class="site-footer__social" aria-label="Canais oficiais">
+        <li>
+          <a class="social-link" data-link="instagram" aria-label="Instagram da VIPZUE">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="social-link" data-link="whatsapp" aria-label="WhatsApp da VIPZUE">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+          </a>
+        </li>
+      </ul>
+      <ul class="site-footer__legal">
+        <li><a class="footer-link" data-link="privacy">Política de Privacidade</a></li>
+        <li><a class="footer-link" data-link="terms">Termos de Uso</a></li>
+      </ul>
+      <p class="site-footer__copy">© 2026 VIPZUE. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script>
+  <script src="js/menu.js" defer></script>
+  <script src="js/hero.js" defer></script>
+  <!-- Fundo do palco: campo de luz procedural WebGL (js/light-field.js). js/aurora.js e js/silk.js ficam no projeto, sem carregar. -->
+  <script src="js/light-field.js" defer></script>
+  <script src="js/sections.js" defer></script>
+  <script src="js/scroll-narrative.js" defer></script>
+</body>
+</html>

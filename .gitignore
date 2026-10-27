@@ -1,0 +1,14 @@
+# gerado por tools/build-site.mjs (a Vercel monta de novo a cada envio)
+site-vercel/
+
+# originais pesados e material de referência: ficam só neste computador
+REFERENCIAS/
+assets/source/
+docs/qa/
+
+# ambiente local
+.claude/
+node_modules/
+.vercel/
+Thumbs.db
+desktop.ini

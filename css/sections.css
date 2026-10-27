@@ -1,0 +1,1141 @@
+/* =========================================================
+   Seções 03–08 (V1 estrutural) + utilitários compartilhados
+   Fonte: documento-mestre 8.4–8.9, UI.07, UI.08, UI.12, UI.15, UI.19.
+   ========================================================= */
+
+/* ---------- Tipografia (tokens UI.19) ---------- */
+.t-display-xl,
+.t-display-l,
+.t-display-m {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  text-wrap: balance;
+}
+
+.t-display-xl {
+  font-size: var(--font-size-display-xl);
+  line-height: var(--font-line-display-xl);
+  letter-spacing: var(--font-tracking-display-xl);
+}
+
+.t-display-l {
+  font-size: var(--font-size-display-lg);
+  line-height: var(--font-line-display-lg);
+  letter-spacing: var(--font-tracking-display-lg);
+}
+
+.t-display-m {
+  font-size: var(--font-size-display-md);
+  line-height: var(--font-line-display-md);
+  letter-spacing: var(--font-tracking-display-md);
+}
+
+.t-body-lg {
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-line-body-lg);
+  text-wrap: pretty;
+}
+
+/* ---------- Seção e superfícies (UI.07) ---------- */
+.section {
+  position: relative;
+  padding-block: var(--section-space-default);
+  --col: calc((min(100vw - var(--page-margin) * 2, var(--container-max)) - var(--grid-gutter) * 11) / 12);
+}
+
+.surface-dark {
+  background: var(--color-bg-primary);
+  color: var(--color-text-on-dark);
+  --text-2: rgb(243 237 227 / var(--color-text-secondary-opacity));
+  --rule: var(--color-border-on-dark);
+}
+
+.surface-deep {
+  background: var(--color-bg-deep);
+  color: var(--color-text-on-dark);
+  --text-2: rgb(243 237 227 / var(--color-text-secondary-opacity));
+  --rule: var(--color-border-on-dark);
+}
+
+.surface-ivory {
+  background: var(--color-surface-light);
+  color: var(--color-text-on-light);
+  --text-2: rgb(34 32 29 / var(--color-text-secondary-opacity));
+  --rule: rgb(34 32 29 / 0.16);
+}
+
+/* Bege: texto secundário em marrom (#4A372B, ~4.9:1). Grafite a 0.75 daria 4.3:1 (AUDITORIA §B). */
+.surface-beige {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-on-light);
+  --text-2: var(--color-brown);
+  --rule: rgb(34 32 29 / 0.2);
+}
+
+/* Foco visível em superfícies claras: o anel champagne-claro não contrasta com marfim/bege */
+.surface-ivory :focus-visible,
+.surface-beige :focus-visible,
+.next-section :focus-visible,
+.site-footer :focus-visible {
+  outline-color: var(--color-text-on-light);
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gutter);
+}
+
+/* ---------- Entradas simples (UI.16; tokens de duração) ---------- */
+.js-reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--space-sm));
+  transition:
+    opacity var(--duration-entrance) var(--ease-emphasized),
+    transform var(--duration-entrance) var(--ease-emphasized);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js-reveal [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- CTA pendente (sem destino real configurado) ---------- */
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn[aria-disabled="true"]::before {
+  animation: none;
+}
+
+a:not([href]) {
+  text-decoration: none;
+  cursor: default;
+}
+
+/* =========================================================
+   03 — Por que isso importa? Narrativa tipográfica (js/scroll-narrative.js)
+   Uma cena, dois territórios na mesma grade: a headline (âncora da tese, no alto) e o espaço narrativo logo abaixo,
+   onde os três parágrafos se sucedem no mesmo lugar.
+   Base (sem JS, movimento reduzido): tudo em fluxo editorial normal, inteiro e visível.
+   Com .s03-motion (script do <head>): trilho de rolagem com um único palco sticky de 100svh.
+   ========================================================= */
+.s03 {
+  /* Composição da referência (25/10): copy à esquerda, águia à direita olhando para ela. Desktop por padrão. */
+  --s03-inset: 7vw; /* exceção local ao container global: a referência alinha a copy a ~7% da largura */
+  --s03-top: 25svh; /* topo visual da headline no palco */
+  --s03-title: clamp(3.25rem, 4vw, 3.75rem);
+  --s03-title-w: min(calc(60vw - 40px), 14.4em); /* "Apenas encontrar sua empresa / não é suficiente." */
+  --s03-text: clamp(1.375rem, 1.6vw, 1.5rem);
+  --s03-copy-w: min(55vw, 880px); /* borda direita da leitura em ~62% da largura */
+  --s03-gap: 40px;
+  /* tom secundário dos parágrafos: o token (0,75) dá ~4,1:1 sobre o ponto mais escuro do campo bege; 0,88 mantém
+     o grafite atenuado com ≥ 4,5:1 (medido nos pixels do canvas sob a copy) */
+  --s03-text-alpha: 0.88;
+  /* Águia (asset 941×1672, transparente): altura e topo pelos pixels visíveis — bico em ~67% e olho em ~88%
+     da largura (o olho fica a 31,5% da altura do arquivo); borda direita no limite do palco. */
+  --s03-eagle-h: 89.5vw;
+  --s03-eagle-top: calc(25svh - 28.2vw);
+  --s03-eagle-bottom: auto;
+  --s03-eagle-right: 0px;
+  --s03-eagle-fade: 86%; /* o arquivo termina num corte reto: se o pé da figura entrar no palco, ele some suave */
+  padding-top: 0;
+}
+
+.s03__stage {
+  position: relative;
+  padding-top: var(--s03-top);
+}
+
+/* Em fluxo, o respiro inferior fica dentro do palco: o recorte da águia coincide com o fim da seção */
+html:not(.s03-motion) .s03 {
+  padding-bottom: 0;
+}
+
+html:not(.s03-motion) .s03__stage {
+  padding-bottom: var(--section-space-default);
+}
+
+/* Figura decorativa: atrás da copy (z-index local do palco), recortada só no próprio invólucro */
+.s03__figure {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+  user-select: none;
+}
+
+.s03__eagle {
+  position: absolute;
+  top: var(--s03-eagle-top);
+  bottom: var(--s03-eagle-bottom);
+  right: var(--s03-eagle-right);
+  width: auto;
+  max-width: none;
+  height: var(--s03-eagle-h);
+  -webkit-mask-image: linear-gradient(to bottom, #000 var(--s03-eagle-fade), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 var(--s03-eagle-fade), transparent 100%);
+}
+
+.container.s03__grid {
+  max-width: none;
+  padding-inline: var(--s03-inset);
+  display: grid;
+  row-gap: var(--s03-gap);
+  justify-items: start;
+}
+
+.s03__title {
+  max-width: var(--s03-title-w);
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--s03-title);
+  line-height: var(--s03-title-lh, 1.1);
+  letter-spacing: -0.02em;
+  color: var(--color-text-on-light);
+}
+
+/* Espaço de leitura: alinhado à mesma margem da headline */
+.s03__slot {
+  width: 100%;
+  max-width: var(--s03-copy-w);
+  display: grid;
+  row-gap: var(--space-2xl);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Número e camadas de luz dos cards: só na apresentação em cards (abaixo de 1024px) */
+.s03__num,
+.s03__card-surface,
+.s03__card-light {
+  display: none;
+}
+
+/* Águia da divisa: só abaixo de 1024px */
+.s03-seam {
+  display: none;
+}
+
+/* Parágrafos (inclusive a conclusão): Switzer 400 na mesma escala de leitura, tom secundário por cor */
+.s03__text {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--s03-text);
+  line-height: var(--s03-text-lh, 1.5);
+  letter-spacing: -0.005em;
+  color: rgb(34 32 29 / var(--s03-text-alpha, var(--color-text-secondary-opacity)));
+  text-wrap: pretty;
+}
+
+/* ---------- Narrativa por rolagem ---------- */
+.s03-motion .s03 {
+  --s03-track: 420svh;
+  height: var(--s03-track);
+  padding-block: 0;
+}
+
+.s03-motion .s03__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  /* a formação espalha as palavras além da coluna: nunca cria rolagem horizontal */
+  overflow-x: clip;
+}
+
+/* Águia na narrativa: perspectiva para a convergência e zoom ancorado no olho (≈ 79% × 32% do arquivo) */
+.s03-motion .s03__figure {
+  perspective: 1400px;
+}
+
+.s03-motion .s03__eagle {
+  transform-origin: 79% 32.4%;
+  will-change: transform;
+}
+
+/* Os três parágrafos ocupam a mesma célula do espaço narrativo (topo alinhado, alturas independentes) */
+.s03-motion .s03__slot > .s03__panel {
+  grid-area: 1 / 1;
+}
+
+.s03-motion .s03__title {
+  transform-origin: 0 50%;
+}
+
+/* camada visual das palavras (a leitura assistiva usa o texto completo, oculto visualmente) */
+.s03__title > [aria-hidden] {
+  display: block;
+  perspective: 900px;
+}
+
+.s03__title .s03__w {
+  display: inline-block;
+  transform-origin: 50% 60%;
+}
+
+/* =========================================================
+   03 — Por que isso importa?
+   ========================================================= */
+/* Mesmo fundo da seção 03: o campo de luz no estado bege (#B8AA96) aparece através da seção; sem WebGL, o bege
+   sólido de .surface-beige. Texto grafite, secundário em marrom (AA no bege); acentos decorativos em bronze, porque o
+   champagne some no bege. Os cards do exemplo continuam escuros (Café), com texto marfim. */
+.has-light-field .why {
+  background: transparent;
+  /* o campo tem sombras mais fundas que o #B8AA96: o marrom cairia abaixo de 4,5:1 nas letras pequenas; a hierarquia
+     do texto secundário fica no tamanho, em grafite */
+  --text-2: var(--color-text-on-light);
+}
+
+.has-light-field .why .example__label {
+  color: var(--color-text-on-light);
+}
+
+.why__head {
+  max-width: calc(var(--col) * 9 + var(--grid-gutter) * 8);
+}
+
+.why__title-turn {
+  display: block;
+}
+
+.why__lead {
+  max-width: calc(var(--col) * 5 + var(--grid-gutter) * 4);
+  margin-top: var(--space-headline-to-subheadline);
+  color: var(--text-2);
+}
+
+/* Jornada: diagrama funcional (a linha liga as etapas — UI.14 permite) */
+.journey {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  margin: var(--space-5xl) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journey::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgb(138 106 75 / 0.55);
+}
+
+.journey__stage {
+  position: relative;
+  padding-top: var(--space-xl);
+}
+
+.journey__stage::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--color-bronze);
+  border-radius: 50%;
+  background: var(--color-bg-secondary);
+}
+
+.journey__stage:last-child::before {
+  background: var(--color-bronze);
+}
+
+.journey__name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-display-md);
+  line-height: var(--font-line-display-md);
+  letter-spacing: var(--font-tracking-display-md);
+  font-weight: var(--font-weight-regular);
+}
+
+.journey__questions {
+  display: grid;
+  gap: var(--space-xs);
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-2);
+}
+
+.why__statement {
+  max-width: calc(var(--col) * 9 + var(--grid-gutter) * 8);
+  margin-top: var(--space-5xl);
+}
+
+.why__statement span {
+  color: var(--text-2);
+}
+
+/* Exemplo da clínica: dois cards de superfície café (UI.07) */
+.example {
+  margin: var(--space-5xl) 0 0;
+}
+
+.example__label {
+  font-size: var(--font-size-micro);
+  line-height: var(--font-line-micro);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-micro);
+  text-transform: uppercase;
+  color: var(--color-brown);
+}
+
+.example__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  margin-top: var(--space-md);
+}
+
+.example__card {
+  --text-2: rgb(243 237 227 / var(--color-text-secondary-opacity));
+  --rule: var(--color-border-on-dark);
+  padding: var(--card-padding, 32px);
+  border: var(--border-width-default) solid var(--rule);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-dark);
+  color: var(--color-text-on-dark);
+}
+
+.example__card--strategic {
+  border-color: rgb(195 168 129 / 0.45);
+}
+
+.example__title {
+  font-size: var(--font-size-heading);
+  line-height: var(--font-line-heading);
+  letter-spacing: var(--font-tracking-heading);
+  font-weight: var(--font-weight-medium);
+}
+
+.flow {
+  display: grid;
+  gap: var(--space-xl);
+  margin: var(--space-md) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Seta funcional entre etapas do fluxo */
+.flow > li + li {
+  position: relative;
+}
+
+.flow > li + li::before {
+  content: "↓";
+  position: absolute;
+  top: calc(var(--space-xl) * -0.5 - 0.75em);
+  left: 0;
+  color: var(--color-brand-accent);
+  line-height: 1.5;
+}
+
+.flow__quotes,
+.flow__items {
+  margin: var(--space-xs) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-2);
+}
+
+.flow__quotes {
+  display: grid;
+  gap: 4px;
+}
+
+.flow__items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px var(--space-md);
+}
+
+/* =========================================================
+   04 — Método
+   ========================================================= */
+.method__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gutter);
+  row-gap: var(--space-5xl);
+  align-items: end;
+}
+
+.method__head {
+  grid-column: 1 / span 7;
+}
+
+.method__lead {
+  max-width: calc(var(--col) * 5 + var(--grid-gutter) * 4);
+  margin-top: var(--space-headline-to-subheadline);
+  color: var(--text-2);
+}
+
+.steps {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A borda superior funciona como linha de progressão entre as etapas */
+.step {
+  padding-top: var(--space-md);
+  border-top: var(--border-width-default) solid rgb(34 32 29 / 0.24);
+}
+
+.step__number {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--font-size-display-lg);
+  line-height: 1;
+  letter-spacing: var(--font-tracking-display-lg);
+  color: var(--color-bronze);
+}
+
+.step__name {
+  margin-top: var(--space-md);
+  font-size: var(--font-size-micro);
+  line-height: var(--font-line-micro);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-micro);
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.step__accent {
+  margin-top: var(--space-xs);
+  font-family: var(--font-display);
+  font-size: var(--font-size-heading);
+  line-height: var(--font-line-heading);
+  letter-spacing: var(--font-tracking-display-md);
+}
+
+.step__detail {
+  margin-top: var(--space-sm);
+  max-width: 40ch;
+  color: var(--text-2);
+}
+
+/* =========================================================
+   05 — Para quem é
+   ========================================================= */
+.audience__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.audience__head {
+  grid-column: 1 / span 5;
+  position: sticky;
+  top: var(--space-2xl);
+}
+
+.audience__lead {
+  margin-top: var(--space-headline-to-subheadline);
+  color: var(--text-2);
+}
+
+.situations {
+  grid-column: 7 / span 6;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: var(--border-width-default) solid var(--rule);
+}
+
+.situation {
+  padding-block: var(--space-md);
+  border-top: var(--border-width-default) solid var(--rule);
+}
+
+.situation__key {
+  font-size: var(--font-size-heading);
+  line-height: var(--font-line-heading);
+  letter-spacing: var(--font-tracking-heading);
+  font-weight: var(--font-weight-medium);
+}
+
+.situation p {
+  margin-top: var(--space-xs);
+  color: var(--text-2);
+}
+
+/* =========================================================
+   06 — CTA final
+   ========================================================= */
+.closing {
+  background: var(--color-bg-deep);
+  padding-block: var(--space-7xl);
+}
+
+.closing__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gutter);
+  row-gap: var(--space-3xl);
+}
+
+.closing__title {
+  grid-column: 1 / span 9;
+}
+
+.closing__title span {
+  display: block;
+}
+
+.closing__action {
+  grid-column: 7 / span 5;
+}
+
+.closing__lead {
+  color: var(--text-2);
+}
+
+.closing__action .btn {
+  margin-top: var(--space-content-to-cta);
+}
+
+.closing__note {
+  max-width: 44ch;
+  margin-top: var(--space-sm);
+  font-size: var(--font-size-small);
+  line-height: var(--font-line-small);
+  color: var(--text-2);
+}
+
+/* =========================================================
+   07 — FAQ (accordion acessível)
+   ========================================================= */
+.faq__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.faq__title {
+  grid-column: 1 / span 4;
+}
+
+.accordion {
+  grid-column: 6 / span 7;
+  border-top: var(--border-width-default) solid var(--rule);
+}
+
+.accordion__item {
+  border-bottom: var(--border-width-default) solid var(--rule);
+}
+
+.accordion__heading {
+  margin: 0;
+}
+
+.accordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-md) 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-line-body-lg);
+  font-weight: var(--font-weight-medium);
+  color: inherit;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.accordion__trigger:hover {
+  color: var(--color-brown);
+}
+
+.accordion__icon {
+  flex: none;
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.accordion__trigger[aria-expanded="true"] .accordion__icon {
+  transform: rotate(45deg);
+}
+
+.accordion__panel {
+  padding-bottom: var(--space-md);
+}
+
+.accordion__panel p {
+  max-width: 62ch;
+  color: var(--text-2);
+}
+
+.accordion__panel:not([hidden]) {
+  animation: panel-in var(--duration-base) var(--ease-standard);
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--space-xs) * -1));
+  }
+}
+
+/* =========================================================
+   08 — Footer (UI.12)
+   ========================================================= */
+.site-footer {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-on-light);
+  padding-block: var(--space-4xl) var(--space-3xl);
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: var(--space-2xl);
+  align-items: center;
+}
+
+.site-footer__logo {
+  width: var(--logo-width);
+  height: auto;
+}
+
+.site-footer__social {
+  display: flex;
+  gap: var(--space-xs);
+  margin: 0 -10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-on-light);
+  transition: opacity var(--duration-fast) var(--ease-standard);
+}
+
+.social-link[href]:hover {
+  opacity: 0.7;
+}
+
+.site-footer__legal {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-link {
+  font-size: var(--font-size-small);
+  line-height: var(--font-line-small);
+  color: var(--color-text-on-light);
+}
+
+.footer-link[href] {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-link[href]:hover {
+  color: var(--color-brown);
+}
+
+/* Copyright: UI.12 pede grafite a 50–60%, que daria ~2.8:1 sobre o bege (AUDITORIA §B).
+   Usa o marrom de link em contexto claro (~4.9:1) para manter a baixa prioridade com AA. */
+.site-footer__copy {
+  grid-column: 1 / -1;
+  font-size: var(--font-size-small);
+  line-height: var(--font-line-small);
+  color: var(--color-brown);
+}
+
+/* =========================================================
+   Tablet
+   ========================================================= */
+@media (max-width: 1023px) {
+  .method__head,
+  .audience__head,
+  .situations,
+  .closing__title,
+  .closing__action,
+  .faq__title,
+  .accordion {
+    grid-column: 1 / -1;
+  }
+
+  .method__grid {
+    row-gap: var(--space-3xl);
+  }
+
+  .audience__head {
+    position: static;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .closing__action {
+    max-width: 560px;
+  }
+
+
+  .faq__title {
+    margin-bottom: var(--space-2xl);
+  }
+
+  /* Larguras em colunas de 12 não valem nos grids de 8/4: medida por caracteres */
+  .why__head,
+  .why__statement {
+    max-width: none;
+  }
+
+  .why__lead,
+  .method__lead {
+    max-width: 52ch;
+  }
+
+  .journey {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: var(--space-2xl);
+  }
+
+  .journey::before {
+    display: none;
+  }
+}
+
+/* Seção 03 abaixo de 1024px: fluxo editorial em painéis (sem palco, sem trilho de rolagem).
+   Headline → lista ordenada de três painéis marfim sobre o Background Secundário → águia em voo atravessando a divisa
+   com a seção seguinte. Cada painel acende com a rolagem (js/scroll-narrative.js grava --a de 0 a 1 em cada um);
+   sem JS ou com movimento reduzido, --a fica em 1: tudo no estado final, legível. */
+@media (max-width: 1023px) {
+  :root {
+    --s03-seam-w: min(72vw, 360px, 36svh); /* águia 2:3: altura ≤ 54svh em telas baixas */
+  }
+
+  .s03 {
+    --s03-inset: var(--page-margin);
+    --s03-top: 48px; /* do topo da seção (= linha plena da luz da passagem) até a headline */
+    --s03-title: clamp(2.25rem, 5vw, 2.75rem);
+    --s03-title-lh: 1.05;
+    --s03-title-w: 680px;
+    --s03-text: 1.125rem;
+    --s03-copy-w: 680px;
+    --s03-gap: 32px;
+    --s03-panel-pad: 28px;
+  }
+
+  .s03__panel {
+    --s03-radius: 28px; /* tablet; o celular volta a 24px (media de 767px, adiante) */
+  }
+
+  /* reserva da metade superior da águia (58% da altura, + deriva de 16px) e 24px até o último painel */
+  html:not(.s03-motion) .s03 {
+    padding-bottom: max(var(--section-space-default), calc(var(--s03-seam-w) * 0.87 + 40px));
+  }
+
+  html:not(.s03-motion) .s03__stage {
+    padding-bottom: 0;
+  }
+
+  .s03__figure {
+    display: none;
+  }
+
+  /* Passagem da Visão: a seção começa onde o palco se solta (sobrepõe os últimos 100svh da Hero) e a frente de luz
+     é presa ao topo dela (js/hero.js, ScrollTrigger "passage"): a linha bege plena coincide com o início da seção,
+     então a headline sobe 48px abaixo da luz durante toda a passagem — nunca há faixa bege vazia entre a luz e o
+     conteúdo, em qualquer velocidade. As camadas escuras do palco somem acima da frente. */
+  .js-story .next-section.s03 {
+    min-height: 0;
+    margin-top: -100svh;
+    margin-top: -100lvh; /* = altura do palco (css/hero.css): a seção começa exatamente onde ele se solta */
+  }
+
+  .js-story.has-light-field .s03[data-next]:not(.is-revealed) {
+    visibility: visible;
+  }
+
+  .s03__slot {
+    row-gap: 16px;
+  }
+
+  /* Card com a superfície do "course-design-cards" (21st.dev, kristen17), na paleta VIPZUE: massa escura, luz radial
+     no canto superior direito, contorno que clareia nesse mesmo canto e conteúdo por cima, em fluxo normal.
+     --a (0 → 1, js/scroll-narrative.js) acende luz, contorno e número juntos; a luz já parte de 28% (perceptível sem
+     hover). Sem JS ou com movimento reduzido, --a fica em 1. A entrada (translate/scale/rotateX) é do <li>, medido por
+     offsetTop (sem contaminar a geometria); o tilt é do .s03__card. Sem rodapé nem barra: o card termina na copy. */
+  .s03__panel {
+    --a: 1;
+    min-width: 0;
+  }
+
+  .s03__card {
+    position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    border-radius: var(--s03-radius);
+    background: var(--color-charcoal);
+    box-shadow: 0 10px 24px rgb(20 18 16 / 0.16);
+    color: var(--color-text-on-dark);
+  }
+
+  /* duas camadas estáticas (padding-box: massa; border-box: contorno de 1,5px); a da luz só muda de opacidade */
+  .s03__card-surface,
+  .s03__card-light {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border: 1.5px solid transparent;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .s03__card-surface {
+    background:
+      radial-gradient(ellipse at 100% 0%, var(--color-brown) 0%, var(--color-coffee) 47%, var(--color-charcoal) 100%) padding-box,
+      linear-gradient(35deg, #38302a 0%, #38302a 65%, var(--color-bronze) 100%) border-box;
+  }
+
+  .s03__card-light {
+    --s03-glow: color-mix(in srgb, var(--color-bronze) 60%, var(--color-coffee));
+    opacity: calc(0.28 + 0.72 * var(--a));
+    background:
+      radial-gradient(ellipse at 100% 0%, var(--s03-glow) 0%, var(--color-coffee) 47%, var(--color-charcoal) 100%) padding-box,
+      linear-gradient(35deg, #38302a 0%, #38302a 65%, var(--color-brand-accent) 100%) border-box;
+  }
+
+  /* Tilt (js/scroll-narrative.js): o card inclina sob o ponteiro; o conteúdo fica acima do spotlight */
+  .s03__card {
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+  }
+
+  .s03__spot {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .s03__card.is-tilting .s03__spot {
+    opacity: 1;
+  }
+
+  .s03__spot::before {
+    content: "";
+    position: absolute;
+    left: var(--sx, 50%);
+    top: var(--sy, 50%);
+    width: 200%;
+    height: 200%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgb(255 255 255 / 0.15) 0%, transparent 40%);
+  }
+
+  /* conteúdo: número → texto; fica parado ao acender (só luz, contorno, número, palavras e linha mudam) */
+  .s03__panel-body {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    row-gap: 20px;
+    justify-items: start;
+    padding: var(--s03-panel-pad);
+  }
+
+  /* número em pill compacta acima da copy; marfim secundário → Champagne Claro com a luz */
+  .s03__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: 44px;
+    min-height: 28px;
+    padding: 4px 12px;
+    border: 1px solid rgb(243 237 227 / 0.12);
+    border-radius: 999px;
+    background: var(--color-brand-primary);
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-medium);
+    font-size: 13px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--color-champagne-light) calc(var(--a) * 100%), rgb(243 237 227 / 0.75));
+  }
+
+  /* cor-base marfim opaca: a contenção de 75% fica só nas palavras (sem multiplicar opacidades).
+     Os três cards com a configuração do 03 (Switzer 500, mesmo tamanho/entrelinha/tracking da regra .s03__text);
+     sem negrito sintetizado: o 500 vem do arquivo da fonte. */
+  .s03__text {
+    min-width: 0;
+    max-width: 60ch;
+    color: var(--color-text-on-dark);
+    font-weight: var(--font-weight-medium);
+    font-synthesis: none;
+    overflow-wrap: break-word;
+  }
+
+  /* Divisa: âncora de altura zero entre as seções; a águia atravessa os dois fundos acima deles */
+  .s03-seam {
+    display: block;
+    position: relative;
+    z-index: 2;
+    height: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .s03-seam__pos {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--s03-seam-w);
+    transform: translateY(-58%); /* a divisa cruza 58% da altura da imagem */
+  }
+
+  .s03-seam__eagle {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* reserva da metade inferior (42% da altura) + 24px até o conteúdo da seção seguinte */
+  .s03-seam + .section {
+    padding-top: max(var(--section-space-default), calc(var(--s03-seam-w) * 0.63 + 24px));
+  }
+}
+
+/* =========================================================
+   Mobile
+   ========================================================= */
+@media (max-width: 767px) {
+  /* Seção 03 no celular: margens de 24px, headline de seção (não de Hero), painéis com padding de 24px */
+  :root {
+    --s03-seam-w: min(72vw, 320px, 36svh);
+  }
+
+  .s03 {
+    --s03-top: 48px;
+    --s03-title: clamp(2rem, 8.5vw, 2.5rem);
+    --s03-title-w: none;
+    --s03-copy-w: none;
+    --s03-panel-pad: 24px;
+  }
+
+  .s03__panel {
+    --s03-radius: 24px;
+  }
+
+  .example__card {
+    --card-padding: 24px;
+  }
+
+  /* Jornada vertical: a linha passa a ligar as etapas de cima para baixo */
+  .journey {
+    grid-template-columns: 1fr;
+    row-gap: var(--space-xl);
+    margin-top: var(--space-3xl);
+  }
+
+  .journey::before {
+    display: block;
+    top: 8px;
+    bottom: 8px;
+    left: 7px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+
+  .journey__stage {
+    padding-top: 0;
+    padding-left: var(--space-xl);
+  }
+
+  .journey__stage::before {
+    top: 0.35em;
+  }
+
+  .why__statement,
+  .example {
+    margin-top: var(--space-3xl);
+  }
+
+  .example__grid,
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .steps {
+    row-gap: var(--space-xl);
+  }
+
+  .closing {
+    padding-block: var(--space-5xl);
+  }
+
+  .closing__grid {
+    row-gap: var(--space-xl);
+  }
+
+  .site-footer__grid {
+    grid-template-columns: 1fr;
+    row-gap: var(--space-xl);
+  }
+
+  .site-footer__social {
+    margin: 0 0 0 -10px;
+  }
+
+  .site-footer__legal {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion__icon,
+  .accordion__trigger {
+    transition: none;
+  }
+
+  .accordion__panel:not([hidden]) {
+    animation: none;
+  }
+}
+

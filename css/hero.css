@@ -1,0 +1,924 @@
+/* =========================================================
+   Header (integrado à Hero, não sticky — CONTEXTO §12)
+   ========================================================= */
+/* Hierarquia da Hero (24/10/2026): marca presente, porém discreta. Valores locais do topo
+   (header, menu e Hero); os tokens globais seguem intactos porque o rodapé também usa --logo-width.
+   Desktop: logo 156 → 140px (−10%), header 96 → 84px.
+   Mobile (ajuste final 24/10): logo 124 → 78px, na presença de um relógio de status; header 72 → 52px
+   (o botão do menu mantém área de toque de 44×44). */
+.site-header,
+.menu-overlay,
+.hero {
+  --header-height: 84px;
+  --logo-width: 140px;
+}
+
+@media (max-width: 767px) {
+  .site-header,
+  .menu-overlay,
+  .hero {
+    --header-height: 52px;
+    --logo-width: 78px;
+  }
+}
+
+.site-header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 30;
+  height: var(--header-height);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.site-header__logo {
+  display: block;
+  width: var(--logo-width);
+  border-radius: var(--radius-xs);
+}
+
+.site-header__logo img {
+  width: 100%;
+  height: auto;
+}
+
+.site-nav ul {
+  display: flex;
+  gap: var(--space-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  display: inline-block;
+  padding-block: var(--space-xs);
+  font-size: var(--font-size-small);
+  line-height: var(--font-line-small);
+  font-weight: var(--font-weight-medium);
+  color: rgb(243 237 227 / var(--color-text-secondary-opacity));
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.site-nav a:hover {
+  color: var(--color-link-on-dark-hover);
+}
+
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-on-dark);
+  cursor: pointer;
+}
+
+/* Menu mobile: overlay amplo, fade com pequeno deslocamento (CONTEXTO §12) */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-primary);
+  color: var(--color-text-on-dark);
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(calc(var(--space-xs) * -1));
+  transition:
+    opacity 260ms var(--ease-standard),
+    transform 260ms var(--ease-standard);
+}
+
+.menu-overlay.is-open {
+  opacity: 1;
+  transform: none;
+}
+
+.menu-overlay[hidden] {
+  display: none;
+}
+
+.menu-overlay__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--header-height);
+}
+
+.menu-overlay__logo {
+  width: var(--logo-width);
+  height: auto;
+}
+
+.menu-overlay__nav {
+  padding-block: var(--space-2xl);
+}
+
+.menu-overlay__nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-overlay__nav li a {
+  display: block;
+  padding-block: var(--space-xs);
+  font-family: var(--font-display);
+  font-size: var(--font-size-display-md);
+  line-height: var(--font-line-display-md);
+  letter-spacing: var(--font-tracking-display-md);
+  text-decoration: none;
+}
+
+.menu-overlay__nav li a:hover {
+  color: var(--color-link-on-dark-hover);
+}
+
+.menu-overlay__cta {
+  margin-top: var(--space-xl);
+}
+
+@media (max-width: 767px) {
+  .site-nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-overlay {
+    transform: none;
+    transition: opacity var(--duration-fast) linear;
+  }
+}
+
+/* =========================================================
+   Hero — palco (v2: composição editorial em camadas, ambiente low-key de estúdio)
+   Camadas: parede/luz (bg) → águia → atmosfera de base → texto.
+   Sem JS de storytelling (reduced motion / tela baixa): Hero estática em fluxo.
+   Com .js-story: 300svh de rolagem e palco sticky de 100svh.
+   ========================================================= */
+.hero {
+  position: relative;
+  --col: calc((min(100vw - var(--page-margin) * 2, var(--container-max)) - var(--grid-gutter) * 11) / 12);
+  /* Headline na coluna esquerda, à esquerda da cabeça da águia (contorno medido: x≈703 em 1600, 629 em 1440,
+     560 em 1280, 450 em 1024). Hierarquia 24/10/2026: −2,5% no tamanho (64 → 62,4px em 1600),
+     entrelinha 0.95 → 0.92 e tracking −0.035em (bloco desenhado). Variáveis locais, sem tocar tokens globais. */
+  /* Desktop (revisão 24/10, telas largas): headline maior, medida pela largura e pela altura
+     (64 → 74px em 1600×900, ~75px em 1878×830, 66px em 1440×900); mobile e tablet em retrato têm a sua. */
+  --hl-size: clamp(48px, min(4.6vw, 9svh), 84px);
+  --hl-leading: 0.92;
+  --hl-tracking: -0.035em;
+  --content-top: calc(var(--header-height) + var(--space-2xl));
+  /* V3: abertura só com a águia. Enquadramento pelo rosto:
+     --face-x = centro do rosto (entre os olhos, 45% da largura do arquivo);
+     --eyes-y = altura da linha dos olhos (23,4% da altura do arquivo).
+     Referência aprovada (24/10/2026): águia à direita, cabeça em destaque no terço superior,
+     corpo preenchendo o canto inferior direito; coluna esquerda livre para título + CTA. */
+  --eagle-w: min(54vw, 122svh);
+  --eagle-h: calc(var(--eagle-w) / 0.757);
+  /* A cabeça se posiciona a partir do espaço que a headline ocupa: início do container + linha mais
+     longa (“do que a presença”, 7,62em) + 56px de respiro + recuo da cabeça no arquivo (26% da largura).
+     Em telas largas a águia desliza para a direita em vez de apertar o texto; limitado a 56–70vw. */
+  --container-left: max(var(--page-margin), (100vw - var(--container-max)) / 2);
+  --face-x: clamp(56vw, calc(var(--container-left) + var(--hl-size) * 7.7 + 56px + var(--eagle-w) * 0.26), 70vw);
+  --eyes-y: 36svh;
+}
+
+.hero__stage {
+  position: relative;
+  min-height: 100svh;
+  overflow: clip;
+  isolation: isolate;
+  background: var(--color-bg-deep);
+}
+
+/* Visão: palco fixo por 258svh de rolagem (aproximação, close com as três frases, passagem curta);
+   "O que fazemos" desliza por baixo do palco e assume no fim. Deve ser TOTAL + 100svh (js/hero.js). */
+.js-story .hero {
+  z-index: 2;
+  /* --story-h = rolagem da timeline + 100svh; o palco pinta 100lvh, então a caixa troca um pelo outro (a rolagem fica
+     a mesma; no desktop lvh = svh) */
+  height: calc(var(--story-h, 358svh) - 100svh + 100lvh);
+  /* a caixa da Hero se estende sobre a seção 03 (que sobe por baixo dela na passagem): só o palco recebe toques e
+     cliques; depois da troca (palco oculto), eles chegam à seção */
+  pointer-events: none;
+}
+
+.js-story .hero__stage {
+  pointer-events: auto;
+}
+
+/* O palco cobre a maior área visível (100lvh): no Safari, com as barras recolhidas, não sobra faixa sem águia, vinheta
+   e sombra na base. O conteúdo é ancorado pelo alto (em svh) e o enquadramento usa 100svh (js/hero.js). */
+.js-story .hero__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  height: 100lvh;
+}
+
+/* ---------- Ambiente: parede grafite com queda de luz para carvão ---------- */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    120% 95% at 58% 40%,
+    var(--color-bg-primary) 0%,
+    color-mix(in srgb, var(--color-bg-primary) 45%, var(--color-bg-deep)) 55%,
+    var(--color-bg-deep) 100%
+  );
+}
+
+.hero__bg > * {
+  position: absolute;
+}
+
+/* Background "Silk" (WebGL, js/silk.js): somente no palco da Visão; não captura cliques/toques.
+   Com o shader ativo, as camadas de estúdio saem para preservar as cores originais do shader
+   (ele já tem vinheta e grão próprios). Sem WebGL, o fundo CSS acima permanece como fallback. */
+.hero__silk {
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.has-silk .hero__bg {
+  background: #0B0907; /* primeira cor da paleta do shader, enquanto o primeiro quadro não é desenhado */
+}
+
+/* Faixa escura no topo: o menu mantém contraste AA mesmo quando um reflexo champagne passa atrás dele */
+.has-silk .hero__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(var(--header-height) + 64px);
+  background: linear-gradient(180deg, rgb(11 9 7 / 0.7) 0%, rgb(11 9 7 / 0) 100%);
+}
+
+.has-silk .hero__light,
+.has-silk .hero__sheen,
+.has-silk .hero__shadow,
+.has-silk .hero__vignette,
+.has-silk .hero__grain {
+  display: none;
+}
+
+/* Fundo procedural (js/light-field.js) — um canvas WebGL1 com Bloom Field (onde está a luz) e Silk (como ela
+   respira) num só shader, na paleta VIPZUE: estado escuro na Hero e no close, estado claro (#B8AA96) na seção 03.
+   Fixo atrás de toda a página (as seções seguintes têm fundo próprio e o cobrem); não captura cliques.
+   Sem WebGL (ou com o contexto perdido), voltam os fundos em CSS: estúdio na Hero, bege na seção 03. */
+.page-light-field {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  pointer-events: none;
+}
+
+.has-light-field .hero__stage,
+.has-light-field .hero__bg {
+  background: transparent;
+}
+
+/* Faixa escura no topo: o menu mantém contraste mesmo sob um pico de luz */
+.has-light-field .hero__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(var(--header-height) + 64px);
+  background: linear-gradient(180deg, rgb(20 18 16 / 0.6) 0%, rgb(20 18 16 / 0) 100%);
+  /* sai à frente do claro na passagem para a seção 03 (máscara definida por js/hero.js) */
+  -webkit-mask-image: var(--wipe-hide, none);
+  mask-image: var(--wipe-hide, none);
+}
+
+.has-light-field .hero__light,
+.has-light-field .hero__sheen,
+.has-light-field .hero__shadow,
+.has-light-field .hero__vignette,
+.has-light-field .hero__grain {
+  display: none;
+}
+
+/* Luz principal: suave, superior-esquerda da cabeça (mesma direção dos reflexos da fotografia) */
+.hero__light {
+  left: var(--face-x);
+  top: calc(var(--eyes-y) - var(--eagle-h) * 0.12);
+  width: 125svh;
+  aspect-ratio: 1;
+  translate: -60% -48%;
+  background: radial-gradient(
+    closest-side,
+    rgb(138 106 75 / 0.48) 0%,
+    rgb(74 55 43 / 0.38) 30%,
+    rgb(47 37 31 / 0.22) 58%,
+    rgb(47 37 31 / 0) 100%
+  );
+}
+
+/* Brilho rasante vindo do alto à esquerda */
+.hero__sheen {
+  inset: 0;
+  background: linear-gradient(152deg, rgb(231 214 183 / 0.05) 0%, rgb(231 214 183 / 0) 40%);
+}
+
+/* Sombra difusa atrás do corpo, do lado oposto à luz */
+.hero__shadow {
+  right: -12vw;
+  bottom: -22svh;
+  width: 72vw;
+  height: 85svh;
+  background: radial-gradient(closest-side, rgb(20 18 16 / 0.9), rgb(20 18 16 / 0));
+}
+
+.hero__vignette {
+  inset: 0;
+  background: radial-gradient(ellipse 92% 82% at 56% 42%, rgb(20 18 16 / 0) 48%, rgb(20 18 16 / 0.72) 100%);
+}
+
+/* Micrograin: token 0.03 aplicado em soft-light (presença visual dentro da faixa 2–4%) */
+.hero__grain {
+  inset: 0;
+  opacity: calc(var(--grain-opacity) * 2.5);
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+/* ---------- Águia: plano do meio, emerge por trás da última linha ---------- */
+.hero__figure {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--eyes-y) - var(--eagle-h) * 0.234);
+  left: calc(var(--face-x) - var(--eagle-w) * 0.45);
+  width: var(--eagle-w);
+  aspect-ratio: 1043 / 1377;
+  pointer-events: none;
+  transform-origin: 45% 22%;
+}
+
+.hero__eagle {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__eagle img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Ajuste tonal (saturate .92, contrast 1.04) gravado no WebP por tools/preparar-assets.html:
+     um filter CSS aqui obrigaria a re-rasterizar a imagem a cada quadro da aproximação. */
+  /* Lado direito cede à sombra; base afunda na atmosfera */
+  -webkit-mask-image:
+    linear-gradient(90deg, #000 58%, rgb(0 0 0 / 0.72) 100%),
+    linear-gradient(180deg, #000 56%, transparent 92%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, #000 58%, rgb(0 0 0 / 0.72) 100%),
+    linear-gradient(180deg, #000 56%, transparent 92%);
+  mask-composite: intersect;
+}
+
+.js-story .hero__figure,
+.js-story .hero__light {
+  will-change: transform;
+}
+
+/* Na Visão a águia escala até ~3×: sem máscara (a atmosfera e a sombra já fazem esse papel)
+   e com camada própria para a opacidade ser composta, não re-rasterizada */
+.js-story .hero__eagle {
+  will-change: opacity;
+}
+
+.js-story .hero__eagle img {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.js-story .visao-shade {
+  will-change: opacity;
+}
+
+.js-story .hero__content {
+  will-change: transform, opacity;
+}
+
+/* Atmosfera de base, acima da águia e abaixo do texto */
+.hero__atmosphere {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  height: 50%;
+  pointer-events: none;
+  background: linear-gradient(
+    0deg,
+    var(--color-bg-deep) 0%,
+    rgb(20 18 16 / 0.9) 20%,
+    rgb(20 18 16 / 0.45) 55%,
+    rgb(20 18 16 / 0) 100%
+  );
+}
+
+/* ---------- Conteúdo: headline na abertura (subheadline e CTA preservados em <template>) ---------- */
+/* Desktop: coluna esquerda, centrada na altura, no espaço livre à esquerda da cabeça da águia */
+.hero__content {
+  position: relative;
+  z-index: 3;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding-top: var(--header-height);
+  padding-bottom: var(--space-3xl);
+}
+
+/* Apoio de contraste: os reflexos champagne do Silk passam atrás do texto (AA garantido) */
+.hero__content::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 calc(50% - 50vw);
+  z-index: -1;
+  width: 62vw;
+  background: radial-gradient(
+    70% 55% at 30% 50%,
+    rgb(11 9 7 / 0.72) 0%,
+    rgb(11 9 7 / 0.45) 55%,
+    rgb(11 9 7 / 0) 100%
+  );
+}
+
+.hero__title .br-m {
+  display: none;
+}
+
+/* Único destaque cromático: cor sólida (pigmento), sem gradiente, brilho ou sombra */
+.hero__accent {
+  color: var(--color-brand-accent);
+}
+
+.hero__title {
+  /* Recuo óptico: o "S" alinha à mesma vertical do logo e da legenda */
+  margin-left: -0.045em;
+  font-family: var(--font-display);
+  font-size: var(--hl-size);
+  line-height: var(--hl-leading);
+  letter-spacing: var(--hl-tracking);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-on-dark);
+}
+
+.hero__line {
+  display: block;
+  white-space: nowrap;
+}
+
+/* Palavras com máscara para entrada e saída (folga para acentos e descendentes) */
+.hero__title .word {
+  display: inline-block;
+  overflow: clip;
+  padding: 0.14em 0.02em 0.1em;
+  margin: -0.14em -0.02em -0.1em;
+  vertical-align: top;
+}
+
+.hero__title .word__inner {
+  display: inline-block;
+}
+
+.hero__legend {
+  max-width: calc(var(--col) * 4 + var(--grid-gutter) * 3);
+  padding-top: var(--space-2xl);
+}
+
+.hero__subtitle {
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-line-body-lg);
+  color: rgb(243 237 227 / var(--color-text-secondary-opacity));
+}
+
+.hero__actions {
+  margin-top: var(--space-content-to-cta);
+}
+
+/* Estado de carregamento: só esconde quando há motion e JS previsto */
+.js-story.is-loading .site-header,
+.js-story.is-loading .hero__content,
+.js-story.is-loading .hero__figure {
+  opacity: 0;
+}
+
+/* =========================================================
+   Passagem para o conteúdo (seção 02 provisória)
+   ========================================================= */
+/* Seção 03 no Light Context: Background Secundário #B8AA96 (fallback em CSS); com o campo de luz, o fundo é o
+   mesmo campo da Hero na rampa bege acinzentado. Conteúdo e narrativa: css/sections.css (.s03). */
+.next-section {
+  position: relative;
+  z-index: 1;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-on-light);
+  padding-block: var(--section-space-default);
+}
+
+.has-light-field .next-section {
+  background: transparent;
+}
+
+/* O palco é transparente sobre o campo de luz: a seção real fica oculta até assumir no fim da Visão */
+.js-story.has-light-field [data-next]:not(.is-revealed) {
+  visibility: hidden;
+}
+
+/* Com storytelling, a seção real sobe por baixo do palco e fica idêntica à cópia vista pela pupila */
+.js-story .next-section {
+  min-height: 100svh;
+  margin-top: -100svh;
+}
+
+/* Fim da Visão: o palco sai de cena e a seção real (idêntica) assume, já interativa */
+.hero__stage.is-handed-off {
+  visibility: hidden;
+}
+
+/* ---------- Camadas da Visão (somente com storytelling) ---------- */
+.visao-shade,
+.next-section--ghost {
+  display: none;
+}
+
+.js-story .visao-shade,
+.js-story .next-section--ghost {
+  display: block;
+}
+
+/* Túnel: escurece tudo, exceto a região do olho */
+.visao-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at var(--focus-x, 50%) var(--focus-y, 50%),
+    rgb(20 18 16 / 0) 0,
+    rgb(20 18 16 / 0) calc(var(--iris-r, 200px) * 0.7),
+    rgb(20 18 16 / 0.82) calc(var(--iris-r, 200px) * 1.5),
+    var(--color-bg-deep) calc(var(--iris-r, 200px) * 2.6)
+  );
+  /* sai à frente do claro na passagem para a seção 03 (máscara definida por js/hero.js) */
+  -webkit-mask-image: var(--wipe-hide, none);
+  mask-image: var(--wipe-hide, none);
+}
+
+/* Cópia visual da seção 02, revelada pelo diafragma da pupila
+   (seletor reforçado para anular a margem negativa de .js-story .next-section) */
+.js-story .next-section--ghost {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  min-height: 0;
+  margin: 0;
+  /* Revelada por luz progressiva: máscara vertical de borda difusa controlada por js/hero.js (inicia oculta) */
+  -webkit-mask-image: linear-gradient(to top, #000 -24%, transparent 0%);
+  mask-image: linear-gradient(to top, #000 -24%, transparent 0%);
+  pointer-events: none;
+}
+
+/* ---------- Narrativa do close (revisão 24/10/2026) ----------
+   Contador "0N / 03" (Switzer), linha fina de progresso geral e uma frase por vez (Gloock 400), tudo em
+   marfim, num único bloco no alto da cena. Escala local (menor que a headline da Hero), sem alterar tokens.
+   Sem storytelling (movimento reduzido, tela baixa, falha do JS): as três frases ficam em fluxo, sem
+   contador nem linha, sobre um recorte estático do olho no tom do close aprovado. */
+.visao-narrativa {
+  position: relative;
+  z-index: 3;
+  padding-block: var(--space-4xl);
+}
+
+.visao-narrativa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* recorte estático: águia a 30% sobre o fundo escuro, como no close animado */
+  background:
+    linear-gradient(rgb(20 18 16 / 0.7), rgb(20 18 16 / 0.7)),
+    url("../assets/hero/aguia-1400.webp") 62% 22% / 230% auto no-repeat,
+    var(--color-bg-deep);
+}
+
+.visao-narrativa__block {
+  /* desktop: bloco largo o bastante para cada frase caber em duas linhas (revisão 24/10) */
+  max-width: 660px;
+}
+
+.visao-narrativa__count {
+  display: none;
+  margin: 0 0 10px;
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1vw, 17px);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-on-dark);
+}
+
+.visao-narrativa__track {
+  display: none;
+  position: relative;
+  height: 1px;
+  margin-bottom: var(--space-md);
+  background: rgb(243 237 227 / 0.18);
+}
+
+.visao-narrativa__progress {
+  position: absolute;
+  inset: 0;
+  background: rgb(243 237 227 / 0.65);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.visao-narrativa__phrases {
+  display: grid;
+  gap: var(--space-md);
+}
+
+/* Frases em Switzer 600 (revisão 24/10: substitui a Gloock só nesta seção; a Hero segue em Gloock).
+   Cada frase tem dois grupos de leitura (.visao-narrativa__line) que viram linhas quando cabem e
+   quebram naturalmente em telas estreitas. */
+.visao-narrativa__phrase {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 600;
+  /* linha mais longa (“apresentar melhor o seu negócio.”) = 14,9em em Switzer 600: 42px cabem nos 660px */
+  font-size: clamp(32px, 3vw, 42px);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--color-text-on-dark);
+}
+
+.visao-narrativa__line {
+  display: block;
+}
+
+/* Com storytelling: camada do palco (irmã da águia, nunca ampliada com ela), sem capturar cliques.
+   Contador e linha aparecem; as três frases ocupam a mesma célula (altura da maior, sem saltos). */
+.js-story .visao-narrativa {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  padding: 0;
+  pointer-events: none;
+}
+
+.js-story .visao-narrativa::before {
+  content: none;
+}
+
+.js-story .visao-narrativa__inner {
+  padding-top: clamp(96px, 14svh, 160px);
+}
+
+.js-story .visao-narrativa__count,
+.js-story .visao-narrativa__track {
+  display: block;
+  opacity: 0;
+}
+
+.js-story .visao-narrativa__phrases {
+  gap: 0;
+}
+
+.js-story .visao-narrativa__phrase {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  will-change: opacity, transform;
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .visao-narrativa__block {
+    max-width: 520px;
+  }
+
+  .visao-narrativa__phrase {
+    font-size: clamp(28px, 3.4vw, 34px);
+    line-height: 1.2;
+  }
+}
+
+/* Mobile: bloco na largura útil (margens de 24px), no alto da cena, acima do olho */
+@media (max-width: 767px) {
+  .visao-narrativa__block {
+    max-width: none;
+  }
+
+  .visao-narrativa__phrase {
+    /* duas linhas na largura útil (largura − 48px ÷ 15,2em): ~22,5px em 390, ~25px em 430;
+       abaixo de ~350px o mínimo de 20px vale e a frase ganha uma terceira linha */
+    font-size: clamp(20px, calc((100vw - 48px) / 15.2), 26px);
+    line-height: 1.22;
+    letter-spacing: -0.015em;
+  }
+
+  .js-story .visao-narrativa__inner {
+    /* 11% da cena: a frase termina acima da íris no close final */
+    padding-top: clamp(64px, 11svh, 120px);
+  }
+}
+
+/* Tablet em retrato (close empilhado, olho grande): bloco mais alto para a frase terminar acima da íris */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .js-story .visao-narrativa__inner {
+    padding-top: clamp(64px, 10svh, 120px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visao-narrativa__phrase {
+    transform: none;
+  }
+}
+
+/* =========================================================
+   Tablet
+   ========================================================= */
+@media (max-width: 1023px) {
+  .hero__legend {
+    max-width: calc(var(--col) * 6 + var(--grid-gutter) * 5);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .hero {
+    /* tablet em retrato: composição empilhada própria; topo mais compacto para caber o futuro CTA */
+    --hl-size: min(7vw, 4.8svh);
+    --hl-leading: 0.94;
+    --hl-tracking: -0.03em;
+    --content-top: calc(var(--header-height) + var(--space-md));
+    --eagle-w: min(100vw, 68svh);
+    --eagle-h: calc(var(--eagle-w) / 0.757);
+    --face-x: 66vw;
+    --eyes-y: 56svh; /* cabeça logo abaixo da headline e do CTA */
+  }
+}
+
+/* =========================================================
+   Mobile: mesma lógica em camadas, empilhada
+   ========================================================= */
+@media (max-width: 767px) {
+  .hero {
+    /* 3 linhas; a mais longa ("a presença digital dele.") mede 9,68em com −0.03em e cabe entre as
+       margens de 24px até 320px. Revisão no iPhone (24/10): 28,9 → 26,5px em 390, topo em header + 8px. */
+    --hl-size: clamp(23px, min(6.8vw, 4.2svh), 34px);
+    --hl-leading: 0.92;
+    --hl-tracking: -0.03em;
+    --content-top: calc(var(--header-height) + var(--space-xs));
+    /* Fim do bloco headline + CTA (3 linhas + 16px + CTA de 44px), calculado só com variáveis */
+    --copy-bottom: calc(var(--content-top) + var(--hl-size) * var(--hl-leading) * 3 + 16px + 44px);
+    /* Águia ancorada abaixo do CTA (não mais em % da altura: no Safari, com as barras, ela subia sobre
+       o botão). Maior, para ocupar o fundo que ficava vazio; a cabeça começa 20px abaixo do CTA. */
+    --eagle-w: min(118vw, 70svh);
+    --eagle-h: calc(var(--eagle-w) / 0.757);
+    --face-x: 63vw;
+    --eyes-y: calc(var(--copy-bottom) + 20px + var(--eagle-h) * 0.234);
+  }
+
+  .hero__figure {
+    width: var(--eagle-w);
+  }
+
+  .hero__light {
+    width: 150vw;
+  }
+
+  .hero__line {
+    display: inline;
+    white-space: normal;
+  }
+
+  .hero__title {
+    text-wrap: balance;
+  }
+
+  .hero__content {
+    padding-bottom: var(--space-xl);
+  }
+
+  .hero__legend {
+    max-width: none;
+  }
+
+  .hero__atmosphere {
+    height: 60%;
+  }
+
+  .next-section {
+    padding-block: var(--space-4xl);
+  }
+}
+
+/* Tablet deitado (lado a lado, abaixo de 1024px): a passagem final acompanha a seção 03 (js/hero.js, WIPE_LEN_FLOW):
+   TOTAL = 222 + 110 + 2 = 334 → 334svh de rolagem + 100svh */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+  .hero {
+    --story-h: 434svh;
+  }
+}
+
+/* =========================================================
+   Visão — composição empilhada (mobile e tablet em retrato):
+   íris no alto, palavras abaixo, eixo de alinhamento vertical
+   ========================================================= */
+@media (max-width: 767px), (max-width: 1023px) and (orientation: portrait) {
+  .hero {
+    /* empilhado: mesma proporção (0,859svh por unidade da timeline). A passagem final acompanha a seção 03 (112% de
+       tela depois da 3ª frase, js/hero.js): TOTAL = 222 + 129 + 2 = 353 → 303svh de rolagem + 100svh */
+    --story-h: 403svh;
+  }
+
+  /* Headline no topo, no espaço livre acima da cabeça da águia, com quebras próprias (3 linhas) */
+  .hero__content {
+    justify-content: flex-start;
+    padding-top: var(--content-top);
+  }
+
+  .hero__content::before {
+    inset: 0 calc(50% - 50vw) auto;
+    width: auto;
+    /* cobre as 3 linhas com densidade estável (o champagne precisa de ~0,5 de apoio quando um reflexo
+       do Silk passa atrás) e se dissolve em 72px abaixo da headline, sem formar faixa */
+    --scrim-end: calc(var(--content-top) + var(--hl-size) * 3);
+    height: calc(var(--scrim-end) + 72px);
+    background: linear-gradient(
+      180deg,
+      rgb(11 9 7 / 0.62) 0,
+      rgb(11 9 7 / 0.52) var(--scrim-end),
+      rgb(11 9 7 / 0) 100%
+    );
+  }
+
+  .hero__title .br-d {
+    display: none;
+  }
+
+  .hero__title .br-m {
+    display: inline;
+  }
+}
+
+/* =========================================================
+   Headline: palavras da entrada + CTA da Hero (ajuste final 24/10)
+   ========================================================= */
+.hero__word {
+  display: inline-block;
+}
+
+/* CTA logo abaixo da headline, no mesmo alinhamento do bloco (desktop: espaço negativo à esquerda) */
+.hero__cta {
+  margin-top: var(--space-xl);
+  pointer-events: auto;
+}
+
+@media (max-width: 767px), (max-width: 1023px) and (orientation: portrait) {
+  .hero__cta {
+    margin-top: var(--space-md);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero__cta {
+    margin-top: var(--space-sm);
+  }
+}
+
