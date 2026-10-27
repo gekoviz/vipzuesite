@@ -18,6 +18,7 @@
 // A passagem é uma frente que sobe de baixo para cima com a rolagem (a mesma da cópia de "O que fazemos" em
 // js/hero.js), com borda difusa levemente ondulada pelo Silk. Sem storytelling, a frente é o topo real da
 // seção 03. O canvas é fixo atrás da página: continua vivo atrás da seção 03 depois que o palco sai de cena.
+// Seção 04: um segundo canvas (mesmo shader e relógio) dentro dela, só na rampa escura e na composição da Hero.
 (() => {
   const hero = document.querySelector("[data-hero]");
   if (!hero) return;
@@ -187,8 +188,6 @@ void main() {
   // frente escuro → claro: sobe de baixo para cima, borda difusa ondulada pelo mesmo Silk
   float front = u_state.x + (s - 0.5) * 2.0 * u_state.w;
   float m = smoothstep(0.0, 1.0, (front - (1.0 - uv.y)) / max(u_state.y, 0.0001));
-  // volta ao escuro da Hero abaixo do topo da seção 04 (borda nítida, como a divisa de qualquer seção)
-  m *= 1.0 - smoothstep(0.0, 1.0, (u_state.z - (1.0 - uv.y)) / 0.004);
   // um só campo; cada rampa só é calculada onde aparece (toda escura na Hero/close, toda clara na seção 03)
   float light = field(Pw, aspect, s, silk);
   vec3 lab = m < 1.0 ? paletteLab(light) : beigeLab(light);
@@ -203,83 +202,120 @@ void main() {
   gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
 }`;
 
-  // ---------- WebGL ----------
-  const canvas = document.createElement("canvas");
-  canvas.className = "page-light-field";
-  canvas.setAttribute("aria-hidden", "true");
-  const gl = canvas.getContext("webgl", { alpha: false, antialias: false, depth: false, stencil: false, premultipliedAlpha: false, powerPreference: "low-power" });
-  if (!gl) return; // sem WebGL: fica o fundo CSS de estúdio (fallback)
+  // ---------- WebGL: um renderizador por canvas (mesmo shader, mesmo relógio) ----------
+  const createField = (canvas) => {
+    const gl = canvas.getContext("webgl", { alpha: false, antialias: false, depth: false, stencil: false, premultipliedAlpha: false, powerPreference: "low-power" });
+    if (!gl) return null;
+    let loc = null;
+    const build = () => {
+      const sh = (type, src) => {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s) || "shader");
+        return s;
+      };
+      const p = gl.createProgram();
+      gl.attachShader(p, sh(gl.VERTEX_SHADER, VERT));
+      gl.attachShader(p, sh(gl.FRAGMENT_SHADER, FRAG));
+      gl.bindAttribLocation(p, 0, "a_pos");
+      gl.linkProgram(p);
+      if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p) || "link");
+      gl.useProgram(p);
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW); // triângulo de tela cheia
+      gl.enableVertexAttribArray(0);
+      gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      loc = {
+        res: gl.getUniformLocation(p, "u_res"),
+        time: gl.getUniformLocation(p, "u_time"),
+        look: gl.getUniformLocation(p, "u_look"),
+        state: gl.getUniformLocation(p, "u_state"),
+      };
+    };
+    try {
+      build();
+    } catch (e) {
+      return null; // shader falhou: fallback CSS
+    }
 
-  let program = null;
-  let loc = null;
-  const build = () => {
-    const sh = (type, src) => {
-      const s = gl.createShader(type);
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s) || "shader");
-      return s;
+    // Fundo difuso: buffer interno menor que a tela (DPR limitado e escala 0,6); a águia e o texto não são afetados.
+    let pixelScale = 1;
+    const resize = () => {
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      const mobile = coarse.matches || w < 768;
+      const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
+      pixelScale = 0.6;
+      // teto de ~1,3 megapixel no buffer (telas grandes e densas): o fundo é difuso, não precisa de mais
+      const area = w * h * (dpr * pixelScale) ** 2;
+      if (area > 1.3e6) pixelScale *= Math.sqrt(1.3e6 / area);
+      const bw = Math.max(1, Math.round(w * dpr * pixelScale));
+      const bh = Math.max(1, Math.round(h * dpr * pixelScale));
+      if (canvas.width !== bw || canvas.height !== bh) {
+        canvas.width = bw;
+        canvas.height = bh;
+        gl.viewport(0, 0, bw, bh);
+      }
     };
-    const p = gl.createProgram();
-    gl.attachShader(p, sh(gl.VERTEX_SHADER, VERT));
-    gl.attachShader(p, sh(gl.FRAGMENT_SHADER, FRAG));
-    gl.bindAttribLocation(p, 0, "a_pos");
-    gl.linkProgram(p);
-    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p) || "link");
-    gl.useProgram(p);
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW); // triângulo de tela cheia
-    gl.enableVertexAttribArray(0);
-    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-    program = p;
-    loc = {
-      res: gl.getUniformLocation(p, "u_res"),
-      time: gl.getUniformLocation(p, "u_time"),
-      look: gl.getUniformLocation(p, "u_look"),
-      state: gl.getUniformLocation(p, "u_state"),
+
+    // state: frente escuro → claro, borda difusa, ondulação; section: composição Hero (0) → close (1)
+    const draw = ([front, soft, warp], section) => {
+      const layout = Math.min(1, Math.max(0, (1.1 - canvas.clientWidth / Math.max(1, canvas.clientHeight)) / 0.4));
+      const silk = 0.9 - 0.6 * section; // o close já tem a textura das penas: o Silk recua
+      gl.uniform2f(loc.res, canvas.width, canvas.height);
+      gl.uniform4f(loc.time, t * 0.2, t * 0.12, silk, section);
+      gl.uniform4f(loc.look, layout, 0.16 - 0.04 * section, 0.024, 1 / Math.max(pixelScale, 0.01));
+      gl.uniform4f(loc.state, front, soft, 0, warp);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
+
+    return { gl, build, resize, draw, lost: () => gl.isContextLost() };
   };
-  try {
-    build();
-  } catch (e) {
-    return; // shader falhou: fallback CSS
-  }
+
+  const coarse = matchMedia("(pointer: coarse)");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  let t = 0; // segundos acumulados (pausas não fazem a luz saltar)
 
   // Fixo atrás da página (z-index −1 no CSS), e não dentro do palco: o mesmo canvas segue atrás da seção 03
   // depois que o palco da Hero sai de cena. A classe na raiz libera os fundos transparentes (CSS).
+  const canvas = document.createElement("canvas");
+  canvas.className = "page-light-field";
+  canvas.setAttribute("aria-hidden", "true");
+  const main = createField(canvas);
+  if (!main) return; // sem WebGL: fica o fundo CSS de estúdio (fallback)
   const root = document.documentElement;
   document.body.prepend(canvas);
   root.classList.add("has-light-field");
 
-  // ---------- Qualidade e tamanho ----------
-  // Fundo difuso: buffer interno menor que a tela (DPR limitado e escala 0,6); a águia e o texto não são afetados.
-  const coarse = matchMedia("(pointer: coarse)");
-  let pixelScale = 1;
-  const resize = () => {
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
-    const mobile = coarse.matches || w < 768;
-    const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
-    pixelScale = 0.6;
-    // teto de ~1,3 megapixel no buffer (telas grandes e densas): o fundo é difuso, não precisa de mais
-    const area = w * h * (dpr * pixelScale) ** 2;
-    if (area > 1.3e6) pixelScale *= Math.sqrt(1.3e6 / area);
-    const bw = Math.max(1, Math.round(w * dpr * pixelScale));
-    const bh = Math.max(1, Math.round(h * dpr * pixelScale));
-    if (canvas.width !== bw || canvas.height !== bh) {
-      canvas.width = bw;
-      canvas.height = bh;
-      gl.viewport(0, 0, bw, bh);
+  // Seção 04 ("Seu cliente encontrou sua empresa. E depois?"): o campo escuro da Hero num canvas DENTRO da seção
+  // (sticky num invólucro do tamanho dela), sobre o Carvão a 50%. A borda superior é a da própria seção: rola junto
+  // com a página no compositor, sem o atraso que a frente desenhada no canvas fixo teria no Safari do iPhone.
+  const why = document.querySelector("#por-que-importa");
+  let whyField = null;
+  if (why) {
+    const wrap = document.createElement("div");
+    wrap.className = "section-light-field";
+    wrap.setAttribute("aria-hidden", "true");
+    const c = document.createElement("canvas");
+    wrap.append(c);
+    why.prepend(wrap);
+    whyField = createField(c);
+    if (whyField) {
+      whyField.canvas = c;
+      why.classList.add("has-field");
+    } else {
+      wrap.remove();
     }
-  };
+  }
+  const WHY_STATE = [-1, 0.004, 0]; // frente abaixo da tela: o campo inteiro na rampa escura
 
   // ---------- Relógio único e estado ----------
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
-  let t = 0; // segundos acumulados (pausas não fazem a luz saltar)
   let last = null;
   let raf = 0;
-  let inView = true;
+  let mainInView = true;
+  let whyInView = false;
   let section = 0; // 0 Hero → 1 close, suavizado
   const next = document.querySelector("[data-next]"); // seção 03, "O que fazemos"
   const WARP = 0.04; // ondulação da frente escuro → claro (fração da altura)
@@ -297,15 +333,8 @@ void main() {
     return [1 - next.getBoundingClientRect().top / Math.max(1, canvas.clientHeight), 0.004, 0];
   };
 
-  // Seção 04 ("Por que isso importa?"): o fundo volta ao campo escuro da Hero a partir do topo dela, em fração da
-  // altura a partir de baixo (negativa enquanto ela está abaixo da tela)
-  const why = document.querySelector("#por-que-importa");
-  const returnFront = () => (why ? 1 - why.getBoundingClientRect().top / Math.max(1, canvas.clientHeight) : -1);
-
   const sectionTarget = () => {
     if (!document.documentElement.classList.contains("js-story")) return 0;
-    // seção 04 ocupando a maior parte da tela: composição de luz da abertura da Hero (não a do close)
-    if (returnFront() > 0.5) return 0;
     const r = hero.getBoundingClientRect();
     const span = Math.max(1, hero.offsetHeight - window.innerHeight);
     const p = Math.min(1, Math.max(0, -r.top / span));
@@ -317,17 +346,9 @@ void main() {
     return x * x * (3 - 2 * x);
   };
 
-  const draw = () => {
-    const w = canvas.width;
-    const h = canvas.height;
-    const layout = Math.min(1, Math.max(0, (1.1 - canvas.clientWidth / Math.max(1, canvas.clientHeight)) / 0.4));
-    const [front, soft, warp] = frontState();
-    const silk = 0.9 - 0.6 * section; // o close já tem a textura das penas: o Silk recua
-    gl.uniform2f(loc.res, w, h);
-    gl.uniform4f(loc.time, t * 0.2, t * 0.12, silk, section);
-    gl.uniform4f(loc.look, layout, 0.16 - 0.04 * section, 0.024, 1 / Math.max(pixelScale, 0.01));
-    gl.uniform4f(loc.state, front, soft, returnFront(), warp);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  const drawAll = () => {
+    if (mainInView && !main.lost()) main.draw(frontState(), section);
+    if (whyField && whyInView && !whyField.lost()) whyField.draw(WHY_STATE, 0);
   };
 
   const frame = (now) => {
@@ -337,11 +358,11 @@ void main() {
     const target = sectionTarget();
     section += (target - section) * (1 - Math.exp(-dt * 6));
     if (dt === 0) section = target;
-    draw();
+    drawAll();
     raf = requestAnimationFrame(frame);
   };
 
-  const running = () => !reduce.matches && !document.hidden && inView && !gl.isContextLost();
+  const running = () => !reduce.matches && !document.hidden && (mainInView || whyInView);
   const update = () => {
     if (running()) {
       if (!raf) raf = requestAnimationFrame(frame);
@@ -351,55 +372,65 @@ void main() {
       last = null;
     }
     // movimento reduzido: quadro estático (sem relógio), atualizado quando a composição muda
-    if (reduce.matches && !gl.isContextLost()) {
+    if (reduce.matches) {
       section = sectionTarget();
-      draw();
+      drawAll();
     }
   };
 
-  resize();
-  draw();
+  main.resize();
+  whyField?.resize();
+  main.draw(frontState(), section);
 
   const ro = new ResizeObserver(() => {
-    resize();
-    if (!raf && !gl.isContextLost()) draw();
+    main.resize();
+    whyField?.resize();
+    if (!raf) drawAll();
   });
   ro.observe(canvas);
-  // Roda só enquanto a Hero (palco) ou a seção 03 estiver na tela; as seções seguintes cobrem o canvas
+  if (whyField) ro.observe(whyField.canvas);
+  // Canvas fixo: roda enquanto a Hero (palco) ou a seção 03 estiver na tela; o da seção 04, só com ela na tela
   const visible = new Set();
   const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
-    inView = visible.size > 0;
+    entries.forEach((e) => {
+      if (e.target === why) whyInView = e.isIntersecting;
+      else if (e.isIntersecting) visible.add(e.target);
+      else visible.delete(e.target);
+    });
+    mainInView = visible.size > 0;
     update();
   });
   io.observe(hero);
   if (next) io.observe(next);
-  // seção 04: o mesmo campo escuro da Hero continua animado enquanto ela está na tela
-  if (why) io.observe(why);
+  if (whyField) io.observe(why);
   const onScrollReduced = () => reduce.matches && update();
   document.addEventListener("visibilitychange", update);
   reduce.addEventListener("change", update);
   window.addEventListener("scroll", onScrollReduced, { passive: true });
 
   // Perda de contexto: pausa e cai no fundo CSS; ao restaurar, recompila e continua do mesmo instante
-  canvas.addEventListener("webglcontextlost", (e) => {
+  const onLost = (off) => (e) => {
     e.preventDefault();
-    if (raf) cancelAnimationFrame(raf);
-    raf = 0;
-    last = null;
-    root.classList.remove("has-light-field");
-  });
-  canvas.addEventListener("webglcontextrestored", () => {
+    off();
+    update();
+  };
+  const onRestored = (field, on, el) => () => {
     try {
-      build();
-      root.classList.add("has-light-field");
-      resize();
-      draw();
+      field.build();
+      on();
+      field.resize();
       update();
+      if (!raf) drawAll();
     } catch (e) {
-      canvas.remove();
+      el.remove();
     }
-  });
+  };
+  canvas.addEventListener("webglcontextlost", onLost(() => root.classList.remove("has-light-field")));
+  canvas.addEventListener("webglcontextrestored", onRestored(main, () => root.classList.add("has-light-field"), canvas));
+  if (whyField) {
+    whyField.canvas.addEventListener("webglcontextlost", onLost(() => why.classList.remove("has-field")));
+    whyField.canvas.addEventListener("webglcontextrestored", onRestored(whyField, () => why.classList.add("has-field"), whyField.canvas.parentElement));
+  }
 
   // Saída da página: para o laço; voltando pelo histórico (bfcache), retoma do mesmo instante
   window.addEventListener("pagehide", () => {
@@ -410,5 +441,10 @@ void main() {
   window.addEventListener("pageshow", update);
 
   update();
-  window.__vzLightField = { get running() { return !!raf; }, get section() { return section; }, size: () => [canvas.width, canvas.height] };
+  window.__vzLightField = {
+    get running() { return !!raf; },
+    get section() { return section; },
+    size: () => [canvas.width, canvas.height],
+    whySize: () => (whyField ? [whyField.canvas.width, whyField.canvas.height] : null),
+  };
 })();

@@ -1,5 +1,27 @@
 # Andamento — VIPZUE 2026
 
+## 27/10/2026 — Divisa S03 → S04 sem faixa cinza no iPhone
+
+**Relato (print do iPhone, vipzuesite.vercel.app):** ao rolar para cima ou para baixo, uma faixa de "outra cor" aparecia entre o bege da S03 e o escuro da S04.
+
+**Causa:**
+- A volta ao escuro era desenhada no canvas fixo do campo de luz, a cada quadro, pela posição medida da S04.
+- No Safari do iPhone a rolagem é composta antes de o JavaScript redesenhar, então a borda pintada chegava atrasada.
+- Nesse intervalo aparecia o bege do canvas por baixo do véu de 50% da S04: a faixa cinza. No Chrome do computador a rolagem é sincronizada e não aparecia.
+
+**Correção (`js/light-field.js`, `css/sections.css`):**
+- A S04 tem o próprio canvas: o mesmo shader e o mesmo relógio, só a rampa escura, na composição da Hero.
+  - Ele fica `sticky` num invólucro do tamanho da seção, a 50% sobre o Carvão opaco (o mesmo véu de antes).
+  - A borda superior é a da própria seção e rola junto com a página: não há atraso possível.
+- O canvas fixo voltou a ter só a passagem escuro → bege da S03.
+- Os dois canvas pausam quando saem da tela. Em perda de contexto, a S04 cai no grafite sólido.
+
+**Verificado (Chrome):**
+- O canvas da S04 coincide com o topo e a base da seção (0px de diferença).
+- Contraste: 0 falhas em 390 e 768; em 1440, só amostras dentro da própria headline.
+- Desktop 1440 idêntico ao baseline. Sem erros, sem overflow.
+- Não verificado no iPhone real; é lá que o atraso acontecia.
+
 ## 27/10/2026 — Seção 04 com o fundo da Seção 01 (Hero) — substitui a entrada "fundo da Seção 03" abaixo
 
 **Pedido:** "deixa o fundo da seção 4 igual da 1".
