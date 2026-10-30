@@ -1,5 +1,23 @@
 # Andamento — VIPZUE 2026
 
+## 30/10/2026 — Seção "Como fazemos" (método): nova copy com 4 etapas
+
+**Pedido:** o usuário colou a copy nova do método (Diagnóstico, Estratégia, Construção, Entrega).
+
+**Feito (`index.html`, `css/sections.css`):**
+- Texto aplicado literalmente. O título "Como fazemos" foi mantido.
+- A frase de abertura ("O que entregamos é uma página. O que a torna estratégica é o propósito por trás de cada decisão.") virou o subtítulo.
+- Cada etapa mantém a estrutura existente: número, nome em caixa alta, frase em Gloock e parágrafo.
+- Nova 4ª etapa: "Entrega".
+- Grade das etapas de 3 colunas para 2 × 2 no desktop e no tablet, porque os parágrafos ficaram longos (~50 palavras). No celular continua 1 coluna.
+- Parágrafo até 56 caracteres por linha (antes 40).
+- `aria-label` da lista atualizado.
+
+**Verificado (Chrome headless):**
+- 1440, 768 e 390: grade correta, sem rolagem lateral, sem erros.
+- Capturas em `docs/qa/metodo/`.
+- `site-vercel/` remontada. Nada enviado ao GitHub.
+
 ## 27/10/2026 — Divisa S03 → S04 sem faixa cinza no iPhone
 
 **Relato (print do iPhone, vipzuesite.vercel.app):** ao rolar para cima ou para baixo, uma faixa de "outra cor" aparecia entre o bege da S03 e o escuro da S04.

@@ -496,11 +496,12 @@ html:not(.s03-motion) .s03__stage {
   color: var(--text-2);
 }
 
+/* Quatro etapas com parágrafos longos: 2 × 2 (em quatro colunas cada parágrafo ficaria com ~280px de largura) */
 .steps {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--grid-gutter);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3xl) var(--grid-gutter);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -541,7 +542,7 @@ html:not(.s03-motion) .s03__stage {
 
 .step__detail {
   margin-top: var(--space-sm);
-  max-width: 40ch;
+  max-width: 56ch;
   color: var(--text-2);
 }
 
