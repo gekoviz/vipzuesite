@@ -1,5 +1,16 @@
 # Andamento — VIPZUE 2026
 
+## 30/10/2026 — Águia 3D removida (volta a águia 2D)
+
+**Pedido:** "remova essa águia 3D. Deixe do jeito que estava."
+
+**Feito:**
+- `index.html` e `css/sections.css` voltaram exatamente ao commit `7d7ad63` (antes da águia 3D).
+- Removidos `js/eagle3d.js` e `assets/secao03/aguia-3d.glb`.
+- `tools/build-site.mjs` manteve as duas melhorias genéricas: copia `.glb` e resolve caminhos citados no JS a partir da página.
+
+**Verificado:** em 390×844 a águia 2D aparece com o mesmo tamanho e posição de antes (281×421, saindo pela borda direita). Sem resto do 3D, sem erros, sem rolagem lateral.
+
 ## 30/10/2026 — Águia 3D na divisa dos cards (prévia)
 
 **Pedido:** trocar a águia que fica abaixo dos cards pelo modelo `eagle 3d model.glb`, interativa e sem girar loucamente; movimento limpo, seguindo o mouse. Durante o trabalho: "não precisa girar de ponta-cabeça, foque nas laterais" e "deixa do tamanho da águia que estava".

@@ -851,11 +851,7 @@ html:not(.s03-motion) .s03__stage {
    sem JS ou com movimento reduzido, --a fica em 1: tudo no estado final, legível. */
 @media (max-width: 1023px) {
   :root {
-    /* Águia da divisa: a 3D (asas abertas) ocupa uma caixa larga e baixa; as reservas das seções e a imagem 2D de
-       espera (2:3) são dimensionadas pela altura dela, para não sobrar vão acima nem abaixo */
-    --s03-3d-w: min(140vw, 760px); /* do tamanho da águia 2D anterior: a asa direita sai pela borda, como antes */
-    --s03-3d-h: calc(var(--s03-3d-w) * 0.62);
-    --s03-seam-w: calc(var(--s03-3d-h) / 1.5);
+    --s03-seam-w: min(72vw, 360px, 36svh); /* águia 2:3: altura ≤ 54svh em telas baixas */
   }
 
   .s03 {
@@ -1038,7 +1034,6 @@ html:not(.s03-motion) .s03__stage {
     height: 0;
     pointer-events: none;
     user-select: none;
-    overflow-x: clip; /* a asa que sai pela borda direita não cria rolagem lateral */
   }
 
   .s03-seam__pos {
@@ -1055,38 +1050,6 @@ html:not(.s03-motion) .s03__stage {
     height: auto;
   }
 
-  /* Águia 3D (js/eagle3d.js): asas abertas pedem uma caixa larga; o centro dela fica sobre a divisa, à direita.
-     Aparece só depois do primeiro quadro desenhado; até lá (ou se algo falhar), a imagem 2D. */
-  .s03-seam__3d {
-    position: absolute;
-    top: 0;
-    right: calc(var(--s03-3d-w) * -0.16);
-    width: var(--s03-3d-w);
-    height: var(--s03-3d-h);
-    transform: translateY(-58%); /* a mesma divisão da imagem 2D: 58% acima da divisa */
-    opacity: 0;
-    transition: opacity 0.5s ease-out;
-    pointer-events: none;
-  }
-
-  .s03-seam__3d canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .s03-seam__pos {
-    transition: opacity 0.5s ease-out;
-  }
-
-  .s03-seam.is-3d .s03-seam__3d {
-    opacity: 1;
-  }
-
-  .s03-seam.is-3d .s03-seam__pos {
-    opacity: 0;
-  }
-
   /* reserva da metade inferior (42% da altura) + 24px até o conteúdo da seção seguinte */
   .s03-seam + .section {
     padding-top: max(var(--section-space-default), calc(var(--s03-seam-w) * 0.63 + 24px));
@@ -1098,6 +1061,9 @@ html:not(.s03-motion) .s03__stage {
    ========================================================= */
 @media (max-width: 767px) {
   /* Seção 03 no celular: margens de 24px, headline de seção (não de Hero), painéis com padding de 24px */
+  :root {
+    --s03-seam-w: min(72vw, 320px, 36svh);
+  }
 
   .s03 {
     --s03-top: 48px;
