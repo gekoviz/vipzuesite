@@ -14,11 +14,12 @@ const local = (url) => !/^(https?:)?\/\//.test(url) && !url.startsWith("data:") 
 const files = new Set(["index.html"]);
 for (const [, url] of html.matchAll(/<(?:script|link)[^>]+(?:src|href)="([^"]+)"/g)) if (local(url)) files.add(url.split("?")[0]);
 
-// arquivos referenciados por HTML, CSS e JS (caminhos relativos ao arquivo que os cita)
-const refs = /(?:\.\.\/)?(?:assets|fonts)\/[A-Za-z0-9_./-]+\.(?:webp|png|jpe?g|svg|avif|woff2?|mp4|webm)/g;
+// arquivos referenciados por HTML, CSS e JS (no CSS, relativos à folha; no HTML e no JS, relativos à página)
+const refs = /(?:\.\.\/)?(?:assets|fonts)\/[A-Za-z0-9_./-]+\.(?:webp|png|jpe?g|svg|avif|woff2?|mp4|webm|glb)/g;
 for (const file of [...files]) {
   const text = readFileSync(join(root, file), "utf8");
-  for (const [ref] of text.matchAll(refs)) files.add(posix.normalize(posix.join(posix.dirname(file), ref)));
+  const base = file.endsWith(".css") ? posix.dirname(file) : ".";
+  for (const [ref] of text.matchAll(refs)) files.add(posix.normalize(posix.join(base, ref)));
 }
 
 const missing = [...files].filter((f) => !existsSync(join(root, f)));

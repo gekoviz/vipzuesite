@@ -1,5 +1,37 @@
 # Andamento — VIPZUE 2026
 
+## 30/10/2026 — Águia 3D na divisa dos cards (prévia)
+
+**Pedido:** trocar a águia que fica abaixo dos cards pelo modelo `eagle 3d model.glb`, interativa e sem girar loucamente; movimento limpo, seguindo o mouse. Durante o trabalho: "não precisa girar de ponta-cabeça, foque nas laterais" e "deixa do tamanho da águia que estava".
+
+**Modelo:** gerado pelo Tripo. Malha única de ~284 mil triângulos, 3 texturas (~5,7 MB), sem esqueleto nem animação, 14,5 MB no total. As asas não batem: o movimento é do corpo inteiro.
+
+**Feito:**
+- `js/eagle3d.js`: three.js 0.160 via jsDelivr, carregado só quando a divisa chega a ~1 tela de distância.
+  - A imagem 2D fica até o primeiro quadro 3D; se algo falhar, ela permanece.
+  - Enquadramento de 3/4 de frente, com cabeça e garras à mostra.
+  - **Com mouse:** vira para os lados até ±22°, com inclinação vertical mínima (±4°) e um leve inclinar das asas na curva, amortecido (~0,4s).
+  - **Sem mouse (toque):** a virada lateral acompanha a passagem pela tela (±12°).
+  - Flutuação lenta sempre. Movimento reduzido: quadro parado. Só desenha com a águia na tela.
+- `css/sections.css`: caixa larga (140% da tela, até 760px), centrada na divisa, com a asa direita saindo pela borda como a águia anterior (cortada na divisa, sem rolagem lateral).
+  - As reservas acima e abaixo da divisa e a imagem 2D de espera são dimensionadas pela altura da caixa.
+- `index.html`: importmap do three.js, caixa `data-s03-eagle3d`, `<script type="module">`.
+- `tools/build-site.mjs` agora copia `.glb`.
+- Só abaixo de 1024px, onde existem os cards. No desktop, a águia de perfil aprovada da S03 continua.
+
+**Verificado (Chrome headless):**
+- 390×844 e 768×1024 com mouse à esquerda e à direita.
+- 3D pronto em ~8s no teste local. Sem erros, sem rolagem lateral.
+- Capturas em `docs/qa/aguia3d/`.
+
+**Compressão (autorizada pelo usuário):**
+- `gltf-transform optimize`: simplificação (284 mil → 85 mil triângulos), malha meshopt, texturas WebP 1024px.
+- 14,5 MB → 0,8 MB. Visual equivalente nas mesmas capturas.
+- O 3D fica pronto em 3–4s no teste local (antes ~8s).
+- `js/eagle3d.js` passa a usar o `MeshoptDecoder` do three.js.
+- O original continua em `Downloads/eagle 3d model.glb`.
+- Publicado a pedido do usuário.
+
 ## 30/10/2026 — Seção "Como fazemos" (método): nova copy com 4 etapas
 
 **Pedido:** o usuário colou a copy nova do método (Diagnóstico, Estratégia, Construção, Entrega).

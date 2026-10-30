@@ -33,6 +33,8 @@
   <link rel="preload" as="image" href="assets/hero/aguia-1400.webp" media="(min-width: 768px)">
   <link rel="preload" as="image" href="assets/hero/aguia-900.webp" media="(max-width: 767px)">
 
+  <!-- Three.js (águia 3D, js/eagle3d.js): os módulos de exemplo importam "three" pelo nome -->
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
@@ -215,9 +217,11 @@
     <div class="s03-seam" data-s03-seam aria-hidden="true">
       <div class="s03-seam__pos">
         <div class="s03-seam__move" data-s03-seam-move>
-          <img class="s03-seam__eagle" src="assets/secao03/aguia-voo-640.webp" srcset="assets/secao03/aguia-voo-640.webp 640w, assets/secao03/aguia-voo-1024.webp 1024w" sizes="(min-width: 768px) min(72vw, 360px), min(72vw, 320px)" width="1024" height="1536" alt="" decoding="async" loading="lazy" draggable="false">
+          <img class="s03-seam__eagle" src="assets/secao03/aguia-voo-640.webp" srcset="assets/secao03/aguia-voo-640.webp 640w, assets/secao03/aguia-voo-1024.webp 1024w" sizes="min(42vw, 232px)" width="1024" height="1536" alt="" decoding="async" loading="lazy" draggable="false">
         </div>
       </div>
+      <!-- Águia 3D (js/eagle3d.js): substitui a imagem acima depois do primeiro quadro; se algo falhar, fica a imagem -->
+      <div class="s03-seam__3d" data-s03-eagle3d><canvas></canvas></div>
     </div>
 
     <!-- 03 — POR QUE ISSO IMPORTA? (8.4). Jornada Descoberta → Informação → Confiança → Contato: proposta de
@@ -506,5 +510,6 @@
   <script src="js/light-field.js" defer></script>
   <script src="js/sections.js" defer></script>
   <script src="js/scroll-narrative.js" defer></script>
+  <script type="module" src="js/eagle3d.js"></script>
 </body>
 </html>
