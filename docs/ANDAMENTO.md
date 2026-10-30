@@ -1,5 +1,13 @@
 # Andamento — VIPZUE 2026
 
+## 30/10/2026 — Cubo removido
+
+**Pedido:** "pode remover o cubo, era só teste".
+
+**Feito:** `index.html` e `css/sections.css` voltaram ao commit `3ac19d0` (logo em relevo mantida); removido `js/method-cube.js`.
+
+**Verificado:** página local sem o cubo, logo em relevo presente, 4 etapas do Método intactas, sem erros no console.
+
 ## 30/10/2026 — Cubo mágico no Método (prévia)
 
 **Pedido:** adicionar o cubo (`cubo-magico-abrir.html`) em alguma seção. Escolha: versão enxuta em "Como fazemos", como metáfora de cada peça no lugar.
