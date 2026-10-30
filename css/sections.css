@@ -547,6 +547,25 @@ html:not(.s03-motion) .s03__stage {
   color: var(--text-2);
 }
 
+/* Cubo ao lado do título (colunas 9–12); no toque, arrastar na vertical continua rolando a página */
+.method__cube {
+  grid-column: 9 / -1;
+  justify-self: center;
+  width: min(100%, 360px);
+}
+
+.method__cube canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.method__cube canvas:active {
+  cursor: grabbing;
+}
+
 /* Quatro etapas com parágrafos longos: 2 × 2 (em quatro colunas cada parágrafo ficaria com ~280px de largura) */
 .steps {
   grid-column: 1 / -1;
@@ -859,6 +878,11 @@ html:not(.s03-motion) .s03__stage {
 
   .method__grid {
     row-gap: var(--space-3xl);
+  }
+
+  .method__cube {
+    grid-column: 1 / -1;
+    width: min(100%, 300px);
   }
 
   .audience__head {

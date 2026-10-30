@@ -1,5 +1,21 @@
 # Andamento — VIPZUE 2026
 
+## 30/10/2026 — Cubo mágico no Método (prévia)
+
+**Pedido:** adicionar o cubo (`cubo-magico-abrir.html`) em alguma seção. Escolha: versão enxuta em "Como fazemos", como metáfora de cada peça no lugar.
+
+**Feito:**
+- `index.html`: `.method__cube` com um canvas decorativo (`aria-hidden`), ao lado do título no desktop (colunas 9–12) e entre o título e as etapas no tablet e celular.
+- `js/method-cube.js`, adaptado do estudo, em canvas 2D e sem dependências:
+  - começa embaralhado (8 giros) e, ao entrar na tela, volta sozinho à ordem, devagar;
+  - mouse: arrastar gira a câmera e clicar numa face gira a face;
+  - toque: arrastar na horizontal gira a câmera e a vertical continua rolando a página (`touch-action: pan-y`);
+  - fora de ordem e parado por 4,5 s, ele se resolve de novo;
+  - movimento reduzido: cubo resolvido e parado.
+- Saíram do estudo: botões (embaralhar, desfazer, reiniciar, 12 giros), placar, histórico e o fundo próprio. As cores originais foram trocadas pelos tons da marca: dourado, bronze, marfim, champanhe, marrom e bege.
+
+**Verificado:** 1366 px (cubo 360 px à direita do título) e 375 px (300 px, sem rolagem lateral); o cubo se resolve ao entrar na tela; sem erros no console.
+
 ## 30/10/2026 — Logo em relevo na divisa S04 → Método (prévia)
 
 **Pedido:** colocar a logo 3D (estudo `vipzue-relevo.html`) entre uma seção e outra. Divisa escolhida: fim da S04 ("Por que importa") → "Como fazemos".
