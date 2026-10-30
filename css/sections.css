@@ -313,6 +313,57 @@ html:not(.s03-motion) .s03__stage {
   color: var(--color-champagne-light);
 }
 
+/* Logo em relevo no fim da Seção 04, sobre o campo escuro e antes da virada para o marfim do Método. As camadas
+   são montadas por js/brand-relief.js; sem JS fica só o vão (a peça é decorativa, aria-hidden). */
+.brand-relief {
+  position: relative;
+  width: min(84%, 760px);
+  margin: var(--space-4xl) auto 0;
+  aspect-ratio: 2048 / 760;
+  perspective: 1000px;
+  pointer-events: none;
+}
+
+.brand-relief__object {
+  position: absolute;
+  inset: 50% 0 auto;
+  aspect-ratio: 2048 / 520;
+  transform: translateY(-50%) rotateX(12deg) rotateY(-18deg);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.brand-relief__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.brand-relief__shadow {
+  position: absolute;
+  inset: 72% 10% auto;
+  height: 12%;
+  border-radius: 50%;
+  background: #000;
+  filter: blur(22px);
+  opacity: 0.7;
+}
+
+@media (max-width: 767px) {
+  .brand-relief {
+    width: 88%;
+    margin-top: var(--space-3xl);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-relief__object {
+    will-change: auto;
+  }
+}
+
 .why__head {
   max-width: calc(var(--col) * 9 + var(--grid-gutter) * 8);
 }

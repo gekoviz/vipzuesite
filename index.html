@@ -307,6 +307,24 @@
           </div>
         </figure>
       </div>
+
+      <!-- Logo em relevo na divisa com o Método: camadas de SVG em 3D que inclinam com o mouse (ou com a rolagem no toque) -->
+      <div class="brand-relief" data-brand-relief aria-hidden="true">
+        <div class="brand-relief__shadow"></div>
+        <div class="brand-relief__object" data-brand-relief-object></div>
+        <template data-brand-relief-vector>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 80 2048 520" class="brand-relief__layer">
+            <g stroke-linejoin="round">
+              <path d="M76 185H170L313 405C318 367 325 325 348 298C359 286 379 279 398 274C400 266 390 259 382 255L365 249C357 242 341 236 325 235C305 233 281 240 260 253L260 246C299 208 350 186 409 185H509L287 502Z"/>
+              <path d="M528 185H608V503H528Z"/>
+              <path d="M653 185H793C887 185 949 216 949 278C949 337 895 370 815 370H773V353H792C843 353 869 329 869 279C869 229 840 203 786 203H732V415L653 503Z"/>
+              <path d="M968 185H1268L1048 486H1112C1166 486 1210 469 1258 439V503H941L1158 204C1085 196 1026 216 968 246Z"/>
+              <path d="M1294 185H1374V365C1374 436 1410 475 1474 475C1539 475 1578 438 1578 367V249L1628 185H1632V365C1632 454 1576 506 1471 506C1358 506 1294 457 1294 367Z"/>
+              <path d="M1678 185H1967V253C1902 217 1829 203 1757 203V324H1904V368H1817C1807 341 1783 330 1767 351C1760 359 1757 370 1757 382V486C1828 486 1907 470 1967 440V503H1678Z"/>
+            </g>
+          </svg>
+        </template>
+      </div>
     </section>
 
     <!-- 04 — MÉTODO (8.5) -->
@@ -506,5 +524,6 @@
   <script src="js/light-field.js" defer></script>
   <script src="js/sections.js" defer></script>
   <script src="js/scroll-narrative.js" defer></script>
+  <script src="js/brand-relief.js" defer></script>
 </body>
 </html>

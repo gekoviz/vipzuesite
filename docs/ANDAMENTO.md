@@ -1,5 +1,17 @@
 # Andamento — VIPZUE 2026
 
+## 30/10/2026 — Logo em relevo na divisa S04 → Método (prévia)
+
+**Pedido:** colocar a logo 3D (estudo `vipzue-relevo.html`) entre uma seção e outra. Divisa escolhida: fim da S04 ("Por que importa") → "Como fazemos".
+
+**Feito:**
+- `index.html`: bloco `.brand-relief` no fim da S04, decorativo (`aria-hidden`), com o vetor da logo em `<template>`.
+- `js/brand-relief.js`: monta 41 camadas em Z (espessura) com degradê dourado na frente. No mouse, a peça inclina para o ponteiro (lateral ±30°, vertical discreto). No toque, gira de −24° a +24° conforme a rolagem. Com movimento reduzido, fica em pose fixa. O laço só roda com a logo na tela.
+- `css/sections.css`: largura `min(84%, 760px)` (88% no celular) e sombra difusa embaixo.
+- Saíram do estudo: o rótulo "GOLD EDITION", a legenda, os botões e o fundo próprio. A logo fica sobre o campo escuro da S04.
+
+**Verificado:** 608 px e 1366 px; logo centrada antes da virada para o marfim, sem erros no console.
+
 ## 30/10/2026 — Águia 3D removida (volta a águia 2D)
 
 **Pedido:** "remova essa águia 3D. Deixe do jeito que estava."
