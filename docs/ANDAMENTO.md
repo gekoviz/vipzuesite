@@ -1,5 +1,62 @@
 # Andamento — VIPZUE 2026
 
+## 31/10/2026 — Passagem Visão → S03 mais curta no desktop
+
+**Pedido:** encurtar a tela bege vazia entre a 3ª frase da Visão e a headline da S03.
+
+**Medido (1280×585):** a 3ª frase some por volta de 1340px; a headline só aparecia por volta de 1530px, ou seja, ~190px de rolagem sem texto. A passagem bege usava 34svh da timeline.
+
+**Feito (só desktop, ≥ 1024px):**
+- `js/hero.js`: `WIPE_LEN_WIDE = 20` (era 34), então TOTAL passa de 258 para 244.
+- `css/hero.css`: `--story-h` padrão de 358svh para 344svh.
+- `js/light-field.js`: valor de reserva do total de 258 para 244.
+
+Celular e tablet não mudam: eles usam `WIPE_LEN_STACKED`, `WIPE_LEN_FLOW` e o próprio `--story-h`.
+
+**Verificado:**
+- 1280×585: a 3ª frase sai em ~1340px e a headline aparece em ~1440px (~100px sem texto, antes ~190px). A frente bege sobe inteira, sem cortes.
+- 1440×900: Hero de 0 a 2196px (244 × 9), S03 de 2196 a 5076px, P1 aparece. Sem erros.
+- 390×844: TOTAL 353 e altura 3401px, iguais a antes.
+
+## 31/10/2026 — Motion do desktop: diagnóstico (fase 0)
+
+**Pedido:** restaurar os efeitos do desktop que pararam no computador do dono (botão da Hero, frases da Visão, palco da S03). Só corrigir depois de confirmar a causa.
+
+**Achados:**
+- Windows deste PC: "efeitos de animação" LIGADOS, então o Chrome não pede movimento reduzido. H-A (reduced motion) descartada aqui.
+- Telas: principal 1920×1080 a 125% (1536×816 úteis) e secundária 1280×720 (1280×672 úteis).
+- Site publicado a 1536×700, janela visível: as três classes ativas, 2 ScrollTriggers, botão `running`, frases da Visão e P1 da S03 aparecendo. H-D não se reproduz nesse tamanho.
+- Git: o repositório começa em 27/10 com o site inteiro. A exigência de altura ≥ 560px já existia antes disso (ver "Movimento reduzido ou altura < 560px" acima) e nenhum commit mexeu nas condições de ativação.
+- Hipótese mais provável: H-B. Na tela secundária, ou com zoom do navegador ≥ 125%, a altura útil da janela fica abaixo de 560px e tudo vira fluxo estático.
+
+**Feito:** `js/motion-debug.js` (só com `?motiondebug`) mostra num painel e no console:
+- janela, DPR e zoom;
+- cada condição de ativação;
+- classes do `<html>`;
+- GSAP e ScrollTriggers;
+- arquivos que falharam.
+
+O `<head>` registra as falhas de carregamento desde o início. Testado a 1280×540: o painel mostra "altura ≥ 560: NÃO" e 0 ScrollTriggers.
+
+**Painel no computador do dono (print):**
+- janela 1280×585, DPR 1,5, zoom 1;
+- todas as condições SIM; classes `js-story js-reveal s03-motion has-light-field`.
+
+H-B descartada também.
+
+**Reprodução local:** a 1280×585, 2 ScrollTriggers. A Visão passa 01 → 03 / 03. A S03 mostra o título com P1, depois P2, depois P3.
+
+**Leitura do print:** é uma captura de página inteira, emendada a partir de várias rolagens. Nela a S03 aparece repetida com P1, P2 e P3 em sequência, o que mostra a narrativa rodando. O vão escuro e as águias repetidas vêm da emenda das áreas fixas (sticky), não do site.
+
+**Rolagem real no site publicado (1280×585, a janela do dono, roda do mouse, janela visível):**
+- Botão da Hero: `shiny-angle`, `shiny-shimmer` e `shiny-breathe` em `running`.
+- Visão: headline sai e a águia aproxima. Uma frase por vez: 01/03 "Páginas estratégicas…" → 02/03 "Para antecipar…" → 03/03 "E conduzi-los…". Passagem para o bege.
+- S03: a headline se forma e assenta no alto. P1, P2 e P3 entram um por vez, palavra por palavra. A águia de perfil acompanha. A saída libera a rolagem para a S04.
+
+**Conclusão:** nenhuma das hipóteses (A, B, C, D) se confirma; os três efeitos funcionam no desktop. Nenhuma correção aplicada.
+
+**Único ponto observado:** entre a passagem para o bege e a formação da headline da S03 (~1500px), há uma tela bege vazia por cerca de um giro de roda. Pode ser o "espaço vazio" relatado. Fica proposto, sem aplicar, encurtar esse trecho no desktop.
+
 ## 30/10/2026 — Cubo removido
 
 **Pedido:** "pode remover o cubo, era só teste".

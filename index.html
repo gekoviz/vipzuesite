@@ -11,6 +11,14 @@
     // Ativa o storytelling antes da primeira pintura para evitar salto de layout.
     (function () {
       var root = document.documentElement;
+      // ?motiondebug: guarda desde já as falhas de carregamento de scripts e folhas (js/motion-debug.js as mostra)
+      if (/[?&]motiondebug\b/.test(location.search)) {
+        window.__vzResErrors = [];
+        addEventListener("error", function (e) {
+          var t = e.target;
+          if (t && (t.src || t.href)) window.__vzResErrors.push(t.src || t.href);
+        }, true);
+      }
       // Mesma condição de js/hero.js (STORY_QUERY).
       var story = "(prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 560px), (prefers-reduced-motion: no-preference) and (max-width: 767px) and (min-height: 700px)";
       if (window.matchMedia && matchMedia(story).matches) root.classList.add("js-story");
@@ -525,5 +533,6 @@
   <script src="js/sections.js" defer></script>
   <script src="js/scroll-narrative.js" defer></script>
   <script src="js/brand-relief.js" defer></script>
+  <script src="js/motion-debug.js" defer></script>
 </body>
 </html>

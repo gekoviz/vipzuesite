@@ -340,7 +340,7 @@ void main() {
     const p = Math.min(1, Math.max(0, -r.top / span));
     // composição de luz do close na mesma janela da atmosfera da seção 02 (marcos publicados por hero.js),
     // estável durante as três frases
-    const story = window.__vzStory || { total: 258, atmosphere: { start: 14, end: 54 } };
+    const story = window.__vzStory || { total: 244, atmosphere: { start: 14, end: 54 } };
     const svh = p * story.total;
     const x = Math.min(1, Math.max(0, (svh - story.atmosphere.start) / (story.atmosphere.end - story.atmosphere.start)));
     return x * x * (3 - 2 * x);

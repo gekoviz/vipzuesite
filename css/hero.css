@@ -209,13 +209,13 @@
   background: var(--color-bg-deep);
 }
 
-/* Visão: palco fixo por 258svh de rolagem (aproximação, close com as três frases, passagem curta);
+/* Visão: palco fixo por 244svh de rolagem no desktop (aproximação, close com as três frases, passagem curta);
    "O que fazemos" desliza por baixo do palco e assume no fim. Deve ser TOTAL + 100svh (js/hero.js). */
 .js-story .hero {
   z-index: 2;
   /* --story-h = rolagem da timeline + 100svh; o palco pinta 100lvh, então a caixa troca um pelo outro (a rolagem fica
      a mesma; no desktop lvh = svh) */
-  height: calc(var(--story-h, 358svh) - 100svh + 100lvh);
+  height: calc(var(--story-h, 344svh) - 100svh + 100lvh);
   /* a caixa da Hero se estende sobre a seção 03 (que sobe por baixo dela na passagem): só o palco recebe toques e
      cliques; depois da troca (palco oculto), eles chegam à seção */
   pointer-events: none;

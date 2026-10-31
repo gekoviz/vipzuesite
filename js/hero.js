@@ -1,6 +1,6 @@
 // Hero VIPZUE — entrada + "Visão" (scroll storytelling com GSAP ScrollTrigger, scrub).
 // A timeline é escrita em "svh de rolagem" (distância), convertida para progresso por TOTAL.
-// Desktop: palco fixo por TOTAL = 258svh (altura do contêiner 358svh). Etapas:
+// Desktop: palco fixo por TOTAL = 244svh (altura do contêiner 344svh). Etapas:
 //     6–38    headline + CTA: inteiros até 6, depois sobem ~5% da tela e esmaecem
 //     6–146   aproximação: a câmera avança da águia monumental até o close do olho direito
 //             (no desktop segue lenta até o fim da passagem, sem congelar)
@@ -8,10 +8,10 @@
 //             estabelecida ANTES de a 1ª frase ficar legível e estável nas três etapas
 //    44–228   narrativa em três etapas (contador 01–03 / 03, linha de progresso, uma frase por vez),
 //             derivada do mesmo progresso aplicado da timeline
-//   222–256   passagem curta logo após a 3ª frase: o campo de luz (js/light-field.js) passa do estado escuro ao
+//   222–242   passagem curta logo após a 3ª frase: o campo de luz (js/light-field.js) passa do estado escuro ao
 //             claro da seção 03 (#B8AA96) numa frente que sobe de baixo; águia, vinheta e faixa do topo saem à
 //             frente dela e o texto de "O que fazemos" surge sobre o claro já estabelecido
-//   256–258   ao sair, a seção real (idêntica) assume
+//   242–244   ao sair, a seção real (idêntica) assume
 // Revisão 24/10: rótulos (Negócio / Cliente ideal / Objetivo comercial), anéis, pupila artificial e linha
 // de visão saíram da cena. O fundo do close volta ao da versão aprovada: águia a 30% sobre o Silk,
 // vinheta 0,55 e enquadramento original (olho ao centro no mobile, à direita no desktop).
@@ -32,7 +32,7 @@
 
   // Distância total do palco fixo, em svh de rolagem (ver --story-h no CSS: TOTAL + 100svh). No palco empilhado
   // (celular e tablet em retrato) a passagem final é mais longa (WIPE_LEN_STACKED) e TOTAL cresce junto.
-  let TOTAL = 258;
+  let TOTAL = 244;
   const at = (svh) => svh / TOTAL;
   const len = (svh) => svh / TOTAL;
 
@@ -41,7 +41,9 @@
   // Fases (em svh da timeline)
   const ZOOM = { start: 6, end: 146 };
   const WIPE_AT = 222;
-  let WIPE_LEN = 34; // saída curta (~1/3 de tela) depois da 3ª frase
+  // desktop: saída curta depois da 3ª frase (era 34; com 20 sobra menos tela bege vazia antes da headline da S03)
+  const WIPE_LEN_WIDE = 20;
+  let WIPE_LEN = WIPE_LEN_WIDE;
   // Empilhado: a passagem não é uma fase da timeline, e sim a própria seção 03 subindo (ScrollTrigger "passage", abaixo):
   // a linha bege plena acompanha o topo da seção, 1:1 com a rolagem. Ela começa 12% de tela antes de a seção entrar
   // (a borda difusa, mais curta abaixo de 1024px: WIPE_SOFT_FLOW) e termina quando a seção chega ao topo — 112% de
@@ -233,7 +235,7 @@
   mm.add({ story: STORY_QUERY, stacked: STACKED_QUERY, flow: FLOW_QUERY }, (ctx) => {
     const { story, stacked, flow } = ctx.conditions;
     root.classList.toggle("js-story", story);
-    WIPE_LEN = stacked ? WIPE_LEN_STACKED : flow ? WIPE_LEN_FLOW : 34;
+    WIPE_LEN = stacked ? WIPE_LEN_STACKED : flow ? WIPE_LEN_FLOW : WIPE_LEN_WIDE;
     WIPE_SOFT = flow ? WIPE_SOFT_FLOW : WIPE_SOFT_WIDE;
     TOTAL = WIPE_AT + WIPE_LEN + 2;
     window.__vzStory.total = TOTAL;
