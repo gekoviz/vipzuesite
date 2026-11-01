@@ -280,6 +280,61 @@ html:not(.s03-motion) .s03__stage {
 }
 
 /* =========================================================
+   Emenda 03 → 04 (desktop ≥ 1024px)
+   O .s03__figure recorta a águia (overflow: clip) na base do palco, que é o topo da Seção 04: a figura, em opacidade
+   plena e mais alta que o palco, termina numa reta sobre o bege, com o escuro colado nela. Aqui a mudança de paleta
+   (bege → Carvão) deixa de ser um corte e passa a ser um véu progressivo: o fim da 03 escurece até o Carvão
+   (--color-bg-deep) e, do outro lado da divisa, o campo de luz da 04 emerge desse mesmo Carvão.
+   Os dois véus são da .s03 (z-index 1): o de cima só entra na tela nos últimos --s03-veil-up de rolagem, subindo sobre
+   o palco; o de baixo cobre só o respiro do topo da 04 (nunca alcança a headline).
+   Abaixo de 1024px a divisa é a águia em voo (.s03-seam) e nada disto se aplica.
+   ========================================================= */
+@media (min-width: 1024px) {
+  .s03 {
+    --s03-veil-up: clamp(140px, 30svh, 380px);
+    --s03-veil-down: calc(var(--section-space-default) - 24px);
+    /* alfa por suavização cúbica (3t² − 2t³), de 10 em 10%: sem faixa visível no começo nem no fim da rampa */
+    --s03-veil-stops:
+      transparent 0%,
+      color-mix(in srgb, var(--color-bg-deep) 2.8%, transparent) 10%,
+      color-mix(in srgb, var(--color-bg-deep) 10.4%, transparent) 20%,
+      color-mix(in srgb, var(--color-bg-deep) 21.6%, transparent) 30%,
+      color-mix(in srgb, var(--color-bg-deep) 35.2%, transparent) 40%,
+      color-mix(in srgb, var(--color-bg-deep) 50%, transparent) 50%,
+      color-mix(in srgb, var(--color-bg-deep) 64.8%, transparent) 60%,
+      color-mix(in srgb, var(--color-bg-deep) 78.4%, transparent) 70%,
+      color-mix(in srgb, var(--color-bg-deep) 89.6%, transparent) 80%,
+      color-mix(in srgb, var(--color-bg-deep) 97.2%, transparent) 90%,
+      var(--color-bg-deep) 100%;
+  }
+
+  /* em fluxo (movimento reduzido ou tela baixa) o palco tem esse respiro embaixo: o véu ocupa só ele */
+  html:not(.s03-motion) .s03 {
+    --s03-veil-up: var(--section-space-default);
+  }
+
+  .s03::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 1;
+    height: var(--s03-veil-up);
+    background: linear-gradient(to bottom, var(--s03-veil-stops));
+    pointer-events: none;
+  }
+
+  .s03::before {
+    content: "";
+    position: absolute;
+    inset: calc(100% - 1px) 0 auto; /* 1px de sobreposição: sem fresta entre os dois véus em telas de escala fracionária */
+    z-index: 1;
+    height: calc(var(--s03-veil-down) + 1px);
+    background: linear-gradient(to top, var(--s03-veil-stops));
+    pointer-events: none;
+  }
+}
+
+/* =========================================================
    04 — Método (fundo escuro com campo de luz; antiga "Por que isso importa?")
    ========================================================= */
 /* Fundo igual ao da Hero: o campo de luz escuro num canvas próprio da seção (js/light-field.js), sticky dentro de um
