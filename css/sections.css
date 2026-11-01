@@ -355,14 +355,30 @@ html:not(.s03-motion) .s03__stage {
 /* =========================================================
    04 — Método (fundo escuro com campo de luz; antiga "Por que isso importa?")
    ========================================================= */
-/* Fundo igual ao da Hero: o campo de luz escuro num canvas próprio da seção (js/light-field.js), sticky dentro de um
-   invólucro do tamanho dela. A borda superior é a da própria seção, então rola junto com a página (no iPhone, a
-   frente desenhada no canvas fixo chegava atrasada e mostrava uma faixa cinza na divisa). O canvas fica a 50% sobre
-   o Carvão opaco: o mesmo véu que mantém o texto pequeno acima de 4,5:1 sobre os focos de luz do campo. Sem WebGL,
-   o grafite sólido de .surface-dark. */
-.why.has-field {
+/* Campo de luz por seção (js/light-field.js). Toda seção com canvas próprio ganha a classe .has-field e o atributo data-field:
+     data-field="dark"  → o fundo da Hero (campo escuro, composição da Hero)     → Seções 04, 06 e Rodapé
+     data-field="light" → o fundo da Seção 03 (campo bege, composição do close)  → Seções 05 e 07
+   O canvas fica dentro da seção (sticky num invólucro do tamanho dela): a borda superior é a da própria seção e rola com
+   a página no compositor. Sem WebGL, ou com o contexto perdido, o JS tira .has-field e cada seção volta ao sólido da própria
+   superfície (.surface-*). Os seletores abaixo exigem .has-field de propósito: é ele que liga e desliga o fundo. */
+.has-field {
   isolation: isolate;
+}
+
+.has-field[data-field="dark"] {
   background: var(--color-bg-deep);
+  --field-opacity: 0.5; /* o canvas a 50% sobre o Carvão opaco: o véu que mantém o texto pequeno legível sobre os focos de luz */
+  /* texto secundário sobre o campo escuro: o token (marfim a 0,75) chega a 4,2:1 no ponto mais claro do campo; a 0,85 fica ≥ 4,8:1 */
+  --text-2: rgb(243 237 227 / 0.85);
+}
+
+.has-field[data-field="light"] {
+  background: var(--color-bg-secondary); /* a base do bege da 03 (#B8AA96), sob o canvas */
+  --field-opacity: 1;
+  /* texto secundário sobre o campo claro: o marrom (#4A372B) e o grafite a 0,75 caem a ~3,6:1 no ponto mais escuro do campo;
+     o grafite a 0,92 mantém ≥ 4,6:1 (o grafite pleno dá 5,3:1) */
+  --text-2: rgb(34 32 29 / 0.92);
+  --rule: rgb(34 32 29 / 0.22);
 }
 
 .section-light-field {
@@ -379,7 +395,7 @@ html:not(.s03-motion) .s03__stage {
   width: 100%;
   height: 100vh;
   height: 100lvh;
-  opacity: 0.5;
+  opacity: var(--field-opacity, 0.5);
 }
 
 /* Subheadline da Seção 04 (abaixo da headline): o mesmo tratamento da frase de abertura de cada etapa, o Heading da

@@ -289,38 +289,52 @@ void main() {
   document.body.prepend(canvas);
   root.classList.add("has-light-field");
 
-  // Seção 04 (Método — "O que entregamos é uma página…"): o campo escuro da Hero num canvas DENTRO da seção
-  // (sticky num invólucro do tamanho dela), sobre o Carvão a 50%. A borda superior é a da própria seção: rola junto
-  // com a página no compositor, sem o atraso que a frente desenhada no canvas fixo teria no Safari do iPhone.
-  const why = document.querySelector("#metodo");
-  let whyField = null;
-  if (why) {
+  // Campos por seção (04 a 08): o MESMO shader e o MESMO relógio, cada um num canvas DENTRO da seção (sticky num invólucro
+  // do tamanho dela). "dark" = o campo escuro da Hero (Background Principal, composição da Hero); "light" = o campo claro da
+  // Seção 03 (Background Secundário, composição do close). A borda superior é a da própria seção: rola junto com a página
+  // no compositor, sem o atraso que uma frente desenhada no canvas fixo teria no Safari do iPhone.
+  const FIELD_SECTIONS = [
+    ["#metodo", "dark"], // 04 — Método
+    ["#para-quem-e", "light"], // 05 — Para quem é
+    ["#contato", "dark"], // 06 — CTA final
+    ["#faq", "light"], // 07 — FAQ
+    ["[data-beam-footer]", "dark"], // 08 — Rodapé
+  ];
+  const FIELD_MODES = {
+    dark: { state: [-1, 0.004, 0], comp: 0 }, // frente abaixo da tela: o campo inteiro na rampa escura; composição da Hero
+    light: { state: [2, 0.004, 0], comp: 1 }, // frente acima da tela: o campo inteiro na rampa clara; composição do close
+  };
+  const fields = [];
+  FIELD_SECTIONS.forEach(([selector, mode]) => {
+    const el = document.querySelector(selector);
+    if (!el) return;
     const wrap = document.createElement("div");
     wrap.className = "section-light-field";
     wrap.setAttribute("aria-hidden", "true");
     const c = document.createElement("canvas");
     wrap.append(c);
-    why.prepend(wrap);
-    whyField = createField(c);
-    if (whyField) {
-      whyField.canvas = c;
-      why.classList.add("has-field");
-    } else {
+    el.prepend(wrap);
+    const field = createField(c);
+    if (!field) {
       wrap.remove();
+      return;
     }
-  }
-  const WHY_STATE = [-1, 0.004, 0]; // frente abaixo da tela: o campo inteiro na rampa escura
-
+    field.canvas = c;
+    el.dataset.field = mode;
+    el.classList.add("has-field");
+    // Quem a IntersectionObserver vigia: o rodapé em cortina é fixo e recortado por clip-path, então vigia-se o invólucro dele
+    const watch = el.closest("[data-footer-curtain]") || el;
+    fields.push({ el, watch, mode, field, inView: false, ...FIELD_MODES[mode] });
+  });
+  const fieldOf = new Map(fields.map((fl) => [fl.watch, fl]));
   // ---------- Relógio único e estado ----------
   let last = null;
   let raf = 0;
   let mainInView = true;
-  let whyInView = false;
-  let section = 0; // 0 Hero → 1 close, suavizado
+  let section = 0; // 0 Hero 
   const next = document.querySelector("[data-next]"); // seção 03, "O que fazemos"
-  const WARP = 0.04; // ondulação da frente escuro → claro (fração da altura)
-
-  // Frente escuro → claro, em fração da altura a partir de baixo. Com storytelling, segue a passagem já
+  const WARP = 0.04; // ondulação da frente escuro 
+  // Frente escuro 
   // suavizada da timeline (publicada por hero.js), ampliada para começar toda escura e terminar toda clara
   // apesar da ondulação. Sem storytelling, é o topo real da seção 03 (borda nítida, como a de qualquer seção).
   const frontState = () => {
@@ -332,7 +346,6 @@ void main() {
     if (!next) return [0, 0.004, 0];
     return [1 - next.getBoundingClientRect().top / Math.max(1, canvas.clientHeight), 0.004, 0];
   };
-
   const sectionTarget = () => {
     if (!document.documentElement.classList.contains("js-story")) return 0;
     const r = hero.getBoundingClientRect();
@@ -345,12 +358,12 @@ void main() {
     const x = Math.min(1, Math.max(0, (svh - story.atmosphere.start) / (story.atmosphere.end - story.atmosphere.start)));
     return x * x * (3 - 2 * x);
   };
-
   const drawAll = () => {
     if (mainInView && !main.lost()) main.draw(frontState(), section);
-    if (whyField && whyInView && !whyField.lost()) whyField.draw(WHY_STATE, 0);
+    fields.forEach((fl) => {
+      if (fl.inView && !fl.field.lost()) fl.field.draw(fl.state, fl.comp);
+    });
   };
-
   const frame = (now) => {
     const dt = last === null ? 0 : Math.min(0.1, (now - last) / 1000);
     last = now;
@@ -361,8 +374,7 @@ void main() {
     drawAll();
     raf = requestAnimationFrame(frame);
   };
-
-  const running = () => !reduce.matches && !document.hidden && (mainInView || whyInView);
+  const running = () => !reduce.matches && !document.hidden && (mainInView || fields.some((fl) => fl.inView));
   const update = () => {
     if (running()) {
       if (!raf) raf = requestAnimationFrame(frame);
@@ -377,23 +389,22 @@ void main() {
       drawAll();
     }
   };
-
   main.resize();
-  whyField?.resize();
+  fields.forEach((fl) => fl.field.resize());
   main.draw(frontState(), section);
-
   const ro = new ResizeObserver(() => {
     main.resize();
-    whyField?.resize();
+    fields.forEach((fl) => fl.field.resize());
     if (!raf) drawAll();
   });
   ro.observe(canvas);
-  if (whyField) ro.observe(whyField.canvas);
-  // Canvas fixo: roda enquanto a Hero (palco) ou a seção 03 estiver na tela; o da seção 04, só com ela na tela
+  fields.forEach((fl) => ro.observe(fl.field.canvas));
+  // Canvas fixo: roda enquanto a Hero (palco) ou a seção 03 estiver na tela; os das seções 04 a 08, só com a própria seção na tela
   const visible = new Set();
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
-      if (e.target === why) whyInView = e.isIntersecting;
+      const fl = fieldOf.get(e.target);
+      if (fl) fl.inView = e.isIntersecting;
       else if (e.isIntersecting) visible.add(e.target);
       else visible.delete(e.target);
     });
@@ -402,12 +413,11 @@ void main() {
   });
   io.observe(hero);
   if (next) io.observe(next);
-  if (whyField) io.observe(why);
+  fields.forEach((fl) => io.observe(fl.watch));
   const onScrollReduced = () => reduce.matches && update();
   document.addEventListener("visibilitychange", update);
   reduce.addEventListener("change", update);
   window.addEventListener("scroll", onScrollReduced, { passive: true });
-
   // Perda de contexto: pausa e cai no fundo CSS; ao restaurar, recompila e continua do mesmo instante
   const onLost = (off) => (e) => {
     e.preventDefault();
@@ -427,11 +437,10 @@ void main() {
   };
   canvas.addEventListener("webglcontextlost", onLost(() => root.classList.remove("has-light-field")));
   canvas.addEventListener("webglcontextrestored", onRestored(main, () => root.classList.add("has-light-field"), canvas));
-  if (whyField) {
-    whyField.canvas.addEventListener("webglcontextlost", onLost(() => why.classList.remove("has-field")));
-    whyField.canvas.addEventListener("webglcontextrestored", onRestored(whyField, () => why.classList.add("has-field"), whyField.canvas.parentElement));
-  }
-
+  fields.forEach((fl) => {
+    fl.field.canvas.addEventListener("webglcontextlost", onLost(() => fl.el.classList.remove("has-field")));
+    fl.field.canvas.addEventListener("webglcontextrestored", onRestored(fl.field, () => fl.el.classList.add("has-field"), fl.field.canvas.parentElement));
+  });
   // Saída da página: para o laço; voltando pelo histórico (bfcache), retoma do mesmo instante
   window.addEventListener("pagehide", () => {
     if (raf) cancelAnimationFrame(raf);
@@ -439,12 +448,13 @@ void main() {
     last = null;
   });
   window.addEventListener("pageshow", update);
-
   update();
+  const whyField = fields.find((fl) => fl.el.id === "metodo");
   window.__vzLightField = {
     get running() { return !!raf; },
     get section() { return section; },
     size: () => [canvas.width, canvas.height],
-    whySize: () => (whyField ? [whyField.canvas.width, whyField.canvas.height] : null),
+    whySize: () => (whyField ? [whyField.field.canvas.width, whyField.field.canvas.height] : null),
+    fields: () => fields.map((fl) => ({ id: fl.el.id || fl.el.className, mode: fl.mode, inView: fl.inView, size: [fl.field.canvas.width, fl.field.canvas.height] })),
   };
 })();
