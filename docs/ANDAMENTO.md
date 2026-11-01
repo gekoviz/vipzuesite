@@ -1,5 +1,21 @@
 # Andamento — VIPZUE 2026
 
+## 01/11/2026 — Rodada 3, seções 04 a 08 (branch `feat/rodada3`, sem merge)
+
+**Pedido:** executar o prompt "PROMPT VIPZUE rodada3 secoes4a8.pdf" e validar com `vz-check-r3.pdf`. Sem mudar copy, `config.js`, tokens, Hero, S02, S03 (exceto o véu) nem menu. Publicar em branch/preview; o merge fica com quem escreveu o prompt.
+
+**Feito** (commits na ordem da §14 + uma correção):
+- campo de luz por seção (04 a 08);
+- véu 03 → 04 em todas as larguras e headline da 04 mais alta no celular;
+- 05 clara e 06 escura com o ShinyButton da Hero;
+- FAQ portada do 21st.dev (palavras com desfoque, accordion de um item, chevron);
+- rodapé sobre o campo da Hero com marca legível e cortina (`js/footer-curtain.js`);
+- links legais do rodapé a 80% (4,49 → ≥ 4,5:1 a 768px).
+
+**Validação:** `vz-check-r3` foi de 11/11/14 PASS (1440/768/390) para 33/34/40 PASS. Restam 2/1/1 FAIL, falsos positivos do script: o `::after` do ShinyButton segue a largura do botão, e a águia não existe no desktop. A copy está idêntica em 5 regiões. Movimento reduzido e sem WebGL foram conferidos.
+
+**Detalhes, exceções E1–E9 e pendências:** `docs/rodada3-relatorio.md`.
+
 ## 01/11/2026 — Rodapé "Beam Wordmark Footer" (21st.dev), portado sem React
 
 **Pedido:** integrar o componente React `beam-wordmark-footer.tsx` (21st.dev, kedhareswer). O site é estático (sem React, Tailwind, TypeScript nem shadcn). O usuário escolheu portar para JS puro, na paleta e com o conteúdo da VIPZUE.
