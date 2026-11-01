@@ -298,57 +298,66 @@ html:not(.s03-motion) .s03__stage {
 }
 
 /* =========================================================
-   Emenda 03 → 04 (desktop ≥ 1024px)
-   O .s03__figure recorta a águia (overflow: clip) na base do palco, que é o topo da Seção 04: a figura, em opacidade
-   plena e mais alta que o palco, termina numa reta sobre o bege, com o escuro colado nela. Aqui a mudança de paleta
-   (bege → Carvão) deixa de ser um corte e passa a ser um véu progressivo: o fim da 03 escurece até o Carvão
-   (--color-bg-deep) e, do outro lado da divisa, o campo de luz da 04 emerge desse mesmo Carvão.
-   Os dois véus são da .s03 (z-index 1): o de cima só entra na tela nos últimos --s03-veil-up de rolagem, subindo sobre
-   o palco; o de baixo cobre só o respiro do topo da 04 (nunca alcança a headline).
-   Abaixo de 1024px a divisa é a águia em voo (.s03-seam) e nada disto se aplica.
+   Véu da divisa 03 → 04, agora em todas as larguras (antes só a partir de 1024px).
+   O bege da 03 afunda no Carvão profundo da 04 numa rampa de suavização cúbica; a 04 recebe o mesmo véu espelhado por
+   baixo, e o campo de luz dela aparece aos poucos. A águia (.s03-seam, z-index 2) fica por cima dos dois véus.
+   O desktop não muda: mesmas cores, mesmos stops, mesmas alturas (--s03-veil-up/-down abaixo, na media de 1024px).
    ========================================================= */
+.s03 {
+  position: relative;
+  /* alfa por suavização cúbica (3t² − 2t³), de 10 em 10%: sem faixa visível no começo nem no fim da rampa */
+  --s03-veil-stops:
+    transparent 0%,
+    color-mix(in srgb, var(--color-bg-deep) 2.8%, transparent) 10%,
+    color-mix(in srgb, var(--color-bg-deep) 10.4%, transparent) 20%,
+    color-mix(in srgb, var(--color-bg-deep) 21.6%, transparent) 30%,
+    color-mix(in srgb, var(--color-bg-deep) 35.2%, transparent) 40%,
+    color-mix(in srgb, var(--color-bg-deep) 50%, transparent) 50%,
+    color-mix(in srgb, var(--color-bg-deep) 64.8%, transparent) 60%,
+    color-mix(in srgb, var(--color-bg-deep) 78.4%, transparent) 70%,
+    color-mix(in srgb, var(--color-bg-deep) 89.6%, transparent) 80%,
+    color-mix(in srgb, var(--color-bg-deep) 97.2%, transparent) 90%,
+    var(--color-bg-deep) 100%;
+}
+
+.s03::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  height: var(--s03-veil-up);
+  background: linear-gradient(to bottom, var(--s03-veil-stops));
+  pointer-events: none;
+}
+
+.s03::before {
+  content: "";
+  position: absolute;
+  inset: calc(100% - 1px) 0 auto; /* 1px de sobreposição: sem fresta entre os dois véus em telas de escala fracionária */
+  z-index: 1;
+  height: calc(var(--s03-veil-down) + 1px);
+  background: linear-gradient(to top, var(--s03-veil-stops));
+  pointer-events: none;
+}
+
 @media (min-width: 1024px) {
   .s03 {
     --s03-veil-up: clamp(140px, 30svh, 380px);
     --s03-veil-down: calc(var(--section-space-default) - 24px);
-    /* alfa por suavização cúbica (3t² − 2t³), de 10 em 10%: sem faixa visível no começo nem no fim da rampa */
-    --s03-veil-stops:
-      transparent 0%,
-      color-mix(in srgb, var(--color-bg-deep) 2.8%, transparent) 10%,
-      color-mix(in srgb, var(--color-bg-deep) 10.4%, transparent) 20%,
-      color-mix(in srgb, var(--color-bg-deep) 21.6%, transparent) 30%,
-      color-mix(in srgb, var(--color-bg-deep) 35.2%, transparent) 40%,
-      color-mix(in srgb, var(--color-bg-deep) 50%, transparent) 50%,
-      color-mix(in srgb, var(--color-bg-deep) 64.8%, transparent) 60%,
-      color-mix(in srgb, var(--color-bg-deep) 78.4%, transparent) 70%,
-      color-mix(in srgb, var(--color-bg-deep) 89.6%, transparent) 80%,
-      color-mix(in srgb, var(--color-bg-deep) 97.2%, transparent) 90%,
-      var(--color-bg-deep) 100%;
   }
 
   /* em fluxo (movimento reduzido ou tela baixa) o palco tem esse respiro embaixo: o véu ocupa só ele */
   html:not(.s03-motion) .s03 {
     --s03-veil-up: var(--section-space-default);
   }
+}
 
-  .s03::after {
-    content: "";
-    position: absolute;
-    inset: auto 0 0;
-    z-index: 1;
-    height: var(--s03-veil-up);
-    background: linear-gradient(to bottom, var(--s03-veil-stops));
-    pointer-events: none;
-  }
-
-  .s03::before {
-    content: "";
-    position: absolute;
-    inset: calc(100% - 1px) 0 auto; /* 1px de sobreposição: sem fresta entre os dois véus em telas de escala fracionária */
-    z-index: 1;
-    height: calc(var(--s03-veil-down) + 1px);
-    background: linear-gradient(to top, var(--s03-veil-stops));
-    pointer-events: none;
+/* Tablet e celular: a 03 é um fluxo normal e termina numa reserva vazia (padding-bottom ≥ 0,87 × a largura da águia
+   + 40px) para a metade de cima da águia. O véu de baixo vive dentro dessa reserva: nunca cobre card nem texto. */
+@media (max-width: 1023px) {
+  .s03 {
+    --s03-veil-up: clamp(120px, 22svh, 200px);
+    --s03-veil-down: 72px; /* cabe no padding-top da 04 (≥ 148px) abaixo do corpo da águia */
   }
 }
 
@@ -1370,9 +1379,29 @@ html:not(.s03-motion) .s03__stage {
     top: 0.35em;
   }
 
-  /* A Seção 04 sobe 12px sob a águia da divisa (a regra de 1023px reserva 24px): a headline agora é curta */
   .s03-seam + .section {
-    padding-top: max(var(--section-space-default), calc(var(--s03-seam-w) * 0.63 + 12px));
+    /* A divisa cruza 58% da altura da imagem da águia. Abaixo dela, o CORPO termina em ~86% da altura (0,42 × a
+       largura da águia abaixo da divisa); só a ponta da cauda/garra desce até 98% (0,60), encostada na borda direita
+       (x ≥ 85% da largura da imagem). Antes a reserva era a imagem inteira (0,63 × largura + 12px = 189px a 390px):
+       a headline ficava ~70px abaixo do corpo. Agora ela sobe até logo abaixo dele. --why-seam-clear é o botão:
+       0,47 → 148px a 390px de largura; suba para afastar, baixe (mín. 0,42) para aproximar. */
+    padding-top: max(var(--section-space-default), calc(var(--s03-seam-w) * var(--why-seam-clear, 0.47) + 16px));
+  }
+
+  /* A headline fica um pouco mais à esquerda da margem de 24px (alinhamento óptico de um título grande: o "O"
+     serifado parece recuado do eixo). Só o título; a subheadline e a jornada ficam no eixo da página.
+     --why-title-shift é o botão. */
+  .why__title {
+    margin-left: calc(var(--why-title-shift, 6px) * -1);
+    text-wrap: balance;
+  }
+
+  /* Abaixo de 392px o token (40px) faria "O que entregamos" quebrar em 3 linhas; 10,2vw mantém a 1ª linha inteira
+     (≈ 296px a 360px). De 392px para cima vale o token, sem mudança. */
+  @media (max-width: 391px) {
+    .why__title {
+      font-size: 10.2vw;
+    }
   }
 
   /* Ponto aceso, "tubelight-navbar" (21st.dev) em CSS: a barra acesa vira o preenchimento do ponto e os halos
