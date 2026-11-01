@@ -415,11 +415,25 @@ html:not(.s03-motion) .s03__stage {
   }
 }
 
-.why__title-turn {
-  display: block;
+/* Subheadline da Seção 04 (abaixo da headline): o mesmo tratamento da frase de abertura de cada etapa, o Heading da
+   UI.05 (Switzer 500; 24px, 22px no celular via token), a --space-headline-to-subheadline (24px) da headline. */
+.why__sub,
+.journey__accent {
+  font-size: var(--font-size-heading);
+  line-height: var(--font-line-heading);
+  letter-spacing: var(--font-tracking-heading);
+  font-weight: var(--font-weight-medium);
 }
 
-/* Jornada: diagrama funcional (a linha liga as etapas — UI.14 permite) */
+.why__sub {
+  max-width: 36ch;
+  margin-top: var(--space-headline-to-subheadline);
+  text-wrap: balance;
+}
+
+/* Jornada do Método. Desktop (≥ 1024px): cards 2 × 2, no fim deste bloco. Tablet: 2 colunas com um ponto no topo de
+   cada etapa (regras de 1023px, abaixo e adiante). Celular: 1 coluna, e cada ponto acende com a rolagem (regras de
+   767px, adiante; js/journey-lamp.js). Nenhuma linha liga as etapas, em nenhuma largura. */
 .journey {
   position: relative;
   display: grid;
@@ -430,35 +444,9 @@ html:not(.s03-motion) .s03__stage {
   list-style: none;
 }
 
-.journey::before {
-  content: "";
-  position: absolute;
-  top: 7px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgb(195 168 129 / 0.4);
-}
-
 .journey__stage {
   position: relative;
   padding-top: var(--space-xl);
-}
-
-.journey__stage::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 15px;
-  height: 15px;
-  border: 1px solid var(--color-brand-accent);
-  border-radius: 50%;
-  background: var(--color-bg-primary);
-}
-
-.journey__stage:last-child::before {
-  background: var(--color-brand-accent);
 }
 
 .journey__name {
@@ -469,19 +457,8 @@ html:not(.s03-motion) .s03__stage {
   font-weight: var(--font-weight-regular);
 }
 
-/* Etapas do Método (Seção 04). Tablet e celular: jornada em pontos e linha, sem cards (regras acima e @media de
-   1023px/767px). O numeral só existe no desktop, onde o card precisa de um marcador de ordem. */
-.journey__num {
-  display: none;
-}
-
-/* Frase de abertura de cada etapa: Heading da UI.05 (Switzer 500; 24px, 22px no celular via token) */
 .journey__accent {
   margin-top: var(--space-xs);
-  font-size: var(--font-size-heading);
-  line-height: var(--font-line-heading);
-  letter-spacing: var(--font-tracking-heading);
-  font-weight: var(--font-weight-medium);
 }
 
 .journey__detail {
@@ -489,34 +466,72 @@ html:not(.s03-motion) .s03__stage {
   color: var(--text-2);
 }
 
-/* Desktop (≥ 1024px): cada etapa vira um Card padrão (UI.07/UI.10), em grade 2 × 2. Exceção documentada a "excesso
-   de cards" / "headline + card + card + card" (UI.01): pedido do usuário para esta seção, só no desktop. Em 4 colunas
-   o parágrafo teria ~212px (≈ 26 caracteres por linha); em 2 × 2 tem ~520px (≈ 66). */
+/* Tablet e celular (< 1024px): ponto no topo de cada etapa */
+@media (max-width: 1023px) {
+  .journey__stage::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 15px;
+    height: 15px;
+    border: 1px solid var(--color-brand-accent);
+    border-radius: 50%;
+    background: var(--color-bg-primary);
+  }
+
+  .journey__stage:last-child::before {
+    background: var(--color-brand-accent);
+  }
+}
+
+/* Desktop (≥ 1024px): cada etapa vira um card no padrão visual do .s03__card (Seção 03 abaixo de 1024px), em grade
+   2 × 2: massa escura, luz radial no canto superior direito, contorno de 1,5px que clareia nesse mesmo canto, raio
+   grande e a mesma escala de texto. É só a aparência em repouso (o estado final da 03): sem tilt, sem luz que acende
+   com a rolagem e sem sombra (invisível sobre o Carvão). Exceção à spec (UI.01/UI.20) registrada no relatório da
+   rodada 2 (E1). */
 @media (min-width: 1024px) {
   .journey {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .journey::before,
-  .journey__stage::before {
-    display: none; /* sem linha nem pontos: o card é o marcador da etapa */
-  }
-
   .journey__stage {
+    --journey-radius: 28px; /* o raio dos cards da 03 no tablet (24px no celular) */
+    --journey-edge: color-mix(in srgb, var(--color-coffee) 95%, var(--color-text-on-dark));
+    --journey-glow: color-mix(in srgb, var(--color-bronze) 60%, var(--color-coffee));
+    isolation: isolate;
+    box-sizing: border-box;
     padding: var(--space-lg); /* card-padding-desktop: 32px (UI.19) */
-    border: var(--border-width-default) solid var(--rule);
-    border-radius: var(--radius-md);
-    background: var(--color-surface-dark);
+    border-radius: var(--journey-radius);
+    background: var(--color-charcoal);
+    color: var(--color-text-on-dark);
   }
 
-  .journey__num {
-    display: block;
-    margin-bottom: var(--space-md);
-    font-size: var(--font-size-micro);
-    line-height: var(--font-line-micro);
+  /* massa e contorno numa só camada, atrás do conteúdo: a receita do .s03__card-light com a luz plena (--a = 1) */
+  .journey__stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border: 1.5px solid transparent;
+    border-radius: inherit;
+    background:
+      radial-gradient(ellipse at 100% 0%, var(--journey-glow) 0%, var(--color-coffee) 47%, var(--color-charcoal) 100%) padding-box,
+      linear-gradient(35deg, var(--journey-edge) 0%, var(--journey-edge) 65%, var(--color-brand-accent) 100%) border-box;
+    pointer-events: none;
+  }
+
+  /* parágrafo na escala de leitura dos cards da 03 (.s03__text abaixo de 1024px): Switzer 500, 18px/1,5, marfim pleno */
+  .journey__detail {
+    max-width: 60ch;
+    color: var(--color-text-on-dark);
+    font-size: 1.125rem;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
     font-weight: var(--font-weight-medium);
-    letter-spacing: var(--font-tracking-micro);
-    color: var(--color-brand-accent);
+    font-synthesis: none;
+    text-wrap: pretty;
+    overflow-wrap: break-word;
   }
 }
 
@@ -797,10 +812,6 @@ html:not(.s03-motion) .s03__stage {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: var(--space-2xl);
   }
-
-  .journey::before {
-    display: none;
-  }
 }
 
 /* Seção 03 abaixo de 1024px: fluxo editorial em painéis (sem palco, sem trilho de rolagem).
@@ -1035,21 +1046,11 @@ html:not(.s03-motion) .s03__stage {
     --s03-radius: 24px;
   }
 
-  /* Jornada vertical: a linha passa a ligar as etapas de cima para baixo */
+  /* Jornada vertical, sem linha: os pontos ficam sozinhos na margem e acendem com a rolagem (js/journey-lamp.js) */
   .journey {
     grid-template-columns: 1fr;
     row-gap: var(--space-xl);
     margin-top: var(--space-3xl);
-  }
-
-  .journey::before {
-    display: block;
-    top: 8px;
-    bottom: 8px;
-    left: 7px;
-    right: auto;
-    width: 1px;
-    height: auto;
   }
 
   .journey__stage {
@@ -1059,6 +1060,27 @@ html:not(.s03-motion) .s03__stage {
 
   .journey__stage::before {
     top: 0.35em;
+  }
+
+  /* A Seção 04 sobe 12px sob a águia da divisa (a regra de 1023px reserva 24px): a headline agora é curta */
+  .s03-seam + .section {
+    padding-top: max(var(--section-space-default), calc(var(--s03-seam-w) * 0.63 + 12px));
+  }
+
+  /* Ponto aceso, "tubelight-navbar" (21st.dev) em CSS: a barra acesa vira o preenchimento do ponto e os halos
+     (bg-primary/20 + blur) viram dois box-shadow na cor de destaque. --a (0 → 1) vem da rolagem; sem JS ou com
+     movimento reduzido a classe .journey--lamp não existe e ficam os pontos de sempre. */
+  .journey--lamp .journey__stage {
+    --a: 0;
+  }
+
+  .journey--lamp .journey__stage::before,
+  .journey--lamp .journey__stage:last-child::before {
+    border-color: color-mix(in srgb, var(--color-brand-accent) calc(40% + 60% * var(--a)), transparent);
+    background: color-mix(in srgb, var(--color-brand-accent) calc(var(--a) * 100%), var(--color-bg-primary));
+    box-shadow:
+      0 0 0 calc(var(--a) * 4px) color-mix(in srgb, var(--color-brand-accent) calc(var(--a) * 16%), transparent),
+      0 0 calc(var(--a) * 16px) calc(var(--a) * 2px) color-mix(in srgb, var(--color-brand-accent) calc(var(--a) * 45%), transparent);
   }
 
   .closing {

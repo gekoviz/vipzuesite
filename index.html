@@ -228,37 +228,35 @@
       </div>
     </div>
 
-    <!-- 04 — MÉTODO (8.5). Absorveu a antiga Seção 05 ("Como fazemos") e a jornada Descoberta → Contato.
-         Desktop (≥ 1024px): 4 cards em 2 × 2 (Card padrão, UI.07/UI.10; exceção pedida ao "excesso de cards" da UI.01).
-         Tablet e celular: jornada em pontos e linha, sem cards. O id #metodo é o do menu e também o gancho do campo de
-         luz em js/light-field.js: não renomear sem atualizar o seletor lá. -->
-    <section class="section surface-dark why" id="metodo" aria-labelledby="method-title">
+    <!-- 04 — MÉTODO (8.5). Cabeçalho: headline + subheadline, entrada "fade-up" (21st.dev underline-hero-section).
+         Desktop (≥ 1024px): 4 cards 2 × 2 no padrão visual do .s03__card (exceções UI.01/UI.20 registradas no relatório
+         da rodada 2). Tablet: pontos em 2 colunas. Celular: pontos que acendem com a rolagem (js/journey-lamp.js,
+         21st.dev tubelight-navbar). O id #metodo é o do menu e também o gancho do campo de luz em js/light-field.js:
+         não renomear sem atualizar o seletor lá. Sem relevo 3D nesta seção (removido na rodada 2). -->
+    <section class="section surface-dark why" id="metodo" aria-labelledby="method-title method-sub">
       <div class="container">
         <header class="why__head">
-          <h2 class="t-display-l why__title" id="method-title" data-reveal>O que entregamos é uma página. <span class="why__title-turn">O que a torna estratégica é o propósito por trás de cada decisão.</span></h2>
+          <h2 class="t-display-l why__title" id="method-title" data-reveal="fade-up">O que entregamos é uma página.</h2>
+          <p class="why__sub" id="method-sub" data-reveal="fade-up" data-reveal-step="1">O que a torna estratégica é o propósito por trás de cada decisão.</p>
         </header>
 
         <ol class="journey" aria-label="Método: diagnóstico, estratégia, construção e entrega">
           <li class="journey__stage" data-reveal>
-            <span class="journey__num" aria-hidden="true">01</span>
             <h3 class="journey__name">Diagnóstico</h3>
             <p class="journey__accent">Primeiro, entendemos o seu negócio.</p>
             <p class="journey__detail">Cada negócio possui suas próprias dúvidas, objeções e informações que nem sempre chegam ao cliente no momento certo. Identificamos o que seus potenciais clientes mais precisam saber antes do contato, para que cheguem à conversa mais informados e preparados.</p>
           </li>
           <li class="journey__stage" data-reveal>
-            <span class="journey__num" aria-hidden="true">02</span>
             <h3 class="journey__name">Estratégia</h3>
             <p class="journey__accent">Depois, definimos o caminho.</p>
             <p class="journey__detail">Organizamos as informações, os argumentos e as provas que precisam aparecer na página, definindo o que apresentar e em qual ordem. Cada elemento é pensado para esclarecer dúvidas, construir confiança e conduzir o potencial cliente ao próximo passo.</p>
           </li>
           <li class="journey__stage" data-reveal>
-            <span class="journey__num" aria-hidden="true">03</span>
             <h3 class="journey__name">Construção</h3>
             <p class="journey__accent">Transformamos estratégia em experiência digital.</p>
             <p class="journey__detail">A partir dessas decisões, desenvolvemos o conteúdo, a interface e a estrutura da página, unindo apresentação visual e objetivo comercial. Cada elemento ganha forma para criar uma experiência clara, profissional e alinhada ao seu negócio.</p>
           </li>
           <li class="journey__stage" data-reveal>
-            <span class="journey__num" aria-hidden="true">04</span>
             <h3 class="journey__name">Entrega</h3>
             <p class="journey__accent">Sua estratégia, agora no ar.</p>
             <p class="journey__detail">Finalizamos, verificamos o funcionamento e publicamos a página conforme o escopo definido. Na entrega, apresentamos o que foi desenvolvido e as principais decisões estratégicas que orientaram sua criação, para que você compreenda não apenas o resultado, mas também o propósito por trás dele.</p>
