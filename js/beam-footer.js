@@ -157,7 +157,7 @@
       run();
     },
     { threshold: 0.12 },
-  ).observe(root);
+  ).observe(root.closest("[data-footer-curtain]") || root);
   reduced.addEventListener?.("change", () => {
     if (reduced.matches) root.dataset.in = "true";
     run();
