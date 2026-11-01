@@ -280,7 +280,7 @@ html:not(.s03-motion) .s03__stage {
 }
 
 /* =========================================================
-   03 — Por que isso importa?
+   04 — Método (fundo escuro com campo de luz; antiga "Por que isso importa?")
    ========================================================= */
 /* Fundo igual ao da Hero: o campo de luz escuro num canvas próprio da seção (js/light-field.js), sticky dentro de um
    invólucro do tamanho dela. A borda superior é a da própria seção, então rola junto com a página (no iPhone, a
@@ -309,11 +309,7 @@ html:not(.s03-motion) .s03__stage {
   opacity: 0.5;
 }
 
-.why.has-field .example__label {
-  color: var(--color-champagne-light);
-}
-
-/* Logo em relevo no fim da Seção 04, sobre o campo escuro e antes da virada para o marfim do Método. As camadas
+/* Logo em relevo no fim da Seção 04, sobre o campo escuro e antes da virada para o bege de « Para quem é ». As camadas
    são montadas por js/brand-relief.js; sem JS fica só o vão (a peça é decorativa, aria-hidden). */
 .brand-relief {
   position: relative;
@@ -366,12 +362,6 @@ html:not(.s03-motion) .s03__stage {
 
 .why__title-turn {
   display: block;
-}
-
-.why__lead {
-  max-width: calc(var(--col) * 5 + var(--grid-gutter) * 4);
-  margin-top: var(--space-headline-to-subheadline);
-  color: var(--text-2);
 }
 
 /* Jornada: diagrama funcional (a linha liga as etapas — UI.14 permite) */
@@ -473,166 +463,6 @@ html:not(.s03-motion) .s03__stage {
     letter-spacing: var(--font-tracking-micro);
     color: var(--color-brand-accent);
   }
-}
-
-.why__statement {
-  max-width: calc(var(--col) * 9 + var(--grid-gutter) * 8);
-  margin-top: var(--space-5xl);
-}
-
-.why__statement span {
-  color: var(--text-2);
-}
-
-/* Exemplo da clínica: dois cards de superfície café (UI.07) */
-.example {
-  margin: var(--space-5xl) 0 0;
-}
-
-.example__label {
-  font-size: var(--font-size-micro);
-  line-height: var(--font-line-micro);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-micro);
-  text-transform: uppercase;
-  color: var(--color-brand-accent);
-}
-
-.example__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--grid-gutter);
-  margin-top: var(--space-md);
-}
-
-.example__card {
-  padding: var(--card-padding, 32px);
-  border: var(--border-width-default) solid var(--rule);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-dark);
-}
-
-.example__card--strategic {
-  border-color: rgb(195 168 129 / 0.45);
-}
-
-.example__title {
-  font-size: var(--font-size-heading);
-  line-height: var(--font-line-heading);
-  letter-spacing: var(--font-tracking-heading);
-  font-weight: var(--font-weight-medium);
-}
-
-.flow {
-  display: grid;
-  gap: var(--space-xl);
-  margin: var(--space-md) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* Seta funcional entre etapas do fluxo */
-.flow > li + li {
-  position: relative;
-}
-
-.flow > li + li::before {
-  content: "↓";
-  position: absolute;
-  top: calc(var(--space-xl) * -0.5 - 0.75em);
-  left: 0;
-  color: var(--color-brand-accent);
-  line-height: 1.5;
-}
-
-.flow__quotes,
-.flow__items {
-  margin: var(--space-xs) 0 0;
-  padding: 0;
-  list-style: none;
-  color: var(--text-2);
-}
-
-.flow__quotes {
-  display: grid;
-  gap: 4px;
-}
-
-.flow__items {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px var(--space-md);
-}
-
-/* =========================================================
-   04 — Método
-   ========================================================= */
-.method__grid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--grid-gutter);
-  row-gap: var(--space-5xl);
-  align-items: end;
-}
-
-.method__head {
-  grid-column: 1 / span 7;
-}
-
-.method__lead {
-  max-width: calc(var(--col) * 5 + var(--grid-gutter) * 4);
-  margin-top: var(--space-headline-to-subheadline);
-  color: var(--text-2);
-}
-
-/* Quatro etapas com parágrafos longos: 2 × 2 (em quatro colunas cada parágrafo ficaria com ~280px de largura) */
-.steps {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-3xl) var(--grid-gutter);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* A borda superior funciona como linha de progressão entre as etapas */
-.step {
-  padding-top: var(--space-md);
-  border-top: var(--border-width-default) solid rgb(34 32 29 / 0.24);
-}
-
-.step__number {
-  display: block;
-  font-family: var(--font-display);
-  font-size: var(--font-size-display-lg);
-  line-height: 1;
-  letter-spacing: var(--font-tracking-display-lg);
-  color: var(--color-bronze);
-}
-
-.step__name {
-  margin-top: var(--space-md);
-  font-size: var(--font-size-micro);
-  line-height: var(--font-line-micro);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-micro);
-  text-transform: uppercase;
-  color: var(--text-2);
-}
-
-.step__accent {
-  margin-top: var(--space-xs);
-  font-family: var(--font-display);
-  font-size: var(--font-size-heading);
-  line-height: var(--font-line-heading);
-  letter-spacing: var(--font-tracking-display-md);
-}
-
-.step__detail {
-  margin-top: var(--space-sm);
-  max-width: 56ch;
-  color: var(--text-2);
 }
 
 /* =========================================================
@@ -885,7 +715,6 @@ html:not(.s03-motion) .s03__stage {
    Tablet
    ========================================================= */
 @media (max-width: 1023px) {
-  .method__head,
   .audience__head,
   .situations,
   .closing__title,
@@ -893,10 +722,6 @@ html:not(.s03-motion) .s03__stage {
   .faq__title,
   .accordion {
     grid-column: 1 / -1;
-  }
-
-  .method__grid {
-    row-gap: var(--space-3xl);
   }
 
   .audience__head {
@@ -911,17 +736,6 @@ html:not(.s03-motion) .s03__stage {
 
   .faq__title {
     margin-bottom: var(--space-2xl);
-  }
-
-  /* Larguras em colunas de 12 não valem nos grids de 8/4: medida por caracteres */
-  .why__head,
-  .why__statement {
-    max-width: none;
-  }
-
-  .why__lead,
-  .method__lead {
-    max-width: 52ch;
   }
 
   .journey {
@@ -1166,10 +980,6 @@ html:not(.s03-motion) .s03__stage {
     --s03-radius: 24px;
   }
 
-  .example__card {
-    --card-padding: 24px;
-  }
-
   /* Jornada vertical: a linha passa a ligar as etapas de cima para baixo */
   .journey {
     grid-template-columns: 1fr;
@@ -1194,20 +1004,6 @@ html:not(.s03-motion) .s03__stage {
 
   .journey__stage::before {
     top: 0.35em;
-  }
-
-  .why__statement,
-  .example {
-    margin-top: var(--space-3xl);
-  }
-
-  .example__grid,
-  .steps {
-    grid-template-columns: 1fr;
-  }
-
-  .steps {
-    row-gap: var(--space-xl);
   }
 
   .closing {
