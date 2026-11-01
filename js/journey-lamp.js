@@ -1,4 +1,5 @@
-// Jornada do Método (Seção 04), celular: cada ponto acende com a rolagem. Porte sem React do "tubelight-navbar" (21st.dev):
+// Jornada do Método (Seção 04). Desktop: os cards ganham luz, tilt e spotlight dos cards da 03 (fim do arquivo).
+// Celular: cada ponto acende com a rolagem. Porte sem React do "tubelight-navbar" (21st.dev):
 // a lâmpada acesa vira o ponto preenchido com halo (css/sections.css, .journey--lamp), e a mola do framer-motion vira a
 // própria rolagem, suavizada. Mesma convenção da narrativa da 03 (js/scroll-narrative.js): o estado é função pura da
 // posição de rolagem (acende descendo, apaga subindo), a geometria é medida só no refresh (resize, rotação, fontes) e
@@ -66,6 +67,98 @@
       ScrollTrigger.removeEventListener("refreshInit", measure);
       trigger.kill();
       list.classList.remove("journey--lamp");
+      stages.forEach((el, i) => {
+        el.style.removeProperty("--a");
+        last[i] = -1;
+      });
+    };
+  });
+
+  // ---------- Desktop (≥ 1024px): os cards ganham os efeitos dos cards da 03 ----------
+  // Luz e contorno acendem quando o card entra na tela (o topo de 88% a 62% da altura; a 03 acende no começo do
+  // percurso do card) e apagam ao subir. Tilt "gravitate" + spotlight, os mesmos valores do bindTilt de
+  // js/scroll-narrative.js: 18°, escala 1,05, perspectiva 1200px; no toque, inclina ao encostar e volta ao soltar.
+  const CARD_FROM = 0.88;
+  const CARD_TO = 0.62;
+  const TILT = { limit: 18, scale: 1.05, perspective: 1200 };
+  const TILT_REST = `perspective(${TILT.perspective}px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+
+  const bindTilt = (card) => {
+    const move = (e) => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      const xRot = (py - 0.5) * (TILT.limit * 2);
+      const yRot = (px - 0.5) * -(TILT.limit * 2);
+      card.style.transform = `perspective(${TILT.perspective}px) rotateX(${xRot.toFixed(2)}deg) rotateY(${yRot.toFixed(2)}deg) scale3d(${TILT.scale}, ${TILT.scale}, ${TILT.scale})`;
+      card.style.setProperty("--sx", `${(px * 100).toFixed(1)}%`);
+      card.style.setProperty("--sy", `${(py * 100).toFixed(1)}%`);
+    };
+    const enter = () => card.classList.add("is-tilting");
+    const leave = () => {
+      card.style.transform = TILT_REST;
+      card.classList.remove("is-tilting");
+    };
+    const press = (e) => {
+      enter();
+      move(e);
+    };
+    const release = (e) => e.pointerType !== "mouse" && leave();
+    const events = [
+      ["pointerenter", enter],
+      ["pointerdown", press],
+      ["pointermove", move],
+      ["pointerup", release],
+      ["pointerleave", leave],
+      ["pointercancel", leave],
+    ];
+    events.forEach(([type, fn]) => card.addEventListener(type, fn));
+    return () => {
+      events.forEach(([type, fn]) => card.removeEventListener(type, fn));
+      card.classList.remove("is-tilting");
+      ["transform", "--sx", "--sy"].forEach((prop) => card.style.removeProperty(prop));
+    };
+  };
+
+  gsap.matchMedia().add("(prefers-reduced-motion: no-preference) and (min-width: 1024px)", () => {
+    let alive = true;
+    let cardTops = [];
+    const measureCards = () => {
+      vh = window.innerHeight;
+      cardTops = stages.map((el) => layoutTop(el));
+    };
+    const renderCards = (y) => {
+      stages.forEach((el, i) => {
+        const a = Math.round(smooth(clamp01((vh * CARD_FROM - (cardTops[i] - y)) / (vh * (CARD_FROM - CARD_TO)))) * 1000) / 1000;
+        if (a === last[i]) return;
+        last[i] = a;
+        el.style.setProperty("--a", a);
+      });
+    };
+
+    list.classList.add("journey--fx");
+    measureCards();
+    ScrollTrigger.addEventListener("refreshInit", measureCards);
+    const trigger = ScrollTrigger.create({
+      start: 0,
+      end: "max",
+      onUpdate: (self) => renderCards(self.scroll()),
+      onRefresh: (self) => renderCards(self.scroll()),
+    });
+    const untilt = stages.map(bindTilt);
+
+    document.fonts?.ready.then(() => {
+      if (!alive) return;
+      measureCards();
+      renderCards(window.scrollY);
+    });
+
+    return () => {
+      alive = false;
+      ScrollTrigger.removeEventListener("refreshInit", measureCards);
+      trigger.kill();
+      untilt.forEach((fn) => fn());
+      list.classList.remove("journey--fx");
       stages.forEach((el, i) => {
         el.style.removeProperty("--a");
         last[i] = -1;

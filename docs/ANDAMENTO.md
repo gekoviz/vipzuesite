@@ -1,5 +1,26 @@
 # Andamento — VIPZUE 2026
 
+## 01/11/2026 — Cards da Seção 4 no desktop com os efeitos da 03
+
+**Pedido:** os cards do desktop estavam "mortos". O usuário quer neles os mesmos efeitos dos cards da Seção 3 no celular.
+
+**Feito (≥ 1024px, só com movimento permitido):**
+- **Luz e contorno que acendem com a rolagem:** `--a` vai de 0 a 1 enquanto o topo do card desce de 88% para 62% da tela, e apaga ao subir. As duas camadas do `.s03__card` (superfície + luz a 0,28 + 0,72 × `--a`) viraram uma só no `::before`, misturada com `color-mix`.
+- **Tilt e spotlight:** mesmo comportamento do `bindTilt` da 03 (18°, escala 1,05, perspectiva 1200px, 0,2s). O brilho fica no `::after` e segue o ponteiro. No toque, o card inclina ao encostar e volta ao soltar.
+- **Onde está o código:** `js/journey-lamp.js` ganhou o ramo do desktop, e `css/sections.css` ganhou `.journey--fx`. O HTML não mudou.
+- **Sem JS ou com movimento reduzido:** `--a` fica em 1 e o card aparece aceso e parado, como antes.
+
+**Fora (por ora):**
+- Sombra, que é invisível sobre o Carvão.
+- Entrada 3D por rolagem: as etapas mantêm a entrada do `data-reveal`.
+- Revelação palavra a palavra.
+
+**Verificado em 1440×900:**
+- `--a` é 0 com o card a 95% da tela, 0,23 a 80%, 0,77 a 70% e 1 a 50%.
+- No hover, o tilt e o spotlight aparecem.
+- O celular continua com `journey--lamp` e o tablet continua com pontos, sem `--a`.
+- Console sem erros.
+
 ## 01/11/2026 — Seção 4, rodada 2 (branch `feat/secao4-rodada2`, sem push)
 
 **Pedido:** PDF "PROMPT VIPZUE secao4 rodada2". Seis mudanças:

@@ -455,9 +455,10 @@ html:not(.s03-motion) .s03__stage {
 
 /* Desktop (≥ 1024px): cada etapa vira um card no padrão visual do .s03__card (Seção 03 abaixo de 1024px), em grade
    2 × 2: massa escura, luz radial no canto superior direito, contorno de 1,5px que clareia nesse mesmo canto, raio
-   grande e a mesma escala de texto. É só a aparência em repouso (o estado final da 03): sem tilt, sem luz que acende
-   com a rolagem e sem sombra (invisível sobre o Carvão). Exceção à spec (UI.01/UI.20) registrada no relatório da
-   rodada 2 (E1). */
+   grande e a mesma escala de texto. Com movimento permitido, os efeitos da 03 (js/journey-lamp.js): luz e contorno
+   que acendem com a rolagem (--a), tilt sob o ponteiro e spotlight. Sem sombra (invisível sobre o Carvão). Sem JS ou
+   com movimento reduzido, --a fica em 1: o card aceso, parado. Exceção à spec (UI.01/UI.20) registrada no relatório
+   da rodada 2 (E1). */
 @media (min-width: 1024px) {
   .journey {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -475,8 +476,10 @@ html:not(.s03-motion) .s03__stage {
     color: var(--color-text-on-dark);
   }
 
-  /* massa e contorno numa só camada, atrás do conteúdo: a receita do .s03__card-light com a luz plena (--a = 1) */
+  /* massa e contorno numa só camada, atrás do conteúdo: as duas camadas do .s03__card (superfície + luz a
+     0,28 + 0,72 × --a) fundidas — só o brilho do canto e a ponta do contorno mudam com a luz */
   .journey__stage::before {
+    --journey-light: calc(28% + 72% * var(--a, 1));
     content: "";
     position: absolute;
     inset: 0;
@@ -484,9 +487,34 @@ html:not(.s03-motion) .s03__stage {
     border: 1.5px solid transparent;
     border-radius: inherit;
     background:
-      radial-gradient(ellipse at 100% 0%, var(--journey-glow) 0%, var(--color-coffee) 47%, var(--color-charcoal) 100%) padding-box,
-      linear-gradient(35deg, var(--journey-edge) 0%, var(--journey-edge) 65%, var(--color-brand-accent) 100%) border-box;
+      radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--journey-glow) var(--journey-light), var(--color-brown)) 0%, var(--color-coffee) 47%, var(--color-charcoal) 100%) padding-box,
+      linear-gradient(35deg, var(--journey-edge) 0%, var(--journey-edge) 65%, color-mix(in srgb, var(--color-brand-accent) var(--journey-light), var(--color-bronze)) 100%) border-box;
     pointer-events: none;
+  }
+
+  /* spotlight do tilt (o .s03__spot da 03): segue o ponteiro, acima da massa e abaixo do texto */
+  .journey__stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(circle 260px at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.15) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .journey__stage.is-tilting::after {
+    opacity: 1;
+  }
+
+  /* tilt de 0,2s (o do .s03__card); a entrada do data-reveal mantém a opacidade e o atraso dela */
+  .journey--fx .journey__stage {
+    transition:
+      opacity var(--duration-entrance) var(--ease-emphasized),
+      transform 0.2s ease-out;
+    transition-delay: var(--reveal-delay, 0ms), 0ms;
   }
 
   /* parágrafo na escala de leitura dos cards da 03 (.s03__text abaixo de 1024px): Switzer 500, 18px/1,5, marfim pleno */
