@@ -1228,6 +1228,12 @@ html.js-reveal .faq.is-list-in .accordion__item {
   color: color-mix(in srgb, var(--bf-ink) 80%, transparent);
 }
 
+/* Links legais: a 78% caíam a 4,49:1 sobre o foco mais claro do campo (768px); a 80%, como a copy, ficam ≥ 4,5:1.
+   Especificidade baixa (0,2,0) de propósito: o hover/foco (.footer-link[href]:hover) continua acendendo para --bf-ink. */
+.has-field .footer-link {
+  color: color-mix(in srgb, var(--bf-ink) 80%, transparent);
+}
+
 /* Wordmark: o preenchimento de repouso passa de marrom → carvão (pensado para o fundo chapado) para um champagne translúcido,
    que se lê sobre qualquer ponto do campo e afunda no escuro na base, como na referência. As duas primeiras camadas
    (brilho do ponteiro e feixe) são as mesmas de .site-footer__l; só a terceira muda. */
