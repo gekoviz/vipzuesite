@@ -160,7 +160,7 @@ Da divisa do desktop, o script confirma o véu de 270/96px a 1440 (mesmas regras
 - **Desempenho em aparelho e rolagem longa de ponta a ponta duas vezes** (§13.6): não feitos em aparelho; em emulação não houve `webglcontextlost` nem erro de console.
 - **Botão "voltar" (bfcache) e rotação do aparelho** (§9.5): não testados.
 - **Skills de auditoria** (contrast, seam, overflow, deadspace, responsive, a11y, anim-lint, spec-check, vsdesign — §13.8): não rodadas nesta rodada.
-- **Site publicado:** a validação foi só no local. Falta rodar o script na prévia da branch depois do push.
+- **Site publicado:** a validação foi só no local, por decisão do usuário (01/11/2026). A branch está no GitHub, mas a Vercel não publica status nos commits e não foi achada URL de prévia; o script não rodou numa versão publicada.
 - **Botão do 06 sem número de WhatsApp:** tem a aparência ativa da Hero, mas não é clicável (`aria-disabled="true"`, `cursor: default`) até o `config.js` ter o número.
 - **"Mais à esquerda" (headline da 04):** interpretado como −6px de alinhamento óptico só no título (x = 18px), com a subheadline no eixo de 24px. O ajuste é feito por `--why-title-shift`.
 
