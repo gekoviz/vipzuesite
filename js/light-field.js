@@ -289,10 +289,10 @@ void main() {
   document.body.prepend(canvas);
   root.classList.add("has-light-field");
 
-  // Seção 04 ("Seu cliente encontrou sua empresa. E depois?"): o campo escuro da Hero num canvas DENTRO da seção
+  // Seção 04 (Método — "O que entregamos é uma página…"): o campo escuro da Hero num canvas DENTRO da seção
   // (sticky num invólucro do tamanho dela), sobre o Carvão a 50%. A borda superior é a da própria seção: rola junto
   // com a página no compositor, sem o atraso que a frente desenhada no canvas fixo teria no Safari do iPhone.
-  const why = document.querySelector("#por-que-importa");
+  const why = document.querySelector("#metodo");
   let whyField = null;
   if (why) {
     const wrap = document.createElement("div");

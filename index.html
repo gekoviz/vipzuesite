@@ -228,95 +228,45 @@
       </div>
     </div>
 
-    <!-- 03 — POR QUE ISSO IMPORTA? (8.4). Jornada Descoberta → Informação → Confiança → Contato: proposta de
-         visualização da lógica do documento; perguntas e exemplo da clínica vêm da fonte. -->
-    <section class="section surface-dark why" id="por-que-importa" aria-labelledby="why-title">
+    <!-- 04 — MÉTODO (8.5). Absorveu a antiga Seção 05 ("Como fazemos") e a jornada Descoberta → Contato.
+         Desktop (≥ 1024px): 4 cards em 2 × 2 (Card padrão, UI.07/UI.10; exceção pedida ao "excesso de cards" da UI.01).
+         Tablet e celular: jornada em pontos e linha, sem cards. O id #metodo é o do menu e também o gancho do campo de
+         luz em js/light-field.js: não renomear sem atualizar o seletor lá. -->
+    <section class="section surface-dark why" id="metodo" aria-labelledby="method-title">
       <div class="container">
         <header class="why__head">
-          <h2 class="t-display-l why__title" id="why-title" data-reveal>Seu cliente encontrou sua empresa. <span class="why__title-turn">E depois?</span></h2>
-          <p class="t-body-lg why__lead" data-reveal>Entre descobrir uma empresa e decidir entrar em contato, o potencial cliente procura respostas.</p>
+          <h2 class="t-display-l why__title" id="method-title" data-reveal>O que entregamos é uma página. <span class="why__title-turn">O que a torna estratégica é o propósito por trás de cada decisão.</span></h2>
         </header>
 
-        <ol class="journey" aria-label="Jornada do potencial cliente">
+        <ol class="journey" aria-label="Método: diagnóstico, estratégia, construção e entrega">
           <li class="journey__stage" data-reveal>
-            <h3 class="journey__name">Descoberta</h3>
-            <ul class="journey__questions">
-              <li>O que essa empresa faz?</li>
-              <li>Esse serviço serve para mim?</li>
-            </ul>
+            <span class="journey__num" aria-hidden="true">01</span>
+            <h3 class="journey__name">Diagnóstico</h3>
+            <p class="journey__accent">Primeiro, entendemos o seu negócio.</p>
+            <p class="journey__detail">Cada negócio possui suas próprias dúvidas, objeções e informações que nem sempre chegam ao cliente no momento certo. Identificamos o que seus potenciais clientes mais precisam saber antes do contato, para que cheguem à conversa mais informados e preparados.</p>
           </li>
           <li class="journey__stage" data-reveal>
-            <h3 class="journey__name">Informação</h3>
-            <ul class="journey__questions">
-              <li>Como funciona?</li>
-              <li>Onde fica?</li>
-            </ul>
+            <span class="journey__num" aria-hidden="true">02</span>
+            <h3 class="journey__name">Estratégia</h3>
+            <p class="journey__accent">Depois, definimos o caminho.</p>
+            <p class="journey__detail">Organizamos as informações, os argumentos e as provas que precisam aparecer na página, definindo o que apresentar e em qual ordem. Cada elemento é pensado para esclarecer dúvidas, construir confiança e conduzir o potencial cliente ao próximo passo.</p>
           </li>
           <li class="journey__stage" data-reveal>
-            <h3 class="journey__name">Confiança</h3>
-            <ul class="journey__questions">
-              <li>Posso confiar?</li>
-              <li>Quem já comprou?</li>
-            </ul>
+            <span class="journey__num" aria-hidden="true">03</span>
+            <h3 class="journey__name">Construção</h3>
+            <p class="journey__accent">Transformamos estratégia em experiência digital.</p>
+            <p class="journey__detail">A partir dessas decisões, desenvolvemos o conteúdo, a interface e a estrutura da página, unindo apresentação visual e objetivo comercial. Cada elemento ganha forma para criar uma experiência clara, profissional e alinhada ao seu negócio.</p>
           </li>
           <li class="journey__stage" data-reveal>
-            <h3 class="journey__name">Contato</h3>
-            <ul class="journey__questions">
-              <li>Qual é o próximo passo?</li>
-            </ul>
+            <span class="journey__num" aria-hidden="true">04</span>
+            <h3 class="journey__name">Entrega</h3>
+            <p class="journey__accent">Sua estratégia, agora no ar.</p>
+            <p class="journey__detail">Finalizamos, verificamos o funcionamento e publicamos a página conforme o escopo definido. Na entrega, apresentamos o que foi desenvolvido e as principais decisões estratégicas que orientaram sua criação, para que você compreenda não apenas o resultado, mas também o propósito por trás dele.</p>
           </li>
         </ol>
-
-        <p class="t-display-m why__statement" data-reveal>Quando essas respostas não estão organizadas, surge atrito. <span>A Landing Page funciona como um ponto estratégico dessa jornada.</span></p>
-
-        <!-- Exemplo ilustrativo do documento (não é um case da VIPZUE) -->
-        <figure class="example" data-reveal>
-          <figcaption class="example__label">Exemplo: clínica odontológica</figcaption>
-          <div class="example__grid">
-            <div class="example__card">
-              <h3 class="example__title">Sem estrutura digital adequada</h3>
-              <ol class="flow">
-                <li>Instagram / anúncio</li>
-                <li>O potencial cliente se interessa.</li>
-                <li>
-                  WhatsApp:
-                  <ul class="flow__quotes">
-                    <li>“Vocês fazem implante?”</li>
-                    <li>“Onde fica a clínica?”</li>
-                    <li>“Quais profissionais atendem?”</li>
-                    <li>“Como funciona a avaliação?”</li>
-                    <li>“Tem depoimentos?”</li>
-                  </ul>
-                </li>
-                <li>A equipe precisa responder manualmente informações básicas antes de iniciar uma conversa comercial mais relevante.</li>
-              </ol>
-            </div>
-            <div class="example__card example__card--strategic">
-              <h3 class="example__title">Com Landing Page estratégica</h3>
-              <ol class="flow">
-                <li>Instagram / anúncio</li>
-                <li>
-                  Landing Page:
-                  <ul class="flow__items">
-                    <li>Serviços</li>
-                    <li>Estrutura da clínica</li>
-                    <li>Profissionais</li>
-                    <li>Depoimentos</li>
-                    <li>Perguntas frequentes</li>
-                    <li>Localização</li>
-                    <li>Informações importantes</li>
-                    <li>CTA</li>
-                  </ul>
-                </li>
-                <li>WhatsApp / agendamento</li>
-                <li>O potencial cliente chega mais informado e com menos dúvidas básicas.</li>
-              </ol>
-            </div>
-          </div>
-        </figure>
       </div>
 
-      <!-- Logo em relevo na divisa com o Método: camadas de SVG em 3D que inclinam com o mouse (ou com a rolagem no toque) -->
+      <!-- Logo em relevo no fim da Seção 04, antes da divisa com « Para quem é »: camadas de SVG em 3D que inclinam com o mouse (ou com a rolagem no toque) -->
       <div class="brand-relief" data-brand-relief aria-hidden="true">
         <div class="brand-relief__shadow"></div>
         <div class="brand-relief__object" data-brand-relief-object></div>
@@ -332,43 +282,6 @@
             </g>
           </svg>
         </template>
-      </div>
-    </section>
-
-    <!-- 04 — MÉTODO (8.5) -->
-    <section class="section surface-ivory method" id="metodo" aria-labelledby="method-title">
-      <div class="container method__grid">
-        <header class="method__head">
-          <h2 class="t-display-l" id="method-title" data-reveal>Como fazemos</h2>
-          <p class="t-body-lg method__lead" data-reveal>O que entregamos é uma página. O que a torna estratégica é o propósito por trás de cada decisão.</p>
-        </header>
-
-        <ol class="steps" aria-label="Método: diagnóstico, estratégia, construção e entrega">
-          <li class="step" data-reveal>
-            <span class="step__number" aria-hidden="true">01</span>
-            <h3 class="step__name">Diagnóstico</h3>
-            <p class="step__accent">Primeiro, entendemos o seu negócio.</p>
-            <p class="step__detail">Cada negócio possui suas próprias dúvidas, objeções e informações que nem sempre chegam ao cliente no momento certo. Identificamos o que seus potenciais clientes mais precisam saber antes do contato, para que cheguem à conversa mais informados e preparados.</p>
-          </li>
-          <li class="step" data-reveal>
-            <span class="step__number" aria-hidden="true">02</span>
-            <h3 class="step__name">Estratégia</h3>
-            <p class="step__accent">Depois, definimos o caminho.</p>
-            <p class="step__detail">Organizamos as informações, os argumentos e as provas que precisam aparecer na página, definindo o que apresentar e em qual ordem. Cada elemento é pensado para esclarecer dúvidas, construir confiança e conduzir o potencial cliente ao próximo passo.</p>
-          </li>
-          <li class="step" data-reveal>
-            <span class="step__number" aria-hidden="true">03</span>
-            <h3 class="step__name">Construção</h3>
-            <p class="step__accent">Transformamos estratégia em experiência digital.</p>
-            <p class="step__detail">A partir dessas decisões, desenvolvemos o conteúdo, a interface e a estrutura da página, unindo apresentação visual e objetivo comercial. Cada elemento ganha forma para criar uma experiência clara, profissional e alinhada ao seu negócio.</p>
-          </li>
-          <li class="step" data-reveal>
-            <span class="step__number" aria-hidden="true">04</span>
-            <h3 class="step__name">Entrega</h3>
-            <p class="step__accent">Sua estratégia, agora no ar.</p>
-            <p class="step__detail">Finalizamos, verificamos o funcionamento e publicamos a página conforme o escopo definido. Na entrega, apresentamos o que foi desenvolvido e as principais decisões estratégicas que orientaram sua criação, para que você compreenda não apenas o resultado, mas também o propósito por trás dele.</p>
-          </li>
-        </ol>
       </div>
     </section>
 

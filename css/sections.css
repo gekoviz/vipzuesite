@@ -364,10 +364,6 @@ html:not(.s03-motion) .s03__stage {
   }
 }
 
-.why__head {
-  max-width: calc(var(--col) * 9 + var(--grid-gutter) * 8);
-}
-
 .why__title-turn {
   display: block;
 }
@@ -428,13 +424,55 @@ html:not(.s03-motion) .s03__stage {
   font-weight: var(--font-weight-regular);
 }
 
-.journey__questions {
-  display: grid;
-  gap: var(--space-xs);
-  margin: var(--space-sm) 0 0;
-  padding: 0;
-  list-style: none;
+/* Etapas do Método (Seção 04). Tablet e celular: jornada em pontos e linha, sem cards (regras acima e @media de
+   1023px/767px). O numeral só existe no desktop, onde o card precisa de um marcador de ordem. */
+.journey__num {
+  display: none;
+}
+
+/* Frase de abertura de cada etapa: Heading da UI.05 (Switzer 500; 24px, 22px no celular via token) */
+.journey__accent {
+  margin-top: var(--space-xs);
+  font-size: var(--font-size-heading);
+  line-height: var(--font-line-heading);
+  letter-spacing: var(--font-tracking-heading);
+  font-weight: var(--font-weight-medium);
+}
+
+.journey__detail {
+  margin-top: var(--space-sm);
   color: var(--text-2);
+}
+
+/* Desktop (≥ 1024px): cada etapa vira um Card padrão (UI.07/UI.10), em grade 2 × 2. Exceção documentada a "excesso
+   de cards" / "headline + card + card + card" (UI.01): pedido do usuário para esta seção, só no desktop. Em 4 colunas
+   o parágrafo teria ~212px (≈ 26 caracteres por linha); em 2 × 2 tem ~520px (≈ 66). */
+@media (min-width: 1024px) {
+  .journey {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .journey::before,
+  .journey__stage::before {
+    display: none; /* sem linha nem pontos: o card é o marcador da etapa */
+  }
+
+  .journey__stage {
+    padding: var(--space-lg); /* card-padding-desktop: 32px (UI.19) */
+    border: var(--border-width-default) solid var(--rule);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-dark);
+  }
+
+  .journey__num {
+    display: block;
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-micro);
+    line-height: var(--font-line-micro);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--font-tracking-micro);
+    color: var(--color-brand-accent);
+  }
 }
 
 .why__statement {
