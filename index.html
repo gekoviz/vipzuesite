@@ -390,28 +390,57 @@
     </section>
   </main>
 
-  <!-- 08 — FOOTER (8.9 / UI.12). Destinos de Instagram, WhatsApp, Privacidade e Termos pendentes:
-       sem destino real, os itens ficam visíveis mas não simulam links funcionais (ver js/config.js). -->
-  <footer class="site-footer">
+  <!-- 08 — FOOTER (8.9 / UI.12). Porte sem React do "Beam Wordmark Footer" (21st.dev, kedhareswer) na paleta VIPZUE:
+       Carvão profundo atravessado por um feixe dourado lento, com a marca em wordmark gigante cortada na base, que o
+       feixe e o brilho do ponteiro atravessam (js/beam-footer.js). Destinos de Instagram, WhatsApp, Privacidade e
+       Termos pendentes: sem destino real, os itens ficam visíveis mas não simulam links funcionais (ver js/config.js). -->
+  <footer class="site-footer" data-beam-footer>
+    <div class="site-footer__rule" aria-hidden="true"></div>
+    <div class="site-footer__sky" aria-hidden="true">
+      <div class="site-footer__wash"></div>
+      <div class="site-footer__bands"></div>
+      <div class="site-footer__beam"></div>
+      <div class="site-footer__glow"></div>
+      <div class="site-footer__grain"></div>
+    </div>
+
     <div class="container site-footer__grid">
-      <img class="site-footer__logo" src="assets/brand/vipzue-logo-marrom.png" width="1200" height="205" alt="VIPZUE" loading="lazy">
-      <ul class="site-footer__social" aria-label="Canais oficiais">
-        <li>
-          <a class="social-link" data-link="instagram" aria-label="Instagram da VIPZUE">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></svg>
-          </a>
-        </li>
-        <li>
-          <a class="social-link" data-link="whatsapp" aria-label="WhatsApp da VIPZUE">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
-          </a>
-        </li>
-      </ul>
-      <ul class="site-footer__legal">
-        <li><a class="footer-link" data-link="privacy">Política de Privacidade</a></li>
-        <li><a class="footer-link" data-link="terms">Termos de Uso</a></li>
-      </ul>
-      <p class="site-footer__copy">© 2026 VIPZUE. Todos os direitos reservados.</p>
+      <div class="site-footer__col site-footer__col--brand">
+        <p class="site-footer__label">© 2026 VIPZUE</p>
+        <ul class="site-footer__social" aria-label="Canais oficiais">
+          <li class="site-footer__fade">
+            <a class="social-link" data-link="instagram" aria-label="Instagram da VIPZUE">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></svg>
+              <span class="site-footer__tip" aria-hidden="true">Instagram</span>
+            </a>
+          </li>
+          <li class="site-footer__fade">
+            <a class="social-link" data-link="whatsapp" aria-label="WhatsApp da VIPZUE">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+              <span class="site-footer__tip" aria-hidden="true">WhatsApp</span>
+            </a>
+          </li>
+        </ul>
+        <p class="site-footer__copy site-footer__fade">Todos os direitos reservados.</p>
+      </div>
+
+      <nav class="site-footer__col" aria-label="Legal">
+        <p class="site-footer__label">Legal</p>
+        <ul class="site-footer__legal">
+          <li class="site-footer__fade"><a class="footer-link" data-link="privacy"><span class="footer-link__t">Política de Privacidade</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 9.5l7-7M4 2.5h5.5V8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+          <li class="site-footer__fade"><a class="footer-link" data-link="terms"><span class="footer-link__t">Termos de Uso</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 9.5l7-7M4 2.5h5.5V8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Wordmark: texto vivo (Gloock), uma letra por span; cada letra pinta o mesmo feixe e brilho do fundo,
+         alinhados às coordenadas do rodapé. O nome acessível é o parágrafo oculto. -->
+    <div class="site-footer__word" data-beam-word>
+      <p class="visually-hidden">VIPZUE</p>
+      <div class="container site-footer__word-box">
+        <div class="site-footer__word-in" aria-hidden="true" data-beam-letters><span class="site-footer__lw"><span class="site-footer__l">V</span></span><span class="site-footer__lw"><span class="site-footer__l">I</span></span><span class="site-footer__lw"><span class="site-footer__l">P</span></span><span class="site-footer__lw"><span class="site-footer__l">Z</span></span><span class="site-footer__lw"><span class="site-footer__l">U</span></span><span class="site-footer__lw"><span class="site-footer__l">E</span></span></div>
+      </div>
+      <div class="site-footer__foot" aria-hidden="true"></div>
     </div>
   </footer>
 
@@ -426,6 +455,7 @@
   <script src="js/sections.js" defer></script>
   <script src="js/scroll-narrative.js" defer></script>
   <script src="js/journey-lamp.js" defer></script>
+  <script src="js/beam-footer.js" defer></script>
   <script src="js/motion-debug.js" defer></script>
 </body>
 </html>

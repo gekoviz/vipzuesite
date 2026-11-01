@@ -1,5 +1,37 @@
 # Andamento — VIPZUE 2026
 
+## 01/11/2026 — Rodapé "Beam Wordmark Footer" (21st.dev), portado sem React
+
+**Pedido:** integrar o componente React `beam-wordmark-footer.tsx` (21st.dev, kedhareswer). O site é estático (sem React, Tailwind, TypeScript nem shadcn). O usuário escolheu portar para JS puro, na paleta e com o conteúdo da VIPZUE.
+
+**Feito:**
+- `index.html`: o rodapé foi refeito.
+  - Fundo com lavagem, faixas, feixe, brilho do ponteiro e grão.
+  - Coluna da marca: "© 2026 VIPZUE", Instagram e WhatsApp em quadrados de vidro com tooltip, e "Todos os direitos reservados.".
+  - Coluna "Legal": Privacidade e Termos, com fio e seta no hover.
+  - Wordmark "VIPZUE" em Gloock, uma letra por span, com nome acessível oculto. A logo PNG saiu do rodapé.
+  - Os destinos continuam vindo de `js/config.js` (`data-link`). Sem URL, os itens ficam pendentes e sem hover.
+- `css/sections.css`: bloco 08 reescrito com tokens. Fundo `--color-bg-deep`, feixe e fios em `--color-brand-accent`, letras de `--color-brown` a `--color-charcoal`. O rodapé saiu da lista do anel de foco para superfícies claras.
+- `js/beam-footer.js` (novo):
+  - ajusta a wordmark à largura do container e a corta 0,14em abaixo da linha de base (métrica da fonte lida num canvas);
+  - posiciona o feixe em cada letra;
+  - o feixe oscila sozinho e se inclina para o ponteiro;
+  - as letras pulam no clique;
+  - a entrada acontece uma vez, quando o rodapé aparece.
+  - O laço de quadros só roda com o rodapé na tela. Com movimento reduzido, tudo fica parado.
+
+**Fora do original:**
+- As colunas fictícias, os créditos e as redes que não existem (X, LinkedIn, YouTube).
+- A paleta azul-marinho.
+
+**Verificado:**
+- 1440: wordmark de 1200px de largura, feixe animado, letras acesas pelo feixe.
+- Tablet (820): duas colunas.
+- Celular (390): uma coluna, sem rolagem horizontal.
+- Console sem erros.
+
+**Não verificado:** movimento reduzido real e Safari.
+
 ## 01/11/2026 — Cards da Seção 4 no desktop com os efeitos da 03
 
 **Pedido:** os cards do desktop estavam "mortos". O usuário quer neles os mesmos efeitos dos cards da Seção 3 no celular.
