@@ -1,5 +1,32 @@
 # Andamento — VIPZUE 2026
 
+## 31/10/2026 — Seção 4 absorve o Método; Seção 5 removida (branch `feat/secao4-metodo`, sem push)
+
+**Pedido:** PDF "PROMPT VIPZUE secao4 metodo". A copy do Método vai para a Seção 4 escura e a Seção 5 marfim sai. No desktop as etapas viram 4 cards; no tablet e no celular continua a linha do tempo. Sem efeitos novos.
+
+**Fase 0:** premissas P1–P8 confirmadas. Linha de base da Seção 4 (fundo, campo de luz, padding topo/base, altura):
+
+| Largura | Fundo | Campo de luz | Padding | Altura |
+|---|---|---|---|---|
+| 1440 | rgb(20,18,16) | sim | 120 / 120 | 2092 |
+| 1024 | igual | sim | 120 / 120 | 1964 |
+| 820 | igual | sim | 250.8 / 120 | 2261 |
+| 390 | igual | sim | 201 / 80 | 2886 |
+
+**Commit 1 (`7f6ad05`):**
+- `index.html`: a Seção 4 vira `#metodo` / `method-title`, com a headline nova e 4 `li.journey__stage` (numeral, nome, frase, parágrafo). Saem o lead, as perguntas, a frase do atrito, o exemplo da clínica e a Seção 5 inteira. O relevo da logo e a `.s03-seam` ficam.
+- `css/sections.css`: `.journey__num` / `__accent` / `__detail` e o bloco `@media (min-width: 1024px)` com os cards: superfície #2F251F, borda `--rule`, raio 12px, padding 32px, numeral dourado. Sai o `max-width` de `.why__head`.
+- `js/light-field.js`: o seletor passa a ser `#metodo`.
+
+**Commit 2 (`ea2a273`):** sai o CSS morto: `.example*`, `.flow*`, `.method*`, `.steps`, `.step*`, `.why__lead` e `.why__statement`, também nos blocos de tablet e celular. O título do bloco no CSS foi atualizado.
+
+**Verificado:**
+- Script do §19.2 sem falhas em 1440 e 1280 (43/43), 1024 (43/43), 820, 390 e 360 (37/37), antes e depois da limpeza.
+- Os greps do §19.1 voltam limpos; console sem erros.
+- Fundo, campo de luz e padding iguais aos de antes em todas as larguras.
+
+**Altura da seção (desktop):** 1440 → 1575px (era 2092), cards 584 × 312/341; 1024 → 1596px, cards 448 de largura; 390 → 2002px. A headline tem 3 linhas no desktop, 6 a 390px e 7 a 360px (no limite, sem ajuste).
+
 ## 31/10/2026 — Passagem Visão → S03 mais curta no desktop
 
 **Pedido:** encurtar a tela bege vazia entre a 3ª frase da Visão e a headline da S03.
