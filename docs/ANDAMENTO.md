@@ -1,5 +1,44 @@
 # Andamento — VIPZUE 2026
 
+## 01/11/2026 — Seção 4, rodada 2 (branch `feat/secao4-rodada2`, sem push)
+
+**Pedido:** PDF "PROMPT VIPZUE secao4 rodada2". Seis mudanças:
+- véu na emenda 03 → 04 do desktop;
+- cards no padrão do `.s03__card`;
+- headline + subheadline;
+- etapas sem numeral;
+- relevo 3D removido;
+- entrada fade-up no cabeçalho;
+- no celular, pontos que acendem com a rolagem no lugar da linha vertical.
+
+**Fase 0:** premissas P1–P12 confirmadas. Linha de base em 1440×900:
+- fundo rgb(20,18,16), com campo de luz e canvas;
+- padding 120/120;
+- `.s03` relative / z-index 1 / overflow visible, sem `::before`/`::after`.
+
+Na emenda, entre a soltura do palco e +0,5vh, a águia terminava numa reta exata contra o Carvão (recorte do `.s03__figure`).
+
+**Commits:**
+1. `d5491a8`: véu progressivo da emenda (`.s03::after` de 30svh sobre o fim do palco e `.s03::before` de 96px no topo da 04; só ≥ 1024px).
+2. `9ad72cf`: H2 de uma frase e `p.why__sub#method-sub`; `aria-labelledby` com os dois ids; cards com a receita do `.s03__card` (raio 28px, luz radial, contorno 1,5px, parágrafo 18px/500); sem numeral e sem linha; celular 12px mais perto da águia.
+3. `0cd0cf3`: relevo 3D removido (HTML, CSS e `js/brand-relief.js`).
+4. `10f556b`: variante `data-reveal="fade-up"` (10px, 0,6s ease-out; `data-reveal-step="1"` = 0,2s).
+5. `97f98a6`: `js/journey-lamp.js` (≤ 767px com movimento permitido; `--a` de 0 a 1 por ponto).
+
+**Verificado:**
+- O script do §20.2 volta `[]` em 1920, 1440, 1280, 1024×768, 1024×600, 820, 390 e 360.
+- Greps do §20.1 limpos; console sem erros.
+- `js/sections.js`, `light-field.js`, `scroll-narrative.js`, tokens, base e hero sem nenhuma linha alterada.
+- Padding-top no celular: 189px (390) e 175px (360).
+- A reta da emenda sumiu em 1440.
+
+**Não verificado:** movimento reduzido, sem JS, escala de 125%, Safari/iOS.
+
+**Exceções para a Section Spec:**
+- E1: gradiente e raio de 28px nos cards do desktop.
+- E2: halo dos pontos no celular.
+- E3: parágrafo de 18px/500 nos cards do desktop.
+
 ## 31/10/2026 — Seção 4 absorve o Método; Seção 5 removida (branch `feat/secao4-metodo`, sem push)
 
 **Pedido:** PDF "PROMPT VIPZUE secao4 metodo". A copy do Método vai para a Seção 4 escura e a Seção 5 marfim sai. No desktop as etapas viram 4 cards; no tablet e no celular continua a linha do tempo. Sem efeitos novos.
