@@ -101,6 +101,25 @@
   transform: none;
 }
 
+/* Variante "fade-up" (21st.dev, underline-hero-section: @keyframes fade-in-up, .animate-fade-in-up e os atrasos
+   -delay-1 / -delay-2). O original é uma animação CSS que roda ao carregar a página; aqui é o mesmo movimento como
+   TRANSIÇÃO disparada pelo IntersectionObserver de js/sections.js, isto é, a entrada acontece quando o elemento chega
+   à tela: opacity 0 → 1 e translateY(10px) → 0, 0,6 s ease-out. Os atrasos de 0,2 s e 0,4 s do original viram
+   data-reveal-step="1" e "2"; o atraso automático de 80 ms entre irmãos continua valendo para quem não usa o passo. */
+.js-reveal [data-reveal="fade-up"] {
+  transform: translateY(10px);
+  transition-duration: 600ms;
+  transition-timing-function: ease-out;
+}
+
+.js-reveal [data-reveal="fade-up"][data-reveal-step="1"] {
+  transition-delay: 200ms;
+}
+
+.js-reveal [data-reveal="fade-up"][data-reveal-step="2"] {
+  transition-delay: 400ms;
+}
+
 /* ---------- CTA pendente (sem destino real configurado) ---------- */
 .btn[aria-disabled="true"] {
   opacity: 0.55;
