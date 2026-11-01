@@ -632,8 +632,24 @@ html:not(.s03-motion) .s03__stage {
   color: var(--text-2);
 }
 
-.closing__action .btn {
+/* 06 — CTA final: o botão é o ShinyButton da Hero (.shiny-cta, css/base.css), sem nenhuma sobrescrita visual.
+   O invólucro só leva o espaçamento que antes estava em ".closing__action .btn". */
+.closing__cta {
   margin-top: var(--space-content-to-cta);
+}
+
+/* Só se o rótulo (42 caracteres, nowrap) estourar a coluna abaixo de 380px: deixa quebrar em 2 linhas */
+@media (max-width: 379px) {
+  .closing__cta .shiny-cta {
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* Sem número de WhatsApp (js/config.js vazio) o JS tira o href e põe aria-disabled: o botão não é clicável, mas não
+   muda de aparência */
+.closing__cta .shiny-cta[aria-disabled="true"] {
+  cursor: default;
 }
 
 .closing__note {
