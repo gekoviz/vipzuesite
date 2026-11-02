@@ -31,8 +31,9 @@
     }
     const vh = window.innerHeight;
     // topo da 05 SEM transformação = topo do invólucro + altura da 04 (o topo medido na própria 05 já viria girado e
-    // encolhido)
-    const top = root.getBoundingClientRect().top + out.offsetHeight;
+    // encolhido). Arredondado ao pixel: o invólucro pode começar em posição fracionária e a rolagem para em posições
+    // inteiras; sem isso a 05 "no topo" fica a 0,3px e p não chega a 1 (a 04 nunca seria dada como coberta).
+    const top = Math.round(root.getBoundingClientRect().top + out.offsetHeight);
     const p = Math.min(1, Math.max(0, 1 - top / vh)); // 0: a 05 entra pelo pé da tela · 1: ela chegou ao topo
     out.style.transform = p > 0 ? `scale(${(1 - (1 - k.scale) * p).toFixed(4)}) rotate(${(-k.rot * p).toFixed(3)}deg)` : "";
     inn.style.transform = p < 1 ? `scale(${(k.scale + (1 - k.scale) * p).toFixed(4)}) rotate(${(k.rot * (1 - p)).toFixed(3)}deg)` : "";
