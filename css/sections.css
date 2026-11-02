@@ -1971,27 +1971,34 @@ html.has-curtain .footer-curtain .site-footer {
 }
 
 /* =========================================================
-   08 — Rodapé no celular (rodada 5): a seção ocupa a tela, com o mesmo desenho e a mesma copy.
-   Antes: ~450 px de altura numa tela de ~700 px, então a FAQ aparecia por cima e as duas ficavam coladas por uma linha.
-   Agora: coluna da altura da tela (100svh, a menor, como o js/footer-curtain.js já usa): a marca no alto, o "Legal" logo
-   acima da wordmark e a wordmark na base. O desktop e o tablet não mudam.
+   08 — Rodapé: altura de tela em TODAS as larguras + wordmark centralizada (rodada 6)
+   Antes (rodada 5): a altura de tela valia só até 767 px. No desktop o rodapé era mais baixo que a tela e a FAQ aparecia acima dele
+   no fim da página ("duas seções juntas"). Agora o rodapé é uma coluna da altura da tela: marca no alto, "Legal" ao lado,
+   wordmark na base, e nada da FAQ aparece. Este bloco SUBSTITUI o bloco "Rodapé no celular (rodada 5)" (sem o @media).
    ========================================================= */
-@media (max-width: 767px) {
-  .site-footer {
-    display: flex;
-    flex-direction: column;
-    min-height: 100svh;
-  }
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
 
-  .site-footer__grid {
-    flex: 1 1 auto;
-    align-content: space-between;
-    padding-top: clamp(72px, 14svh, 128px);
-  }
+.site-footer__grid {
+  flex: 1 1 auto;
+  align-content: space-between;
+  padding-top: clamp(72px, 14svh, 128px);
+}
 
-  .site-footer__word {
-    flex: none;
-  }
+.site-footer__word {
+  flex: none;
+}
+
+/* wordmark no meio da página: a caixa é o .container (centrada); o texto dentro dela também */
+.site-footer__word-box {
+  text-align: center;
+}
+
+.site-footer__word-in {
+  justify-content: center;
 }
 
 /* =========================================================

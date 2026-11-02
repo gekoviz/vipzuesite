@@ -75,12 +75,16 @@
     // Cortina (§9.5): o rodapé só vira cortina se couber na tela (altura ≤ 100svh). Em janela baixa a marca encolhe até o
     // rodapé caber, no máximo − 28%; abaixo disso a cortina simplesmente não liga e o rodapé fica em fluxo normal.
     // Medido: sem este teto, em 1366 × 650 o rodapé tem 682 px e a cortina não liga; com ele fica com 624 px e liga.
+    // altura NATURAL do rodapé (sem o min-height: 100svh e sem a altura fixa da cortina, que só acrescentam espaço vazio): é ela que decide se a wordmark precisa encolher
+    const mh = root.style.minHeight, hh = root.style.height;
+    root.style.minHeight = "0px";
+    root.style.height = "auto";
     const rest = root.offsetHeight - word.offsetHeight; // altura do rodapé sem a marca
+    root.style.minHeight = mh;
+    root.style.height = hh;
     const k = measureBaseline() + CUT;
     const capH = (window.innerHeight * 0.96 - rest) / k;
-    // celular (≤ 767 px): o rodapé tem altura de tela (min-height: 100svh), então `rest` inclui o espaço vazio e este teto
-    // encolheria a wordmark; ela segue a largura
-    if (window.innerHeight >= 560 && capH > 0 && !matchMedia("(max-width: 767px)").matches) size = Math.max(Math.min(size, capH), size * 0.72);
+    if (window.innerHeight >= 560 && capH > 0) size = Math.max(Math.min(size, capH), size * 0.72);
     inner.style.fontSize = size + "px";
     word.style.height = Math.max(0, size * k) + "px";
     place();
