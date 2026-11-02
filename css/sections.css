@@ -365,7 +365,7 @@ html:not(.s03-motion) .s03__stage {
    04 — Método (fundo escuro com campo de luz; antiga "Por que isso importa?")
    ========================================================= */
 /* Campo de luz por seção (js/light-field.js). Toda seção com canvas próprio ganha a classe .has-field e o atributo data-field:
-     data-field="dark"  → o fundo da Hero (campo escuro, composição da Hero)     → Seções 04, 06 e Rodapé
+     data-field="dark"  → o fundo da Hero (campo escuro, composição da Hero, teto de brilho FIELD_CAP) → Seções 04, 06 e Rodapé
      data-field="light" → o fundo da Seção 03 (campo bege, composição do close)  → Seções 05 e 07
    O canvas fica dentro da seção (sticky num invólucro do tamanho dela): a borda superior é a da própria seção e rola com
    a página no compositor. Sem WebGL, ou com o contexto perdido, o JS tira .has-field e cada seção volta ao sólido da própria
@@ -376,9 +376,11 @@ html:not(.s03-motion) .s03__stage {
 
 .has-field[data-field="dark"] {
   background: var(--color-bg-deep);
-  --field-opacity: 0.5; /* o canvas a 50% sobre o Carvão opaco: o véu que mantém o texto pequeno legível sobre os focos de luz */
-  /* texto secundário sobre o campo escuro: o token (marfim a 0,75) chega a 4,2:1 no ponto mais claro do campo; a 0,85 fica ≥ 4,8:1 */
-  --text-2: rgb(243 237 227 / 0.85);
+  /* O canvas vai a 100%: o brilho já vem limitado dentro do shader (FIELD_CAP, §4.1a), e não por um véu. O véu de 50% usado
+     antes deixava o campo cinza e com ~40% da luz da Hero; o teto mantém os tons médios iguais e limita só o miolo dos focos. */
+  --field-opacity: 1;
+  /* texto secundário sobre o campo escuro: o token (marfim a 0,75) dá 3,9:1 no ponto mais claro do campo; a 0,88 fica ≥ 4,7:1 */
+  --text-2: rgb(243 237 227 / 0.88);
 }
 
 .has-field[data-field="light"] {

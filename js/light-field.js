@@ -86,7 +86,7 @@ uniform vec2 u_res;
 uniform vec4 u_time;  // x: ph (fase do Bloom, t·0.20)  y: tempo do Silk  z: quantidade de Silk  w: progresso Hero → close
 uniform vec4 u_look;  // x: layout (0 paisagem → 1 retrato)  y: vinheta  z: grão  w: escala de pixel (grão)
 uniform vec4 u_state; // x: frente escuro → claro (fração da altura a partir de baixo)  y: borda difusa
-                      // z: livre  w: ondulação da frente
+                      // z: teto de brilho (0 = sem teto)  w: ondulação da frente
 
 ${consts}
 const vec3 L0 = ${v3(LAB[0])};
@@ -190,6 +190,12 @@ void main() {
   float m = smoothstep(0.0, 1.0, (front - (1.0 - uv.y)) / max(u_state.y, 0.0001));
   // um só campo; cada rampa só é calculada onde aparece (toda escura na Hero/close, toda clara na seção 03)
   float light = field(Pw, aspect, s, silk);
+  // teto suave do brilho, só nos campos de seção (u_state.z = 0 desliga; a Hero e a 03 passam 0): abaixo de 72% do teto é
+  // identidade (tons iguais aos da Hero); acima, comprime até o teto. Mantém o matiz e só limita o miolo dos focos.
+  if (u_state.z > 0.0) {
+    float k = u_state.z * 0.72;
+    light = light < k ? light : k + (u_state.z - k) * (1.0 - exp(-(light - k) / (u_state.z - k)));
+  }
   vec3 lab = m < 1.0 ? paletteLab(light) : beigeLab(light);
   if (m > 0.0 && m < 1.0) lab = mix(lab, beigeLab(light), m);
   vec3 col = clamp(linearToSrgb(oklabToLin(lab)), 0.0, 1.0);
@@ -261,13 +267,13 @@ void main() {
     };
 
     // state: frente escuro → claro, borda difusa, ondulação; section: composição Hero (0) → close (1)
-    const draw = ([front, soft, warp], section) => {
+    const draw = ([front, soft, warp, cap = 0], section) => {
       const layout = Math.min(1, Math.max(0, (1.1 - canvas.clientWidth / Math.max(1, canvas.clientHeight)) / 0.4));
       const silk = 0.9 - 0.6 * section; // o close já tem a textura das penas: o Silk recua
       gl.uniform2f(loc.res, canvas.width, canvas.height);
       gl.uniform4f(loc.time, t * 0.2, t * 0.12, silk, section);
       gl.uniform4f(loc.look, layout, 0.16 - 0.04 * section, 0.024, 1 / Math.max(pixelScale, 0.01));
-      gl.uniform4f(loc.state, front, soft, 0, warp);
+      gl.uniform4f(loc.state, front, soft, cap, warp);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
@@ -290,7 +296,7 @@ void main() {
   root.classList.add("has-light-field");
 
   // Campos por seção (04 a 08): o MESMO shader e o MESMO relógio, cada um num canvas DENTRO da seção (sticky num invólucro
-  // do tamanho dela). "dark" = o campo escuro da Hero (Background Principal, composição da Hero); "light" = o campo claro da
+  // do tamanho dela). "dark" = o campo escuro da Hero (Background Principal, composição da Hero, com teto de brilho); "light" = o campo claro da
   // Seção 03 (Background Secundário, composição do close). A borda superior é a da própria seção: rola junto com a página
   // no compositor, sem o atraso que uma frente desenhada no canvas fixo teria no Safari do iPhone.
   const FIELD_SECTIONS = [
@@ -300,9 +306,13 @@ void main() {
     ["#faq", "light"], // 07 — FAQ
     ["[data-beam-footer]", "dark"], // 08 — Rodapé
   ];
+  // Teto de brilho do campo escuro (u_state.z do shader, §4.1a). 0 = a Hero idêntica, mas o texto pequeno reprova nos focos
+  // (marfim a 0,75 cai a ~2,5:1). 0,72 = os tons médios e escuros saem iguais aos da Hero e só o miolo dos focos é achatado:
+  // a luz máxima fica em L ≈ 0,11 e todo texto passa de 4,5:1. É a única constante a mexer para chegar mais perto da Hero.
+  const FIELD_CAP = 0.72;
   const FIELD_MODES = {
-    dark: { state: [-1, 0.004, 0], comp: 0 }, // frente abaixo da tela: o campo inteiro na rampa escura; composição da Hero
-    light: { state: [2, 0.004, 0], comp: 1 }, // frente acima da tela: o campo inteiro na rampa clara; composição do close
+    dark: { state: [-1, 0.004, 0, FIELD_CAP], comp: 0 }, // frente abaixo da tela: o campo inteiro na rampa escura; composição da Hero
+    light: { state: [2, 0.004, 0, 0], comp: 1 }, // frente acima da tela: o campo inteiro na rampa clara (sem teto); composição do close
   };
   const fields = [];
   FIELD_SECTIONS.forEach(([selector, mode]) => {
@@ -455,6 +465,7 @@ void main() {
     get section() { return section; },
     size: () => [canvas.width, canvas.height],
     whySize: () => (whyField ? [whyField.field.canvas.width, whyField.field.canvas.height] : null),
-    fields: () => fields.map((fl) => ({ id: fl.el.id || fl.el.className, mode: fl.mode, inView: fl.inView, size: [fl.field.canvas.width, fl.field.canvas.height] })),
+    cap: FIELD_CAP,
+    fields: () => fields.map((fl) => ({ id: fl.el.id || fl.el.className, mode: fl.mode, cap: fl.state[3] || 0, inView: fl.inView, size: [fl.field.canvas.width, fl.field.canvas.height] })),
   };
 })();
