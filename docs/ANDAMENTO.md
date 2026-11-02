@@ -1,10 +1,14 @@
 # Andamento — VIPZUE 2026
 
-## 02/11/2026 — Rodada 5, ajustes (branch `feat/rodada5`, publicação pendente)
+## 02/11/2026 — Rodada 5, ajustes (publicada em produção)
 
 **Pedido:** executar "PROMPT VIPZUE rodada5 ajustes.pdf" e validar com `vz-check-r5.pdf`.
 
-**Bloqueio:** o push na `main` é negado pelo auto mode. Os commits ficaram na branch, à espera da confirmação do usuário.
+**Bloqueio:** o push na `main` é negado pelo auto mode. A rodada foi feita na branch `feat/rodada5`.
+
+**Publicado:** fast-forward da `main` (`e80bac2` → `626b744`) com push, depois da confirmação do usuário. Em produção:
+- `handoff.js` responde 404;
+- `vz-check-r5`: 36/30/38/38/38 PASS, 0 FAIL, igual ao local.
 
 **Feito** (6 commits + 1 correção):
 - sai o efeito de entrada 04 → 05 (`js/handoff.js` apagado) e o véu passa à classe `.veil`;

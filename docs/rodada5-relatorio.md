@@ -2,9 +2,25 @@
 
 Feita na branch `feat/rodada5`, a partir da `main` em `e80bac2` (rodada 4 em produção).
 
-A §11 pede publicar a cada commit, mas o push na `main` é bloqueado pelo auto mode ("Production Deploy"). Por isso os commits ficaram na branch e serão publicados de uma vez, depois da confirmação do usuário (como na rodada 4).
+A §11 pede publicar a cada commit, mas o push na `main` é bloqueado pelo auto mode ("Production Deploy"). Por isso os commits foram publicados de uma vez, depois da confirmação do usuário (como na rodada 4).
 
-**Publicação: pendente.** R1 e a prova de deploy (`curl -sI https://vipzuesite.vercel.app/js/handoff.js` → 404) só podem ser feitos depois do push. Até lá, todos os números abaixo são do servidor local (`http://localhost:5173/`), no Chrome via DevTools, com a aba em primeiro plano.
+**Publicado em produção em 02/11/2026:** fast-forward da `main` (`e80bac2` → `626b744`) com push.
+
+**Prova de deploy:** `curl -sI https://vipzuesite.vercel.app/js/handoff.js` → `HTTP/1.1 404 Not Found`. O HTML publicado traz os novos `span.veil`.
+
+**`vz-check-r5` em produção** (aba em primeiro plano):
+
+| Largura | PASS | FAIL | WARN | NA |
+|---|---|---|---|---|
+| 390 × 844 | 36 | 0 | 1 | 0 |
+| 768 × 1024 | 30 | 0 | 1 | 1 |
+| 1024 × 768 | 38 | 0 | 1 | 0 |
+| 1366 × 650 | 38 | 0 | 1 | 0 |
+| 1440 × 900 | 38 | 0 | 1 | 0 |
+
+- `A.sem-js` dá PASS em produção (404, sem tag).
+- O WARN é o `Z.manual`, e o NA é o `E.lampada` a 768.
+- Os números são idênticos aos do local. Salvo indicação, os de (5) e (6) abaixo são do servidor local (`http://localhost:5173/`), no Chrome via DevTools.
 
 ## (1) Resumo em 5 linhas
 
@@ -115,7 +131,7 @@ Nenhuma exceção entrou nos tokens-base nem nos componentes-base.
 
 | # | Item | Prova | Resultado | Evidência |
 |---|---|---|---|---|
-| R1 | Deploy da rodada no ar; `js/handoff.js` = 404 | `A.sem-js`; curl | **Pendente** (publicação aguarda confirmação) | No local, `A.sem-js` PASS: 404 e sem tag. |
+| R1 | Deploy da rodada no ar; `js/handoff.js` = 404 | `A.sem-js`; curl | PASS | curl = 404; `A.sem-js` PASS em produção nas cinco larguras. |
 | R2 | Rodada 4 presente (pré-requisito) | §2.1 | PASS | Produção em `e80bac2`; `handoff.js` = 200 antes da rodada (`antes-*`: `A.sem-js` FAIL, como esperado). |
 | R3 | Efeito removido (sem invólucro, sem transform/sticky, 04 e 05 irmãs) | `A.sem-*`, `A.irmaos` | PASS | `s03-seam → #metodo → #para-quem-e → #contato → #faq` irmãos em `main`; sem transform/sticky em 5 posições de rolagem. |
 | R4 | Dobra 04 → 05 e 03 → 04 intactas | `A.dobra-*`; `3.*` do r3c; capturas | PASS | Véus de 72 + 153px (390) / 72 + 217px (1440). Título da 05 com 192/256px de padding-top. r3c `3.irmao` volta a PASS. `3.fiapo` (390): FAIL já existente em produção, ver (6). |
@@ -220,7 +236,6 @@ Não foram feitas: as capturas em 1024 e 1920px, a do ponteiro sobre o 02 e o 04
 
 ## (8) O que ficou
 
-- **Publicação (R1):** aguarda a confirmação do usuário. Depois do push: `curl` do `handoff.js` = 404, `A.sem-js` PASS em produção e o r5 em produção nas cinco larguras.
 - **iPhone real (R15):** não feito. O que conferir: rodapé de tela com a barra de endereço encolhendo, cortina, véus 06 → 07 e a 04 em paisagem (≥ 1024px).
 - **Teste sem JS:** não feito. Pelo código: os véus são HTML + CSS e o rodapé de tela é CSS; sem JS, só a cortina não liga.
 - **Contraste do miolo do destaque com conta-gotas** (§7.4): não feito à mão. O script dá 6,1:1.
