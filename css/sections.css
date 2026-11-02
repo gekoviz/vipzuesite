@@ -362,6 +362,68 @@ html:not(.s03-motion) .s03__stage {
 }
 
 /* =========================================================
+   Escala de texto dos cards da 03 em um lugar só (rodada 4, §3.3). Os valores são os que o .s03__text já usa:
+   abaixo de 1024px, Switzer 500 a 18px/1,5 (--s03-text: 1.125rem + o peso da media de 1023px); a partir de 1024px,
+   Switzer 400 a clamp(1.375rem, 1.6vw, 1.5rem)/1,5. Tracking −0,005em nas duas. A 03 não foi apontada para estes
+   tokens (opcional da §3.3): ela continua com as regras dela, e o vz-check-r4 (A.escala) acusa se um dia divergirem.
+   ========================================================= */
+:root {
+  --t-card-size: clamp(1.375rem, 1.6vw, 1.5rem);
+  --t-card-lh: 1.5;
+  --t-card-weight: var(--font-weight-regular);
+  --t-card-tracking: -0.005em;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --t-card-size: 1.125rem;
+    --t-card-weight: var(--font-weight-medium);
+  }
+}
+
+/* 04 — Método: tipografia das etapas (rodada 4)
+   1) O nome da etapa (Diagnóstico, Estratégia, …) deixa a Gloock, que é fonte de headline, e vai para a Switzer 600.
+   2) O subtítulo de cada etapa sai do HTML: cada etapa fica com nome + parágrafo.
+   3) O parágrafo usa a MESMA escala de texto dos cards da 03, pelos tokens --t-card-* (uma fonte da verdade: 03 e 04
+      não divergem mais). */
+#metodo {
+  /* o título se destaca por peso e tamanho, não por brilho: mesma cor do parágrafo (botão único; suba para marfim pleno
+     só se a Experiência pedir) */
+  --step-name-color: var(--text-2);
+  --step-name-size: clamp(1.5rem, 1.2rem + 1.1vw, 1.875rem); /* 24px no celular → 30px no desktop */
+}
+
+/* nos cards do desktop o parágrafo é marfim pleno (.journey__detail na media de 1024px): o nome acompanha */
+@media (min-width: 1024px) {
+  #metodo {
+    --step-name-color: var(--color-text-on-dark);
+  }
+}
+
+#metodo .journey__name {
+  font-family: var(--font-body); /* Switzer */
+  font-size: var(--step-name-size);
+  line-height: 1.15;
+  font-weight: 600; /* o 600 vem do arquivo (css/fonts.css carrega switzer-600.woff2); sem negrito sintético */
+  font-synthesis: none;
+  letter-spacing: -0.015em;
+  color: var(--step-name-color);
+}
+
+#metodo .journey__detail {
+  font-size: var(--t-card-size);
+  line-height: var(--t-card-lh);
+  font-weight: var(--t-card-weight);
+  letter-spacing: var(--t-card-tracking);
+  font-synthesis: none;
+}
+
+/* Sem o subtítulo, o parágrafo sobe para junto do nome */
+#metodo .journey__name + .journey__detail {
+  margin-block-start: 0.5em;
+}
+
+/* =========================================================
    04 — Método (fundo escuro com campo de luz; antiga "Por que isso importa?")
    ========================================================= */
 /* Campo de luz por seção (js/light-field.js). Toda seção com canvas próprio ganha a classe .has-field e o atributo data-field:
@@ -409,10 +471,9 @@ html:not(.s03-motion) .s03__stage {
   opacity: var(--field-opacity, 0.5);
 }
 
-/* Subheadline da Seção 04 (abaixo da headline): o mesmo tratamento da frase de abertura de cada etapa, o Heading da
-   UI.05 (Switzer 500; 24px, 22px no celular via token), a --space-headline-to-subheadline (24px) da headline. */
-.why__sub,
-.journey__accent {
+/* Subheadline da Seção 04 (abaixo da headline): o Heading da UI.05 (Switzer 500; 24px, 22px no celular via token), a
+   --space-headline-to-subheadline (24px) da headline. */
+.why__sub {
   font-size: var(--font-size-heading);
   line-height: var(--font-line-heading);
   letter-spacing: var(--font-tracking-heading);
@@ -449,10 +510,6 @@ html:not(.s03-motion) .s03__stage {
   line-height: var(--font-line-display-md);
   letter-spacing: var(--font-tracking-display-md);
   font-weight: var(--font-weight-regular);
-}
-
-.journey__accent {
-  margin-top: var(--space-xs);
 }
 
 .journey__detail {
