@@ -1,10 +1,15 @@
 # Andamento — VIPZUE 2026
 
-## 02/11/2026 — Rodada 6, seção 06, emendas, rodapé e uma seção por tela (branch `feat/rodada6`, aguardando publicação)
+## 02/11/2026 — Rodada 6, seção 06, emendas, rodapé e uma seção por tela (publicada em produção)
 
 **Pedido:** executar "PROMPT VIPZUE rodada6 secao06.pdf" e validar com `vz-check-r6.pdf`.
 
-**Bloqueio:** o push na `main` é negado pelo auto mode. A rodada foi feita na branch `feat/rodada6` e só é publicada depois da confirmação do usuário.
+**Bloqueio:** o push na `main` é negado pelo auto mode. A rodada foi feita na branch `feat/rodada6`.
+
+**Publicado:** fast-forward da `main` (`130597b` → `f9a0303`) com push, depois da confirmação do usuário.
+- O primeiro deploy falhou: o `tools/build-site.mjs` leu um caminho de imagem num comentário do CSS e não achou o arquivo.
+- Corrigido em `b624036` (o comentário ficou sem o caminho; nenhuma regra muda).
+- Em produção: três WebP da águia = 200; `vz-check-r6` igual ao local nas cinco larguras (só o `B.img-peso` dá NA, por cache).
 
 **Feito** (5 commits de código + este):
 - botão (Hero e 06): o hover só acende; sem o quadrado, mesma velocidade da borda (119–120°/s parada e no hover; antes caía para 71°/s);

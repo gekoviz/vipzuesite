@@ -2,7 +2,31 @@
 
 Feita na branch `feat/rodada6`, a partir da `main` em `130597b` (rodada 5 em produção).
 
-A §11 pede publicar a cada commit, mas o push na `main` é bloqueado pelo auto mode ("Production Deploy"). Os cinco commits de código foram validados no servidor local (`http://localhost:5173/`, Chrome via DevTools) e ficam prontos para publicar de uma vez, **depois da confirmação do usuário** (como nas rodadas 4 e 5). R1 e a validação em produção ficam pendentes até lá.
+A §11 pede publicar a cada commit, mas o push na `main` é bloqueado pelo auto mode ("Production Deploy"). Os cinco commits de código foram validados no servidor local (`http://localhost:5173/`, Chrome via DevTools) e publicados de uma vez, depois da confirmação do usuário (como nas rodadas 4 e 5).
+
+**Publicado em produção em 02/11/2026:** fast-forward da `main` (`130597b` → `f9a0303`) com push, mais a correção `b624036`.
+- **O primeiro deploy não saiu.** O `tools/build-site.mjs` procura caminhos de assets no texto do CSS, inclusive em comentários. Um comentário do bloco da 06 citava `assets/img/aguia-cta-1200.webp`; o build o resolveu relativo a `css/`, não achou o arquivo e parou.
+- **A correção (`b624036`)** tira o caminho do comentário; nenhuma regra muda. O build local passou a gerar o `site-vercel/` com os três WebP.
+
+**Prova de deploy:**
+- `curl` dos três WebP em produção: 200, `image/webp`, com 38 980, 88 062 e 180 438 bytes.
+- O HTML publicado traz o `.closing__panel` e a microcopy nova.
+- `js/handoff.js` continua 404.
+
+**`vz-check-r6` em produção** (aba em primeiro plano): o mesmo resultado do local nas cinco larguras.
+
+| Largura | PASS | FAIL | WARN | NA |
+|---|---|---|---|---|
+| 390 × 844 | 38 | 1 | 2 | 14 |
+| 768 × 1024 | 39 | 0 | 2 | 14 |
+| 1366 × 768 | 48 | 5 | 3 | 0 |
+| 1440 × 900 | 49 | 4 | 3 | 0 |
+| 1920 × 1080 | 49 | 3 | 3 | 1 |
+
+- As FAIL e os WARN são os mesmos do local, explicados em (7).
+- A única diferença é o `B.img-peso`, que dá NA em 390, 768 e 1920: a imagem veio do cache, sem medida de transferência. Os pesos foram conferidos pelo curl, acima.
+
+Salvo indicação, os números de (3) a (7) abaixo são do servidor local.
 
 ## (1) Resumo em 5 linhas
 
@@ -113,7 +137,7 @@ Nenhuma exceção entrou nos tokens-base nem nos componentes-base.
 
 | # | Item | Prova | Resultado | Evidência |
 |---|---|---|---|---|
-| R1 | Deploy da rodada no ar; WebP da águia = 200 | curl; `A.sem-quadrado` | **Pendente** | Aguarda a confirmação do usuário para publicar. |
+| R1 | Deploy da rodada no ar; WebP da águia = 200 | curl; `A.sem-quadrado` | PASS | `main` em `b624036`. Três WebP = 200 (38 980 / 88 062 / 180 438 bytes). `A.sem-quadrado` PASS em produção nas cinco larguras. |
 | R2 | Rodada 5 presente (pré-requisito) | §2.1 | PASS | Produção em `130597b`; `vz-check-r5` em produção 36/30/38/38/38 PASS, 0 FAIL. |
 | R3 | Botão: sem quadrado, mesmo arco e mesma velocidade no hover, só acende; Hero e 06 iguais | `A.*` | PASS (390, 768, 1366, 1440, 1920) | 119–120°/s parada e no hover (antes: 120 → 71°/s). Arco 5% → 5%, ângulo 0deg → 0deg, uma animação (`shiny-angle 3s`). Hover: pontos 0,22 → 0,45, cintilância 0,32 → 0,6. Capturas `c1-hero-hover-a/b/c.png` sem retângulo. |
 | R4 | 06: título à esquerda, card à direita com a águia na borda, uma tela; celular: título, depois card | `B.*`; capturas | PASS | Lado a lado: título 49% do container, vão de 38–159px, centros verticais com 0px de diferença. 06 = 100% da tela em 1366/1440/1920. Celular: título termina em 343, painel começa em 383. |
@@ -216,7 +240,6 @@ Não foram feitas: o lado a lado com as fotos da Experiência (não estão no pr
 
 ## (9) O que ficou
 
-- **Publicar** (fast-forward da `main` e push), depois da confirmação do usuário, e rodar R1 e o `vz-check-r6` em produção.
 - **Encaixe da rolagem:** só `proximity`; ver a dúvida 5.
 - **Botão sem foco por teclado enquanto o `js/config.js` não tiver número:** o `a` sem `href` não recebe Tab. O `Z.manual` (7) ("Tab até o botão: anel de foco visível") só pode ser conferido com o número preenchido. Já era assim na rodada 5.
 - **Trackpad, iPhone, Safari e Firefox:** não testados (R15).
