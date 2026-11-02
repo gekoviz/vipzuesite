@@ -615,6 +615,80 @@ html:not(.s03-motion) .s03__stage {
 }
 
 /* =========================================================
+   Dobra 04 → 05 (rodada 4): a mesma da 03 → 04, espelhada. O Carvão profundo é o ponto de encontro: o campo escuro da
+   04 afunda nele (rampa curta) e ele se dissolve no bege da 05 (rampa longa), com a mesma suavização cúbica da 03
+   (3t² − 2t³, de 10 em 10%: sem faixa visível no começo nem no fim). A 05 reserva o véu no padding-top (--pq-veil).
+   ========================================================= */
+.handoff {
+  --s45-veil-stops:
+    transparent 0%,
+    color-mix(in srgb, var(--color-bg-deep) 2.8%, transparent) 10%,
+    color-mix(in srgb, var(--color-bg-deep) 10.4%, transparent) 20%,
+    color-mix(in srgb, var(--color-bg-deep) 21.6%, transparent) 30%,
+    color-mix(in srgb, var(--color-bg-deep) 35.2%, transparent) 40%,
+    color-mix(in srgb, var(--color-bg-deep) 50%, transparent) 50%,
+    color-mix(in srgb, var(--color-bg-deep) 64.8%, transparent) 60%,
+    color-mix(in srgb, var(--color-bg-deep) 78.4%, transparent) 70%,
+    color-mix(in srgb, var(--color-bg-deep) 89.6%, transparent) 80%,
+    color-mix(in srgb, var(--color-bg-deep) 97.2%, transparent) 90%,
+    var(--color-bg-deep) 100%;
+  --s45-veil-dark: 72px; /* dentro da 04, no fim */
+  --s45-veil-light: clamp(140px, 24svh, 260px); /* dentro da 05, no começo; o título da 05 começa abaixo dele */
+}
+
+@media (max-width: 1023px) {
+  .handoff {
+    --s45-veil-light: clamp(112px, 18svh, 168px);
+  }
+}
+
+.seam45 {
+  position: absolute;
+  inset-inline: 0;
+  z-index: -1; /* acima do canvas do campo (também z −1, antes no DOM: o campo entra com prepend) e abaixo de todo conteúdo */
+  pointer-events: none;
+}
+
+.seam45--dark {
+  bottom: 0;
+  height: var(--s45-veil-dark);
+  background: linear-gradient(to bottom, var(--s45-veil-stops));
+}
+
+.seam45--light {
+  top: -1px; /* 1px de sobreposição com a 04 (como o .s03::before): sem a linha clara na emenda em escala fracionária */
+  height: calc(var(--s45-veil-light) + 1px);
+  background: linear-gradient(to top, var(--s45-veil-stops));
+}
+
+/* Entrada da 05 sobre a 04 (rodada 4). Tudo sob .is-handoff (posto pelo js/handoff.js): sem JS, com movimento reduzido
+   ou sem o par de seções, é fluxo normal. A 04 (mais alta que a tela) cola quando o FIM dela encosta no pé da tela (top
+   negativo = tela − altura da 04), a 05 sobe por cima e as duas se mexem pelo JS (scale + rotate). O invólucro é Carvão
+   profundo: é o que aparece nas margens enquanto as duas estão menores que a tela. */
+.handoff {
+  position: relative;
+  background: var(--color-bg-deep);
+  overflow-x: clip; /* a 04 girada não cria rolagem horizontal; clip não vira contêiner de rolagem e não quebra o sticky */
+}
+
+.handoff.is-handoff #metodo {
+  position: sticky;
+  top: min(0px, calc(100svh - var(--handoff-h, 100svh)));
+  transform-origin: 50% calc(100% - 50svh); /* centro da última tela da 04, a que fica visível quando ela cola */
+}
+
+.handoff.is-handoff #para-quem-e {
+  position: relative;
+  z-index: 1;
+  transform-origin: 50% 0; /* gira pelo topo, centralizado: a seção é mais alta que a tela */
+}
+
+.handoff.is-moving #metodo,
+.handoff.is-moving #para-quem-e {
+  will-change: transform; /* só enquanto o efeito corre */
+}
+
+/* =========================================================
    05 — Para quem é · cards (rodada 4)
    Card: o do 21st.dev "feature-sections" (@prebuiltui): imagem em cima, texto embaixo, sobe no hover. Aqui: janela
    escura com a ilustração (a "cara" da referência: painel escuro + base clara), sobre uma base marfim, na paleta e nas
@@ -1661,7 +1735,8 @@ html.js-reveal .faq.is-list-in .accordion__item {
   }
 
   /* reserva da metade inferior (42% da altura) + 24px até o conteúdo da seção seguinte */
-  .s03-seam + .section {
+  .s03-seam + .section,
+  .s03-seam + .handoff > #metodo {
     padding-top: max(var(--section-space-default), calc(var(--s03-seam-w) * 0.63 + 24px));
   }
 }
@@ -1703,7 +1778,8 @@ html.js-reveal .faq.is-list-in .accordion__item {
     top: 0.35em;
   }
 
-  .s03-seam + .section {
+  .s03-seam + .section,
+  .s03-seam + .handoff > #metodo {
     /* A divisa cruza 58% da altura da imagem da águia. Abaixo dela, o CORPO termina em ~86% da altura (0,42 × a
        largura da águia abaixo da divisa); só a ponta da cauda/garra desce até 98% (0,60), encostada na borda direita
        (x ≥ 85% da largura da imagem). Antes a reserva era a imagem inteira (0,63 × largura + 12px = 189px a 390px):

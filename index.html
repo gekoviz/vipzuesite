@@ -233,7 +233,9 @@
          da rodada 2). Tablet: pontos em 2 colunas. Celular: pontos que acendem com a rolagem (js/journey-lamp.js,
          21st.dev tubelight-navbar). O id #metodo é o do menu e também o gancho do campo de luz em js/light-field.js:
          não renomear sem atualizar o seletor lá. Sem relevo 3D nesta seção (removido na rodada 2). -->
-    <section class="section surface-dark why" id="metodo" aria-labelledby="method-title method-sub">
+    <!-- Invólucro da dobra 04 → 05 e do efeito de entrada da 05 sobre a 04 (rodada 4): só as duas seções, sem nada entre elas. -->
+    <div class="handoff" data-handoff>
+    <section class="section surface-dark why" id="metodo" aria-labelledby="method-title method-sub" data-handoff-out>
       <div class="container">
         <header class="why__head">
           <h2 class="t-display-l why__title" id="method-title" data-reveal="fade-up">O que entregamos é uma página.</h2>
@@ -259,6 +261,7 @@
           </li>
         </ol>
       </div>
+      <span class="seam45 seam45--dark" aria-hidden="true"></span>
     </section>
 
     <!-- 05 — PARA QUEM É (rodada 4): copy nova (E-b) e três cards com ilustração; mosaico no desktop. -->
@@ -350,6 +353,7 @@
         </ul>
       </div>
     </section>
+    </div>
 
     <!-- 06 — CTA FINAL (8.7). Headline e subheadline: direção de copy da fonte. Nota de redução de fricção: proposta. -->
     <section class="section surface-dark closing" id="contato" aria-labelledby="closing-title">
