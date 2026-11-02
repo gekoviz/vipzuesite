@@ -1,5 +1,23 @@
 # Andamento — VIPZUE 2026
 
+## 01/11/2026 — Rodada 3C, correção e fechamento (branch `feat/rodada3`; produção pendente)
+
+**Pedido:** executar "PROMPT VIPZUE rodada3c correcao.pdf", que manda publicar em produção a cada commit, e validar com `vz-check-r3c.pdf`.
+
+**Etapa 0:** cenário (A). A rodada 3 estava na branch, sem merge. Produção antes da 3C: 15/12/12/12 PASS (390/768/1440/1366×650), com `0.deploy` FAIL.
+
+**Feito na branch:**
+- teto de brilho `FIELD_CAP` 0,72 no shader;
+- campo escuro a 100% e texto secundário a 0,88;
+- copy e links legais do rodapé a 88%;
+- teto de altura da marca para a cortina ligar em janela baixa.
+
+**Validação no local:** 47/41/41/41 PASS, sem FAIL nem WARN. A 04 tem 66% da luz da Hero (era 39%). Copy idêntica.
+
+**Pendente:** o fast-forward da `main` com push foi bloqueado pelo auto mode (deploy em produção); aguarda confirmação do usuário.
+
+**Relatório:** `docs/rodada3c-relatorio.md`.
+
 ## 01/11/2026 — Rodada 3, seções 04 a 08 (branch `feat/rodada3`, sem merge)
 
 **Pedido:** executar o prompt "PROMPT VIPZUE rodada3 secoes4a8.pdf" e validar com `vz-check-r3.pdf`. Sem mudar copy, `config.js`, tokens, Hero, S02, S03 (exceto o véu) nem menu. Publicar em branch/preview; o merge fica com quem escreveu o prompt.
