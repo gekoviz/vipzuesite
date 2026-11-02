@@ -1,5 +1,26 @@
 # Andamento — VIPZUE 2026
 
+## 02/11/2026 — Rodada 4, seções 04 a 07 (branch `feat/rodada4`, aguardando publicação)
+
+**Pedido:** executar "PROMPT VIPZUE rodada4 secoes4a7.pdf" e validar com `vz-check-r4.pdf`.
+
+**Bloqueio:** o push na `main` foi negado pelo auto mode. A rodada foi feita na branch `feat/rodada4` e será publicada de uma vez, com a confirmação do usuário.
+
+**Feito** (6 commits + docs):
+- 04: nome em Switzer 600, sem subtítulos, escala de texto da 03 (`--t-card-*`);
+- 05: copy nova em três cards com ilustração, mosaico no desktop;
+- dobra 04 → 05 com véu duplo;
+- 06 bege com campo espelhado; 07 escura;
+- efeito de entrada da 05 sobre a 04 (`js/handoff.js`);
+- correção do progresso arredondado ao pixel.
+
+**Validação no local** (`vz-check-r4`): 35/34/36/36 PASS (390/768/1440/1366×650), 0 FAIL.
+- WARN: o `Z.manual`; o `A.hierarquia` a 768 (tamanho do nome, valor do prompt).
+- 1440×1500: o FAIL esperado da §6.6.
+- `vz-check-r3c`: só falham os itens que mudam de propósito.
+
+**Relatório:** `docs/rodada4-relatorio.md`.
+
 ## 01/11/2026 — Rodada 3C, correção e fechamento (publicada em produção)
 
 **Pedido:** executar "PROMPT VIPZUE rodada3c correcao.pdf", que manda publicar em produção a cada commit, e validar com `vz-check-r3c.pdf`.
