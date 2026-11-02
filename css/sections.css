@@ -854,47 +854,100 @@ html:not(.s03-motion) .s03__stage {
 }
 
 /* =========================================================
-   06 — CTA final
+   06 — CTA final (rodada 6): título à esquerda, card com a águia à direita (desktop); título e depois o card (celular/tablet)
+   Este bloco SUBSTITUI o bloco ".closing" da 06 e também o bloco "06 — CTA final: respiro embaixo para o véu longo
+   06 → 07 (rodada 5)" (o padding-bottom passa a viver aqui).
+   A copy do título e do texto não muda; a microcopy perde "e o orçamento. Não é uma compra: é o início da conversa." (E19).
    ========================================================= */
 .closing {
-  padding-block: var(--space-7xl);
+  /* geometria da águia, lida do arquivo real (assets/img/aguia-cta-1200.webp, 1200×804, recorte justo pelo alfa) */
+  --closing-eagle-w: 0.84; /* largura da águia ÷ largura do painel */
+  --closing-eagle-ratio: 0.670; /* altura ÷ largura do arquivo */
+  --closing-perch: 0.15; /* fração da altura da águia que desce para dentro do card: a base do corpo e as garras ficam sobre a borda */
+  /* o véu longo 06 → 07 (rodada 5) segue valendo até 1023 px: o conteúdo termina acima dele */
+  padding-block: var(--space-5xl) calc(var(--veil-long) + var(--space-md));
 }
 
 .closing__grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--grid-gutter);
-  row-gap: var(--space-3xl);
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--space-2xl);
 }
 
 .closing__title {
-  grid-column: 1 / span 9;
+  grid-column: 1 / -1;
 }
 
+/* .closing .closing__title e .closing .closing__lead (dois níveis) vencem .t-display-xl e .t-body-lg, que são classes soltas, seja qual for a ordem dos arquivos */
 .closing__title span {
   display: block;
 }
 
+/* painel = águia (em fluxo, acima) + card; a águia desce por cima da borda de cima do card */
+.closing__panel {
+  grid-column: 1 / -1;
+  position: relative;
+  width: min(100%, 520px);
+  margin-inline: auto;
+}
+
+.closing__eagle {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: calc(var(--closing-eagle-w) * 100%);
+  height: auto;
+  margin-inline: auto;
+  translate: 0 calc(var(--closing-perch) * 100%);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 16px 18px rgb(20 18 16 / 0.32));
+}
+
+/* card: o mesmo desenho dos cards da 04 (raio 24, filete de 1 px, gradiente 158° Bronze → Café → Carvão), opaco por estar sobre o bege */
 .closing__action {
-  grid-column: 7 / span 5;
+  --text-2: rgb(243 237 227 / 0.78);
+  --journey-hl-1: color-mix(in srgb, var(--color-bronze) 82%, var(--color-brown));
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding:
+    calc(var(--closing-eagle-w) * var(--closing-eagle-ratio) * var(--closing-perch) * 100% + clamp(28px, 7vw, 44px))
+    clamp(22px, 6vw, 44px)
+    clamp(28px, 7vw, 40px);
+  border: 1px solid color-mix(in srgb, var(--journey-hl-1) 70%, transparent);
+  border-radius: 24px;
+  background: linear-gradient(158deg, var(--journey-hl-1) 0%, var(--color-brown) 46%, var(--color-charcoal) 100%);
+  color: var(--color-text-on-dark);
+  text-align: center;
+  box-shadow: 0 1px 0 rgb(243 237 227 / 0.06) inset;
 }
 
-.closing__lead {
-  color: var(--text-2);
+.closing .closing__lead {
+  max-width: 30ch;
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  color: var(--color-text-on-dark);
+  text-wrap: balance;
 }
 
-/* 06 — CTA final: o botão é o ShinyButton da Hero (.shiny-cta, css/base.css), sem nenhuma sobrescrita visual.
-   O invólucro só leva o espaçamento que antes estava em ".closing__action .btn". */
 .closing__cta {
-  margin-top: var(--space-content-to-cta);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: var(--space-lg);
 }
 
-/* Só se o rótulo (42 caracteres, nowrap) estourar a coluna abaixo de 380px: deixa quebrar em 2 linhas */
-@media (max-width: 379px) {
-  .closing__cta .shiny-cta {
-    white-space: normal;
-    text-align: center;
-  }
+/* o botão pode quebrar em duas linhas num card estreito, sem sair da caixa */
+.closing__cta .shiny-cta {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
 }
 
 /* Sem número de WhatsApp (js/config.js vazio) o JS tira o href e põe aria-disabled: o botão não é clicável, mas não
@@ -904,21 +957,82 @@ html:not(.s03-motion) .s03__stage {
 }
 
 .closing__note {
-  max-width: 44ch;
-  margin-top: var(--space-sm);
+  max-width: 34ch;
+  margin: var(--space-md) 0 0;
   font-size: var(--font-size-small);
   line-height: var(--font-line-small);
   color: var(--text-2);
+  text-wrap: balance;
 }
 
-/* =========================================================
-   06 — CTA final: respiro embaixo para o véu longo 06 → 07 (rodada 5)
-   O véu (.veil--long.veil--end) mora no FIM da 06 e tem a altura de --veil-long; o conteúdo termina antes dele.
-   Só o padding-bottom muda: a headline, o texto e o botão ficam onde estão (a Experiência vai revisar a copy e a
-   diagramação depois).
-   ========================================================= */
-.closing {
-  padding-bottom: calc(var(--veil-long) + var(--space-md));
+@media (max-width: 767px) {
+  .closing {
+    padding-block: var(--space-5xl) calc(var(--veil-long) + var(--space-md));
+  }
+
+  .closing__grid {
+    row-gap: var(--space-xl);
+  }
+
+  .closing__panel {
+    width: 100%;
+  }
+}
+
+/* desktop: título grande à esquerda (sem ocupar a coluna toda), painel à direita; a seção ocupa a tela (ver o bloco "uma seção por tela").
+   O painel inteiro (águia, card, textos, botão) escala com a ALTURA da tela: tudo dentro dele é em em, a base é --closing-p.
+   Em 1366×768 de monitor e em 1920×1080 a composição é a mesma, só muda a escala. Os textos têm piso em px (leitura). */
+@media (min-width: 1024px) {
+  .closing {
+    padding-block: clamp(56px, 9svh, 120px); /* sem véu no desktop (ver "emendas") */
+  }
+
+  .closing__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+    align-items: center;
+    row-gap: 0;
+  }
+
+  .closing .closing__title {
+    grid-column: 1 / span 6;
+    font-size: clamp(48px, 5.8vw, 92px);
+  }
+
+  .closing__panel {
+    --closing-p: clamp(12px, 1.75svh, 17px);
+    grid-column: 7 / span 6;
+    justify-self: end;
+    width: min(100%, 34em);
+    margin-inline: 0;
+    font-size: var(--closing-p);
+  }
+
+  .closing__action {
+    padding:
+      calc(var(--closing-eagle-w) * var(--closing-eagle-ratio) * var(--closing-perch) * 100% + 1.9em)
+      2.4em
+      2.2em;
+    border-radius: 1.6em;
+  }
+
+  .closing .closing__lead {
+    font-size: max(16px, 1.3em);
+  }
+
+  .closing__cta {
+    margin-top: 2em;
+  }
+
+  .closing__cta .shiny-cta {
+    font-size: max(14px, 1em);
+    padding: 1.15em 2em;
+  }
+
+  .closing__note {
+    margin-top: 1.4em;
+    font-size: max(12.5px, 0.82em);
+  }
 }
 
 /* =========================================================
@@ -1529,17 +1643,6 @@ html.js-reveal .faq.is-list-in .accordion__item {
    Tablet
    ========================================================= */
 @media (max-width: 1023px) {
-  .closing__title,
-  .closing__action {
-    grid-column: 1 / -1;
-  }
-
-  .closing__action {
-    max-width: 560px;
-  }
-
-
-
   .journey {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: var(--space-2xl);
@@ -1835,15 +1938,6 @@ html.js-reveal .faq.is-list-in .accordion__item {
       0 0 calc(var(--a) * 16px) calc(var(--a) * 2px) color-mix(in srgb, var(--color-brand-accent) calc(var(--a) * 45%), transparent);
   }
 
-  /* só o topo: o padding-bottom da 06 é o do véu 06 → 07 (rodada 5), que vale em todas as larguras */
-  .closing {
-    padding-top: var(--space-5xl);
-  }
-
-  .closing__grid {
-    row-gap: var(--space-xl);
-  }
-
   .site-footer__grid {
     grid-template-columns: 1fr;
     row-gap: var(--space-xl);
@@ -1898,38 +1992,6 @@ html.has-curtain .footer-curtain .site-footer {
   .site-footer__word {
     flex: none;
   }
-}
-
-/* =========================================================
-   06 — ShinyButton sobre o bege (rodada 5)
-   O efeito é o mesmo (borda cônica viva, pontos, brilho); só as CORES passam a ser as do Primary CTA "sobre fundo claro"
-   da Especificação Mestra (UI.08): fundo Grafite quente, texto Marfim, hover Carvão, anel de foco Grafite.
-   Escopo: só a 06 (.closing). O botão da Hero (sobre escuro) não muda.
-   ========================================================= */
-@property --shiny-bg {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #22201d;
-}
-
-.closing .shiny-cta {
-  --shiny-bg: var(--color-cta-primary-light-bg); /* #22201D Grafite quente */
-  --shiny-bg-subtle: color-mix(in srgb, var(--color-cta-primary-light-text) 14%, var(--color-cta-primary-light-bg)); /* filete interno */
-  --shiny-fg: var(--color-cta-primary-light-text); /* #F3EDE3 Marfim */
-  --shiny-highlight: var(--color-bronze); /* #8A6A4B: o contorno vivo precisa aparecer sobre o bege (o Champagne da Hero some nele) */
-  --shiny-highlight-subtle: var(--color-brand-accent); /* #C3A881 */
-  outline-offset: 3px;
-  transition-property: --shiny-angle-offset, --shiny-percent, --shiny-shine, --shiny-bg;
-  transition-duration: 800ms, 800ms, 800ms, 180ms;
-  transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1), cubic-bezier(0.25, 1, 0.5, 1), cubic-bezier(0.25, 1, 0.5, 1), ease-out;
-}
-
-.closing .shiny-cta:is(:hover, :focus-visible) {
-  --shiny-bg: var(--color-cta-primary-light-hover); /* #141210 Carvão profundo, em 180 ms */
-}
-
-.closing .shiny-cta:focus-visible {
-  outline: 2px solid var(--color-cta-primary-light-bg); /* anel Grafite, 2 px, afastado 3 px */
 }
 
 /* =========================================================
