@@ -70,10 +70,17 @@
     const cs = getComputedStyle(box);
     const target = box.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0);
     inner.style.fontSize = "100px";
-    const size = fitSize(inner.offsetWidth, target, target * 0.42);
+    let size = fitSize(inner.offsetWidth, target, target * 0.42);
     if (!size) return;
+    // Cortina (§9.5): o rodapé só vira cortina se couber na tela (altura ≤ 100svh). Em janela baixa a marca encolhe até o
+    // rodapé caber, no máximo − 28%; abaixo disso a cortina simplesmente não liga e o rodapé fica em fluxo normal.
+    // Medido: sem este teto, em 1366 × 650 o rodapé tem 682 px e a cortina não liga; com ele fica com 624 px e liga.
+    const rest = root.offsetHeight - word.offsetHeight; // altura do rodapé sem a marca
+    const k = measureBaseline() + CUT;
+    const capH = (window.innerHeight * 0.96 - rest) / k;
+    if (window.innerHeight >= 560 && capH > 0) size = Math.max(Math.min(size, capH), size * 0.72);
     inner.style.fontSize = size + "px";
-    word.style.height = Math.max(0, size * (measureBaseline() + CUT)) + "px";
+    word.style.height = Math.max(0, size * k) + "px";
     place();
   };
 

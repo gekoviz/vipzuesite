@@ -1227,13 +1227,14 @@ html.js-reveal .faq.is-list-in .accordion__item {
 }
 
 .site-footer.has-field .site-footer__copy {
-  color: color-mix(in srgb, var(--bf-ink) 80%, transparent);
+  color: color-mix(in srgb, var(--bf-ink) 88%, transparent); /* 80% dava 4,2:1 no ponto mais claro do campo; 88% dá ≥ 4,7:1 */
 }
 
-/* Links legais: a 78% caíam a 4,49:1 sobre o foco mais claro do campo (768px); a 80%, como a copy, ficam ≥ 4,5:1.
-   Especificidade baixa (0,2,0) de propósito: o hover/foco (.footer-link[href]:hover) continua acendendo para --bf-ink. */
+/* Links legais: com o campo a 100% (teto de brilho), 78% e 80% caem a 4,47:1 no foco mais claro (1366 × 650); a 88%, como a
+   copy, ficam ≥ 4,5:1. Especificidade baixa (0,2,0) de propósito: o hover/foco (.footer-link[href]:hover) continua acendendo
+   para --bf-ink. */
 .has-field .footer-link {
-  color: color-mix(in srgb, var(--bf-ink) 80%, transparent);
+  color: color-mix(in srgb, var(--bf-ink) 88%, transparent);
 }
 
 /* Wordmark: o preenchimento de repouso passa de marrom → carvão (pensado para o fundo chapado) para um champagne translúcido,
