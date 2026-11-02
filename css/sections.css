@@ -1979,7 +1979,8 @@ html.has-curtain .footer-curtain .site-footer {
     --hl: 1;
   }
 
-  .journey:has(.journey__stage:is(:hover, :focus-within)) .journey__stage:nth-child(2) {
+  /* :not(): sem ele esta regra (0,5,0) vence a do card sob o ponteiro (0,3,0) e o 02 apagaria com o ponteiro nele mesmo */
+  .journey:has(.journey__stage:is(:hover, :focus-within)) .journey__stage:nth-child(2):not(:hover, :focus-within) {
     --hl: 0;
   }
 
