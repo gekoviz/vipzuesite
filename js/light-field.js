@@ -302,8 +302,8 @@ void main() {
   const FIELD_SECTIONS = [
     ["#metodo", "dark"], // 04 — Método
     ["#para-quem-e", "light"], // 05 — Para quem é
-    ["#contato", "dark"], // 06 — CTA final
-    ["#faq", "light"], // 07 — FAQ
+    ["#contato", "light"], // 06 — CTA final (rodada 4: bege, igual à 03 e à 05)
+    ["#faq", "dark"], // 07 — FAQ (rodada 4: escuro, a cara do rodapé)
     ["[data-beam-footer]", "dark"], // 08 — Rodapé
   ];
   // Teto de brilho do campo escuro (u_state.z do shader, §4.1a). 0 = a Hero idêntica, mas o texto pequeno reprova nos focos
