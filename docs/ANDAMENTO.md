@@ -1,10 +1,14 @@
 # Andamento — VIPZUE 2026
 
-## 02/11/2026 — Rodada 4, seções 04 a 07 (branch `feat/rodada4`, aguardando publicação)
+## 02/11/2026 — Rodada 4, seções 04 a 07 (publicada em produção)
 
 **Pedido:** executar "PROMPT VIPZUE rodada4 secoes4a7.pdf" e validar com `vz-check-r4.pdf`.
 
-**Bloqueio:** o push na `main` foi negado pelo auto mode. A rodada foi feita na branch `feat/rodada4` e será publicada de uma vez, com a confirmação do usuário.
+**Bloqueio:** o primeiro push na `main` foi negado pelo auto mode. A rodada foi feita na branch `feat/rodada4`.
+
+**Publicado:** fast-forward da `main` com push, depois da confirmação do usuário. Em produção:
+- `handoff.js` responde 200;
+- `vz-check-r4`: 35/34/36/36 PASS, 0 FAIL, igual ao local.
 
 **Feito** (6 commits + docs):
 - 04: nome em Switzer 600, sem subtítulos, escala de texto da 03 (`--t-card-*`);

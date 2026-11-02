@@ -1,6 +1,21 @@
 # Rodada 4 — Seções 04 a 07: relatório
 
-Feita na branch `feat/rodada4`, a partir da `main` em `31e4ce4` (3C em produção). **Ainda não publicada**: o push na `main` foi bloqueado pelo auto mode ("Production Deploy"), e o comando inteiro foi negado, inclusive o commit. Por isso os commits não foram publicados um a um, como pede a §11; a publicação vai de uma vez, depois da confirmação do usuário. A validação abaixo é no endereço local (`localhost:5173`, mesmo código da branch). O R1 (deploy) fica pendente até a publicação.
+Publicado em produção em 02/11/2026, 04:50 UTC: fast-forward da `main` (`31e4ce4` → `9903e7c`), feito depois da confirmação do usuário.
+
+Feita na branch `feat/rodada4`, a partir da `main` em `31e4ce4` (3C em produção). O primeiro push na `main` foi bloqueado pelo auto mode ("Production Deploy"). Por isso os commits foram publicados de uma vez, e não um a um como pede a §11.
+
+**Prova de deploy:** `curl -sI https://vipzuesite.vercel.app/js/handoff.js` → `HTTP/1.1 200 OK`.
+
+**`vz-check-r4` em produção** (aba em primeiro plano, mesmo ambiente do local):
+
+| Largura | PASS | FAIL | WARN |
+|---|---|---|---|
+| 390 × 844 | 35 | 0 | 1 |
+| 768 × 1024 | 34 | 0 | 2 |
+| 1440 × 900 | 36 | 0 | 1 |
+| 1366 × 650 | 36 | 0 | 1 |
+
+`0.deploy` dá PASS. O `vz-check-r3c` em produção a 1366 × 650 dá 34 PASS e 7 FAIL, as mesmas do local, todas previstas (ver (6)). Os números de (5) e (6) abaixo são do local, e são idênticos aos de produção.
 
 ## (1) Resumo em 5 linhas
 
@@ -107,7 +122,7 @@ Tokens novos, todos locais (nenhum entra nos tokens-base):
 
 | # | Item | Prova | Resultado | Evidência |
 |---|---|---|---|---|
-| R1 | Deploy da rodada em produção | `0.deploy`; curl do `handoff.js` | **Pendente** | Não publicado (bloqueio do push na `main`, ver topo). No local, `0.deploy` dá PASS nas 4 larguras. |
+| R1 | Deploy da rodada em produção | `0.deploy`; curl do `handoff.js` | PASS | curl do `handoff.js` = 200; `0.deploy` PASS em produção nas 4 larguras. |
 | R2 | 3C presente | `0.rodada3c` | PASS | 4 larguras |
 | R3 | 04: Switzer 600, sem subtítulo, escala da 03, cor | `A.*` | PASS (WARN a 768) | 390: nome 24px / parágrafo 18px (18/27/500). 1440: 30px / 23px (23,04/34,56/400). 768: `A.hierarquia` WARN, ver (6). |
 | R4 | 05: copy, mosaico/coluna, contraste, entradas | `B.*` | PASS | Mosaico a 1440 (card 3 com degrau de 56px); coluna a 390 (x 24, largura 327px). Proporção 1,60. Contraste: título 7,1:1, subtítulo 6,2:1, cards 7,1:1. Entradas 5/5. |
@@ -226,7 +241,6 @@ O título "Para quem são nossas Landing Pages Estratégicas?" continua.
 
 ## (9) O que ficou
 
-- **Publicação em produção e R1** (`0.deploy` e curl do `handoff.js` = 200 no ar), com as checagens repetidas em produção. Depende da confirmação do usuário.
 - **iPhone real (R14):** dobra sem faixa, efeito sem tranco com a barra de endereço encolhendo, sem `webglcontextlost` em duas rolagens inteiras.
 - **Teste sem JS:** não foi feito. Pelo código: o efeito e os estados ficam sob `.is-handoff` e `html.js-reveal`, que só existem com JS.
 - **Rolagem longa de ponta a ponta duas vezes** (§10.8): não feita como sessão separada. As rodadas do checker rolam a página inteira várias vezes e o console ficou sem erros.
