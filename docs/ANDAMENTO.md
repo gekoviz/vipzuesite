@@ -1,5 +1,26 @@
 # Andamento — VIPZUE 2026
 
+## 02/11/2026 — Rodada 5, ajustes (branch `feat/rodada5`, publicação pendente)
+
+**Pedido:** executar "PROMPT VIPZUE rodada5 ajustes.pdf" e validar com `vz-check-r5.pdf`.
+
+**Bloqueio:** o push na `main` é negado pelo auto mode. Os commits ficaram na branch, à espera da confirmação do usuário.
+
+**Feito** (6 commits + 1 correção):
+- sai o efeito de entrada 04 → 05 (`js/handoff.js` apagado) e o véu passa à classe `.veil`;
+- véus 06 → 07 e no começo e no fim da FAQ;
+- rodapé do celular com a altura da tela;
+- botão da 06 nas cores do Primary CTA sobre fundo claro (14,0:1);
+- 04 no desktop: quatro cards em linha, números 01–04, ✦, destaque que acompanha o ponteiro, headline à esquerda em 2 linhas;
+- correção: o 02 apagava com o ponteiro sobre ele mesmo (especificidade do CSS do prompt).
+
+**Validação no local** (`vz-check-r5`): 36/30/38/38/38 PASS (390/768/1024/1366×650/1440), 0 FAIL. Único WARN: o `Z.manual`.
+- `vz-check-r4` e `vz-check-r3c`: só mudam os itens previstos na §10.2, mais o `2.contraste` do r3c a 1440, que é artefato do checker.
+- Movimento reduzido, sem WebGL e 1440×1500 conferidos.
+- Rolagem longa: 0 contextos perdidos.
+
+**Relatório:** `docs/rodada5-relatorio.md`.
+
 ## 02/11/2026 — Rodada 4, seções 04 a 07 (publicada em produção)
 
 **Pedido:** executar "PROMPT VIPZUE rodada4 secoes4a7.pdf" e validar com `vz-check-r4.pdf`.
