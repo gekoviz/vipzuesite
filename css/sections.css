@@ -615,49 +615,166 @@ html:not(.s03-motion) .s03__stage {
 }
 
 /* =========================================================
-   05 — Para quem é
+   05 — Para quem é · cards (rodada 4)
+   Card: o do 21st.dev "feature-sections" (@prebuiltui): imagem em cima, texto embaixo, sobe no hover. Aqui: janela
+   escura com a ilustração (a "cara" da referência: painel escuro + base clara), sobre uma base marfim, na paleta e nas
+   fontes da VIPZUE.
+   Desktop ≥ 1024px: mosaico 2 × 2 como a referência (título e subtítulo no alto à esquerda; os cards 1 e 3 na coluna da
+   direita, o 2 embaixo à esquerda). Celular e tablet: uma coluna, card por card.
    ========================================================= */
-.audience__grid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--grid-gutter);
-  align-items: start;
+.pq {
+  --pq-ink: var(--color-text-on-light, #22201d);
+  --pq-gap: clamp(20px, 3vw, 32px);
+  --pq-veil: var(--s45-veil-light, 0px); /* altura do véu de cima (dobra 04 → 05): o título começa abaixo dele */
+  position: relative;
+  padding-block: calc(var(--pq-veil) + var(--space-xl, 48px)) var(--section-space-default, 96px);
 }
 
-.audience__head {
-  grid-column: 1 / span 5;
-  position: sticky;
-  top: var(--space-2xl);
+.pq__inner {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: var(--page-margin, 24px);
 }
 
-.audience__lead {
-  margin-top: var(--space-headline-to-subheadline);
+.pq__head {
+  max-width: 36rem;
+}
+
+.pq__title {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.pq__lead {
+  max-width: 28rem;
+  margin: var(--space-md, 20px) 0 0;
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 1.02rem + 0.45vw, 1.375rem);
+  line-height: 1.4;
+  font-weight: var(--font-weight-medium, 500);
   color: var(--text-2);
 }
 
-.situations {
-  grid-column: 7 / span 6;
-  margin: 0;
+.pq__cards {
+  display: grid;
+  gap: var(--pq-gap);
+  margin: var(--space-2xl, 40px) 0 0;
   padding: 0;
   list-style: none;
-  border-bottom: var(--border-width-default) solid var(--rule);
 }
 
-.situation {
-  padding-block: var(--space-md);
-  border-top: var(--border-width-default) solid var(--rule);
+/* O <li> só se posiciona e entra (data-reveal: opacity/transform são do reveal do site). A base marfim, a sombra e o
+   hover são do .pq-card__plate, DENTRO dele: assim a entrada e o hover nunca disputam o mesmo transform nem o mesmo
+   transition. */
+.pq-card {
+  display: flex;
 }
 
-.situation__key {
-  font-size: var(--font-size-heading);
-  line-height: var(--font-line-heading);
-  letter-spacing: var(--font-tracking-heading);
-  font-weight: var(--font-weight-medium);
+.pq-card__plate {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgb(34 32 29 / 0.1);
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--color-ivory, #f3ede3) 78%, transparent);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 0 32px 60px -38px rgb(34 32 29 / 0.55);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.situation p {
-  margin-top: var(--space-xs);
-  color: var(--text-2);
+.pq-card__visual {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 90% at 88% 0%, rgb(138 106 75 / 0.6), transparent 58%),
+    linear-gradient(165deg, var(--color-coffee, #2f251f) 0%, var(--color-bg-deep, #141210) 72%);
+  box-shadow: inset 0 0 0 1px rgb(195 168 129 / 0.2);
+}
+
+.pq-card__visual svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pq-card__text {
+  margin: 0;
+  padding: 22px 16px 16px;
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 1.02rem + 0.45vw, 1.375rem);
+  line-height: 1.35;
+  font-weight: var(--font-weight-medium, 500);
+  letter-spacing: -0.01em;
+  color: var(--pq-ink);
+}
+
+.pq-card__text strong {
+  font-weight: 600;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .pq-card__plate:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 0 40px 70px -36px rgb(34 32 29 / 0.62);
+  }
+}
+
+/* Tablet: uma coluna, cards com largura de leitura */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pq__cards {
+    max-width: 620px;
+  }
+}
+
+/* Desktop: mosaico 2 × 2 da referência. A ordem no HTML (título, cards 1, 2, 3) é a ordem de leitura e de tabulação; o
+   grid só reposiciona: 1 em cima à direita, 2 embaixo à esquerda, 3 embaixo à direita (um pouco mais baixo, para o
+   degrau). */
+@media (min-width: 1024px) {
+  .pq__inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(48px, 6vw, 96px);
+    row-gap: var(--pq-gap);
+    align-items: start;
+  }
+
+  .pq__head {
+    grid-column: 1;
+    grid-row: 1;
+    padding-block-start: clamp(8px, 2vw, 32px);
+  }
+
+  .pq__cards {
+    display: contents;
+  }
+
+  .pq-card:nth-child(1) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .pq-card:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .pq-card:nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+    margin-block-start: clamp(24px, 4vw, 56px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pq-card__plate {
+    transition: none;
+  }
 }
 
 /* =========================================================
@@ -1321,16 +1438,9 @@ html.js-reveal .faq.is-list-in .accordion__item {
    Tablet
    ========================================================= */
 @media (max-width: 1023px) {
-  .audience__head,
-  .situations,
   .closing__title,
   .closing__action {
     grid-column: 1 / -1;
-  }
-
-  .audience__head {
-    position: static;
-    margin-bottom: var(--space-2xl);
   }
 
   .closing__action {
