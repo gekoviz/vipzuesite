@@ -371,8 +371,7 @@ void main() {
   const drawAll = () => {
     if (mainInView && !main.lost()) main.draw(frontState(), section);
     fields.forEach((fl) => {
-      // data-covered: a 04, colada embaixo da 05 no efeito de entrada (js/handoff.js), está toda coberta: não gasta GPU
-      if (fl.inView && !fl.el.hasAttribute("data-covered") && !fl.field.lost()) fl.field.draw(fl.state, fl.comp);
+      if (fl.inView && !fl.field.lost()) fl.field.draw(fl.state, fl.comp);
     });
   };
   const frame = (now) => {
