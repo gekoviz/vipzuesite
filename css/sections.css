@@ -1931,3 +1931,122 @@ html.has-curtain .footer-curtain .site-footer {
 .closing .shiny-cta:focus-visible {
   outline: 2px solid var(--color-cta-primary-light-bg); /* anel Grafite, 2 px, afastado 3 px */
 }
+
+/* =========================================================
+   04 — Método, desktop (≥ 1024 px): quatro cards em linha, no estilo da referência (rodada 5)
+   Contorno fino, número grande (01–04, decorativo), nome em negrito, texto menor e apagado, ✦ no canto de baixo e um
+   card em destaque com gradiente. O destaque nasce no card 02 e passa para o card sob o ponteiro (ou com foco).
+   Celular e tablet (< 1024 px) NÃO mudam: a linha do tempo com o ponto aceso continua a mesma.
+   O tilt, o spotlight, o reveal e o js/journey-lamp.js continuam como estão (nenhuma linha de JS muda).
+   ========================================================= */
+@property --hl {
+  syntax: "<number>";
+  inherits: true; /* herdado: o ::before lê o --hl do card */
+  initial-value: 0;
+}
+
+@media (min-width: 1024px) {
+  /* Título: grande, à esquerda, em duas linhas (a frase é a mesma; só a largura da caixa muda).
+     8.4em medido com a Gloock real: "O que entregamos" (8,05em) cabe; "O que entregamos é" (8,75em) quebra. */
+  #metodo .why__title {
+    max-width: 8.4em;
+    text-align: left;
+  }
+
+  .journey {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(16px, 1.7vw, 24px);
+    counter-reset: etapa;
+  }
+
+  .journey__stage {
+    --journey-radius: 24px;
+    --journey-pad: clamp(20px, 1.95vw, 28px);
+    --journey-line: rgb(243 237 227 / 0.14); /* contorno fino (--color-border-on-dark é 0,12: aqui 0,14 para ler sobre o campo) */
+    --journey-fill: color-mix(in srgb, var(--color-charcoal) 62%, transparent);
+    --journey-hl-1: color-mix(in srgb, var(--color-bronze) 82%, var(--color-brown));
+    --journey-hl-2: var(--color-brown);
+    --hl: 0;
+    counter-increment: etapa;
+    display: flex;
+    flex-direction: column;
+    padding: var(--journey-pad) var(--journey-pad) calc(var(--journey-pad) + 36px); /* os 36 px de baixo guardam o ✦ */
+    background: transparent;
+  }
+
+  /* destaque: nasce no 02; com o ponteiro (ou foco) em outro card, ele passa para esse */
+  .journey__stage:nth-child(2) {
+    --hl: 1;
+  }
+
+  .journey:has(.journey__stage:is(:hover, :focus-within)) .journey__stage:nth-child(2) {
+    --hl: 0;
+  }
+
+  .journey .journey__stage:is(:hover, :focus-within) {
+    --hl: 1;
+  }
+
+  /* placa: contorno de 1 px + fundo translúcido; o gradiente de destaque entra por cima, com a força de --hl */
+  .journey__stage::before {
+    border: 1px solid color-mix(in srgb, var(--journey-hl-1) calc(var(--hl) * 70%), var(--journey-line));
+    background:
+      linear-gradient(
+        158deg,
+        color-mix(in srgb, var(--journey-hl-1) calc(var(--hl) * 100%), transparent) 0%,
+        color-mix(in srgb, var(--journey-hl-2) calc(var(--hl) * 92%), transparent) 46%,
+        color-mix(in srgb, var(--color-charcoal) calc(var(--hl) * 100%), transparent) 100%
+      ),
+      var(--journey-fill);
+  }
+
+  .journey--fx .journey__stage {
+    transition:
+      opacity var(--duration-entrance) var(--ease-emphasized),
+      transform 0.2s ease-out,
+      --hl 0.45s ease-out;
+    transition-delay: var(--reveal-delay, 0ms), 0ms, 0ms;
+  }
+
+  /* número grande, decorativo: o texto alternativo vazio ("/ ''") o tira da leitura de tela; a lista (ol) já numera */
+  #metodo .journey__name::before {
+    content: counter(etapa, decimal-leading-zero); /* navegadores sem o texto alternativo: o número entra, sem prejuízo */
+    content: counter(etapa, decimal-leading-zero) / "";
+    display: block;
+    margin-bottom: clamp(18px, 1.9vw, 28px);
+    font-size: clamp(2.25rem, 3.4vw, 3rem);
+    line-height: 1;
+    font-weight: var(--font-weight-regular);
+    letter-spacing: -0.03em;
+    color: var(--color-text-on-dark);
+  }
+
+  #metodo {
+    --step-name-size: clamp(1.25rem, 1.65vw, 1.5rem);
+  }
+
+  /* texto menor e apagado (a escala --t-card-* da 03 não cabe em 4 colunas; vale no celular e no tablet) */
+  #metodo .journey__detail {
+    margin-block-start: 0.6em;
+    max-width: none;
+    font-size: clamp(0.9375rem, 1.05vw, 1rem);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    font-weight: var(--font-weight-regular);
+    color: rgb(243 237 227 / 0.74);
+  }
+
+  /* ✦ no canto de baixo à direita (decorativo) */
+  #metodo .journey__detail::after {
+    content: "";
+    position: absolute;
+    right: var(--journey-pad);
+    bottom: var(--journey-pad);
+    width: 18px;
+    height: 18px;
+    background: currentColor;
+    opacity: 0.7;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1.5c.8 6 4.5 9.7 10.5 10.5-6 .8-9.7 4.5-10.5 10.5C11.2 16.5 7.5 12.8 1.5 12 7.5 11.2 11.2 7.5 12 1.5z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1.5c.8 6 4.5 9.7 10.5 10.5-6 .8-9.7 4.5-10.5 10.5C11.2 16.5 7.5 12.8 1.5 12 7.5 11.2 11.2 7.5 12 1.5z'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+}
