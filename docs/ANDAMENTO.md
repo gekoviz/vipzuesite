@@ -1,5 +1,26 @@
 # Andamento — VIPZUE 2026
 
+## 02/11/2026 — Rodada 6, seção 06, emendas, rodapé e uma seção por tela (branch `feat/rodada6`, aguardando publicação)
+
+**Pedido:** executar "PROMPT VIPZUE rodada6 secao06.pdf" e validar com `vz-check-r6.pdf`.
+
+**Bloqueio:** o push na `main` é negado pelo auto mode. A rodada foi feita na branch `feat/rodada6` e só é publicada depois da confirmação do usuário.
+
+**Feito** (5 commits de código + este):
+- botão (Hero e 06): o hover só acende; sem o quadrado, mesma velocidade da borda (119–120°/s parada e no hover; antes caía para 71°/s);
+- 06: título à esquerda e card escuro com a águia pousada na borda (três WebP com alfa: 38/86/176 KB); microcopy nova (E19);
+- emendas: linha de 1px no lugar do véu preto no desktop (04 → 05 e 06 → 07) e linha Bronze na 05 → 06 em todas as larguras;
+- rodapé com a altura da tela em todas as larguras e wordmark centralizada;
+- uma seção por tela no desktop: `min-height: 100svh` e encaixe da rolagem com `proximity`, só da 04 ao rodapé (Plano B da §7.1: com `mandatory`, a rolagem saltava dentro dos palcos sticky da Hero e da 02/03).
+
+**Validação no local** (`vz-check-r6`): 39/40/48/49/50 PASS em 390/768/1366/1440/1920 (antes: 16/15/17/18/18).
+- As FAIL que sobram são explicadas no relatório: dois falsos positivos do checker (`B.img-alfa`, `E.wordmark-centro`), o Plano B (`D.snap`) e a sobreposição Hero/02 que já existia (`D.sem-fresta`, `D.vizinha-escondida`).
+- `vz-check-r5`: só mudam os itens previstos na §10.2, mais o `C.js`, que a §6.3 manda mudar.
+- Movimento reduzido, sem WebGL, 1366×650, 1280×620, 1920×1600 e 320px conferidos. Rolagem longa: 0 contextos perdidos.
+- Não testados: trackpad, iPhone, Safari e Firefox.
+
+**Relatório:** `docs/rodada6-relatorio.md`.
+
 ## 02/11/2026 — Rodada 5, ajustes (publicada em produção)
 
 **Pedido:** executar "PROMPT VIPZUE rodada5 ajustes.pdf" e validar com `vz-check-r5.pdf`.
