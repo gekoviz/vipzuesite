@@ -78,7 +78,9 @@
     const rest = root.offsetHeight - word.offsetHeight; // altura do rodapé sem a marca
     const k = measureBaseline() + CUT;
     const capH = (window.innerHeight * 0.96 - rest) / k;
-    if (window.innerHeight >= 560 && capH > 0) size = Math.max(Math.min(size, capH), size * 0.72);
+    // celular (≤ 767 px): o rodapé tem altura de tela (min-height: 100svh), então `rest` inclui o espaço vazio e este teto
+    // encolheria a wordmark; ela segue a largura
+    if (window.innerHeight >= 560 && capH > 0 && !matchMedia("(max-width: 767px)").matches) size = Math.max(Math.min(size, capH), size * 0.72);
     inner.style.fontSize = size + "px";
     word.style.height = Math.max(0, size * k) + "px";
     place();

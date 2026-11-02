@@ -26,7 +26,8 @@
     root.classList.remove("has-curtain");
     wrap.style.removeProperty("--curtain-h");
     const h = Math.ceil(footer.getBoundingClientRect().height);
-    if (motion.matches && h > 0 && h <= smallViewport()) {
+    // +1: o ceil() da altura do rodapé pode passar 1 px de 100svh por arredondamento; sem a folga a cortina desligaria sozinha
+    if (motion.matches && h > 0 && h <= smallViewport() + 1) {
       wrap.style.setProperty("--curtain-h", h + "px");
       root.classList.add("has-curtain");
     }
