@@ -860,7 +860,7 @@ html:not(.s03-motion) .s03__stage {
    A copy do título e do texto não muda; a microcopy perde "e o orçamento. Não é uma compra: é o início da conversa." (E19).
    ========================================================= */
 .closing {
-  /* geometria da águia, lida do arquivo real (assets/img/aguia-cta-1200.webp, 1200×804, recorte justo pelo alfa) */
+  /* geometria da águia, lida do arquivo real (a águia de 1200 px, 1200×804, recorte justo pelo alfa) */
   --closing-eagle-w: 0.84; /* largura da águia ÷ largura do painel */
   --closing-eagle-ratio: 0.670; /* altura ÷ largura do arquivo */
   --closing-perch: 0.15; /* fração da altura da águia que desce para dentro do card: a base do corpo e as garras ficam sobre a borda */
