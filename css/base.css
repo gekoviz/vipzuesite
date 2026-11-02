@@ -207,9 +207,12 @@ button {
 }
 
 /* =========================================================
-   ShinyButton (CTA da Hero) — adaptação VIPZUE do componente de referência:
-   cápsula, borda viva com brilho percorrendo o contorno, textura de pontos, shimmer interno e
-   resposta de hover. Azul → champagne; Inter → Switzer; shimmer reduzido (premium, não neon).
+   ShinyButton (Hero e 06) — rodada 6
+   O hover/foco só ACENDE o efeito que já corre: a borda continua girando na mesma velocidade e com o mesmo arco.
+   Saem: o retângulo que aparecia, crescia e encolhia (span::before + @keyframes shiny-breathe), a troca de arco/ângulo no hover
+   (--shiny-percent / --shiny-angle-offset) e a segunda animação "reverse paused" que o hover liberava e que desacelerava a borda.
+   Entram: brilho do filete (--shiny-shine mais claro), pontos e cintilância mais fortes e um halo suave que segue a pílula.
+   Este bloco SUBSTITUI o ShinyButton inteiro (do primeiro @property --shiny-angle até o último @keyframes shiny-*).
    ========================================================= */
 @property --shiny-angle {
   syntax: "<angle>";
@@ -244,15 +247,13 @@ button {
   --shiny-anim: shiny-angle linear infinite;
   --shiny-duration: 3s;
   --shiny-shadow: 2px;
-  --shiny-transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
-
+  --shiny-transition: 600ms cubic-bezier(0.25, 1, 0.5, 1);
   isolation: isolate;
   position: relative;
   overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* desktop: acompanha a escala da headline (revisão 24/10); o mobile tem regra própria abaixo */
   padding: clamp(18px, 1.25vw, 22px) clamp(32px, 2.3vw, 44px);
   font-family: var(--font-body);
   font-size: clamp(16px, 1.1vw, 19px);
@@ -275,15 +276,17 @@ button {
       var(--shiny-shine) calc(var(--shiny-percent) * 2),
       var(--shiny-highlight) calc(var(--shiny-percent) * 3),
       transparent calc(var(--shiny-percent) * 4)
-    ) border-box;
-  box-shadow: inset 0 0 0 1px var(--shiny-bg-subtle);
+    )
+    border-box;
+  box-shadow:
+    inset 0 0 0 1px var(--shiny-bg-subtle),
+    0 0 30px -6px rgb(195 168 129 / 0);
   transition: var(--shiny-transition);
-  transition-property: --shiny-angle-offset, --shiny-percent, --shiny-shine;
+  transition-property: --shiny-shine, box-shadow;
 }
 
 .shiny-cta::before,
-.shiny-cta::after,
-.shiny-cta span::before {
+.shiny-cta::after {
   content: "";
   pointer-events: none;
   position: absolute;
@@ -291,13 +294,14 @@ button {
   inset-block-start: 50%;
   translate: -50% -50%;
   z-index: -1;
+  transition: opacity var(--shiny-transition);
 }
 
 .shiny-cta:active {
   translate: 0 1px;
 }
 
-/* textura de pontos revelada pelo mesmo ângulo do brilho */
+/* pontinhos que giram com a borda */
 .shiny-cta::before {
   --size: calc(100% - var(--shiny-shadow) * 3);
   --position: 2px;
@@ -312,7 +316,7 @@ button {
   opacity: 0.22;
 }
 
-/* shimmer interno */
+/* cintilância que gira por dentro */
 .shiny-cta::after {
   --shiny-anim: shiny-shimmer linear infinite;
   width: 100%;
@@ -327,40 +331,27 @@ button {
   z-index: 1;
 }
 
-/* respiração quente no hover/foco */
-.shiny-cta span::before {
-  --size: calc(100% + 1rem);
-  width: var(--size);
-  height: var(--size);
-  box-shadow: inset 0 -1ex 2rem 4px rgb(195 168 129 / 0.45);
-  opacity: 0;
-  transition: opacity var(--shiny-transition);
-  animation: calc(var(--shiny-duration) * 1.5) shiny-breathe linear infinite;
-}
-
+/* UMA animação só (a borda gira sempre, no hover também) */
 .shiny-cta,
 .shiny-cta::before,
 .shiny-cta::after {
-  animation:
-    var(--shiny-anim) var(--shiny-duration),
-    var(--shiny-anim) calc(var(--shiny-duration) / 0.4) reverse paused;
-  animation-composition: add;
+  animation: var(--shiny-anim) var(--shiny-duration);
 }
 
+/* "acende": mesmo arco, mesma velocidade, mais luz */
 .shiny-cta:is(:hover, :focus-visible) {
-  --shiny-percent: 20%;
-  --shiny-angle-offset: 95deg;
-  --shiny-shine: var(--shiny-highlight-subtle);
+  --shiny-shine: #fff6e2;
+  box-shadow:
+    inset 0 0 0 1px var(--shiny-bg-subtle),
+    0 0 30px -6px rgb(195 168 129 / 0.5);
 }
 
-.shiny-cta:is(:hover, :focus-visible),
-.shiny-cta:is(:hover, :focus-visible)::before,
+.shiny-cta:is(:hover, :focus-visible)::before {
+  opacity: 0.45;
+}
+
 .shiny-cta:is(:hover, :focus-visible)::after {
-  animation-play-state: running;
-}
-
-.shiny-cta:is(:hover, :focus-visible) span::before {
-  opacity: 1;
+  opacity: 0.6;
 }
 
 .shiny-cta:focus-visible {
@@ -379,21 +370,8 @@ button {
   }
 }
 
-@keyframes shiny-breathe {
-  from,
-  to {
-    scale: 1;
-  }
-
-  50% {
-    scale: 1.2;
-  }
-}
-
-/* Mobile: cabe inteiro em uma linha até 320px, com área de toque ≥ 44px */
 @media (max-width: 767px) {
   .shiny-cta {
-    /* 44px de altura (área de toque), mais contido que no desktop */
     padding: 13px clamp(16px, 4.6vw, 22px);
     font-size: clamp(12.5px, 3.6vw, 14px);
   }
@@ -407,8 +385,7 @@ button {
 
   .shiny-cta,
   .shiny-cta::before,
-  .shiny-cta::after,
-  .shiny-cta span::before {
+  .shiny-cta::after {
     animation: none;
     transition: none;
   }
