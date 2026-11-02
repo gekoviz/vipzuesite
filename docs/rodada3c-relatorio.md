@@ -1,7 +1,7 @@
 # Rodada 3C — Correção e fechamento das seções 03 → 08: relatório
 
-Branch `feat/rodada3`. A rodada 3 inteira e os deltas da 3C estão nela.
-**A `main` e o site no ar (https://vipzuesite.vercel.app/) ainda não têm nada disto.** Na hora do merge fast-forward com push, o auto mode do Claude Code bloqueou o deploy em produção ("Production Deploy"). A §2.2 pede publicar a cada commit; isso fica aguardando a confirmação do usuário.
+Publicado em produção em 02/11/2026 00:26 (UTC): fast-forward da `main` para a `feat/rodada3` (`457aab3`), feito depois da confirmação do usuário.
+O primeiro push na `main` tinha sido bloqueado pelo auto mode ("Production Deploy"). Por isso os commits da rodada foram publicados de uma vez, e não um a um como pede a §2.2.
 
 ## (1) Resumo em 5 linhas
 
@@ -30,7 +30,8 @@ Branch `feat/rodada3`. A rodada 3 inteira e os deltas da 3C estão nela.
    | 1366 × 650 | 41 | 0 | 0 | 2 |
 
    Copy idêntica nas 5 regiões.
-5. **Luz média da 04:** 66% da Hero a 390 (antes 39%), 61% a 768 e 63% a 1440. O pior contraste fica dentro do limite em todas as larguras. **C1 (deploy em produção) está pendente.**
+5. **Luz média da 04:** 66% da Hero a 390 (antes 39%), 61% a 768 e 63% a 1440. O pior contraste fica dentro do limite em todas as larguras.
+6. **No endereço publicado, depois do deploy:** os mesmos números do local (47/41/41/41 PASS, 0 FAIL, 0 WARN), com `0.deploy` PASS nas 4 larguras.
 
 ## (2) Arquivos alterados
 
@@ -82,11 +83,11 @@ Nenhuma exceção entrou nos tokens nem nos componentes-base.
 
 ## (5) Registro de conformidade
 
-Medido no local (`http://localhost:5173`, mesmo código da branch).
+Medido no endereço publicado (https://vipzuesite.vercel.app/) depois do deploy. Os números são iguais aos do local.
 
 | # | Item | Resultado | Evidência |
 |---|---|---|---|
-| C1 | Deploy da rodada em produção | **PENDENTE** | Push na `main` bloqueado pelo auto mode; em produção `0.deploy` dá FAIL e o `curl -sI …/js/footer-curtain.js` dá 404. No local, `0.deploy` PASS. |
+| C1 | Deploy da rodada em produção | PASS | `curl -sI …/js/footer-curtain.js` dá HTTP 200; o `index.html` tem Last-Modified 02/11/2026 00:26:05 GMT; `0.deploy` PASS no endereço publicado nas 4 larguras. |
 | C2 | 5 campos, ≤ 6 canvases | PASS | `1.api` 5 campos; `1.contextos` 6 canvases; `1.visiveis` ≤ 2 |
 | C3 | 04 com o fundo da Hero (teto) | PASS | `1b.teto` 0,72 nos 3 escuros; `1b.escuro~hero` 66% / 61% / 63% / 67% (390 / 768 / 1440 / 1366) |
 | C4 | 05 com o fundo da 03 | PASS | `1b.claro=03` 0,0 níveis (limite 14) |
@@ -106,7 +107,7 @@ Medido no local (`http://localhost:5173`, mesmo código da branch).
 
 ## (6) `vz-check-r3c.js`: antes e depois
 
-| Largura | Antes (produção, Etapa 0) | Depois (local) |
+| Largura | Antes (produção, Etapa 0) | Depois (produção, após o deploy; igual ao local) |
 |---|---|---|
 | 390 × 844 | 15 PASS · 14 FAIL · 2 WARN · 2 NA | **47 PASS** |
 | 768 × 1024 | 12 PASS · 13 FAIL · 3 NA | **41 PASS · 1 NA** |
@@ -136,7 +137,6 @@ Feitas durante a validação (sem arquivo no repositório): a 04 a 390 com o cam
 
 ## (8) O que ficou
 
-- **C1, publicar em produção.** É um fast-forward da `main` para a `feat/rodada3` e um push. Depois, rodar o `vz-check-r3c` no endereço publicado nas 4 larguras, com `0.deploy` PASS.
 - **iPhone/Safari real:** não testado. Pontos de risco:
   - o `fixed` dentro de `clip-path`;
   - a barra de endereço que encolhe;

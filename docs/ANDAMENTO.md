@@ -1,6 +1,6 @@
 # Andamento — VIPZUE 2026
 
-## 01/11/2026 — Rodada 3C, correção e fechamento (branch `feat/rodada3`; produção pendente)
+## 01/11/2026 — Rodada 3C, correção e fechamento (publicada em produção)
 
 **Pedido:** executar "PROMPT VIPZUE rodada3c correcao.pdf", que manda publicar em produção a cada commit, e validar com `vz-check-r3c.pdf`.
 
@@ -14,7 +14,7 @@
 
 **Validação no local:** 47/41/41/41 PASS, sem FAIL nem WARN. A 04 tem 66% da luz da Hero (era 39%). Copy idêntica.
 
-**Pendente:** o fast-forward da `main` com push foi bloqueado pelo auto mode (deploy em produção); aguarda confirmação do usuário.
+**Publicado:** fast-forward da `main` com push, depois da confirmação do usuário. Em produção: 47/41/41/41 PASS, com `0.deploy` PASS.
 
 **Relatório:** `docs/rodada3c-relatorio.md`.
 
