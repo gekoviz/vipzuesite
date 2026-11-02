@@ -912,6 +912,16 @@ html:not(.s03-motion) .s03__stage {
 }
 
 /* =========================================================
+   06 — CTA final: respiro embaixo para o véu longo 06 → 07 (rodada 5)
+   O véu (.veil--long.veil--end) mora no FIM da 06 e tem a altura de --veil-long; o conteúdo termina antes dele.
+   Só o padding-bottom muda: a headline, o texto e o botão ficam onde estão (a Experiência vai revisar a copy e a
+   diagramação depois).
+   ========================================================= */
+.closing {
+  padding-bottom: calc(var(--veil-long) + var(--space-md));
+}
+
+/* =========================================================
    07 — FAQ · porte sem React do 21st.dev "frequently-asked-questions-with-accordion" (@scrollxui)
    Estrutura: título centralizado → lista em coluna única (max-w-3xl = 768px) → itens com linha inferior.
    Entradas: palavras do título com desfoque (0,4s, +0,08s por palavra), lista sobe 20px (0,5s, atraso 0,5s) e cada
@@ -1825,8 +1835,9 @@ html.js-reveal .faq.is-list-in .accordion__item {
       0 0 calc(var(--a) * 16px) calc(var(--a) * 2px) color-mix(in srgb, var(--color-brand-accent) calc(var(--a) * 45%), transparent);
   }
 
+  /* só o topo: o padding-bottom da 06 é o do véu 06 → 07 (rodada 5), que vale em todas as larguras */
   .closing {
-    padding-block: var(--space-5xl);
+    padding-top: var(--space-5xl);
   }
 
   .closing__grid {
