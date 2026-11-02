@@ -1899,3 +1899,35 @@ html.has-curtain .footer-curtain .site-footer {
     flex: none;
   }
 }
+
+/* =========================================================
+   06 — ShinyButton sobre o bege (rodada 5)
+   O efeito é o mesmo (borda cônica viva, pontos, brilho); só as CORES passam a ser as do Primary CTA "sobre fundo claro"
+   da Especificação Mestra (UI.08): fundo Grafite quente, texto Marfim, hover Carvão, anel de foco Grafite.
+   Escopo: só a 06 (.closing). O botão da Hero (sobre escuro) não muda.
+   ========================================================= */
+@property --shiny-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #22201d;
+}
+
+.closing .shiny-cta {
+  --shiny-bg: var(--color-cta-primary-light-bg); /* #22201D Grafite quente */
+  --shiny-bg-subtle: color-mix(in srgb, var(--color-cta-primary-light-text) 14%, var(--color-cta-primary-light-bg)); /* filete interno */
+  --shiny-fg: var(--color-cta-primary-light-text); /* #F3EDE3 Marfim */
+  --shiny-highlight: var(--color-bronze); /* #8A6A4B: o contorno vivo precisa aparecer sobre o bege (o Champagne da Hero some nele) */
+  --shiny-highlight-subtle: var(--color-brand-accent); /* #C3A881 */
+  outline-offset: 3px;
+  transition-property: --shiny-angle-offset, --shiny-percent, --shiny-shine, --shiny-bg;
+  transition-duration: 800ms, 800ms, 800ms, 180ms;
+  transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1), cubic-bezier(0.25, 1, 0.5, 1), cubic-bezier(0.25, 1, 0.5, 1), ease-out;
+}
+
+.closing .shiny-cta:is(:hover, :focus-visible) {
+  --shiny-bg: var(--color-cta-primary-light-hover); /* #141210 Carvão profundo, em 180 ms */
+}
+
+.closing .shiny-cta:focus-visible {
+  outline: 2px solid var(--color-cta-primary-light-bg); /* anel Grafite, 2 px, afastado 3 px */
+}
