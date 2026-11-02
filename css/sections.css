@@ -2182,3 +2182,50 @@ html.has-curtain .footer-curtain .site-footer {
     top: 0;
   }
 }
+
+/* =========================================================
+   Uma seção por tela no desktop — rodada 6
+   Vale de 1024 px de largura e 600 px de altura para cima. Celular e tablet não mudam.
+   1) cada seção tem no mínimo a altura da tela (svh) e o conteúdo fica centralizado na vertical;
+   2) a rolagem "encaixa" no começo de cada seção da 04 ao rodapé (scroll-snap), então duas seções não ficam meio a meio (menos com movimento reduzido).
+   Plano B da §7.1, medido: com "mandatory" (e com a Hero e a 02/03 no encaixe) a rolagem saltava dentro dos palcos sticky delas
+   (as posições 1296–3096 de 1440×900 ficavam inalcançáveis, porque a 02 sobe 100svh por cima da Hero); sem a Hero e a 02/03
+   no encaixe, "mandatory" levava a página inteira até a 04. Por isso: "proximity", e a Hero e a 02/03 rolam livres (sem ponto de encaixe).
+   O desenho interno das seções não muda: só a altura mínima e o ponto em que o conteúdo se assenta.
+   ========================================================= */
+@media (min-width: 1024px) and (min-height: 600px) {
+  main > section {
+    min-height: 100svh;
+  }
+
+  /* centraliza o conteúdo na vertical (seções de bloco simples: .container + camadas absolutas); o min-height repete o da regra acima
+     porque um seletor de id vence qualquer min-height de classe que a seção já tenha */
+  #metodo,
+  #para-quem-e,
+  #contato,
+  #faq {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  html {
+    scroll-snap-type: y proximity;
+  }
+
+  #metodo,
+  #para-quem-e,
+  #contato,
+  #faq,
+  .footer-curtain {
+    scroll-snap-align: start;
+  }
+}
+
+/* movimento reduzido: sem encaixe forçado da rolagem (a altura de tela das seções continua) */
+@media (min-width: 1024px) and (min-height: 600px) and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+  }
+}
