@@ -58,25 +58,25 @@
 }
 
 .surface-ivory {
-  background: var(--color-surface-light);
+  background: var(--color-bg-light); /* seção clara: Marfim (a Areia fica só para superfícies sobre o Marfim) */
   color: var(--color-text-on-light);
   --text-2: rgb(34 32 29 / var(--color-text-secondary-opacity));
   --rule: rgb(34 32 29 / 0.16);
 }
 
-/* Bege: texto secundário em marrom (#4A372B, ~4.9:1). Grafite a 0.75 daria 4.3:1 (AUDITORIA §B). */
+/* Clara (nome histórico "beige"): fundo Marfim; texto secundário Grafite a 0,75 (6,6:1 sobre o Marfim). */
 .surface-beige {
   background: var(--color-bg-secondary);
   color: var(--color-text-on-light);
-  --text-2: var(--color-brown);
+  --text-2: rgb(34 32 29 / var(--color-text-secondary-opacity));
   --rule: rgb(34 32 29 / 0.2);
 }
 
-/* Foco visível em superfícies claras: o anel champagne-claro não contrasta com marfim/bege */
+/* Foco visível em superfícies claras: o anel Marfim (do escuro) não contrasta com o Marfim; aqui ele é Grafite */
 .surface-ivory :focus-visible,
 .surface-beige :focus-visible,
 .next-section :focus-visible {
-  outline-color: var(--color-text-on-light);
+  outline-color: var(--color-focus-on-light);
 }
 
 .grid-12 {
@@ -299,7 +299,7 @@ html:not(.s03-motion) .s03__stage {
 
 /* =========================================================
    Véu da divisa 03 → 04, agora em todas as larguras (antes só a partir de 1024px).
-   O bege da 03 afunda no Carvão profundo da 04 numa rampa de suavização cúbica; a 04 recebe o mesmo véu espelhado por
+   O Marfim da 03 afunda na profundidade Mocha (#332B23) da 04 numa rampa de suavização cúbica; a 04 recebe o mesmo véu espelhado por
    baixo, e o campo de luz dela aparece aos poucos. A águia (.s03-seam, z-index 2) fica por cima dos dois véus.
    O desktop não muda: mesmas cores, mesmos stops, mesmas alturas (--s03-veil-up/-down abaixo, na media de 1024px).
    ========================================================= */
@@ -428,7 +428,7 @@ html:not(.s03-motion) .s03__stage {
    ========================================================= */
 /* Campo de luz por seção (js/light-field.js). Toda seção com canvas próprio ganha a classe .has-field e o atributo data-field:
      data-field="dark"  → o fundo da Hero (campo escuro, composição da Hero, teto de brilho FIELD_CAP) → Seções 04, 06 e Rodapé
-     data-field="light" → o fundo da Seção 03 (campo bege, composição do close)  → Seções 05 e 07
+     data-field="light" → o fundo da Seção 03 (campo Marfim, composição do close)  → Seções 05 e 07
    O canvas fica dentro da seção (sticky num invólucro do tamanho dela): a borda superior é a da própria seção e rola com
    a página no compositor. Sem WebGL, ou com o contexto perdido, o JS tira .has-field e cada seção volta ao sólido da própria
    superfície (.surface-*). Os seletores abaixo exigem .has-field de propósito: é ele que liga e desliga o fundo. */
@@ -441,15 +441,15 @@ html:not(.s03-motion) .s03__stage {
   /* O canvas vai a 100%: o brilho já vem limitado dentro do shader (FIELD_CAP, §4.1a), e não por um véu. O véu de 50% usado
      antes deixava o campo cinza e com ~40% da luz da Hero; o teto mantém os tons médios iguais e limita só o miolo dos focos. */
   --field-opacity: 1;
-  /* texto secundário sobre o campo escuro: o token (marfim a 0,75) dá 3,9:1 no ponto mais claro do campo; a 0,88 fica ≥ 4,7:1 */
-  --text-2: rgb(243 237 227 / 0.88);
+  /* texto secundário sobre o campo escuro: com a luz Páprica (migração cromática), o pico do campo (~#8E5539) derruba o Marfim
+     a 0,88 para 4,4:1; a 0,95 fica ≥ 4,8:1 (exceção de alfa registrada no relatório da migração) */
+  --text-2: rgb(243 237 227 / 0.95);
 }
 
 .has-field[data-field="light"] {
-  background: var(--color-bg-secondary); /* a base do bege da 03 (#B8AA96), sob o canvas */
+  background: var(--color-bg-secondary); /* a base clara da 03 (Marfim #F3EDE3), sob o canvas */
   --field-opacity: 1;
-  /* texto secundário sobre o campo claro: o marrom (#4A372B) e o grafite a 0,75 caem a ~3,6:1 no ponto mais escuro do campo;
-     o grafite a 0,92 mantém ≥ 4,6:1 (o grafite pleno dá 5,3:1) */
+  /* texto secundário sobre o campo claro (Marfim aquecido por #E2B99C nas sombras): grafite a 0,92 */
   --text-2: rgb(34 32 29 / 0.92);
   --rule: rgb(34 32 29 / 0.22);
 }
@@ -538,8 +538,9 @@ html:not(.s03-motion) .s03__stage {
     background: var(--color-bg-primary);
   }
 
+  /* núcleo Marfim: a Páprica sobre o campo escuro fica abaixo de 3:1 (objeto gráfico); a borda segue Páprica */
   .journey__stage:last-child::before {
-    background: var(--color-brand-accent);
+    background: var(--color-ivory);
   }
 }
 
@@ -556,13 +557,13 @@ html:not(.s03-motion) .s03__stage {
 
   .journey__stage {
     --journey-radius: 28px; /* o raio dos cards da 03 no tablet (24px no celular) */
-    --journey-edge: color-mix(in srgb, var(--color-coffee) 95%, var(--color-text-on-dark));
-    --journey-glow: color-mix(in srgb, var(--color-bronze) 60%, var(--color-coffee));
+    --journey-edge: var(--color-shadow-mid);
+    --journey-glow: var(--color-mocha-paprika);
     isolation: isolate;
     box-sizing: border-box;
     padding: var(--space-lg); /* card-padding-desktop: 32px (UI.19) */
     border-radius: var(--journey-radius);
-    background: var(--color-charcoal);
+    background: var(--color-mocha);
     color: var(--color-text-on-dark);
   }
 
@@ -577,8 +578,8 @@ html:not(.s03-motion) .s03__stage {
     border: 1.5px solid transparent;
     border-radius: inherit;
     background:
-      radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--journey-glow) var(--journey-light), var(--color-brown)) 0%, var(--color-coffee) 47%, var(--color-charcoal) 100%) padding-box,
-      linear-gradient(35deg, var(--journey-edge) 0%, var(--journey-edge) 65%, color-mix(in srgb, var(--color-brand-accent) var(--journey-light), var(--color-bronze)) 100%) border-box;
+      radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--journey-glow) var(--journey-light), var(--color-mocha)) 0%, var(--color-surface-mid) 47%, var(--color-shadow-mid) 100%) padding-box,
+      linear-gradient(35deg, var(--journey-edge) 0%, var(--journey-edge) 65%, color-mix(in srgb, var(--color-paprika) var(--journey-light), var(--color-mocha-paprika)) 100%) border-box;
     pointer-events: none;
   }
 
@@ -589,7 +590,7 @@ html:not(.s03-motion) .s03__stage {
     inset: 0;
     z-index: -1;
     border-radius: inherit;
-    background: radial-gradient(circle 260px at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.15) 0%, transparent 100%);
+    background: radial-gradient(circle 260px at var(--sx, 50%) var(--sy, 50%), rgb(236 204 186 / 0.15) 0%, transparent 100%);
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
@@ -624,7 +625,7 @@ html:not(.s03-motion) .s03__stage {
 /* =========================================================
    Véus de junção (rodada 5): UMA receita para as três emendas com o Carvão profundo.
    04 → 05 (já existia como .seam45), 06 → 07 e 07 → rodapé. Alfa por suavização cúbica (3t² − 2t³, de 10 em 10%):
-   sem faixa visível no começo nem no fim da rampa. O Carvão profundo (#141210) é o ponto de encontro das duas seções.
+   sem faixa visível no começo nem no fim da rampa. A profundidade Mocha (#332B23) é o ponto de encontro das duas seções.
    --veil-short fica DENTRO da seção escura; --veil-long fica DENTRO da seção clara (o bege afunda aos poucos, o escuro
    não perde conteúdo). As variáveis ficam em :root porque o invólucro .handoff (que as carregava) deixa de existir.
    ========================================================= */
@@ -699,7 +700,7 @@ html:not(.s03-motion) .s03__stage {
    direita, o 2 embaixo à esquerda). Celular e tablet: uma coluna, card por card.
    ========================================================= */
 .pq {
-  --pq-ink: var(--color-text-on-light, #22201d);
+  --pq-ink: var(--color-text-on-light);
   --pq-gap: clamp(20px, 3vw, 32px);
   --pq-veil: var(--veil-long, 0px); /* altura do véu de cima (dobra 04 → 05): o título começa abaixo dele */
   position: relative;
@@ -755,8 +756,8 @@ html:not(.s03-motion) .s03__stage {
   padding: 10px;
   border: 1px solid rgb(34 32 29 / 0.1);
   border-radius: 28px;
-  background: color-mix(in srgb, var(--color-ivory, #f3ede3) 78%, transparent);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 0 32px 60px -38px rgb(34 32 29 / 0.55);
+  background: color-mix(in srgb, var(--color-sand) 78%, transparent);
+  box-shadow: inset 0 1px 0 rgb(243 237 227 / 0.55), 0 32px 60px -38px rgb(34 32 29 / 0.55);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -766,9 +767,9 @@ html:not(.s03-motion) .s03__stage {
   overflow: hidden;
   border-radius: 20px;
   background:
-    radial-gradient(120% 90% at 88% 0%, rgb(138 106 75 / 0.6), transparent 58%),
-    linear-gradient(165deg, var(--color-coffee, #2f251f) 0%, var(--color-bg-deep, #141210) 72%);
-  box-shadow: inset 0 0 0 1px rgb(195 168 129 / 0.2);
+    radial-gradient(120% 90% at 88% 0%, rgb(141 83 55 / 0.6), transparent 58%),
+    linear-gradient(165deg, var(--color-mocha) 0%, var(--color-graphite) 72%);
+  box-shadow: inset 0 0 0 1px rgb(229 212 187 / 0.2);
 }
 
 .pq-card__visual svg {
@@ -797,7 +798,7 @@ html:not(.s03-motion) .s03__stage {
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .pq-card__plate:hover {
     transform: translateY(-4px);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 0 40px 70px -36px rgb(34 32 29 / 0.62);
+    box-shadow: inset 0 1px 0 rgb(243 237 227 / 0.55), 0 40px 70px -36px rgb(34 32 29 / 0.62);
   }
 }
 
@@ -902,13 +903,13 @@ html:not(.s03-motion) .s03__stage {
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
-  filter: drop-shadow(0 16px 18px rgb(20 18 16 / 0.32));
+  filter: drop-shadow(0 16px 18px rgb(34 32 29 / 0.32));
 }
 
-/* card: o mesmo desenho dos cards da 04 (raio 24, filete de 1 px, gradiente 158° Bronze → Café → Carvão), opaco por estar sobre o bege */
+/* card: o mesmo desenho dos cards da 04 (raio 24, filete de 1 px, gradiente 158°), opaco por estar sobre o Marfim.
+   Gradiente próprio (não usa o --journey-hl-1 da 04): topo #6E4B34 → Mocha → base #4A3B2C; borda Mocha/Páprica. */
 .closing__action {
   --text-2: rgb(243 237 227 / 0.78);
-  --journey-hl-1: color-mix(in srgb, var(--color-bronze) 82%, var(--color-brown));
   position: relative;
   z-index: 1;
   display: flex;
@@ -918,9 +919,9 @@ html:not(.s03-motion) .s03__stage {
     calc(var(--closing-eagle-w) * var(--closing-eagle-ratio) * var(--closing-perch) * 100% + clamp(28px, 7vw, 44px))
     clamp(22px, 6vw, 44px)
     clamp(28px, 7vw, 40px);
-  border: 1px solid color-mix(in srgb, var(--journey-hl-1) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-mocha-paprika) 70%, transparent);
   border-radius: 24px;
-  background: linear-gradient(158deg, var(--journey-hl-1) 0%, var(--color-brown) 46%, var(--color-charcoal) 100%);
+  background: linear-gradient(158deg, var(--color-panel-top) 0%, var(--color-mocha) 46%, var(--color-panel-base) 100%);
   color: var(--color-text-on-dark);
   text-align: center;
   box-shadow: 0 1px 0 rgb(243 237 227 / 0.06) inset;
@@ -1045,10 +1046,10 @@ html:not(.s03-motion) .s03__stage {
    e o texto é marfim.
    ========================================================= */
 .faq {
-  --faq-ink: var(--color-ivory, #f3ede3); /* títulos das perguntas */
+  --faq-ink: var(--color-ivory); /* títulos das perguntas */
   --faq-rule: rgb(243 237 227 / 0.2); /* linha de cada item */
   --faq-underline: rgb(243 237 227 / 0.55); /* sublinhado no hover */
-  --faq-focus: var(--color-champagne-light, #e7d6b7); /* anel de foco */
+  --faq-focus: var(--color-focus-on-dark); /* anel de foco */
   position: relative;
   isolation: isolate;
   color: var(--faq-ink);
@@ -1230,7 +1231,7 @@ html.js-reveal .faq.is-list-in .accordion__item {
 .site-footer {
   --bf-acc: var(--color-brand-accent);
   --bf-ink: var(--color-text-on-dark);
-  --bf-bg: var(--color-bg-deep);
+  --bf-bg: var(--color-bg-primary);
   --bf-ang: 118deg;
   --bf-b: 58%;
   --bf-px: 50%;
@@ -1326,7 +1327,7 @@ html.js-reveal .faq.is-list-in .accordion__item {
   font-size: var(--font-size-small);
   line-height: 1;
   letter-spacing: 0.01em;
-  color: var(--bf-acc);
+  color: var(--bf-ink); /* label pequeno: tinta Marfim (a Páprica fica no filete) */
 }
 
 .site-footer__label::after {
@@ -1404,7 +1405,7 @@ html.js-reveal .faq.is-list-in .accordion__item {
   padding: 6px 8px;
   border-radius: 4px;
   background: var(--bf-acc);
-  color: var(--bf-bg);
+  color: var(--color-graphite); /* Grafite sobre Páprica: 4,6:1 */
   font-size: 11px;
   line-height: 1;
   white-space: nowrap;
@@ -1433,7 +1434,8 @@ html.js-reveal .faq.is-list-in .accordion__item {
   margin-top: 21px;
   font-size: var(--font-size-small);
   line-height: 1.5;
-  color: color-mix(in srgb, var(--bf-ink) 70%, transparent);
+  /* 95%: sobre o Mocha com a lavagem Páprica (sem WebGL), 70% caía a 3,6:1; 95% dá ≥ 5:1 (migração cromática) */
+  color: color-mix(in srgb, var(--bf-ink) 95%, transparent);
 }
 
 /* links legais: um fio dourado entra, o texto desliza e a seta aparece */
@@ -1453,7 +1455,7 @@ html.js-reveal .faq.is-list-in .accordion__item {
   padding: 6px 0;
   font-size: var(--font-size-small);
   line-height: 21px;
-  color: color-mix(in srgb, var(--bf-ink) 78%, transparent);
+  color: color-mix(in srgb, var(--bf-ink) 95%, transparent); /* 78% caía a 4,2:1 sobre o Mocha + lavagem Páprica */
   transition: color 0.25s;
 }
 
@@ -1548,7 +1550,7 @@ html.js-reveal .faq.is-list-in .accordion__item {
   background-image:
     radial-gradient(circle 22cqw at var(--bf-px) var(--bf-py), color-mix(in srgb, var(--bf-acc) calc(var(--bf-g) * 85%), transparent), transparent 70%),
     linear-gradient(var(--bf-ang), transparent calc(var(--bf-b) - 9%), color-mix(in srgb, var(--bf-acc) 55%, transparent) calc(var(--bf-b) - 1.5%), color-mix(in srgb, var(--bf-acc) 70%, transparent) var(--bf-b), color-mix(in srgb, var(--bf-acc) 20%, transparent) calc(var(--bf-b) + 3.5%), transparent calc(var(--bf-b) + 8%)),
-    linear-gradient(180deg, var(--color-brown) var(--bf-top), var(--color-charcoal) var(--bf-bot));
+    linear-gradient(180deg, var(--color-mocha-glint) var(--bf-top), var(--color-deep) var(--bf-bot));
   transform-origin: 50% 100%;
   transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.25, 1.2), filter 0.4s;
 }
@@ -1600,23 +1602,23 @@ html.js-reveal .faq.is-list-in .accordion__item {
   height: 100%;
 }
 
-/* Texto pequeno sobre o campo: o Champagne (#C3A881) cai a 3,8:1 nos focos claros; o Champagne Claro mantém ≥ 6:1 */
+/* Texto pequeno sobre o campo: tinta Marfim (a Páprica não serve de tinta para texto pequeno) */
 .site-footer.has-field .site-footer__label {
-  color: var(--color-champagne-light);
+  color: var(--bf-ink);
 }
 
 .site-footer.has-field .site-footer__copy {
-  color: color-mix(in srgb, var(--bf-ink) 88%, transparent); /* 80% dava 4,2:1 no ponto mais claro do campo; 88% dá ≥ 4,7:1 */
+  color: color-mix(in srgb, var(--bf-ink) 95%, transparent); /* sobre o pico Páprica do campo, 88% dava 4,4:1; 95% dá ≥ 4,8:1 */
 }
 
-/* Links legais: com o campo a 100% (teto de brilho), 78% e 80% caem a 4,47:1 no foco mais claro (1366 × 650); a 88%, como a
-   copy, ficam ≥ 4,5:1. Especificidade baixa (0,2,0) de propósito: o hover/foco (.footer-link[href]:hover) continua acendendo
+/* Links legais: com a luz Páprica do campo (migração cromática), 88% cai a 4,35:1 no foco mais claro (1440 × 900); a 95%, como a
+   copy, ficam ≥ 4,8:1. Especificidade baixa (0,2,0) de propósito: o hover/foco (.footer-link[href]:hover) continua acendendo
    para --bf-ink. */
 .has-field .footer-link {
-  color: color-mix(in srgb, var(--bf-ink) 88%, transparent);
+  color: color-mix(in srgb, var(--bf-ink) 95%, transparent);
 }
 
-/* Wordmark: o preenchimento de repouso passa de marrom → carvão (pensado para o fundo chapado) para um champagne translúcido,
+/* Wordmark: o preenchimento de repouso passa de Mocha com reflexo → profundidade (pensado para o fundo chapado) para uma Páprica translúcida,
    que se lê sobre qualquer ponto do campo e afunda no escuro na base, como na referência. As duas primeiras camadas
    (brilho do ponteiro e feixe) são as mesmas de .site-footer__l; só a terceira muda. */
 .site-footer.has-field .site-footer__l {
@@ -1722,8 +1724,8 @@ html.js-reveal .faq.is-list-in .accordion__item {
     width: 100%;
     min-width: 0;
     border-radius: var(--s03-radius);
-    background: var(--color-charcoal);
-    box-shadow: 0 10px 24px rgb(20 18 16 / 0.16);
+    background: var(--color-mocha);
+    box-shadow: 0 10px 24px rgb(34 32 29 / 0.16);
     color: var(--color-text-on-dark);
   }
 
@@ -1741,16 +1743,16 @@ html.js-reveal .faq.is-list-in .accordion__item {
 
   .s03__card-surface {
     background:
-      radial-gradient(ellipse at 100% 0%, var(--color-brown) 0%, var(--color-coffee) 47%, var(--color-charcoal) 100%) padding-box,
-      linear-gradient(35deg, #38302a 0%, #38302a 65%, var(--color-bronze) 100%) border-box;
+      radial-gradient(ellipse at 100% 0%, var(--color-mocha) 0%, var(--color-surface-mid) 47%, var(--color-shadow-mid) 100%) padding-box,
+      linear-gradient(35deg, var(--color-shadow-mid) 0%, var(--color-shadow-mid) 65%, var(--color-mocha-paprika) 100%) border-box;
   }
 
   .s03__card-light {
-    --s03-glow: color-mix(in srgb, var(--color-bronze) 60%, var(--color-coffee));
+    --s03-glow: var(--color-mocha-paprika);
     opacity: calc(0.28 + 0.72 * var(--a));
     background:
-      radial-gradient(ellipse at 100% 0%, var(--s03-glow) 0%, var(--color-coffee) 47%, var(--color-charcoal) 100%) padding-box,
-      linear-gradient(35deg, #38302a 0%, #38302a 65%, var(--color-brand-accent) 100%) border-box;
+      radial-gradient(ellipse at 100% 0%, var(--s03-glow) 0%, var(--color-surface-mid) 47%, var(--color-shadow-mid) 100%) padding-box,
+      linear-gradient(35deg, var(--color-shadow-mid) 0%, var(--color-shadow-mid) 65%, var(--color-paprika) 100%) border-box;
   }
 
   /* Tilt (js/scroll-narrative.js): o card inclina sob o ponteiro; o conteúdo fica acima do spotlight */
@@ -1784,7 +1786,7 @@ html.js-reveal .faq.is-list-in .accordion__item {
     height: 200%;
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgb(255 255 255 / 0.15) 0%, transparent 40%);
+    background: radial-gradient(circle, rgb(236 204 186 / 0.15) 0%, transparent 40%);
   }
 
   /* conteúdo: número → texto; fica parado ao acender (só luz, contorno, número, palavras e linha mudam) */
@@ -1797,7 +1799,7 @@ html.js-reveal .faq.is-list-in .accordion__item {
     padding: var(--s03-panel-pad);
   }
 
-  /* número em pill compacta acima da copy; marfim secundário → Champagne Claro com a luz */
+  /* número em pill compacta acima da copy, sobre Grafite; Marfim secundário → Marfim pleno com a luz */
   .s03__num {
     display: inline-flex;
     align-items: center;
@@ -1808,14 +1810,14 @@ html.js-reveal .faq.is-list-in .accordion__item {
     padding: 4px 12px;
     border: 1px solid rgb(243 237 227 / 0.12);
     border-radius: 999px;
-    background: var(--color-brand-primary);
+    background: var(--color-graphite);
     font-family: var(--font-body);
     font-weight: var(--font-weight-medium);
     font-size: 13px;
     line-height: 1;
     letter-spacing: 0.08em;
     font-variant-numeric: tabular-nums;
-    color: color-mix(in srgb, var(--color-champagne-light) calc(var(--a) * 100%), rgb(243 237 227 / 0.75));
+    color: color-mix(in srgb, var(--color-ivory) calc(var(--a) * 100%), rgb(243 237 227 / 0.75));
   }
 
   /* cor-base marfim opaca: a contenção de 75% fica só nas palavras (sem multiplicar opacidades).
@@ -1932,7 +1934,7 @@ html.js-reveal .faq.is-list-in .accordion__item {
   .journey--lamp .journey__stage::before,
   .journey--lamp .journey__stage:last-child::before {
     border-color: color-mix(in srgb, var(--color-brand-accent) calc(40% + 60% * var(--a)), transparent);
-    background: color-mix(in srgb, var(--color-brand-accent) calc(var(--a) * 100%), var(--color-bg-primary));
+    background: color-mix(in srgb, var(--color-ivory) calc(var(--a) * 100%), var(--color-bg-primary)); /* núcleo Marfim (≥ 3:1); halo e borda Páprica */
     box-shadow:
       0 0 0 calc(var(--a) * 4px) color-mix(in srgb, var(--color-brand-accent) calc(var(--a) * 16%), transparent),
       0 0 calc(var(--a) * 16px) calc(var(--a) * 2px) color-mix(in srgb, var(--color-brand-accent) calc(var(--a) * 45%), transparent);
@@ -2032,9 +2034,9 @@ html.has-curtain .footer-curtain .site-footer {
     --journey-radius: 24px;
     --journey-pad: clamp(20px, 1.95vw, 28px);
     --journey-line: rgb(243 237 227 / 0.14); /* contorno fino (--color-border-on-dark é 0,12: aqui 0,14 para ler sobre o campo) */
-    --journey-fill: color-mix(in srgb, var(--color-charcoal) 62%, transparent);
-    --journey-hl-1: color-mix(in srgb, var(--color-bronze) 82%, var(--color-brown));
-    --journey-hl-2: var(--color-brown);
+    --journey-fill: color-mix(in srgb, var(--color-graphite) 62%, transparent);
+    --journey-hl-1: var(--color-card-glint);
+    --journey-hl-2: var(--color-mocha);
     --hl: 0;
     counter-increment: etapa;
     display: flex;
@@ -2059,13 +2061,13 @@ html.has-curtain .footer-curtain .site-footer {
 
   /* placa: contorno de 1 px + fundo translúcido; o gradiente de destaque entra por cima, com a força de --hl */
   .journey__stage::before {
-    border: 1px solid color-mix(in srgb, var(--journey-hl-1) calc(var(--hl) * 70%), var(--journey-line));
+    border: 1px solid color-mix(in srgb, var(--color-paprika) calc(var(--hl) * 70%), var(--journey-line));
     background:
       linear-gradient(
         158deg,
         color-mix(in srgb, var(--journey-hl-1) calc(var(--hl) * 100%), transparent) 0%,
         color-mix(in srgb, var(--journey-hl-2) calc(var(--hl) * 92%), transparent) 46%,
-        color-mix(in srgb, var(--color-charcoal) calc(var(--hl) * 100%), transparent) 100%
+        color-mix(in srgb, var(--color-graphite) calc(var(--hl) * 100%), transparent) 100%
       ),
       var(--journey-fill);
   }
@@ -2123,8 +2125,8 @@ html.has-curtain .footer-curtain .site-footer {
 
 /* =========================================================
    Emendas — rodada 6
-   (a) 05 → 06, em TODAS as larguras: a 06 tem o mesmo bege da 05 (campo espelhado) e ganha um filete Bronze de 1 px no topo,
-       na receita do filete do rodapé (.site-footer__rule): 18% → 62% → 18%, pico a 58%. O Dourado some sobre o bege; por isso Bronze.
+   (a) 05 → 06, em TODAS as larguras: a 06 tem o mesmo claro da 05 (campo espelhado) e ganha um filete #6A3C2B (realce escuro) de 1 px no topo,
+       na receita do filete do rodapé (.site-footer__rule): 18% → 62% → 18%, pico a 58%. A Páprica clara some sobre o Marfim; por isso o realce escuro.
    (b) de 1024 px para cima, o véu preto sai e entra a mesma linha (Dourado, do lado ESCURO da emenda):
          04 → 05  escuro → bege   filete Dourado no FIM da 04
          06 → 07  bege  → escuro  filete Dourado no TOPO da 07
@@ -2141,9 +2143,9 @@ html.has-curtain .footer-curtain .site-footer {
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--color-bronze) 18%, transparent),
-    color-mix(in srgb, var(--color-bronze) 62%, transparent) 58%,
-    color-mix(in srgb, var(--color-bronze) 18%, transparent)
+    color-mix(in srgb, var(--color-card-glint) 18%, transparent),
+    color-mix(in srgb, var(--color-card-glint) 62%, transparent) 58%,
+    color-mix(in srgb, var(--color-card-glint) 18%, transparent)
   );
 }
 
@@ -2159,7 +2161,7 @@ html.has-curtain .footer-curtain .site-footer {
     display: none;
   }
 
-  /* os dois véus curtos que ficam do lado escuro viram o filete Dourado (04: no fim; 07: no topo) */
+  /* os dois véus curtos que ficam do lado escuro viram o filete Páprica (04: no fim; 07: no topo) */
   #metodo > .veil--end,
   #faq > .veil--start {
     inset-inline: 0;
