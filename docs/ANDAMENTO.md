@@ -1,5 +1,26 @@
 # Andamento — VIPZUE 2026
 
+## 06/11/2026 — Rodada 03 de cor (branch `feat/cores-r3`, sem publicar)
+
+**Pedido:** "VIPZUE_Prompt_Mestre_Correcao_Cromatica_Rodada_03_Claude_Code.md". Corrigir os quatro sintomas reprovados da Rodada 02 e provar na pintura final, sem publicar.
+
+**Feito:**
+- **CTA:** todos os botões principais em Páprica com tinta Grafite, inclusive o do menu mobile, com a órbita preservada. Rótulo a 4,54–4,60:1.
+- **Rampa escura:** âncoras #6B402D / #B04C27 (mais croma, mais vermelhas, sem clarear atrás do texto). `STOPS` voltaram às posições originais.
+- **Rampa clara:** Marfim → Páprica Profunda #9F3930 (até 40%) na 05 e na 06.
+- **Véus:** restaurados como na rodada 6, com corte seco só nas emendas 03/04, 04/05 e 06/07. Voltaram o filete da 06 e o véu FAQ → rodapé.
+
+**Medido:**
+- 0 falhas de contraste em 360, 390, 430, 768, 1024, 1366, 1440 e 1920, com movimento reduzido e sem WebGL.
+- `vz-check-r6`: 46/3/7 em 1440 e 38/2/2 em 390 (antes, 45/3/8 e 36/2/4).
+
+**Relatório:** `docs/rodada-03-cor-relatorio.md`.
+
+**Decisões pendentes:**
+- espaçamento restaurado no celular (+152 px na 05 e na 06);
+- águia da 03 cortada reta no desktop;
+- publicação.
+
 ## 06/11/2026 — Revisão e correção do refinamento cromático (publicado em produção)
 
 **Pedido:** revisar e medir o commit `771d09c`, feito por outra sessão a partir do documento de refinamento (Páprica Profunda, cards Mocha, CTA Páprica, corte seco).

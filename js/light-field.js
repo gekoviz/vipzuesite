@@ -5,7 +5,7 @@
 // Silk define COMO a luz respira — o laço de shade() original, com amplitude e frequência reduzidas, vira um
 // campo de modulação (leve deformação do domínio + ±12% de luminância), nunca uma segunda imagem.
 // O campo escalar de luz é comprimido (1 − e^−x) e mapeado na paleta VIPZUE em OKLab
-// (#332B23 → #47392B → #5B4632 → #674933 → #9F4B2D → #D7673F: profundidade → Mocha → Páprica; migração cromática 06/11);
+// (#332B23 → #47392B → #5B4632 → #6B402D → #B04C27 → #D7673F: profundidade → Mocha → Páprica; rodada 03 de cor, 06/11);
 // depois vinheta leve e o grão do shader
 // (o grão SVG do Bloom não é usado). Um relógio (rAF): o tempo move a luz; a rolagem (palco da Hero) só
 // desloca suavemente a composição da Hero para a do close, sem reiniciar.
@@ -14,8 +14,8 @@
 // Dois estados no MESMO shader e no mesmo relógio (seção 03 "Por que isso importa?"):
 //   escuro — Hero e close: o campo de luz mapeado na rampa escura (Background Principal Mocha, luz Páprica)
 //   claro  — seção 03: o MESMO campo (mesmos blooms, Silk, deriva, vinheta e grão), só que mapeado numa rampa
-//            centrada no Background Secundário Marfim #F3EDE3 (ruptura e respiro), com as sombras levemente
-//            aquecidas por #C98468 (Marfim pigmentado com Paprica Profunda) e as luzes subindo para os reflexos #F4EFE6 e #F7F2EB. Só a cor muda.
+//            assentada no Background Secundário Marfim #F3EDE3 (ruptura e respiro); nos focos do campo o Marfim
+//            recebe uma mistura localizada de Páprica Profunda #9F3930. Só a cor muda.
 // A passagem é uma frente que sobe de baixo para cima com a rolagem (a mesma da cópia de "O que fazemos" em
 // js/hero.js), com borda difusa levemente ondulada pelo Silk. Sem storytelling, a frente é o topo real da
 // seção 03. O canvas é fixo atrás da página: continua vivo atrás da seção 03 depois que o palco sai de cena.
@@ -25,43 +25,36 @@
   if (!hero) return;
 
   // ---------- Paleta (sRGB) → OKLab, calculada uma vez e embutida no shader ----------
-  // Rampa escura: profundidade #332B23, sombra intermediária #47392B, Mocha #5B4632, Mocha com reflexo #674933,
-  // luz intermediária #9F4B2D, Páprica #D7673F.
-  // #9F4B2D (era #A55A3A): com as paradas em 0.72, é esta a cor que fica atrás do texto do Método e da FAQ no
-  // celular. #A55A3A (luminância 0,156) derrubava o Marfim a 4,2:1. #9F4B2D tem o tom da Páprica (39,8° em OKLab,
-  // contra 43,2°), mais croma (0,120 contra 0,109) e luminância 0,126: mais vermelho, sem clarear (revisão 06/11).
-  const PALETTE = ["#332B23", "#47392B", "#5B4632", "#674933", "#9F4B2D", "#D7673F"];
-  // Contexto claro (seções claras). Os nomes das chaves ficam por compatibilidade com o shader; a função muda:
-  //   BRONZE  = sombra clara #C98468 (só para aquecer de leve o fundo da rampa)
-  //   BASE    = Marfim #F3EDE3 (o fundo)
-  //   CHAMP_L = reflexo claro #F4EFE6
-  //   IVORY   = reflexo claro máximo #F7F2EB
-  // #C98468 é o Marfim pigmentado com Páprica Profunda #9F3930 (= --color-shadow-light
-  // em tokens.css; os dois valores são a MESMA decisão em dois arquivos, mudar um sem o
-  // outro deixa a página incoerente). Era #E2B99C, que media 1,25:1 contra o Marfim: a
-  // sombra da rampa clara era quase o próprio fundo, e é por isso que as seções claras
-  // não tinham presença cromática nenhuma (§4).
-  const LIGHT = { BRONZE: "#C98468", BASE: "#F3EDE3", CHAMP_L: "#F4EFE6", IVORY: "#F7F2EB" };
+  // Rampa escura: profundidade #332B23, sombra intermediária #47392B, Mocha #5B4632, Mocha com reflexo Páprica #6B402D,
+  // Páprica escura #B04C27, Páprica #D7673F.
+  // Rodada 03 (06/11): as paradas voltaram às posições originais e só a COR dos dois anchors que os campos com teto
+  // alcançam mudou. Com FIELD_CAP = 0.72 o campo das seções 04, 07 e 08 vai de ~0.06 a ~0.70; a Páprica pura (x = 1)
+  // nunca aparece nelas, então o acento tem de estar nos anchors 0.56 e 0.78.
+  //   0.56  #674933 → #6B402D  mesma luminância (0,07); croma 0,053 → 0,067; tom 57° → 44° (puxado para a Páprica)
+  //   0.78  #9F4B2D → #B04C27  croma 0,120 → 0,140, no tom da Páprica (40°)
+  // Teto de luminância: no celular o pico do campo fica atrás do texto Marfim. Em x = 0.70 (o máximo alcançável) a cor
+  // resultante é #9B492A, luminância 0,119: Marfim a 95% passa com 4,99:1 (4,84 com a rampa da rodada 02).
+  const PALETTE = ["#332B23", "#47392B", "#5B4632", "#6B402D", "#B04C27", "#D7673F"];
+  // Contexto claro (seções claras): BASE = Marfim #F3EDE3, o fundo; DEEP = Páprica Profunda #9F3930, o pigmento dos
+  // focos (= --color-paprika-deep em tokens.css: a mesma decisão nos dois arquivos).
+  // Rodada 03: a transferência foi invertida. Antes, a SOMBRA do campo era pigmentada (#C98468 a 32%: um rosado na
+  // parte baixa da seção) e os FOCOS subiam para reflexos quase brancos (#F4EFE6, #F7F2EB) — o acento ficava onde não
+  // há luz e sumia onde há. Agora o fundo é Marfim e os máximos locais do campo recebem a Páprica Profunda.
+  const LIGHT = { BASE: "#F3EDE3", DEEP: "#9F3930" };
 
-  // §3 — a Páprica precisa ser reconhecível no escuro, e o problema era a distribuição,
-  // não a intensidade. Com [0, 0.18, 0.36, 0.56, 0.78, 1], QUATRO das seis paradas eram
-  // marrom e a Páprica só chegava em x = 1: tudo que o campo iluminava até 0.78 saía
-  // como marrom alaranjado. Puxando as paradas para baixo, a faixa de Páprica de fato
-  // passa de 0.22 para 0.36 do percurso — e o Mocha continua sendo a massa dominante,
-  // porque o valor do campo é baixo na maior parte da tela.
-  // Só as posições mudaram. Nenhuma cor nova, nenhum bloom, nenhuma velocidade.
-  // Medido no celular: a 0.64 a FAQ virava preenchimento laranja de meia tela,
-  // que é o que o §3 proíbe. Num viewport estreito o mesmo bloom cobre uma
-  // fração muito maior da área, então a faixa de Páprica pesa mais que no
-  // desktop. 0.72 dá 0.28 do percurso em Páprica, contra 0.22 do original:
-  // mais presente, sem virar fundo.
-  const STOPS = [0, 0.17, 0.34, 0.52, 0.72, 1];
+  // Posições originais das paradas. A rodada 02 as tinha puxado para [0, .17, .34, .52, .72, 1]; a rodada 03 as
+  // declara invariantes e põe o acento na cor dos anchors alcançáveis (acima).
+  const STOPS = [0, 0.18, 0.36, 0.56, 0.78, 1];
 
-  // Rampa clara: x do campo em que a sombra (Marfim + fração da sombra clara) chega ao Marfim, e o Marfim chega ao reflexo.
-  // `deep` subiu de 0.22 para 0.32 junto com a troca do pigmento: presença perceptível
-  // na sombra, sem virar preenchimento avermelhado. O fundo continua reconhecivelmente
-  // Marfim, porque `base` resolve a rampa de volta ao Marfim puro já em x = 0.2.
-  const BEIGE = { deep: 0.32, base: 0.48, champ: 0.75 };
+  // Rampa clara: até `from` o campo é Marfim puro; de `from` a `to` o Marfim recebe Páprica Profunda até a fração `amt`
+  // (mistura em OKLab). Com a composição do close o campo claro vai de ~0.10 a ~0.70, e o foco fica no alto à direita
+  // (atrás dos cards da 05 e do painel da 06); o campo escuro da composição mantém a coluna do título em ~0.2–0.4, quase
+  // Marfim puro. `from` = 0.34 deixa o pigmento chegar ao espaço aberto entre o título e os cards, e não só à borda deles
+  // (com 0.42 ele só aparecia como um halo em volta dos cards, porque o foco fica atrás deles).
+  // Teto do pigmento: 40% (≈ #D6A599, o "acento local visível" da tabela §73). Há texto Grafite sobre o campo (a 03 no
+  // desktop tem o parágrafo a 87,8% de opacidade sobre o foco): a 40% ele fica em 5,96:1 e o secundário a 75% em 4,50:1;
+  // a 55% cairiam para 4,77 e 3,78.
+  const BEIGE = { from: 0.34, to: 0.7, amt: 0.4 };
   const toOklab = (hex) => {
     const lin = [1, 3, 5].map((i) => {
       const c = parseInt(hex.slice(i, i + 2), 16) / 255;
@@ -127,10 +120,8 @@ const vec3 L2 = ${v3(LAB[2])};
 const vec3 L3 = ${v3(LAB[3])};
 const vec3 L4 = ${v3(LAB[4])};
 const vec3 L5 = ${v3(LAB[5])};
-const vec3 K_BRONZE = ${v3(toOklab(LIGHT.BRONZE))};
 const vec3 K_BASE = ${v3(toOklab(LIGHT.BASE))};
-const vec3 K_CHAMP_L = ${v3(toOklab(LIGHT.CHAMP_L))};
-const vec3 K_IVORY = ${v3(toOklab(LIGHT.IVORY))};
+const vec3 K_DEEP = ${v3(toOklab(LIGHT.DEEP))};
 
 vec3 oklabToLin(vec3 c) {
   float l = c.x + 0.3963377774 * c.y + 0.2158037573 * c.z;
@@ -196,14 +187,10 @@ float field(vec2 Pw, vec2 aspect, float s, float silk) {
   light *= mix(1.0, 0.88 + 0.24 * s, silk);
   return light;
 }
-// Rampa clara (seções claras): o fundo do campo assenta no Marfim #F3EDE3 (aquecido pela sombra clara #C98468
-// nas sombras) e as luzes sobem para os reflexos #F4EFE6 e #F7F2EB — a mesma leitura de luz da Hero, em outra cor
+// Rampa clara (seções claras): o fundo do campo assenta no Marfim #F3EDE3 e os focos do campo recebem Páprica
+// Profunda #9F3930 — o mesmo campo de luz da Hero, lido como pigmento quente sobre o Marfim
 vec3 beigeLab(float x) {
-  vec3 c = mix(K_BASE, K_BRONZE, ${f(BEIGE.deep)});
-  c = mix(c, K_BASE, seg(x, 0.0, ${f(BEIGE.base)}));
-  c = mix(c, K_CHAMP_L, seg(x, ${f(BEIGE.base)}, ${f(BEIGE.champ)}));
-  c = mix(c, K_IVORY, seg(x, ${f(BEIGE.champ)}, 1.0));
-  return c;
+  return mix(K_BASE, K_DEEP, ${f(BEIGE.amt)} * seg(x, ${f(BEIGE.from)}, ${f(BEIGE.to)}));
 }
 
 void main() {

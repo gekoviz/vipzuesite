@@ -24,13 +24,11 @@
   --color-deep: #332B23;           /* profundidade (Mocha escurecido) */
   --color-shadow-mid: #47392B;     /* sombra intermediária */
   --color-mocha-glint: #674933;    /* Mocha com reflexo */
-  --color-light-mid: #9F4B2D;      /* luz intermediária (Mocha → Páprica); era #A55A3A, ver js/light-field.js */
+  --color-light-mid: #B04C27;      /* Páprica escura, anchor 0.78 da rampa escura (rodada 03; era #9F4B2D), ver js/light-field.js */
   --color-card-glint: #6A3C2B;     /* realce escuro de card */
-  --color-shadow-light: #C98468;   /* sombra clara (rampa clara do campo), pigmentada com Páprica Profunda */
   --color-ivory-glint-1: #F4EFE6;  /* reflexo claro */
   --color-ivory-glint-2: #F7F2EB;  /* reflexo claro máximo */
   --color-button-glint: #ECCCBA;   /* reflexo do botão */
-  --color-button-core: #2B2620;    /* miolo do botão */
   --color-surface-mid: #52402F;    /* superfície intermediária (cards da 03) */
   --color-mocha-paprika: #8D5337;  /* reflexo Mocha/Páprica (cards da 03, painéis da 05) */
 
@@ -62,15 +60,16 @@
   --color-focus-on-light: var(--color-graphite);
 
   /* 03. CTA
-     O CTA principal (.shiny-cta, Hero e 06) passa a ter superfície Páprica —
-     ver base.css. Os tokens abaixo servem o .btn--primary-dark do cabeçalho e
-     do menu, que continua cápsula escura com borda e órbita em Páprica. */
-  --color-cta-primary-dark-bg: var(--color-graphite);
-  --color-cta-primary-dark-text: var(--color-ivory);
-  --color-cta-primary-dark-hover: var(--color-button-core);
-  --color-cta-primary-light-bg: var(--color-graphite);
-  --color-cta-primary-light-text: var(--color-ivory);
-  --color-cta-primary-light-hover: var(--color-button-core);
+     Todo CTA principal tem superfície Páprica e tinta Grafite (4,57:1; Marfim
+     daria 3,06:1). O .shiny-cta (Hero e 06) monta as camadas em base.css; os
+     tokens abaixo servem o .btn--primary-dark do menu mobile (rodada 03: era
+     cápsula Grafite) e o .btn--primary-light, que hoje não tem instância. */
+  --color-cta-primary-dark-bg: var(--color-paprika);
+  --color-cta-primary-dark-text: var(--color-graphite);
+  --color-cta-primary-dark-hover: var(--color-paprika);
+  --color-cta-primary-light-bg: var(--color-paprika);
+  --color-cta-primary-light-text: var(--color-graphite);
+  --color-cta-primary-light-hover: var(--color-paprika);
 
   /* 04–07. Typography */
   --font-display: "Gloock", serif;

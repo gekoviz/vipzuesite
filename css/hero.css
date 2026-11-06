@@ -335,9 +335,9 @@
   background: radial-gradient(
     closest-side,
     rgb(215 103 63 / 0.48) 0%,
-    rgb(159 75 45 / 0.38) 30%,
-    rgb(103 73 51 / 0.22) 58%,
-    rgb(103 73 51 / 0) 100%
+    rgb(176 76 39 / 0.38) 30%, /* anchors 0.78 e 0.56 da rampa escura (rodada 03): #B04C27, #6B402D */
+    rgb(107 64 45 / 0.22) 58%,
+    rgb(107 64 45 / 0) 100%
   );
 }
 
@@ -468,7 +468,7 @@
   background: radial-gradient(
     70% 55% at 30% 50%,
     rgb(34 32 29 / 0.8) 0%,
-    rgb(34 32 29 / 0.72) 70%, /* era 0.66: com a Páprica mais forte do campo, "presença digital" mergulhava a 3,0:1 em 1920 */
+    rgb(34 32 29 / 0.66) 70%,
     rgb(34 32 29 / 0) 100%
   );
 }

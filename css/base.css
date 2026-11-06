@@ -111,8 +111,12 @@ button {
   transition-duration: var(--duration-press);
 }
 
-/* CTA principal (referência aprovada em 24/10/2026, substitui o preenchimento champagne do UI.08):
-   cápsula escura (Grafite), borda Páprica, brilho quente sutil e um ponto de luz percorrendo a borda. */
+/* CTA do menu mobile (referência aprovada em 24/10/2026, substitui o preenchimento champagne do UI.08):
+   cápsula com borda, brilho quente sutil e um ponto de luz percorrendo a borda.
+   Rodada 03 de cor (06/11/2026): é o mesmo CTA comercial da Hero e da 06 (data-cta="whatsapp"), então a superfície
+   passa a Páprica com tinta Grafite, como o .shiny-cta. A estrutura (borda, órbita de 6s, sombras, hover) não muda;
+   só a cor. A órbita, que era Páprica, sumiria sobre o miolo Páprica: os mesmos alfas passam ao reflexo claro
+   #ECCCBA, com pico Marfim (a escada de luz do .shiny-cta). */
 @property --btn-orbit {
   syntax: "<angle>";
   inherits: false;
@@ -124,8 +128,8 @@ button {
   isolation: isolate;
   border: 1px solid rgb(215 103 63 / 0.5);
   border-radius: var(--radius-pill);
-  background: linear-gradient(180deg, var(--color-button-core) 0%, var(--color-graphite) 100%);
-  color: var(--color-text-on-dark);
+  background: linear-gradient(180deg, var(--color-cta-primary-dark-bg) 0%, var(--color-cta-primary-dark-bg) 100%);
+  color: var(--color-cta-primary-dark-text);
   box-shadow:
     inset 0 1px 0 rgb(243 237 227 / 0.1),
     0 0 22px -6px rgb(215 103 63 / 0.35);
@@ -145,12 +149,12 @@ button {
   border-radius: inherit;
   background: conic-gradient(
     from var(--btn-orbit),
-    rgb(215 103 63 / 0) 0deg,
-    rgb(215 103 63 / 0) 240deg,
-    rgb(215 103 63 / 0.4) 300deg,
-    rgb(215 103 63 / 0.9) 338deg,
-    var(--color-button-glint) 354deg,
-    rgb(215 103 63 / 0) 360deg
+    rgb(236 204 186 / 0) 0deg,
+    rgb(236 204 186 / 0) 240deg,
+    rgb(236 204 186 / 0.4) 300deg,
+    rgb(236 204 186 / 0.9) 338deg,
+    var(--color-ivory) 354deg,
+    rgb(236 204 186 / 0) 360deg
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
@@ -243,9 +247,11 @@ button {
    mudou, e a borda continua girando como girava.
 
    A escada de luz tinha de ser refeita porque a base subiu de #22201D para
-   #D7673F — o que antes era realce agora é mais escuro que o fundo:
+   #D7673F — o que antes era realce agora é mais escuro que o fundo
+   (mapa da rodada 03, §29):
 
-     highlight  #C98468  flanco do arco      (era Páprica, que sumiria)
+     bg-subtle  Páprica 90% + Grafite 10%  inset de 1px (era Páprica Profunda)
+     highlight  #ECCCBA  flanco do arco e cintilância (era #C98468)
      shine      #ECCCBA  pico em repouso
      hover      #F3EDE3  pico aceso          (já estava assim, mais abaixo)
 
@@ -254,9 +260,9 @@ button {
    Páprica nem clarear o Grafite sem quebrar AA. */
 .shiny-cta {
   --shiny-bg: var(--color-paprika);
-  --shiny-bg-subtle: var(--color-paprika-deep);
+  --shiny-bg-subtle: color-mix(in srgb, var(--color-paprika) 90%, var(--color-graphite));
   --shiny-fg: var(--color-graphite);
-  --shiny-highlight: var(--color-shadow-light);
+  --shiny-highlight: var(--color-button-glint);
   --shiny-highlight-subtle: var(--color-button-glint);
   --shiny-shine: var(--color-button-glint);
   --shiny-anim: shiny-angle linear infinite;
