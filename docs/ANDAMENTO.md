@@ -1,6 +1,6 @@
 # Andamento — VIPZUE 2026
 
-## 06/11/2026 — Hero desktop: voo da águia controlado pela rolagem (branch local, não publicado)
+## 06/11/2026 — Hero desktop: voo da águia controlado pela rolagem (publicado em produção)
 
 **Pedido:** "PROMPT MESTRE DE IMPLEMENTAÇÃO — Hero Desktop · Vídeo da Águia Controlado por Scroll". Master enviado pelo usuário: `IMG_5747.MP4`, de fundo branco, que ficou fora do repositório.
 
@@ -19,7 +19,10 @@
 
 **Relatório:** `docs/hero-video-relatorio.md`, com os limites: pose final alinhada à águia estática (não centrada — o usuário decidiu manter assim), Safari e dispositivos físicos não testados, e 13 MB no desktop.
 
-**Não publicado.**
+**Publicado:** fast-forward da `main` (`cd9f23b` → `341d5e1`) com push, depois da confirmação do usuário ("Sim, publicar").
+- Em produção, `hero.js` e `hero.css` são idênticos aos locais (hash); manifest e quadros respondem 200.
+- 1440×900: prólogo montado (total 504, Hero 5436 px); quadro 144 em 120 svh com a headline oculta; headline e CTA visíveis em 235 svh.
+- 390×844: total 353, sem canvas e sem pedidos do voo, página com 10880 px (igual a antes); nenhum erro no console.
 
 ## 06/11/2026 — Rodada 03 de cor (publicada em produção)
 
