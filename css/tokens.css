@@ -1,42 +1,61 @@
 /* VIPZUE — Design Tokens (fonte: documento-mestre v2, UI.19). Não alterar valores sem decisão registrada. */
 :root {
-  /* 01. Brand */
-  --color-brand-primary: #22201D;
-  --color-brand-secondary: #F3EDE3;
-  --color-brand-accent: #C3A881;
-  --color-charcoal: #141210;
-  --color-coffee: #2F251F;
-  --color-brown: #4A372B;
-  --color-bronze: #8A6A4B;
-  --color-beige: #B8AA96;
-  --color-champagne-light: #E7D6B7;
+  /* 01. Brand — migração cromática (06/11/2026): cinco cores principais fixas */
+  --color-mocha: #5B4632;          /* Mocha Profundo — base escura */
+  --color-ivory: #F3EDE3;          /* Marfim Quente — base clara e tinta no escuro */
+  --color-paprika: #D7673F;        /* Páprica — acento e luz (só decorativo; nunca tinta de texto pequeno) */
+  --color-graphite: #22201D;       /* Grafite Quente — tinta no claro, cards escuros, profundidade */
+  --color-sand: #E5D4BB;           /* Areia Quente — superfícies claras sobre o Marfim */
+  --color-brand-primary: var(--color-mocha);
+  --color-brand-secondary: var(--color-ivory);
+  --color-brand-accent: var(--color-paprika);
+
+  /* 01b. Derivados técnicos (degradês, sombras e reflexos; nunca cores novas de marca) */
+  --color-deep: #332B23;           /* profundidade (Mocha escurecido) */
+  --color-shadow-mid: #47392B;     /* sombra intermediária */
+  --color-mocha-glint: #674933;    /* Mocha com reflexo */
+  --color-light-mid: #A55A3A;      /* luz intermediária (Mocha → Páprica) */
+  --color-card-glint: #6A3C2B;     /* realce escuro de card */
+  --color-panel-top: #6E4B34;      /* topo do painel do CTA final */
+  --color-panel-base: #4A3B2C;     /* base do painel do CTA final */
+  --color-shadow-light: #E2B99C;   /* sombra clara (rampa clara do campo) */
+  --color-ivory-glint-1: #F4EFE6;  /* reflexo claro */
+  --color-ivory-glint-2: #F7F2EB;  /* reflexo claro máximo */
+  --color-button-glint: #ECCCBA;   /* reflexo do botão */
+  --color-button-core: #2B2620;    /* miolo do botão */
+  --color-surface-mid: #52402F;    /* superfície intermediária (cards da 03) */
+  --color-mocha-paprika: #8D5337;  /* reflexo Mocha/Páprica (cards da 03, painéis da 05) */
 
   /* 02. Semantic */
-  --color-bg-primary: #22201D;
-  --color-bg-secondary: #B8AA96;
-  --color-bg-deep: #141210;
-  --color-surface-dark: #2F251F;
-  --color-surface-light: #F3EDE3;
-  --color-text-on-dark: #F3EDE3;
-  --color-text-on-light: #22201D;
+  --color-bg-primary: var(--color-mocha);
+  --color-bg-secondary: var(--color-ivory);
+  --color-bg-light: var(--color-ivory);
+  --color-bg-deep: var(--color-deep);
+  --color-surface-dark: var(--color-graphite);
+  --color-surface-light: var(--color-sand);
+  --color-text-on-dark: var(--color-ivory);
+  --color-text-on-light: var(--color-graphite);
   --color-text-secondary-opacity: 0.75;
   --color-text-muted-opacity: 0.50;
   --color-border-on-dark: rgba(243, 237, 227, 0.12);
   --color-border-on-light: rgba(34, 32, 29, 0.12);
   --color-border-interactive-on-dark: rgba(243, 237, 227, 0.18);
   --color-border-interactive-on-light: rgba(34, 32, 29, 0.20);
-  --color-link-on-dark: #C3A881;
-  --color-link-on-dark-hover: #E7D6B7;
-  --color-link-on-light: #4A372B;
-  --color-link-on-light-hover: #22201D;
+  /* Tinta de links, labels pequenos e foco: separada do acento decorativo (Páprica) */
+  --color-link-on-dark: var(--color-ivory);
+  --color-link-on-dark-hover: var(--color-ivory-glint-2);
+  --color-link-on-light: var(--color-graphite);
+  --color-link-on-light-hover: var(--color-graphite);
+  --color-focus-on-dark: var(--color-ivory);
+  --color-focus-on-light: var(--color-graphite);
 
   /* 03. CTA */
-  --color-cta-primary-dark-bg: #C3A881;
-  --color-cta-primary-dark-text: #22201D;
-  --color-cta-primary-dark-hover: #E7D6B7;
-  --color-cta-primary-light-bg: #22201D;
-  --color-cta-primary-light-text: #F3EDE3;
-  --color-cta-primary-light-hover: #141210;
+  --color-cta-primary-dark-bg: var(--color-graphite);
+  --color-cta-primary-dark-text: var(--color-ivory);
+  --color-cta-primary-dark-hover: var(--color-button-core);
+  --color-cta-primary-light-bg: var(--color-graphite);
+  --color-cta-primary-light-text: var(--color-ivory);
+  --color-cta-primary-light-hover: var(--color-button-core);
 
   /* 04–07. Typography */
   --font-display: "Gloock", serif;
@@ -96,7 +115,7 @@
   --radius-lg: 14px;
   --radius-pill: 999px; /* CTA principal em cápsula — decisão do usuário em 24/10/2026 (substitui radius-sm no CTA) */
   --border-width-default: 1px;
-  --shadow-sm: 0 4px 12px rgba(20, 18, 16, 0.06);
+  --shadow-sm: 0 4px 12px rgba(34, 32, 29, 0.06);
 
   /* Motion (CONTEXTO §14) */
   --duration-press: 100ms;

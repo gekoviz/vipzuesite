@@ -11,7 +11,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--color-bg-deep);
+  background: var(--color-bg-primary);
   color: var(--color-text-on-dark);
   font-family: var(--font-body);
   font-size: var(--font-size-body);
@@ -44,7 +44,7 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-champagne-light);
+  outline: 2px solid var(--color-focus-on-dark);
   outline-offset: 3px;
 }
 
@@ -112,7 +112,7 @@ button {
 }
 
 /* CTA principal (referência aprovada em 24/10/2026, substitui o preenchimento champagne do UI.08):
-   cápsula escura, borda champagne, brilho quente sutil e um ponto de luz percorrendo a borda. */
+   cápsula escura (Grafite), borda Páprica, brilho quente sutil e um ponto de luz percorrendo a borda. */
 @property --btn-orbit {
   syntax: "<angle>";
   inherits: false;
@@ -122,13 +122,13 @@ button {
 .btn--primary-dark {
   position: relative;
   isolation: isolate;
-  border: 1px solid rgb(195 168 129 / 0.5);
+  border: 1px solid rgb(215 103 63 / 0.5);
   border-radius: var(--radius-pill);
-  background: linear-gradient(180deg, #231A13 0%, #120E0B 100%);
+  background: linear-gradient(180deg, var(--color-button-core) 0%, var(--color-graphite) 100%);
   color: var(--color-text-on-dark);
   box-shadow:
-    inset 0 1px 0 rgb(231 214 183 / 0.1),
-    0 0 22px -6px rgb(195 168 129 / 0.35);
+    inset 0 1px 0 rgb(243 237 227 / 0.1),
+    0 0 22px -6px rgb(215 103 63 / 0.35);
   transition:
     border-color var(--duration-base) var(--ease-standard),
     box-shadow var(--duration-base) var(--ease-standard),
@@ -145,12 +145,12 @@ button {
   border-radius: inherit;
   background: conic-gradient(
     from var(--btn-orbit),
-    rgb(231 214 183 / 0) 0deg,
-    rgb(231 214 183 / 0) 240deg,
-    rgb(231 214 183 / 0.4) 300deg,
-    rgb(231 214 183 / 0.9) 338deg,
-    #FFF4E0 354deg,
-    rgb(231 214 183 / 0) 360deg
+    rgb(215 103 63 / 0) 0deg,
+    rgb(215 103 63 / 0) 240deg,
+    rgb(215 103 63 / 0.4) 300deg,
+    rgb(215 103 63 / 0.9) 338deg,
+    var(--color-button-glint) 354deg,
+    rgb(215 103 63 / 0) 360deg
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
@@ -173,10 +173,10 @@ button {
 
 @media (hover: hover) {
   .btn--primary-dark:hover {
-    border-color: rgb(231 214 183 / 0.8);
+    border-color: rgb(215 103 63 / 0.8);
     box-shadow:
-      inset 0 1px 0 rgb(231 214 183 / 0.16),
-      0 0 28px -4px rgb(195 168 129 / 0.5);
+      inset 0 1px 0 rgb(243 237 227 / 0.16),
+      0 0 28px -4px rgb(215 103 63 / 0.5);
     transform: translateY(-1px);
   }
 
@@ -234,16 +234,17 @@ button {
 
 @property --shiny-shine {
   syntax: "<color>";
-  initial-value: #f6ebd6;
+  initial-value: #ECCCBA; /* = --color-button-glint (@property não aceita var()) */
   inherits: false;
 }
 
 .shiny-cta {
-  --shiny-bg: #120e0b;
-  --shiny-bg-subtle: #2a1d14;
-  --shiny-fg: var(--color-text-on-dark);
-  --shiny-highlight: var(--color-brand-accent);
-  --shiny-highlight-subtle: var(--color-champagne-light);
+  --shiny-bg: var(--color-graphite);
+  --shiny-bg-subtle: var(--color-button-core);
+  --shiny-fg: var(--color-ivory);
+  --shiny-highlight: var(--color-paprika);
+  --shiny-highlight-subtle: var(--color-button-glint);
+  --shiny-shine: var(--color-button-glint);
   --shiny-anim: shiny-angle linear infinite;
   --shiny-duration: 3s;
   --shiny-shadow: 2px;
@@ -280,7 +281,7 @@ button {
     border-box;
   box-shadow:
     inset 0 0 0 1px var(--shiny-bg-subtle),
-    0 0 30px -6px rgb(195 168 129 / 0);
+    0 0 30px -6px rgb(215 103 63 / 0);
   transition: var(--shiny-transition);
   transition-property: --shiny-shine, box-shadow;
 }
@@ -308,7 +309,7 @@ button {
   --space: calc(var(--position) * 2);
   width: var(--size);
   height: var(--size);
-  background: radial-gradient(circle at var(--position) var(--position), var(--color-champagne-light) calc(var(--position) / 4), transparent 0) padding-box;
+  background: radial-gradient(circle at var(--position) var(--position), var(--shiny-highlight-subtle) calc(var(--position) / 4), transparent 0) padding-box;
   background-size: var(--space) var(--space);
   background-repeat: space;
   mask-image: conic-gradient(from calc(var(--shiny-angle) + 45deg), black, transparent 10% 90%, black);
@@ -340,10 +341,10 @@ button {
 
 /* "acende": mesmo arco, mesma velocidade, mais luz */
 .shiny-cta:is(:hover, :focus-visible) {
-  --shiny-shine: #fff6e2;
+  --shiny-shine: var(--color-ivory);
   box-shadow:
     inset 0 0 0 1px var(--shiny-bg-subtle),
-    0 0 30px -6px rgb(195 168 129 / 0.5);
+    0 0 30px -6px rgb(215 103 63 / 0.5);
 }
 
 .shiny-cta:is(:hover, :focus-visible)::before {
@@ -355,7 +356,7 @@ button {
 }
 
 .shiny-cta:focus-visible {
-  outline: 2px solid var(--color-champagne-light);
+  outline: 2px solid var(--color-focus-on-dark);
 }
 
 @keyframes shiny-angle {
