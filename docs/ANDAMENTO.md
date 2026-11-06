@@ -1,5 +1,26 @@
 # Andamento — VIPZUE 2026
 
+## 06/11/2026 — Hero desktop: voo da águia controlado pela rolagem (branch local, não publicado)
+
+**Pedido:** "PROMPT MESTRE DE IMPLEMENTAÇÃO — Hero Desktop · Vídeo da Águia Controlado por Scroll". Master enviado pelo usuário: `IMG_5747.MP4`, de fundo branco, que ficou fora do repositório.
+
+**Feito** (branch `feat/hero-voo`):
+- **Quadros:** 241 WebP 1600×890 com alfa (13 MB) em `assets/hero/voo/`, mais o manifest. O recorte do branco foi feito no navegador (inundação a partir da borda + erosão + cor puxada do interior), e a ferramenta ficou em `tools/recortar-voo.html`.
+- **Prólogo:** 260 svh no início da timeline existente da Hero (`js/hero.js`), só ≥1024 px com movimento. Sem pin novo; as marcas de antes só são deslocadas.
+- **Fim do voo:** a imagem assenta sobre a águia estática (desvio de 1–2 px medido), as duas trocam por opacidade, e a headline entra com a animação de sempre, uma vez.
+- **Falha ou demora:** se os quadros falham ou demoram mais de 8 s, a Hero de sempre volta.
+- **Build:** `tools/build-site.mjs` passa a seguir os `.json` referenciados.
+
+**Medido:**
+- mobile e tablet (360, 390, 430, 768, 1023) idênticos à `main`, sem nenhum pedido do voo;
+- desktop de 1024 a 1920 com o prólogo, e a página cresce exatamente 260 svh;
+- movimento reduzido sem o prólogo;
+- 404 e Slow 3G caem na Hero original.
+
+**Relatório:** `docs/hero-video-relatorio.md`, com os limites: pose final alinhada à águia estática (não centrada), Safari e dispositivos físicos não testados, e 13 MB no desktop.
+
+**Não publicado.**
+
 ## 06/11/2026 — Rodada 03 de cor (publicada em produção)
 
 **Pedido:** "VIPZUE_Prompt_Mestre_Correcao_Cromatica_Rodada_03_Claude_Code.md". Corrigir os quatro sintomas reprovados da Rodada 02 e provar na pintura final, sem publicar.
