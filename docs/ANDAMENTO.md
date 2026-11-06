@@ -1,5 +1,30 @@
 # Andamento — VIPZUE 2026
 
+## 06/11/2026 — Migração cromática (branch `feat/cores`, sem publicar)
+
+**Pedido:** executar "VIPZUE_Prompt_Mestre_Migracao_Cromatica_Claude.md".
+- Só a cor da landing muda, para Mocha, Marfim, Páprica, Grafite e Areia, mais os derivados do prompt.
+- Copy, layout, geometria, máscaras e animações ficam iguais.
+
+**Feito:**
+- tokens novos, com foco próprio no escuro (Marfim) e no claro (Grafite);
+- rampas do shader (as mesmas posições);
+- Hero, botões, cards da 03 e do Método, Para quem é, CTA final com gradiente próprio, FAQ e rodapé;
+- SVGs do HTML e `theme-color`.
+
+**Ajustes por contraste:**
+- apoio Grafite da headline mais denso: "presença digital" passou de 2,62 para ≥ 3,24:1 em 1920;
+- texto secundário do campo e rodapé em Marfim 95%;
+- núcleo do indicador do Método em Marfim.
+
+**Validação:**
+- contraste por pixel em 8 larguras, sem WebGL, com movimento reduzido e sem JS: 0 falhas de texto;
+- `vz-check-r6` igual à produção em 390, 768, 1366, 1440 e 1920, exceto `B.contraste`: é falso positivo, porque o checker reconstrói o card da 06 com tokens que não existem mais (a medição real dá 6,9 / 5,6:1);
+- build local ok;
+- não testados: Safari, iPhone, Firefox e aparelhos reais.
+
+**Relatório:** `docs/migracao-cromatica-relatorio.md`. Capturas antes/depois em `docs/qa/migracao-cromatica/` (local).
+
 ## 02/11/2026 — Rodada 6, seção 06, emendas, rodapé e uma seção por tela (publicada em produção)
 
 **Pedido:** executar "PROMPT VIPZUE rodada6 secao06.pdf" e validar com `vz-check-r6.pdf`.
