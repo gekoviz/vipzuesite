@@ -1,5 +1,20 @@
 # Andamento — VIPZUE 2026
 
+## 06/11/2026 — Revisão e correção do refinamento cromático (`771d09c`, não publicado)
+
+**Pedido:** revisar e medir o commit `771d09c`, feito por outra sessão a partir do documento de refinamento (Páprica Profunda, cards Mocha, CTA Páprica, corte seco).
+
+**Resultado:** não está pronto para publicar.
+- A Páprica mais forte no campo escuro derruba o texto Marfim no celular para abaixo de 4,5:1. No Método fica em 4,20–4,47; no FAQ, em 4,42–4,45. Na produção, na mesma posição, ficava em 4,88–4,90.
+- "Presença digital" em 1920: um quadro chegou a 2,996:1.
+- O resto passa: cards da 05 a 7,62:1; botão Páprica a 4,54:1 (em repouso e aceso); corte seco conferido.
+
+**Correção aplicada (aprovada pelo usuário):**
+- luz intermediária da rampa escura de #A55A3A para #9F4B2D (mais vermelha, mais escura): Método 390 passa de 4,20 para 4,78:1 e FAQ 390, de 4,42 para 5,08:1;
+- apoio da headline no desktop de .66 para .72 a 70%: "presença digital" em 1920 fica entre 3,15 e 3,42:1.
+
+**Relatório:** `docs/refinamento-cromatico-revisao.md`. Commitado na `main` local, sobre o `771d09c`, sem push.
+
 ## 06/11/2026 — Migração cromática (publicada em produção)
 
 **Pedido:** executar "VIPZUE_Prompt_Mestre_Migracao_Cromatica_Claude.md".
