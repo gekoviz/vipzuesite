@@ -105,14 +105,21 @@ Pior valor por seção:
 
 `css/tokens.css`, `css/base.css`, `css/hero.css`, `css/sections.css`, `js/light-field.js`.
 
-## Decisões para você
+## Decisões tomadas (o usuário pediu "faça o que ficar melhor")
 
-1. **Espaçamento no celular (+152 px na 05 e na 06).**
-   - É a restauração do layout de antes da Rodada 02, que zerou essa variável sem pedido.
-   - Se preferir manter o mais compacto, basta voltar `--veil-long` a 0 até 1023 px. A cor não depende disso.
-2. **Águia de perfil da 03 no desktop.**
-   - Com o corte seco 03 → 04, a figura esmaecida (40%) agora termina em linha reta na borda da seção; antes o véu a dissolvia.
-   - Alternativa: uma máscara de gradiente só na figura. Isso devolve a dissolução sem névoa na seção, mas muda um quadro da narrativa, então não apliquei sem aprovação.
+1. **Espaçamento no celular (+152 px na 05 e na 06): mantido.**
+   - É a restauração do layout de antes da Rodada 02, que zerou essa variável sem pedido, e é o que pedem os §37/§107.
+   - Para voltar ao compacto, basta pôr `--veil-long` em 0 até 1023 px. A cor não depende disso.
+2. **Águia de perfil da 03 no desktop: dissolvida antes da divisa, sem névoa na seção.**
+   - Só a figura recebe uma máscara de gradiente na base (`css/sections.css`, `--s03-fig-fade`).
+   - Com a narrativa, o fade é 0 px enquanto o palco está preso à tela (o quadro da narrativa não muda). Ele cresce até `--s03-veil-up` (270 px em 1440×900) só quando o palco se solta e a divisa entra na tela. É uma animação ligada à rolagem (`animation-timeline: view()`).
+     - Medido: 0 / 0 / 200 / 270 px com a divisa a 1100 / 900 / 700 / 450 px do topo.
+   - Com movimento reduzido, o fade é fixo (120 px) e termina 16 px acima da divisa.
+   - Em navegador sem `animation-timeline` (Firefox e Safari antigos), fica como o corte seco simples.
+   - Só atinge o desktop (≥ 1024 px); no celular a figura não aparece.
+   - Ao desaparecer, a águia só clareia o fundo atrás do texto Grafite, então o contraste não pode piorar.
+   - Capturas: `v4-1440-emendaA-aguia.png` e `v4-1440-emendaA-aguia-rm.png`.
+3. **Publicação:** continua dependendo do seu ok explícito.
 
 ## Limitações
 

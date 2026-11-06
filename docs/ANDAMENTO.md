@@ -16,10 +16,11 @@
 
 **Relatório:** `docs/rodada-03-cor-relatorio.md`.
 
-**Decisões pendentes:**
-- espaçamento restaurado no celular (+152 px na 05 e na 06);
-- águia da 03 cortada reta no desktop;
-- publicação.
+**Decisões (o usuário pediu "faça o que ficar melhor"):**
+- espaçamento restaurado no celular (+152 px na 05 e na 06): mantido;
+- águia da 03 no desktop: agora se dissolve antes da divisa, com uma máscara só na figura, ligada à rolagem, sem névoa na seção.
+
+**Pendente:** publicação, que depende do ok do usuário.
 
 ## 06/11/2026 — Revisão e correção do refinamento cromático (publicado em produção)
 
