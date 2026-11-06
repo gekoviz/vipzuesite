@@ -1,6 +1,6 @@
 # Andamento — VIPZUE 2026
 
-## 06/11/2026 — Rodada 03 de cor (branch `feat/cores-r3`, sem publicar)
+## 06/11/2026 — Rodada 03 de cor (publicada em produção)
 
 **Pedido:** "VIPZUE_Prompt_Mestre_Correcao_Cromatica_Rodada_03_Claude_Code.md". Corrigir os quatro sintomas reprovados da Rodada 02 e provar na pintura final, sem publicar.
 
@@ -20,7 +20,9 @@
 - espaçamento restaurado no celular (+152 px na 05 e na 06): mantido;
 - águia da 03 no desktop: agora se dissolve antes da divisa, com uma máscara só na figura, ligada à rolagem, sem névoa na seção.
 
-**Pendente:** publicação, que depende do ok do usuário.
+**Publicado:** fast-forward da `main` (`bf4a7db` → `8521292`) com push, depois da confirmação do usuário ("Sim, publicar").
+- Em produção, index, tokens, base, hero, sections e light-field são idênticos aos locais (hash; base e hero diferem só pelo CRLF da cópia local).
+- Na produção, em 390: Método 5,16:1 e 06 (botão 4,54:1), 0 falhas.
 
 ## 06/11/2026 — Revisão e correção do refinamento cromático (publicado em produção)
 
