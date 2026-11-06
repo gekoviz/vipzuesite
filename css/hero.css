@@ -206,7 +206,7 @@
   min-height: 100svh;
   overflow: clip;
   isolation: isolate;
-  background: var(--color-bg-deep);
+  background: var(--color-bg-primary);
 }
 
 /* Visão: palco fixo por 244svh de rolagem no desktop (aproximação, close com as três frases, passagem curta);
@@ -234,7 +234,7 @@
   height: 100lvh;
 }
 
-/* ---------- Ambiente: parede grafite com queda de luz para carvão ---------- */
+/* ---------- Ambiente: parede Mocha com queda de luz para a profundidade (#332B23) ---------- */
 .hero__bg {
   position: absolute;
   inset: 0;
@@ -264,16 +264,16 @@
 }
 
 .has-silk .hero__bg {
-  background: #0B0907; /* primeira cor da paleta do shader, enquanto o primeiro quadro não é desenhado */
+  background: var(--color-deep); /* primeira cor da paleta do shader, enquanto o primeiro quadro não é desenhado */
 }
 
-/* Faixa escura no topo: o menu mantém contraste AA mesmo quando um reflexo champagne passa atrás dele */
+/* Faixa escura no topo: o menu mantém contraste AA mesmo quando um reflexo de luz passa atrás dele */
 .has-silk .hero__bg::after {
   content: "";
   position: absolute;
   inset: 0 0 auto;
   height: calc(var(--header-height) + 64px);
-  background: linear-gradient(180deg, rgb(11 9 7 / 0.7) 0%, rgb(11 9 7 / 0) 100%);
+  background: linear-gradient(180deg, rgb(34 32 29 / 0.7) 0%, rgb(34 32 29 / 0) 100%);
 }
 
 .has-silk .hero__light,
@@ -285,9 +285,9 @@
 }
 
 /* Fundo procedural (js/light-field.js) — um canvas WebGL1 com Bloom Field (onde está a luz) e Silk (como ela
-   respira) num só shader, na paleta VIPZUE: estado escuro na Hero e no close, estado claro (#B8AA96) na seção 03.
+   respira) num só shader, na paleta VIPZUE: estado escuro (Mocha/Páprica) na Hero e no close, estado claro (Marfim) na seção 03.
    Fixo atrás de toda a página (as seções seguintes têm fundo próprio e o cobrem); não captura cliques.
-   Sem WebGL (ou com o contexto perdido), voltam os fundos em CSS: estúdio na Hero, bege na seção 03. */
+   Sem WebGL (ou com o contexto perdido), voltam os fundos em CSS: estúdio Mocha na Hero, Marfim na seção 03. */
 .page-light-field {
   position: fixed;
   top: 0;
@@ -311,7 +311,7 @@
   position: absolute;
   inset: 0 0 auto;
   height: calc(var(--header-height) + 64px);
-  background: linear-gradient(180deg, rgb(20 18 16 / 0.6) 0%, rgb(20 18 16 / 0) 100%);
+  background: linear-gradient(180deg, rgb(34 32 29 / 0.6) 0%, rgb(34 32 29 / 0) 100%);
   /* sai à frente do claro na passagem para a seção 03 (máscara definida por js/hero.js) */
   -webkit-mask-image: var(--wipe-hide, none);
   mask-image: var(--wipe-hide, none);
@@ -334,17 +334,17 @@
   translate: -60% -48%;
   background: radial-gradient(
     closest-side,
-    rgb(138 106 75 / 0.48) 0%,
-    rgb(74 55 43 / 0.38) 30%,
-    rgb(47 37 31 / 0.22) 58%,
-    rgb(47 37 31 / 0) 100%
+    rgb(215 103 63 / 0.48) 0%,
+    rgb(165 90 58 / 0.38) 30%,
+    rgb(103 73 51 / 0.22) 58%,
+    rgb(103 73 51 / 0) 100%
   );
 }
 
 /* Brilho rasante vindo do alto à esquerda */
 .hero__sheen {
   inset: 0;
-  background: linear-gradient(152deg, rgb(231 214 183 / 0.05) 0%, rgb(231 214 183 / 0) 40%);
+  background: linear-gradient(152deg, rgb(236 204 186 / 0.05) 0%, rgb(236 204 186 / 0) 40%);
 }
 
 /* Sombra difusa atrás do corpo, do lado oposto à luz */
@@ -353,12 +353,12 @@
   bottom: -22svh;
   width: 72vw;
   height: 85svh;
-  background: radial-gradient(closest-side, rgb(20 18 16 / 0.9), rgb(20 18 16 / 0));
+  background: radial-gradient(closest-side, rgb(51 43 35 / 0.9), rgb(51 43 35 / 0));
 }
 
 .hero__vignette {
   inset: 0;
-  background: radial-gradient(ellipse 92% 82% at 56% 42%, rgb(20 18 16 / 0) 48%, rgb(20 18 16 / 0.72) 100%);
+  background: radial-gradient(ellipse 92% 82% at 56% 42%, rgb(34 32 29 / 0) 48%, rgb(34 32 29 / 0.72) 100%);
 }
 
 /* Micrograin: token 0.03 aplicado em soft-light (presença visual dentro da faixa 2–4%) */
@@ -438,9 +438,9 @@
   background: linear-gradient(
     0deg,
     var(--color-bg-deep) 0%,
-    rgb(20 18 16 / 0.9) 20%,
-    rgb(20 18 16 / 0.45) 55%,
-    rgb(20 18 16 / 0) 100%
+    rgb(51 43 35 / 0.9) 20%,
+    rgb(51 43 35 / 0.45) 55%,
+    rgb(51 43 35 / 0) 100%
   );
 }
 
@@ -458,7 +458,7 @@
   padding-bottom: var(--space-3xl);
 }
 
-/* Apoio de contraste: os reflexos champagne do Silk passam atrás do texto (AA garantido) */
+/* Apoio de contraste (Grafite): os reflexos de luz do campo passam atrás do texto (AA garantido; Páprica ≥ 3:1) */
 .hero__content::before {
   content: "";
   position: absolute;
@@ -467,9 +467,9 @@
   width: 62vw;
   background: radial-gradient(
     70% 55% at 30% 50%,
-    rgb(11 9 7 / 0.72) 0%,
-    rgb(11 9 7 / 0.45) 55%,
-    rgb(11 9 7 / 0) 100%
+    rgb(34 32 29 / 0.8) 0%,
+    rgb(34 32 29 / 0.66) 70%,
+    rgb(34 32 29 / 0) 100%
   );
 }
 
@@ -477,9 +477,9 @@
   display: none;
 }
 
-/* Único destaque cromático: cor sólida (pigmento), sem gradiente, brilho ou sombra */
+/* Único destaque cromático: Páprica sólida (pigmento), sem gradiente, brilho ou sombra */
 .hero__accent {
-  color: var(--color-brand-accent);
+  color: var(--color-paprika);
 }
 
 .hero__title {
@@ -536,8 +536,8 @@
 /* =========================================================
    Passagem para o conteúdo (seção 02 provisória)
    ========================================================= */
-/* Seção 03 no Light Context: Background Secundário #B8AA96 (fallback em CSS); com o campo de luz, o fundo é o
-   mesmo campo da Hero na rampa bege acinzentado. Conteúdo e narrativa: css/sections.css (.s03). */
+/* Seção 03 no Light Context: Background Secundário Marfim #F3EDE3 (fallback em CSS); com o campo de luz, o fundo é o
+   mesmo campo da Hero na rampa clara. Conteúdo e narrativa: css/sections.css (.s03). */
 .next-section {
   position: relative;
   z-index: 1;
@@ -586,9 +586,9 @@
   opacity: 0;
   background: radial-gradient(
     circle at var(--focus-x, 50%) var(--focus-y, 50%),
-    rgb(20 18 16 / 0) 0,
-    rgb(20 18 16 / 0) calc(var(--iris-r, 200px) * 0.7),
-    rgb(20 18 16 / 0.82) calc(var(--iris-r, 200px) * 1.5),
+    rgb(51 43 35 / 0) 0,
+    rgb(51 43 35 / 0) calc(var(--iris-r, 200px) * 0.7),
+    rgb(51 43 35 / 0.82) calc(var(--iris-r, 200px) * 1.5),
     var(--color-bg-deep) calc(var(--iris-r, 200px) * 2.6)
   );
   /* sai à frente do claro na passagem para a seção 03 (máscara definida por js/hero.js) */
@@ -629,7 +629,7 @@
   pointer-events: none;
   /* recorte estático: águia a 30% sobre o fundo escuro, como no close animado */
   background:
-    linear-gradient(rgb(20 18 16 / 0.7), rgb(20 18 16 / 0.7)),
+    linear-gradient(rgb(51 43 35 / 0.7), rgb(51 43 35 / 0.7)),
     url("../assets/hero/aguia-1400.webp") 62% 22% / 230% auto no-repeat,
     var(--color-bg-deep);
 }
@@ -662,7 +662,7 @@
 .visao-narrativa__progress {
   position: absolute;
   inset: 0;
-  background: rgb(243 237 227 / 0.65);
+  background: var(--color-paprika);
   transform: scaleX(0);
   transform-origin: left center;
 }
@@ -876,15 +876,15 @@
   .hero__content::before {
     inset: 0 calc(50% - 50vw) auto;
     width: auto;
-    /* cobre as 3 linhas com densidade estável (o champagne precisa de ~0,5 de apoio quando um reflexo
-       do Silk passa atrás) e se dissolve em 72px abaixo da headline, sem formar faixa */
+    /* cobre as 3 linhas com densidade estável (a Páprica precisa de apoio Grafite para ≥ 3:1 quando um reflexo
+       do campo passa atrás) e se dissolve em 72px abaixo da headline, sem formar faixa */
     --scrim-end: calc(var(--content-top) + var(--hl-size) * 3);
     height: calc(var(--scrim-end) + 72px);
     background: linear-gradient(
       180deg,
-      rgb(11 9 7 / 0.62) 0,
-      rgb(11 9 7 / 0.52) var(--scrim-end),
-      rgb(11 9 7 / 0) 100%
+      rgb(34 32 29 / 0.62) 0,
+      rgb(34 32 29 / 0.52) var(--scrim-end),
+      rgb(34 32 29 / 0) 100%
     );
   }
 
