@@ -17,7 +17,7 @@
 - movimento reduzido sem o prólogo;
 - 404 e Slow 3G caem na Hero original.
 
-**Relatório:** `docs/hero-video-relatorio.md`, com os limites: pose final alinhada à águia estática (não centrada), Safari e dispositivos físicos não testados, e 13 MB no desktop.
+**Relatório:** `docs/hero-video-relatorio.md`, com os limites: pose final alinhada à águia estática (não centrada — o usuário decidiu manter assim), Safari e dispositivos físicos não testados, e 13 MB no desktop.
 
 **Não publicado.**
 

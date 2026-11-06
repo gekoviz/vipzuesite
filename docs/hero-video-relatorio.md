@@ -129,7 +129,7 @@ Os testes rodaram no Chromium do painel do app e no Chrome via DevTools, com emu
 
 ## Limites e pontos em aberto
 
-1. **Pose final "centralizada":** o §10 pede a águia centrada na composição; o §91, alinhada à referência da Hero antiga. Segui o §91: a pose para exatamente sobre a águia estática (olhos em cerca de 55–60% da largura). É isso que permite a troca sem salto e mantém a coluna do título livre. Centralizar de verdade exigiria mover também a águia estática da Hero, o que muda o layout aprovado e pede sua decisão.
+1. **Pose final "centralizada":** o §10 pede a águia centrada na composição; o §91, alinhada à referência da Hero antiga. Segui o §91: a pose para exatamente sobre a águia estática (olhos em cerca de 55–60% da largura). É isso que permite a troca sem salto e mantém a coluna do título livre. Centralizar de verdade exigiria mover também a águia estática da Hero. **Decisão do usuário (06/11): manter alinhada.**
 2. **Abertura:** no quadro 0 a águia já está entrando pela esquerda e não há headline. A primeira tela do desktop mostra só a águia, o campo de luz e o header. Não acrescentei indicação de rolagem (o prompt proíbe UI nova).
 3. **Header:** continua como era, posicionado no topo da página. Sai da tela quando se rola, o que já acontecia antes; não ficou fixo.
 4. **Distância da Hero no desktop:** de 344 para 604 svh. São 2 telas a mais de rolagem até a Visão.
