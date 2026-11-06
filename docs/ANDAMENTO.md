@@ -1,10 +1,14 @@
 # Andamento — VIPZUE 2026
 
-## 06/11/2026 — Migração cromática (branch `feat/cores`, sem publicar)
+## 06/11/2026 — Migração cromática (publicada em produção)
 
 **Pedido:** executar "VIPZUE_Prompt_Mestre_Migracao_Cromatica_Claude.md".
 - Só a cor da landing muda, para Mocha, Marfim, Páprica, Grafite e Areia, mais os derivados do prompt.
 - Copy, layout, geometria, máscaras e animações ficam iguais.
+
+**Publicado:** fast-forward da `main` (`4045f68` → `c5f1789`) com push, depois da confirmação do usuário.
+- Em produção: os 7 arquivos alterados são idênticos aos locais (hash) e o `theme-color` é #5B4632.
+- `vz-check-r6` igual ao local em 1440 (48/3/5) e em 390 (o `B.img-peso` dá NA por cache).
 
 **Feito:**
 - tokens novos, com foco próprio no escuro (Marfim) e no claro (Grafite);
