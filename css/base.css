@@ -238,11 +238,25 @@ button {
   inherits: false;
 }
 
+/* Superfície Páprica (decisão de 06/11/2026, §6). O recolorir é inteiro aqui,
+   nestas seis linhas: nenhuma velocidade, duração, dimensão, raio ou arco
+   mudou, e a borda continua girando como girava.
+
+   A escada de luz tinha de ser refeita porque a base subiu de #22201D para
+   #D7673F — o que antes era realce agora é mais escuro que o fundo:
+
+     highlight  #C98468  flanco do arco      (era Páprica, que sumiria)
+     shine      #ECCCBA  pico em repouso
+     hover      #F3EDE3  pico aceso          (já estava assim, mais abaixo)
+
+   A tinta é Grafite Quente: 4,57:1 sobre a Páprica. Marfim daria 3,06:1 e
+   reprovaria. A folga é de 0,07 — depois disso não dá para escurecer a
+   Páprica nem clarear o Grafite sem quebrar AA. */
 .shiny-cta {
-  --shiny-bg: var(--color-graphite);
-  --shiny-bg-subtle: var(--color-button-core);
-  --shiny-fg: var(--color-ivory);
-  --shiny-highlight: var(--color-paprika);
+  --shiny-bg: var(--color-paprika);
+  --shiny-bg-subtle: var(--color-paprika-deep);
+  --shiny-fg: var(--color-graphite);
+  --shiny-highlight: var(--color-shadow-light);
   --shiny-highlight-subtle: var(--color-button-glint);
   --shiny-shine: var(--color-button-glint);
   --shiny-anim: shiny-angle linear infinite;
@@ -355,6 +369,9 @@ button {
   opacity: 0.6;
 }
 
+/* O foco não pode ser a tinta do botão: sobre a Páprica o Grafite é
+   legível como texto, mas um anel fino some. O anel fica Marfim, e ele
+   assenta fora da pílula, sobre o Mocha da seção. */
 .shiny-cta:focus-visible {
   outline: 2px solid var(--color-focus-on-dark);
 }

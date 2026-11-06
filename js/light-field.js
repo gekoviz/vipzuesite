@@ -15,7 +15,7 @@
 //   escuro — Hero e close: o campo de luz mapeado na rampa escura (Background Principal Mocha, luz Páprica)
 //   claro  — seção 03: o MESMO campo (mesmos blooms, Silk, deriva, vinheta e grão), só que mapeado numa rampa
 //            centrada no Background Secundário Marfim #F3EDE3 (ruptura e respiro), com as sombras levemente
-//            aquecidas por #E2B99C e as luzes subindo para os reflexos #F4EFE6 e #F7F2EB. Só a cor muda.
+//            aquecidas por #C98468 (Marfim pigmentado com Paprica Profunda) e as luzes subindo para os reflexos #F4EFE6 e #F7F2EB. Só a cor muda.
 // A passagem é uma frente que sobe de baixo para cima com a rolagem (a mesma da cópia de "O que fazemos" em
 // js/hero.js), com borda difusa levemente ondulada pelo Silk. Sem storytelling, a frente é o topo real da
 // seção 03. O canvas é fixo atrás da página: continua vivo atrás da seção 03 depois que o palco sai de cena.
@@ -29,14 +29,36 @@
   // luz intermediária #A55A3A, Páprica #D7673F
   const PALETTE = ["#332B23", "#47392B", "#5B4632", "#674933", "#A55A3A", "#D7673F"];
   // Contexto claro (seções claras). Os nomes das chaves ficam por compatibilidade com o shader; a função muda:
-  //   BRONZE  = sombra clara #E2B99C (só para aquecer de leve o fundo da rampa)
+  //   BRONZE  = sombra clara #C98468 (só para aquecer de leve o fundo da rampa)
   //   BASE    = Marfim #F3EDE3 (o fundo)
   //   CHAMP_L = reflexo claro #F4EFE6
   //   IVORY   = reflexo claro máximo #F7F2EB
-  const LIGHT = { BRONZE: "#E2B99C", BASE: "#F3EDE3", CHAMP_L: "#F4EFE6", IVORY: "#F7F2EB" };
-  const STOPS = [0, 0.18, 0.36, 0.56, 0.78, 1];
-  // Rampa clara: x do campo em que a sombra (Marfim + fração da sombra clara) chega ao Marfim, e o Marfim chega ao reflexo
-  const BEIGE = { deep: 0.22, base: 0.2, champ: 0.6 };
+  // #C98468 é o Marfim pigmentado com Páprica Profunda #9F3930 (= --color-shadow-light
+  // em tokens.css; os dois valores são a MESMA decisão em dois arquivos, mudar um sem o
+  // outro deixa a página incoerente). Era #E2B99C, que media 1,25:1 contra o Marfim: a
+  // sombra da rampa clara era quase o próprio fundo, e é por isso que as seções claras
+  // não tinham presença cromática nenhuma (§4).
+  const LIGHT = { BRONZE: "#C98468", BASE: "#F3EDE3", CHAMP_L: "#F4EFE6", IVORY: "#F7F2EB" };
+
+  // §3 — a Páprica precisa ser reconhecível no escuro, e o problema era a distribuição,
+  // não a intensidade. Com [0, 0.18, 0.36, 0.56, 0.78, 1], QUATRO das seis paradas eram
+  // marrom e a Páprica só chegava em x = 1: tudo que o campo iluminava até 0.78 saía
+  // como marrom alaranjado. Puxando as paradas para baixo, a faixa de Páprica de fato
+  // passa de 0.22 para 0.36 do percurso — e o Mocha continua sendo a massa dominante,
+  // porque o valor do campo é baixo na maior parte da tela.
+  // Só as posições mudaram. Nenhuma cor nova, nenhum bloom, nenhuma velocidade.
+  // Medido no celular: a 0.64 a FAQ virava preenchimento laranja de meia tela,
+  // que é o que o §3 proíbe. Num viewport estreito o mesmo bloom cobre uma
+  // fração muito maior da área, então a faixa de Páprica pesa mais que no
+  // desktop. 0.72 dá 0.28 do percurso em Páprica, contra 0.22 do original:
+  // mais presente, sem virar fundo.
+  const STOPS = [0, 0.17, 0.34, 0.52, 0.72, 1];
+
+  // Rampa clara: x do campo em que a sombra (Marfim + fração da sombra clara) chega ao Marfim, e o Marfim chega ao reflexo.
+  // `deep` subiu de 0.22 para 0.26 junto com a troca do pigmento: presença perceptível
+  // na sombra, sem virar preenchimento avermelhado. O fundo continua reconhecivelmente
+  // Marfim, porque `base` resolve a rampa de volta ao Marfim puro já em x = 0.2.
+  const BEIGE = { deep: 0.32, base: 0.48, champ: 0.75 };
   const toOklab = (hex) => {
     const lin = [1, 3, 5].map((i) => {
       const c = parseInt(hex.slice(i, i + 2), 16) / 255;
@@ -171,7 +193,7 @@ float field(vec2 Pw, vec2 aspect, float s, float silk) {
   light *= mix(1.0, 0.88 + 0.24 * s, silk);
   return light;
 }
-// Rampa clara (seções claras): o fundo do campo assenta no Marfim #F3EDE3 (levemente aquecido pela sombra clara #E2B99C
+// Rampa clara (seções claras): o fundo do campo assenta no Marfim #F3EDE3 (aquecido pela sombra clara #C98468
 // nas sombras) e as luzes sobem para os reflexos #F4EFE6 e #F7F2EB — a mesma leitura de luz da Hero, em outra cor
 vec3 beigeLab(float x) {
   vec3 c = mix(K_BASE, K_BRONZE, ${f(BEIGE.deep)});

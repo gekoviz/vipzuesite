@@ -3,12 +3,22 @@
   /* 01. Brand — migração cromática (06/11/2026): cinco cores principais fixas */
   --color-mocha: #5B4632;          /* Mocha Profundo — base escura */
   --color-ivory: #F3EDE3;          /* Marfim Quente — base clara e tinta no escuro */
-  --color-paprika: #D7673F;        /* Páprica — acento e luz (só decorativo; nunca tinta de texto pequeno) */
-  --color-graphite: #22201D;       /* Grafite Quente — tinta no claro, cards escuros, profundidade */
-  --color-sand: #E5D4BB;           /* Areia Quente — superfícies claras sobre o Marfim */
+  --color-paprika: #D7673F;        /* Páprica — acento e luz nos ambientes Mocha, superfície do CTA */
+  --color-paprika-deep: #9F3930;   /* Páprica Profunda — acento e luz nos ambientes Marfim */
+  --color-graphite: #22201D;       /* Grafite Quente — tinta no claro, profundidade, tinta sobre a Páprica */
   --color-brand-primary: var(--color-mocha);
   --color-brand-secondary: var(--color-ivory);
   --color-brand-accent: var(--color-paprika);
+
+  /* Por que DUAS páprica, e não uma com opacidade: a diferença é de contraste
+     medido, não de gosto. Sobre o Marfim, a Páprica dá 3,06:1 e some; a
+     Páprica Profunda dá 5,81:1. Sobre o Mocha, a Páprica dá 2,49:1 e lê como
+     luz. Cada ambiente usa a sua, e é isso que mantém a família coerente nas
+     duas luminosidades (decisão de 06/11/2026, §2 e §4).
+
+     Areia Quente #E5D4BB saiu da paleta principal na mesma decisão. Ela media
+     1,25:1 contra o Marfim — era superfície clara sobre fundo claro, e é por
+     isso que os cards da 05 não tinham presença. */
 
   /* 01b. Derivados técnicos (degradês, sombras e reflexos; nunca cores novas de marca) */
   --color-deep: #332B23;           /* profundidade (Mocha escurecido) */
@@ -16,9 +26,7 @@
   --color-mocha-glint: #674933;    /* Mocha com reflexo */
   --color-light-mid: #A55A3A;      /* luz intermediária (Mocha → Páprica) */
   --color-card-glint: #6A3C2B;     /* realce escuro de card */
-  --color-panel-top: #6E4B34;      /* topo do painel do CTA final */
-  --color-panel-base: #4A3B2C;     /* base do painel do CTA final */
-  --color-shadow-light: #E2B99C;   /* sombra clara (rampa clara do campo) */
+  --color-shadow-light: #C98468;   /* sombra clara (rampa clara do campo), pigmentada com Páprica Profunda */
   --color-ivory-glint-1: #F4EFE6;  /* reflexo claro */
   --color-ivory-glint-2: #F7F2EB;  /* reflexo claro máximo */
   --color-button-glint: #ECCCBA;   /* reflexo do botão */
@@ -32,7 +40,11 @@
   --color-bg-light: var(--color-ivory);
   --color-bg-deep: var(--color-deep);
   --color-surface-dark: var(--color-graphite);
-  --color-surface-light: var(--color-sand);
+  /* Era a Areia. Não virou outra cor clara por substituição: as superfícies
+     que ela servia foram reavaliadas uma a uma (§2). Os cards da 05 viraram
+     Mocha; o que sobra aqui — o skip link — é superfície clara de verdade,
+     e assenta no próprio Marfim. */
+  --color-surface-light: var(--color-ivory);
   --color-text-on-dark: var(--color-ivory);
   --color-text-on-light: var(--color-graphite);
   --color-text-secondary-opacity: 0.75;
@@ -49,7 +61,10 @@
   --color-focus-on-dark: var(--color-ivory);
   --color-focus-on-light: var(--color-graphite);
 
-  /* 03. CTA */
+  /* 03. CTA
+     O CTA principal (.shiny-cta, Hero e 06) passa a ter superfície Páprica —
+     ver base.css. Os tokens abaixo servem o .btn--primary-dark do cabeçalho e
+     do menu, que continua cápsula escura com borda e órbita em Páprica. */
   --color-cta-primary-dark-bg: var(--color-graphite);
   --color-cta-primary-dark-text: var(--color-ivory);
   --color-cta-primary-dark-hover: var(--color-button-core);

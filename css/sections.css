@@ -449,7 +449,7 @@ html:not(.s03-motion) .s03__stage {
 .has-field[data-field="light"] {
   background: var(--color-bg-secondary); /* a base clara da 03 (Marfim #F3EDE3), sob o canvas */
   --field-opacity: 1;
-  /* texto secundário sobre o campo claro (Marfim aquecido por #E2B99C nas sombras): grafite a 0,92 */
+  /* texto secundário sobre o campo claro (Marfim aquecido por #C98468 nas sombras): grafite a 0,92 */
   --text-2: rgb(34 32 29 / 0.92);
   --rule: rgb(34 32 29 / 0.22);
 }
@@ -623,39 +623,37 @@ html:not(.s03-motion) .s03__stage {
 }
 
 /* =========================================================
-   Véus de junção (rodada 5): UMA receita para as três emendas com o Carvão profundo.
-   04 → 05 (já existia como .seam45), 06 → 07 e 07 → rodapé. Alfa por suavização cúbica (3t² − 2t³, de 10 em 10%):
-   sem faixa visível no começo nem no fim da rampa. A profundidade Mocha (#332B23) é o ponto de encontro das duas seções.
-   --veil-short fica DENTRO da seção escura; --veil-long fica DENTRO da seção clara (o bege afunda aos poucos, o escuro
-   não perde conteúdo). As variáveis ficam em :root porque o invólucro .handoff (que as carregava) deixa de existir.
+   CORTE SECO entre ambientes (decisão de 06/11/2026, §8).
+   Substitui os "véus de junção" da rodada 5 e o filete da rodada 6.
+
+   O que os véus faziam: o Carvão #332B23 avançava, por uma rampa de dez
+   paradas, até 260px para DENTRO da seção clara. É a "faixa escura
+   acinzentada" que a decisão rejeita — uma região que não representa nem o
+   Marfim nem o Mocha. A seção clara termina em Marfim e a escura começa em
+   Mocha, sem nada tentando costurar as duas.
+
+   O filete de 1px em Páprica que a rodada 6 pôs no desktop sai junto, mais
+   abaixo no arquivo: o §8 registra que faixas, separadores e linhas foram
+   avaliados e que o corte seco foi escolhido NO LUGAR deles. Filete no
+   desktop e corte seco no celular seria a mesma emenda resolvida de dois
+   jeitos.
+
+   As três emendas: 04 → 05, 06 → 07 e 07 → rodapé.
+
+   As alturas vão a zero em vez de os <span class="veil"> saírem do HTML: a
+   05 lê --veil-long em --pq-veil e a 06 o usa no padding, então zerar aqui
+   remove junto o espaço que estava reservado para a rampa. Nenhum HTML muda,
+   e devolver os dois valores abaixo traz tudo de volta.
    ========================================================= */
 :root {
-  --veil-stops:
-    transparent 0%,
-    color-mix(in srgb, var(--color-bg-deep) 2.8%, transparent) 10%,
-    color-mix(in srgb, var(--color-bg-deep) 10.4%, transparent) 20%,
-    color-mix(in srgb, var(--color-bg-deep) 21.6%, transparent) 30%,
-    color-mix(in srgb, var(--color-bg-deep) 35.2%, transparent) 40%,
-    color-mix(in srgb, var(--color-bg-deep) 50%, transparent) 50%,
-    color-mix(in srgb, var(--color-bg-deep) 64.8%, transparent) 60%,
-    color-mix(in srgb, var(--color-bg-deep) 78.4%, transparent) 70%,
-    color-mix(in srgb, var(--color-bg-deep) 89.6%, transparent) 80%,
-    color-mix(in srgb, var(--color-bg-deep) 97.2%, transparent) 90%,
-    var(--color-bg-deep) 100%;
-  --veil-short: 72px;
-  --veil-long: clamp(140px, 24svh, 260px);
-}
-
-@media (max-width: 1023px) {
-  :root {
-    --veil-long: clamp(112px, 18svh, 168px);
-  }
+  --veil-short: 0px;  /* era 72px */
+  --veil-long: 0px;   /* era clamp(140px, 24svh, 260px); 112–168px abaixo de 1024 */
 }
 
 .veil {
   position: absolute;
   inset-inline: 0;
-  z-index: -1; /* acima do canvas do campo (também z −1, antes no DOM) e abaixo de todo conteúdo */
+  z-index: -1;
   pointer-events: none;
 }
 
@@ -667,18 +665,10 @@ html:not(.s03-motion) .s03__stage {
   --veil-h: var(--veil-long);
 }
 
-/* no FIM da seção de cima: o fundo afunda no Carvão */
-.veil--end {
-  bottom: 0;
-  height: var(--veil-h);
-  background: linear-gradient(to bottom, var(--veil-stops));
-}
-
-/* no COMEÇO da seção de baixo: o Carvão se dissolve (1px a mais por cima: sem fresta em telas de escala fracionária) */
+/* Sem rampa e sem altura: os <span> continuam no DOM, inertes. */
+.veil--end,
 .veil--start {
-  top: -1px;
-  height: calc(var(--veil-h) + 1px);
-  background: linear-gradient(to top, var(--veil-stops));
+  display: none;
 }
 
 /* O véu usa z-index: -1. Sem o campo de luz (sem WebGL) a seção não vira contexto de empilhamento (.has-field só entra com
@@ -754,10 +744,15 @@ html:not(.s03-motion) .s03__stage {
   flex-direction: column;
   width: 100%;
   padding: 10px;
-  border: 1px solid rgb(34 32 29 / 0.1);
+  /* Superfície Mocha sobre o ambiente Marfim (§5). A base Areia media 1,25:1
+     contra o Marfim — era superfície clara sobre fundo claro, e o card não
+     tinha presença nenhuma. Em Mocha são 7,62:1 com a tinta Marfim.
+     O contorno é o acento Páprica que o §5 pede; a borda Grafite a 10% que
+     estava aqui não existiria sobre o escuro. */
+  border: 1px solid color-mix(in srgb, var(--color-paprika) 38%, transparent);
   border-radius: 28px;
-  background: color-mix(in srgb, var(--color-sand) 78%, transparent);
-  box-shadow: inset 0 1px 0 rgb(243 237 227 / 0.55), 0 32px 60px -38px rgb(34 32 29 / 0.55);
+  background: var(--color-mocha);
+  box-shadow: inset 0 1px 0 rgb(243 237 227 / 0.14), 0 32px 60px -38px rgb(34 32 29 / 0.55);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -769,7 +764,7 @@ html:not(.s03-motion) .s03__stage {
   background:
     radial-gradient(120% 90% at 88% 0%, rgb(141 83 55 / 0.6), transparent 58%),
     linear-gradient(165deg, var(--color-mocha) 0%, var(--color-graphite) 72%);
-  box-shadow: inset 0 0 0 1px rgb(229 212 187 / 0.2);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-paprika) 24%, transparent);
 }
 
 .pq-card__visual svg {
@@ -788,7 +783,9 @@ html:not(.s03-motion) .s03__stage {
   line-height: 1.35;
   font-weight: var(--font-weight-medium, 500);
   letter-spacing: -0.01em;
-  color: var(--pq-ink);
+  /* A tinta da SEÇÃO é Grafite, porque o ambiente é Marfim. Dentro do card a
+     superfície virou Mocha, então a tinta aqui vira Marfim (§5). */
+  color: var(--color-text-on-dark);
 }
 
 .pq-card__text strong {
@@ -921,7 +918,10 @@ html:not(.s03-motion) .s03__stage {
     clamp(28px, 7vw, 40px);
   border: 1px solid color-mix(in srgb, var(--color-mocha-paprika) 70%, transparent);
   border-radius: 24px;
-  background: linear-gradient(158deg, var(--color-panel-top) 0%, var(--color-mocha) 46%, var(--color-panel-base) 100%);
+  /* Superfície Mocha consolidada (§7). Era um degradê de três paradas, de
+     #6E4B34 a #4A3B2C passando pelo Mocha — e é por isso que o painel lia
+     como "marrom pouco definido": nenhuma das duas pontas era cor da marca. */
+  background: var(--color-mocha);
   color: var(--color-text-on-dark);
   text-align: center;
   box-shadow: 0 1px 0 rgb(243 237 227 / 0.06) inset;
@@ -2124,64 +2124,34 @@ html.has-curtain .footer-curtain .site-footer {
 }
 
 /* =========================================================
-   Emendas — rodada 6
-   (a) 05 → 06, em TODAS as larguras: a 06 tem o mesmo claro da 05 (campo espelhado) e ganha um filete #6A3C2B (realce escuro) de 1 px no topo,
-       na receita do filete do rodapé (.site-footer__rule): 18% → 62% → 18%, pico a 58%. A Páprica clara some sobre o Marfim; por isso o realce escuro.
-   (b) de 1024 px para cima, o véu preto sai e entra a mesma linha (Dourado, do lado ESCURO da emenda):
-         04 → 05  escuro → bege   filete Dourado no FIM da 04
-         06 → 07  bege  → escuro  filete Dourado no TOPO da 07
-         07 → 08  como está (filete do rodapé + véu curto no fim da FAQ)
-       Celular e tablet seguem com os véus da rodada 5 (04→05 e 06→07).
-   Os <span class="veil …"> do HTML da rodada 5 são reaproveitados (nenhum HTML muda nesta parte).
+   Emendas — corte seco (decisão de 06/11/2026, §8)
+
+   Este bloco SUBSTITUI os filetes da rodada 6. Eram três:
+     05 → 06  filete #6A3C2B no topo da 06, em todas as larguras
+     04 → 05  filete Páprica no fim da 04, só no desktop
+     06 → 07  filete Páprica no topo da 07, só no desktop
+
+   Os três saem. O §8 registra que faixas, separadores e linhas foram
+   avaliados e que o corte seco foi escolhido NO LUGAR deles, e marca o
+   filete que aparece nas imagens de estudo como fora da decisão aprovada.
+
+   O que fica no lugar: nada. A seção clara termina em Marfim, a escura
+   começa em Mocha, e a troca de plano cromático é a própria transição.
+
+   Continuam de pé, porque não são emenda de ambiente:
+     · o filete do rodapé (.site-footer__rule), que é desenho do rodapé;
+     · os véus da 03 (--s03-veil-stops), que fazem parte da narrativa de
+       aproximação da águia e o §8 manda preservar;
+     · o scroll-snap e a altura de tela, logo abaixo.
    ========================================================= */
-#contato::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: 3;
-  height: 1px;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--color-card-glint) 18%, transparent),
-    color-mix(in srgb, var(--color-card-glint) 62%, transparent) 58%,
-    color-mix(in srgb, var(--color-card-glint) 18%, transparent)
-  );
-}
-
 @media (min-width: 1024px) {
-  /* sem rampa: a 05 e a 06 não reservam mais espaço para o véu longo (a 05 lê --veil-long em --pq-veil; a 06, no padding) */
-  :root {
-    --veil-long: 0px;
-  }
-
-  /* véus que saem */
+  /* A 05 e a 06 não reservam mais espaço para rampa nenhuma. --veil-long já
+     é 0px em :root; fica aqui só o registro de que era este o ponto. */
   #para-quem-e > .veil--start,
-  #contato > .veil--end {
-    display: none;
-  }
-
-  /* os dois véus curtos que ficam do lado escuro viram o filete Páprica (04: no fim; 07: no topo) */
+  #contato > .veil--end,
   #metodo > .veil--end,
   #faq > .veil--start {
-    inset-inline: 0;
-    height: 1px;
-    z-index: 3;
-    background: linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--color-brand-accent) 15%, transparent),
-      color-mix(in srgb, var(--color-brand-accent) 60%, transparent) 58%,
-      color-mix(in srgb, var(--color-brand-accent) 15%, transparent)
-    );
-  }
-
-  #metodo > .veil--end {
-    top: auto;
-    bottom: 0;
-  }
-
-  #faq > .veil--start {
-    top: 0;
+    display: none;
   }
 }
 
