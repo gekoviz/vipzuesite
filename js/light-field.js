@@ -5,7 +5,7 @@
 // Silk define COMO a luz respira — o laço de shade() original, com amplitude e frequência reduzidas, vira um
 // campo de modulação (leve deformação do domínio + ±12% de luminância), nunca uma segunda imagem.
 // O campo escalar de luz é comprimido (1 − e^−x) e mapeado na paleta VIPZUE em OKLab
-// (#332B23 → #47392B → #5B4632 → #674933 → #A55A3A → #D7673F: profundidade → Mocha → Páprica; migração cromática 06/11);
+// (#332B23 → #47392B → #5B4632 → #674933 → #9F4B2D → #D7673F: profundidade → Mocha → Páprica; migração cromática 06/11);
 // depois vinheta leve e o grão do shader
 // (o grão SVG do Bloom não é usado). Um relógio (rAF): o tempo move a luz; a rolagem (palco da Hero) só
 // desloca suavemente a composição da Hero para a do close, sem reiniciar.
@@ -26,8 +26,11 @@
 
   // ---------- Paleta (sRGB) → OKLab, calculada uma vez e embutida no shader ----------
   // Rampa escura: profundidade #332B23, sombra intermediária #47392B, Mocha #5B4632, Mocha com reflexo #674933,
-  // luz intermediária #A55A3A, Páprica #D7673F
-  const PALETTE = ["#332B23", "#47392B", "#5B4632", "#674933", "#A55A3A", "#D7673F"];
+  // luz intermediária #9F4B2D, Páprica #D7673F.
+  // #9F4B2D (era #A55A3A): com as paradas em 0.72, é esta a cor que fica atrás do texto do Método e da FAQ no
+  // celular. #A55A3A (luminância 0,156) derrubava o Marfim a 4,2:1. #9F4B2D tem o tom da Páprica (39,8° em OKLab,
+  // contra 43,2°), mais croma (0,120 contra 0,109) e luminância 0,126: mais vermelho, sem clarear (revisão 06/11).
+  const PALETTE = ["#332B23", "#47392B", "#5B4632", "#674933", "#9F4B2D", "#D7673F"];
   // Contexto claro (seções claras). Os nomes das chaves ficam por compatibilidade com o shader; a função muda:
   //   BRONZE  = sombra clara #C98468 (só para aquecer de leve o fundo da rampa)
   //   BASE    = Marfim #F3EDE3 (o fundo)
@@ -55,7 +58,7 @@
   const STOPS = [0, 0.17, 0.34, 0.52, 0.72, 1];
 
   // Rampa clara: x do campo em que a sombra (Marfim + fração da sombra clara) chega ao Marfim, e o Marfim chega ao reflexo.
-  // `deep` subiu de 0.22 para 0.26 junto com a troca do pigmento: presença perceptível
+  // `deep` subiu de 0.22 para 0.32 junto com a troca do pigmento: presença perceptível
   // na sombra, sem virar preenchimento avermelhado. O fundo continua reconhecivelmente
   // Marfim, porque `base` resolve a rampa de volta ao Marfim puro já em x = 0.2.
   const BEIGE = { deep: 0.32, base: 0.48, champ: 0.75 };

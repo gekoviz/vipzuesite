@@ -24,7 +24,7 @@
   --color-deep: #332B23;           /* profundidade (Mocha escurecido) */
   --color-shadow-mid: #47392B;     /* sombra intermediária */
   --color-mocha-glint: #674933;    /* Mocha com reflexo */
-  --color-light-mid: #A55A3A;      /* luz intermediária (Mocha → Páprica) */
+  --color-light-mid: #9F4B2D;      /* luz intermediária (Mocha → Páprica); era #A55A3A, ver js/light-field.js */
   --color-card-glint: #6A3C2B;     /* realce escuro de card */
   --color-shadow-light: #C98468;   /* sombra clara (rampa clara do campo), pigmentada com Páprica Profunda */
   --color-ivory-glint-1: #F4EFE6;  /* reflexo claro */

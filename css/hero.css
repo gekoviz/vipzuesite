@@ -335,7 +335,7 @@
   background: radial-gradient(
     closest-side,
     rgb(215 103 63 / 0.48) 0%,
-    rgb(165 90 58 / 0.38) 30%,
+    rgb(159 75 45 / 0.38) 30%,
     rgb(103 73 51 / 0.22) 58%,
     rgb(103 73 51 / 0) 100%
   );
@@ -468,7 +468,7 @@
   background: radial-gradient(
     70% 55% at 30% 50%,
     rgb(34 32 29 / 0.8) 0%,
-    rgb(34 32 29 / 0.66) 70%,
+    rgb(34 32 29 / 0.72) 70%, /* era 0.66: com a Páprica mais forte do campo, "presença digital" mergulhava a 3,0:1 em 1920 */
     rgb(34 32 29 / 0) 100%
   );
 }
