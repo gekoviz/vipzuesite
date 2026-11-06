@@ -5,16 +5,17 @@
 // Silk define COMO a luz respira — o laço de shade() original, com amplitude e frequência reduzidas, vira um
 // campo de modulação (leve deformação do domínio + ±12% de luminância), nunca uma segunda imagem.
 // O campo escalar de luz é comprimido (1 − e^−x) e mapeado na paleta VIPZUE em OKLab
-// (#141210 → #22201D → #2F251F → #4A372B → #8A6A4B → #C3A881); depois vinheta leve e o grão do shader
+// (#332B23 → #47392B → #5B4632 → #674933 → #A55A3A → #D7673F: profundidade → Mocha → Páprica; migração cromática 06/11);
+// depois vinheta leve e o grão do shader
 // (o grão SVG do Bloom não é usado). Um relógio (rAF): o tempo move a luz; a rolagem (palco da Hero) só
 // desloca suavemente a composição da Hero para a do close, sem reiniciar.
 // Substitui js/aurora.js e js/silk.js (ambos continuam no projeto, sem carregar).
 //
 // Dois estados no MESMO shader e no mesmo relógio (seção 03 "Por que isso importa?"):
-//   escuro — Hero e close: o campo de luz mapeado na rampa escura (Background Principal, universo grafite)
+//   escuro — Hero e close: o campo de luz mapeado na rampa escura (Background Principal Mocha, luz Páprica)
 //   claro  — seção 03: o MESMO campo (mesmos blooms, Silk, deriva, vinheta e grão), só que mapeado numa rampa
-//            centrada no Background Secundário #B8AA96 (bege acinzentado: ruptura e respiro), com as luzes
-//            subindo para champagne claro #E7D6B7 e marfim #F3EDE3. Só a cor muda (25/10).
+//            centrada no Background Secundário Marfim #F3EDE3 (ruptura e respiro), com as sombras levemente
+//            aquecidas por #E2B99C e as luzes subindo para os reflexos #F4EFE6 e #F7F2EB. Só a cor muda.
 // A passagem é uma frente que sobe de baixo para cima com a rolagem (a mesma da cópia de "O que fazemos" em
 // js/hero.js), com borda difusa levemente ondulada pelo Silk. Sem storytelling, a frente é o topo real da
 // seção 03. O canvas é fixo atrás da página: continua vivo atrás da seção 03 depois que o palco sai de cena.
@@ -24,11 +25,17 @@
   if (!hero) return;
 
   // ---------- Paleta (sRGB) → OKLab, calculada uma vez e embutida no shader ----------
-  const PALETTE = ["#141210", "#22201D", "#2F251F", "#4A372B", "#8A6A4B", "#C3A881"];
-  // Contexto claro (seção 03): bronze (só para aprofundar o fundo da rampa), bege acinzentado, champagne claro, marfim
-  const LIGHT = { BRONZE: "#8A6A4B", BASE: "#B8AA96", CHAMP_L: "#E7D6B7", IVORY: "#F3EDE3" };
+  // Rampa escura: profundidade #332B23, sombra intermediária #47392B, Mocha #5B4632, Mocha com reflexo #674933,
+  // luz intermediária #A55A3A, Páprica #D7673F
+  const PALETTE = ["#332B23", "#47392B", "#5B4632", "#674933", "#A55A3A", "#D7673F"];
+  // Contexto claro (seções claras). Os nomes das chaves ficam por compatibilidade com o shader; a função muda:
+  //   BRONZE  = sombra clara #E2B99C (só para aquecer de leve o fundo da rampa)
+  //   BASE    = Marfim #F3EDE3 (o fundo)
+  //   CHAMP_L = reflexo claro #F4EFE6
+  //   IVORY   = reflexo claro máximo #F7F2EB
+  const LIGHT = { BRONZE: "#E2B99C", BASE: "#F3EDE3", CHAMP_L: "#F4EFE6", IVORY: "#F7F2EB" };
   const STOPS = [0, 0.18, 0.36, 0.56, 0.78, 1];
-  // Rampa clara: x do campo em que a sombra (bege + fração de bronze) chega ao bege, e o bege chega ao champagne claro
+  // Rampa clara: x do campo em que a sombra (Marfim + fração da sombra clara) chega ao Marfim, e o Marfim chega ao reflexo
   const BEIGE = { deep: 0.22, base: 0.2, champ: 0.6 };
   const toOklab = (hex) => {
     const lin = [1, 3, 5].map((i) => {
@@ -62,8 +69,8 @@
 
   // ---------- Composição da luz: (centro x, centro y em 0–1 do canvas, topo = 0), raio (em lados curtos), intensidade.
   // Hero desktop (HD), Hero retrato (HM), close desktop (CD), close retrato (CM). Interpolados por layout e rolagem.
-  // 1 bronze principal (atrás/lateral da cabeça) · 2 champagne (pico, menor) · 3 café/marrom lateral amplo
-  // 4 campo escuro (região da headline / do texto do close; reduz a luz) · 5 volume inferior grafite/café
+  // 1 luz principal, Mocha com reflexo → luz intermediária (atrás/lateral da cabeça) · 2 Páprica (pico, menor) · 3 sombra/Mocha lateral amplo
+  // 4 campo escuro (região da headline / do texto do close; reduz a luz) · 5 volume inferior em profundidade/sombra
   const B = {
     HD: [[0.7, 0.3, 0.62, 0.85], [0.82, 0.14, 0.26, 0.55], [0.98, 0.7, 0.75, 0.3], [0.2, 0.5, 0.62, 0.62], [0.55, 1.08, 0.7, 0.28]],
     HM: [[0.62, 0.38, 0.95, 0.85], [0.88, 0.27, 0.38, 0.5], [0.02, 0.62, 0.9, 0.28], [0.3, 0.13, 0.62, 0.66], [0.5, 1.05, 1.0, 0.26]],
@@ -114,7 +121,7 @@ vec3 linearToSrgb(vec3 c) {
   return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c));
 }
 float seg(float x, float a, float b) { return smoothstep(0.0, 1.0, clamp((x - a) / (b - a), 0.0, 1.0)); }
-// Rampa da paleta em OKLab (transições perceptualmente suaves café → bronze → champagne)
+// Rampa da paleta em OKLab (transições perceptualmente suaves profundidade → Mocha → Páprica)
 vec3 paletteLab(float x) {
   vec3 c = L0;
   c = mix(c, L1, seg(x, ${f(STOPS[0])}, ${f(STOPS[1])}));
@@ -152,20 +159,20 @@ float bloom(vec2 P, vec2 aspect, vec4 b, vec2 ph, float amt) {
 // Campo de luz da Hero / close (escalar 0–1): o mesmo para os dois estados, só a rampa de cor muda
 float field(vec2 Pw, vec2 aspect, float s, float silk) {
   const float amt = 0.25;
-  float light = 0.1; // grafite de base
+  float light = 0.1; // profundidade de base
   light += bloom(Pw, aspect, pick(HD0, HM0, CD0, CM0), vec2(${f(phases[0][0])}, ${f(phases[0][1])}), amt);
   light += bloom(Pw, aspect, pick(HD1, HM1, CD1, CM1), vec2(${f(phases[1][0])}, ${f(phases[1][1])}), amt);
   light += bloom(Pw, aspect, pick(HD2, HM2, CD2, CM2), vec2(${f(phases[2][0])}, ${f(phases[2][1])}), amt);
   light += bloom(Pw, aspect, pick(HD4, HM4, CD4, CM4), vec2(${f(phases[4][0])}, ${f(phases[4][1])}), amt);
-  // compressão suave: os blooms se combinam sem clipar nem virar bege generalizado
+  // compressão suave: os blooms se combinam sem clipar nem virar Páprica generalizada
   light = 1.0 - exp(-1.5 * light);
   // campo escuro (headline / texto do close)
   light *= 1.0 - bloom(Pw, aspect, pick(HD3, HM3, CD3, CM3), vec2(${f(phases[3][0])}, ${f(phases[3][1])}), amt);
   light *= mix(1.0, 0.88 + 0.24 * s, silk);
   return light;
 }
-// Rampa clara (seção 03): o fundo do campo assenta no bege acinzentado #B8AA96 (levemente aprofundado por bronze
-// nas sombras) e as luzes sobem para champagne claro e marfim — a mesma leitura de luz da Hero, em outra cor
+// Rampa clara (seções claras): o fundo do campo assenta no Marfim #F3EDE3 (levemente aquecido pela sombra clara #E2B99C
+// nas sombras) e as luzes sobem para os reflexos #F4EFE6 e #F7F2EB — a mesma leitura de luz da Hero, em outra cor
 vec3 beigeLab(float x) {
   vec3 c = mix(K_BASE, K_BRONZE, ${f(BEIGE.deep)});
   c = mix(c, K_BASE, seg(x, 0.0, ${f(BEIGE.base)}));
@@ -302,7 +309,7 @@ void main() {
   const FIELD_SECTIONS = [
     ["#metodo", "dark"], // 04 — Método
     ["#para-quem-e", "light"], // 05 — Para quem é
-    ["#contato", "light"], // 06 — CTA final (rodada 4: bege, igual à 03 e à 05)
+    ["#contato", "light"], // 06 — CTA final (claro, igual à 03 e à 05)
     ["#faq", "dark"], // 07 — FAQ (rodada 4: escuro, a cara do rodapé)
     ["[data-beam-footer]", "dark"], // 08 — Rodapé
   ];

@@ -19,7 +19,7 @@
   panel.style.cssText =
     "position:fixed;right:8px;bottom:8px;z-index:99999;max-width:min(440px,calc(100vw - 16px));max-height:70vh;overflow:auto;" +
     "margin:0;padding:10px 12px;font:12px/1.45 ui-monospace,Consolas,monospace;white-space:pre-wrap;" +
-    "color:#F3EDE3;background:rgba(20,18,16,.92);border:1px solid #C3A881;border-radius:8px;pointer-events:auto";
+    "color:#F3EDE3;background:rgba(34,32,29,.92);border:1px solid #D7673F;border-radius:8px;pointer-events:auto";
 
   function report(when) {
     const yes = (b) => (b ? "SIM" : "NÃO");

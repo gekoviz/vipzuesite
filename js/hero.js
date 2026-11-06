@@ -9,7 +9,7 @@
 //    44–228   narrativa em três etapas (contador 01–03 / 03, linha de progresso, uma frase por vez),
 //             derivada do mesmo progresso aplicado da timeline
 //   222–242   passagem curta logo após a 3ª frase: o campo de luz (js/light-field.js) passa do estado escuro ao
-//             claro da seção 03 (#B8AA96) numa frente que sobe de baixo; águia, vinheta e faixa do topo saem à
+//             claro da seção 03 (Marfim #F3EDE3) numa frente que sobe de baixo; águia, vinheta e faixa do topo saem à
 //             frente dela e o texto de "O que fazemos" surge sobre o claro já estabelecido
 //   242–244   ao sair, a seção real (idêntica) assume
 // Revisão 24/10: rótulos (Negócio / Cliente ideal / Objetivo comercial), anéis, pupila artificial e linha
@@ -41,11 +41,11 @@
   // Fases (em svh da timeline)
   const ZOOM = { start: 6, end: 146 };
   const WIPE_AT = 222;
-  // desktop: saída curta depois da 3ª frase (era 34; com 20 sobra menos tela bege vazia antes da headline da S03)
+  // desktop: saída curta depois da 3ª frase (era 34; com 20 sobra menos tela clara vazia antes da headline da S03)
   const WIPE_LEN_WIDE = 20;
   let WIPE_LEN = WIPE_LEN_WIDE;
   // Empilhado: a passagem não é uma fase da timeline, e sim a própria seção 03 subindo (ScrollTrigger "passage", abaixo):
-  // a linha bege plena acompanha o topo da seção, 1:1 com a rolagem. Ela começa 12% de tela antes de a seção entrar
+  // a linha clara plena acompanha o topo da seção, 1:1 com a rolagem. Ela começa 12% de tela antes de a seção entrar
   // (a borda difusa, mais curta abaixo de 1024px: WIPE_SOFT_FLOW) e termina quando a seção chega ao topo — 112% de
   // tela, ≈ 131 × 0,86svh. A cauda da timeline (WIPE_LEN) só reserva esse trecho depois da 3ª frase; --story-h no CSS
   // acompanha (TOTAL 353). Tablet deitado (1svh por unidade, lado a lado): 112 unidades (TOTAL 334).
@@ -124,7 +124,7 @@
   const WIPE_SOFT_WIDE = 24;
   const WIPE_SOFT_FLOW = 12;
   let WIPE_SOFT = WIPE_SOFT_WIDE;
-  // Águia, vinheta do close e faixa do topo saem um pouco à frente do claro (nunca escuro sobre o bege)
+  // Águia, vinheta do close e faixa do topo saem um pouco à frente do claro (nunca escuro sobre o claro)
   const WIPE_LEAD = 8;
   // Texto da seção 02 na cópia: surge em ~60px de avanço depois que o marfim pleno passa do seu topo
   const TEXT_RAMP = 60;
@@ -369,7 +369,7 @@
 
     // ---------- Passagem: a superfície marfim sobe como luz, com borda difusa, sem flash ----------
     // Desktop: fase da timeline. Abaixo de 1024px: presa à geometria da seção 03 — a frente plena
-    // (edge − WIPE_SOFT) fica exatamente no topo da seção, então não existe faixa bege sem conteúdo entre a luz e a
+    // (edge − WIPE_SOFT) fica exatamente no topo da seção, então não existe faixa clara sem conteúdo entre a luz e a
     // headline, em qualquer velocidade de rolagem (sem scrub: a luz não se atrasa em relação ao conteúdo).
     let passage = null;
     if (flow && next) {
