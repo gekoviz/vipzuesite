@@ -1,6 +1,6 @@
 # Andamento — VIPZUE 2026
 
-## 06/11/2026 — Revisão e correção do refinamento cromático (`771d09c`, não publicado)
+## 06/11/2026 — Revisão e correção do refinamento cromático (publicado em produção)
 
 **Pedido:** revisar e medir o commit `771d09c`, feito por outra sessão a partir do documento de refinamento (Páprica Profunda, cards Mocha, CTA Páprica, corte seco).
 
@@ -13,7 +13,11 @@
 - luz intermediária da rampa escura de #A55A3A para #9F4B2D (mais vermelha, mais escura): Método 390 passa de 4,20 para 4,78:1 e FAQ 390, de 4,42 para 5,08:1;
 - apoio da headline no desktop de .66 para .72 a 70%: "presença digital" em 1920 fica entre 3,15 e 3,42:1.
 
-**Relatório:** `docs/refinamento-cromatico-revisao.md`. Commitado na `main` local, sobre o `771d09c`, sem push.
+**Relatório:** `docs/refinamento-cromatico-revisao.md`. 
+
+**Publicado:** push da `main` (`c5fa47a` → `110219d`), depois da confirmação do usuário.
+- Em produção: index, tokens, base, hero, sections e light-field idênticos aos locais (hash).
+- Na produção, em 390: Método 4,78:1 e FAQ 5,11:1, 0 falhas.
 
 ## 06/11/2026 — Migração cromática (publicada em produção)
 
