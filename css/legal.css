@@ -1,4 +1,4 @@
-/* Política de Privacidade (/privacidade): página informativa, leve. Usa os tokens e a base do site; fundo em
+/* Páginas legais (/privacidade e /termos-de-uso): páginas informativas, leves. Usa os tokens e a base do site; fundo em
    gradiente CSS discreto no ambiente Mocha/Páprica. Sem scripts, sem efeitos pesados. */
 
 .legal {
@@ -242,6 +242,12 @@
   padding-block: var(--space-lg);
   font-size: var(--font-size-small);
   color: var(--legal-ink-soft);
+}
+
+.legal__footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-lg);
 }
 
 .legal__footer a {

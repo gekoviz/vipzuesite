@@ -18,7 +18,7 @@ A política descreve só isso. O WhatsApp aparece como meio de contato e como se
 ## Arquivos
 - **Novos:**
   - `privacidade/index.html`: página sem scripts;
-  - `css/privacidade.css`.
+  - `css/privacidade.css` (renomeada para `css/legal.css` com os Termos de Uso, que usam a mesma folha).
 - **Alterados:**
   - `index.html`: item do footer passou de `data-link="privacy"` (pendente) para `href="/privacidade"`; comentário do footer atualizado;
   - `css/sections.css`: `.footer-link` ganhou `text-decoration: none`. Com destino real, o navegador passaria a sublinhar o item; o indicador do site é o traço do `::before` no hover/foco;

@@ -7,9 +7,9 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const out = join(root, "site-vercel");
-// Páginas publicadas: a principal e as páginas próprias (ex.: /privacidade → privacidade/index.html, servida pela
+// Páginas publicadas: a principal e as páginas próprias (ex.: /privacidade → privacidade/index.html, /termos-de-uso → termos-de-uso/index.html, servida pela
 // Vercel como índice da pasta).
-const PAGES = ["index.html", "privacidade/index.html"];
+const PAGES = ["index.html", "privacidade/index.html", "termos-de-uso/index.html"];
 
 // scripts e folhas locais de cada página (os de CDN ficam como estão), resolvidos a partir da pasta da página
 const local = (url) => !/^(https?:)?\/\//.test(url) && !url.startsWith("data:") && !url.startsWith("#");

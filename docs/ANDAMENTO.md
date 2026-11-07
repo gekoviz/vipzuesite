@@ -1,5 +1,35 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Termos de Uso em /termos-de-uso (local, não publicada)
+
+**Pedido:** "VIPZUE — Implementação dos Termos de Uso". O pedido diz "Não publicar automaticamente". Branch local `feat/termos-de-uso`.
+
+**Feito:**
+- `termos-de-uso/index.html`: página sem scripts, com 18 seções baseadas no que o site realmente diz.
+  - A contratação depende de proposta e contrato.
+  - O clique no WhatsApp não é contratação.
+  - Os limites de responsabilidade preservam o CDC.
+  - Não há foro de eleição.
+- `css/privacidade.css` foi renomeada para `css/legal.css` e serve as duas páginas.
+- Os rodapés das páginas legais apontam uma para a outra.
+- Footer da home: "Termos de Uso" ganhou `href="/termos-de-uso"`.
+- O build gera 274 arquivos.
+
+**Verificado (local):**
+- Acesso direto e recarga, com e sem barra no final.
+- Clique real no footer e entre as páginas legais.
+- "Voltar para o site" funciona pelo teclado.
+- 1440 e 360 sem rolagem lateral.
+- 18/18 âncoras do sumário existem.
+- 0 scripts e 0 assets do voo.
+- Console limpo.
+- Landing sem diff em `js/`; `test-hero-voo` 11/11.
+
+**Pendente:**
+- Validação jurídica: foro, limitação de responsabilidade, licenças de terceiros e o "não gera cobrança".
+- Publicação, só quando pedida.
+- Detalhes em `docs/termos-de-uso-relatorio.md`.
+
 ## 07/11/2026 — Política de Privacidade em /privacidade (publicada em produção)
 
 **Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` avançou de `24d5b25` para `f8f080a` (fast-forward da `feat/privacidade`) e foi enviada.
