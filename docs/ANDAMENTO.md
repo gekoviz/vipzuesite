@@ -1,5 +1,19 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Cromático v2 e correções funcionais (local, aguardando autorização)
+
+**Pedido:** "PROMPT MESTRE DEFINITIVO DE IMPLEMENTAÇÃO CROMÁTICA E CORREÇÕES FUNCIONAIS". Branch `feat/cromatico-v2`. **Não publicado.**
+
+**Feito:**
+- Rampas do campo de luz conforme a especificação (só cor).
+- CTA final escuro: fundo Mocha, painel Grafite e botão Páprica/Grafite.
+- Removidos o filete 05 → 06 e a saída defeituosa da 03 → Método.
+- Hero em derivações da paleta, com o CTA `#D7673F`.
+
+**Ponto aberto:** perguntas da FAQ (4,21:1) e links legais do rodapé (3,94:1) ficam abaixo de 4,5:1 quando o pico Páprica da rampa nova passa atrás. Corrigir exige mudar o campo ou pôr apoio local; decisão do usuário.
+
+Detalhes, contraste medido e o que não foi verificado: `docs/cromatico-v2-relatorio.md`.
+
 ## 07/11/2026 — Hero quente, como a referência do usuário (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `56b6bc0` para `0e1e17b` (fast-forward de `feat/hero-quente`).

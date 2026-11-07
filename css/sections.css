@@ -272,40 +272,15 @@ html:not(.s03-motion) .s03__stage {
   perspective: 1400px;
 }
 
-/* Rodada 03 de cor — corte seco 03 → 04 sem "tesoura na fotografia" (desktop, onde a figura aparece).
-   A seção termina em linha reta, mas a águia esmaecida não: só a figura se dissolve nos últimos
-   --s03-veil-up px antes da divisa. Nenhuma névoa é pintada na seção.
-   - Sem a narrativa (movimento reduzido): o fim da figura é o fim da seção, então o fade é fixo.
-   - Com a narrativa: o palco fica preso à tela e a base da figura é a base da tela; o fade cresce só quando
-     o palco se solta e a divisa entra na tela (scroll-driven, faixa "exit" da própria figura). Durante a
-     narrativa o quadro é o mesmo de antes. Sem suporte a animation-timeline, fica como o corte seco simples. */
-@property --s03-fig-fade {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0px;
-}
-
-@keyframes s03-fig-fade {
-  from { --s03-fig-fade: 0px; }
-  to { --s03-fig-fade: var(--s03-veil-up); }
-}
-
+/* Corte seco 03 → 04 (desktop, onde a figura aparece). 07/11/2026: a máscara que crescia na águia enquanto o palco
+   saía da tela (animation-timeline: view(), faixa "exit") foi REMOVIDA com a saída animada da 03 (js/scroll-narrative.js):
+   com a narrativa, a figura chega inteira à divisa e sai pela rolagem normal, sem arrasto.
+   Sem a narrativa (movimento reduzido) a seção é um fluxo estático e o fim da figura é o fim da seção: ali o fade fixo dos
+   últimos --s03-veil-up px continua (não é animação de saída; evita a fotografia cortada na régua). */
 @media (min-width: 1024px) {
-  .s03__figure {
-    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--s03-fig-fade)), transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--s03-fig-fade)), transparent 100%);
-  }
-
   html:not(.s03-motion) .s03__figure {
-    --s03-fig-fade: var(--s03-veil-up);
-  }
-
-  @supports (animation-timeline: view()) {
-    .s03-motion .s03__figure {
-      animation: s03-fig-fade linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 30%;
-    }
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--s03-veil-up)), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--s03-veil-up)), transparent 100%);
   }
 }
 
@@ -510,12 +485,6 @@ html:not(.s03-motion) .s03__stage {
   opacity: var(--field-opacity, 0.5);
 }
 
-/* Campo espelhado na vertical (rodada 4). A 06 (CTA) e a 05 são as duas claras e vizinhas; cada uma tem o seu canvas.
-   Espelhando o da 06, a primeira linha dela é a mesma última linha da 05 (mesmo shader, mesmo relógio, mesmo tamanho):
-   a emenda deixa de existir. */
-.has-field[data-field-flip] .section-light-field canvas {
-  transform: scaleY(-1);
-}
 
 /* Subheadline da Seção 04 (abaixo da headline): o Heading da UI.05 (Switzer 500; 24px, 22px no celular via token), a
    --space-headline-to-subheadline (24px) da headline. */
@@ -930,6 +899,17 @@ html:not(.s03-motion) .s03__stage {
    A copy do título e do texto não muda; a microcopy perde "e o orçamento. Não é uma compra: é o início da conversa." (E19).
    ========================================================= */
 .closing {
+  /* Contrato cromático da 06 (07/11/2026): ambiente Mocha com o campo escuro (Páprica na luz), título Marfim, painel
+     Grafite com tinta Marfim, botão Páprica com rótulo Grafite (o .shiny-cta de base.css já é Páprica/Grafite). */
+  --closing-bg: var(--color-mocha);
+  --closing-ink: var(--color-ivory);
+  --closing-panel-bg: var(--color-graphite);
+  --closing-panel-ink: var(--color-ivory);
+  --closing-accent: var(--color-paprika);
+  --closing-button-bg: var(--color-paprika);
+  --closing-button-ink: var(--color-graphite);
+  --shiny-bg: var(--closing-button-bg);
+  --shiny-fg: var(--closing-button-ink);
   /* geometria da águia, lida do arquivo real (a águia de 1200 px, 1200×804, recorte justo pelo alfa) */
   --closing-eagle-w: 0.84; /* largura da águia ÷ largura do painel */
   --closing-eagle-ratio: 0.670; /* altura ÷ largura do arquivo */
@@ -988,18 +968,19 @@ html:not(.s03-motion) .s03__stage {
     calc(var(--closing-eagle-w) * var(--closing-eagle-ratio) * var(--closing-perch) * 100% + clamp(28px, 7vw, 44px))
     clamp(22px, 6vw, 44px)
     clamp(28px, 7vw, 40px);
-  border: 1px solid color-mix(in srgb, var(--color-mocha-paprika) 70%, transparent);
+  /* filete de 1px: era Mocha/Páprica a 70% (lia sobre o Marfim); sobre o Mocha, Marfim discreto, sem moldura Páprica */
+  border: 1px solid color-mix(in srgb, var(--color-ivory) 14%, transparent);
   border-radius: 24px;
-  /* Superfície Mocha consolidada. O degradê de três paradas (158°, 0/46/100%) era de #6E4B34 a #4A3B2C passando pelo
-     Mocha, e lia como "marrom pouco definido"; a rodada 02 o trocou por Mocha chapado. Rodada 03 (§27): ângulo e
-     paradas voltam, com as pontas a 5% do Mocha — o painel lê como Mocha e conserva a gradação discreta. */
+  /* Painel Grafite dentro do ambiente Mocha (07/11/2026): o mesmo degradê de três paradas (158°, 0/46/100%), agora
+     Grafite aquecido por Mocha → Grafite → profundidade quente. #302A22 e #28241F são derivados Grafite/Mocha
+     (≈ Grafite com 25% e 11% de Mocha), não cores de marca. */
   background: linear-gradient(
     158deg,
-    color-mix(in srgb, var(--color-mocha) 95%, var(--color-paprika)) 0%,
-    var(--color-mocha) 46%,
-    color-mix(in srgb, var(--color-mocha) 95%, var(--color-graphite)) 100%
+    #302A22 0%,
+    var(--closing-panel-bg) 46%,
+    #28241F 100%
   );
-  color: var(--color-text-on-dark);
+  color: var(--closing-panel-ink);
   text-align: center;
   box-shadow: 0 1px 0 rgb(243 237 227 / 0.06) inset;
 }
@@ -2175,26 +2156,13 @@ html.has-curtain .footer-curtain .site-footer {
    pintados (regra de background: none, no bloco dos véus).
 
    Fica de pé:
-     · o filete #6A3C2B no topo da 06 (#contato::before). A 05 → 06 é uma
-       passagem entre DOIS ambientes claros, fora das emendas de corte seco;
-       a rodada 02 o tinha retirado junto com os outros dois;
      · o filete do rodapé (.site-footer__rule), que é desenho do rodapé;
      · o véu curto no fim da FAQ, na passagem para a cortina do rodapé.
+
+   07/11/2026 (cromático v2): o filete do topo da 06 (#contato::before) foi
+   REMOVIDO em todos os breakpoints. A 06 passou a ser escura, então a
+   05 → 06 é um corte seco Marfim/Mocha, sem linha decorativa.
    ========================================================= */
-#contato::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: 3;
-  height: 1px;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--color-card-glint) 18%, transparent),
-    color-mix(in srgb, var(--color-card-glint) 62%, transparent) 58%,
-    color-mix(in srgb, var(--color-card-glint) 18%, transparent)
-  );
-}
 
 @media (min-width: 1024px) {
   /* sem rampa: a 05 e a 06 não reservam espaço para o véu longo no desktop (a 05 lê --veil-long em --pq-veil; a 06,

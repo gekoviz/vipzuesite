@@ -6,7 +6,7 @@
 //              águia em voo na divisa com a seção seguinte (buildPanels, mais abaixo).
 //
 // Desktop: a headline é a tese e permanece; o raciocínio se revela abaixo dela, num único espaço narrativo:
-//   headline se forma (centro do palco) → assenta no alto e fica → P1 → P2 → P3 (conclusão) → saída suave.
+//   headline se forma (centro do palco) → assenta no alto e fica → P1 → P2 → P3 (conclusão); sem saída animada.
 //
 // Uma única fonte de progresso: um ScrollTrigger (GSAP, já carregado na página) sobre a rolagem nativa, do topo ao
 // fim do trilho da seção. Todos os estados são funções puras desse progresso, por isso a narrativa é reversível,
@@ -39,10 +39,12 @@
     p: [
       { in: [0.2, 0.27], reveal: [0.25, 0.42], out: [0.47, 0.52] }, // leitura plena 0.42–0.47
       { in: [0.505, 0.555], reveal: [0.52, 0.69], out: [0.74, 0.79] }, // leitura plena 0.69–0.74
-      { in: [0.775, 0.815], reveal: [0.79, 0.93], out: null }, // conclusão; leitura plena 0.93–0.97
+      { in: [0.775, 0.815], reveal: [0.79, 0.93], out: null }, // conclusão; leitura plena de 0.93 ao fim
     ],
-    exit: [0.97, 1], // headline + conclusão sobem um pouco e esmaecem; o palco libera a rolagem
+    // 07/11/2026: a fase de saída (0.97–1: headline, conclusão e águia subiam 18px e esmaeciam 60% enquanto a 04
+    // entrava) foi REMOVIDA. Ao fim do trilho o palco se solta com o conteúdo inteiro e sai da tela pela rolagem normal.
   };
+  const PUSH_END = 0.97; // fim da aproximação lenta da águia (o mesmo ponto de antes; não é mais uma saída)
   const FORM_SCALE = 1.08; // escala de formação; a assentada é a tipográfica (≈ 8% menor)
 
   const clamp01 = (v) => Math.min(1, Math.max(0, v));
@@ -136,26 +138,25 @@
           ? `translate3d(${(d * K * k).toFixed(2)}px, ${(Math.abs(d) * 2 * k).toFixed(2)}px, 0) rotateX(${(d * R * k).toFixed(2)}deg)`
           : "none";
       });
-      // MACRO 2 — assentamento: do centro do palco para o alto, 8% menor; depois permanece até a saída
+      // MACRO 2 — assentamento: do centro do palco para o alto, 8% menor; depois permanece até o palco se soltar
       const settle = smooth(range(p, T.settle));
-      const exit = smooth(range(p, T.exit));
       const scale = FORM_SCALE + (1 - FORM_SCALE) * settle;
-      const ty = geo.dy * (1 - settle) - 18 * exit;
+      const ty = geo.dy * (1 - settle);
       title.style.transform = `translate3d(0, ${ty.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
-      title.style.opacity = (smooth(form / 0.45) * (1 - 0.6 * exit)).toFixed(3);
+      title.style.opacity = smooth(form / 0.45).toFixed(3);
       // MACRO 1b — águia, no mesmo vocabulário da headline: converge como as palavras (deslocada à direita e
       // levemente girada em Y, sob perspectiva) quando a headline termina de assentar, chegando junto com o 1º texto;
-      // depois aproxima devagar enquanto o raciocínio avança (zoom ancorado no olho, como uma câmera) e sai com a
-      // headline. Na formação e na subida ela ainda não está no palco: a headline cruza a tela sem passar sobre ela.
-      // Tudo função do mesmo progresso: reversível.
+      // depois aproxima devagar enquanto o raciocínio avança (zoom ancorado no olho, como uma câmera). Na formação e na
+      // subida ela ainda não está no palco: a headline cruza a tela sem passar sobre ela. Tudo função do mesmo
+      // progresso: reversível.
       if (figure) {
         const arrive = smooth(range(p, [T.settle[1] - 0.02, T.p[0].in[1]]));
         const ke = 1 - arrive;
-        const push = smooth(range(p, [T.settle[1], T.exit[0]]));
-        figure.style.opacity = (arrive * (1 - 0.6 * exit)).toFixed(3);
+        const push = smooth(range(p, [T.settle[1], PUSH_END]));
+        figure.style.opacity = arrive.toFixed(3);
         if (eagle) {
           const ey = (-1.2 * push).toFixed(3);
-          eagle.style.transform = `translate3d(${(8 * ke).toFixed(2)}%, calc(${ey}% - ${(18 * exit).toFixed(2)}px), 0) rotateY(${(-9 * ke).toFixed(2)}deg) scale(${(1 + 0.04 * ke + 0.035 * push).toFixed(4)})`;
+          eagle.style.transform = `translate3d(${(8 * ke).toFixed(2)}%, ${ey}%, 0) rotateY(${(-9 * ke).toFixed(2)}deg) scale(${(1 + 0.04 * ke + 0.035 * push).toFixed(4)})`;
         }
       }
 
@@ -165,8 +166,8 @@
         const enter = smooth(range(p, seg.in));
         const leave = seg.out ? smooth(range(p, seg.out)) : 0;
         const last = i === paras.length - 1;
-        const y = shift * (1 - enter) - shift * leave - (last ? 18 * exit : 0);
-        const o = enter * (1 - leave) * (last ? 1 - 0.6 * exit : 1);
+        const y = shift * (1 - enter) - shift * leave;
+        const o = enter * (1 - leave);
         el.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(${(0.99 + 0.01 * enter).toFixed(4)})`;
         el.style.opacity = o.toFixed(3);
         // MICRO — revelação por palavra com o progresso local do parágrafo

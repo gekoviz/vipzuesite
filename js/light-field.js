@@ -47,7 +47,10 @@
   //              FIELD_CAP não muda: o pico alcançável continua em x ≈ 0,70.
   // No canvas principal u_tone = 1 − composição (Hero 0 → close 1): o reforço cede na mesma janela de rolagem que já leva a
   // luz da Hero para a do close, e é zero no close estabelecido.
-  const PALETTE_REFINED = ["#332B23", "#47392B", "#5B4632", "#7A351B", "#B64619", "#D7673F"];
+  // 07/11/2026 (prompt mestre de implementação cromática): rampa refinada definitiva. Anchors 0–2 iguais (profundidade e
+  // Mocha); os de luz passam a derivados Mocha→Páprica (#8D4B34) e Páprica escurecida (#C65D3C), para o caráter Páprica
+  // aparecer já nos meios-tons sem depender do último anchor. Paradas e FIELD_CAP não mudam.
+  const PALETTE_REFINED = ["#332B23", "#47392B", "#5B4632", "#8D4B34", "#C65D3C", "#D7673F"];
   // Contexto claro (seções claras): BASE = Marfim #F3EDE3, o fundo; DEEP = Páprica Profunda #9F3930, o pigmento dos
   // focos (= --color-paprika-deep em tokens.css: a mesma decisão nos dois arquivos).
   // Rodada 03: a transferência foi invertida. Antes, a SOMBRA do campo era pigmentada (#C98468 a 32%: um rosado na
@@ -75,7 +78,9 @@
   // Texto sobre o campo claro, pior caso medido em 20 min de deriva: o parágrafo da 03 chega a x 0,656 na ponta direita →
   // 52% → Grafite a 87,8% em 5,01:1; títulos e lead da 05 ficam abaixo de x 0,40 (≤ 12%, Marfim reconhecível); o título
   // da 06 chega a 0,51 (36%, texto grande). Testada também 50%/0,28–0,58: tingia a coluna de leitura (18% em x 0,40); descartada.
-  const BEIGE = { from: 0.3, to: 0.6, amt: 0.46, coreFrom: 0.6, coreTo: 0.74, coreAmt: 0.16 };
+  // 07/11/2026 (prompt mestre): a Páprica Profunda se concentra nos valores ALTOS do campo (from 0,48 → to 0,82, até 58%)
+  // e o resto repousa no Marfim. Só a mistura de cor muda; o campo físico é o mesmo. O miolo extra (core) saiu (coreAmt 0).
+  const BEIGE = { from: 0.48, to: 0.82, amt: 0.58, coreFrom: 0.82, coreTo: 1, coreAmt: 0 };
   const toOklab = (hex) => {
     const lin = [1, 3, 5].map((i) => {
       const c = parseInt(hex.slice(i, i + 2), 16) / 255;
@@ -350,7 +355,7 @@ void main() {
   const FIELD_SECTIONS = [
     ["#metodo", "dark"], // 04 — Método
     ["#para-quem-e", "light"], // 05 — Para quem é
-    ["#contato", "light"], // 06 — CTA final (claro, igual à 03 e à 05)
+    ["#contato", "dark"], // 06 — CTA final (07/11/2026: ambiente Mocha/Páprica, como a Hero; era claro)
     ["#faq", "dark"], // 07 — FAQ (rodada 4: escuro, a cara do rodapé)
     ["[data-beam-footer]", "dark"], // 08 — Rodapé
   ];
