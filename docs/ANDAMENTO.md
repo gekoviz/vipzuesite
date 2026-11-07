@@ -1,5 +1,34 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Política de Privacidade em /privacidade (local, não publicada)
+
+**Pedido:** "VIPZUE — Implementação da Política de Privacidade". O pedido diz "Não publicar automaticamente". Branch local `feat/privacidade`; nada na Vercel.
+
+**Feito:**
+- Auditoria do que o site coleta hoje: nenhum formulário, analytics, cookie ou armazenamento. O WhatsApp está previsto, mas o número está vazio. Terceiros: Google Fonts, jsDelivr, Vercel.
+- `privacidade/index.html`: página sem scripts, com 16 seções em pt-BR (LGPD/ANPD) e fundo em gradiente Mocha/Páprica com os tokens.
+  - 7 campos da empresa ficam marcados `[A PREENCHER]`: razão social, CNPJ, endereço, encarregado, conservação, segurança no atendimento e canal de privacidade.
+  - A folha própria é `css/privacidade.css`.
+- Footer: o item "Política de Privacidade" ganhou `href="/privacidade"`, e `.footer-link` ganhou `text-decoration: none` para manter a aparência.
+- `tools/build-site.mjs` publica também a nova página. O build gera 273 arquivos.
+
+**Verificado (Chrome/DevTools, local):**
+- URL direta e âncoras funcionam.
+- O clique no footer leva à página, e "Voltar para o site" leva a `/`.
+- Teclado: 22 focáveis com foco visível.
+- 360/390 sem rolagem lateral.
+- Contraste do texto entre 5,05:1 e 9,78:1. O rótulo e os números em Páprica (2,5:1) foram trocados.
+- 0 scripts e 0 assets do voo na página.
+- Hero intacta: `test-hero-voo` 11/11.
+- O único 404 é `/favicon.ico`, que o site já não tinha.
+
+**Pendente:**
+- Dados jurídicos dos 7 campos.
+- Revisão jurídica.
+- Confirmar a rota sem barra na Vercel após o deploy.
+- Termos de Uso.
+- Detalhes em `docs/privacidade-relatorio.md`.
+
 ## 07/11/2026 — Hero desktop: correção V2 do voo (publicada em produção)
 
 **Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` avançou de `555f1cf` para `414f9cf` (fast-forward da `fix/hero-voo-v2`) e foi enviada.

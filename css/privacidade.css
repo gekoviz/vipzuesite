@@ -1,0 +1,287 @@
+/* Política de Privacidade (/privacidade): página informativa, leve. Usa os tokens e a base do site; fundo em
+   gradiente CSS discreto no ambiente Mocha/Páprica. Sem scripts, sem efeitos pesados. */
+
+.legal {
+  --legal-ink: var(--color-ivory);
+  --legal-ink-soft: rgb(243 237 227 / 0.82); /* ≈ 5,7:1 no ponto mais claro do fundo (Mocha); ≈ 9,8:1 no Grafite */
+  --legal-rule: var(--color-border-on-dark);
+  min-height: 100vh;
+  background-color: var(--color-deep);
+  background-image:
+    radial-gradient(60rem 36rem at 88% -8%, rgb(215 103 63 / 0.16), transparent 70%),
+    radial-gradient(48rem 32rem at -10% 18%, rgb(91 70 50 / 0.55), transparent 72%),
+    linear-gradient(180deg, var(--color-mocha) 0%, var(--color-deep) 42%, var(--color-graphite) 100%);
+  background-attachment: fixed;
+  color: var(--legal-ink);
+}
+
+.legal ::selection {
+  background: var(--color-paprika);
+  color: var(--color-graphite);
+}
+
+/* ---------- Topo ---------- */
+.legal__header {
+  border-bottom: 1px solid var(--legal-rule);
+}
+
+.legal__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-height: 84px;
+}
+
+.legal__logo {
+  display: block;
+  width: 140px;
+  border-radius: var(--radius-xs);
+}
+
+.legal__logo img {
+  width: 100%;
+  height: auto;
+}
+
+.legal__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--legal-ink);
+  text-decoration: underline;
+  text-decoration-color: rgb(215 103 63 / 0.7);
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+}
+
+.legal__back::before {
+  content: "←";
+  text-decoration: none;
+  color: var(--color-paprika);
+}
+
+.legal__back:hover {
+  text-decoration-color: var(--color-paprika);
+}
+
+/* ---------- Documento ---------- */
+.legal__main {
+  padding-block: var(--space-5xl) var(--space-4xl);
+}
+
+.legal__doc {
+  max-width: 44rem;
+}
+
+.legal__eyebrow {
+  margin-bottom: var(--space-sm);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--legal-ink-soft); /* Páprica sobre Mocha fica em ~2,5:1: só em traços e marcadores */
+}
+
+.legal h1 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-display-md);
+  font-weight: 400;
+  line-height: var(--font-line-display-md);
+  letter-spacing: -0.01em;
+}
+
+.legal__updated {
+  margin-top: var(--space-sm);
+  font-size: var(--font-size-small);
+  color: var(--legal-ink-soft);
+}
+
+.legal__lead {
+  margin-top: var(--space-xl);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-line-body-lg);
+}
+
+.legal section {
+  margin-top: var(--space-3xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--legal-rule);
+  scroll-margin-top: var(--space-lg);
+}
+
+.legal h2 {
+  margin-bottom: var(--space-md);
+  font-family: var(--font-display);
+  font-size: var(--font-size-heading);
+  font-weight: 400;
+  line-height: var(--font-line-heading);
+}
+
+.legal section p,
+.legal section li,
+.legal__facts {
+  color: var(--legal-ink-soft);
+}
+
+.legal section p + p,
+.legal section ul + p,
+.legal section p + ul,
+.legal section p + dl {
+  margin-top: var(--space-sm);
+}
+
+.legal section ul {
+  margin: 0;
+  padding-left: 1.25em;
+}
+
+.legal section li + li {
+  margin-top: var(--space-xs);
+}
+
+.legal section li::marker {
+  color: var(--color-paprika);
+}
+
+.legal strong {
+  color: var(--legal-ink);
+  font-weight: var(--font-weight-medium);
+}
+
+.legal__doc a:not(.legal__back) {
+  color: var(--legal-ink);
+  text-decoration-color: rgb(215 103 63 / 0.7);
+  text-underline-offset: 4px;
+}
+
+.legal__doc a:not(.legal__back):hover {
+  text-decoration-color: var(--color-paprika);
+}
+
+/* Identificação do controlador */
+.legal__facts {
+  display: grid;
+  grid-template-columns: minmax(9rem, max-content) 1fr;
+  gap: var(--space-xs) var(--space-md);
+  margin: 0;
+}
+
+.legal__facts dt {
+  color: var(--legal-ink);
+  font-weight: var(--font-weight-medium);
+}
+
+.legal__facts dd {
+  margin: 0;
+}
+
+/* Dado da empresa ainda não confirmado: bem visível, para nunca passar por definitivo */
+.pendente {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgb(215 103 63 / 0.18);
+  outline: 1px dashed var(--color-paprika);
+  color: var(--legal-ink);
+}
+
+/* Sumário */
+.legal__toc {
+  margin-top: var(--space-2xl);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--legal-rule);
+  border-radius: var(--radius-md);
+  background: rgb(34 32 29 / 0.35);
+}
+
+.legal .legal__toc-title {
+  margin-bottom: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--legal-ink-soft);
+}
+
+.legal__toc ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px var(--space-lg);
+  margin: 0;
+  padding-left: 1.5em;
+  font-size: var(--font-size-small);
+}
+
+.legal__toc li::marker {
+  color: var(--legal-ink-soft);
+}
+
+.legal__toc a {
+  padding-block: 3px; /* inline: o número da lista acompanha a 1ª linha quando o item quebra */
+}
+
+.legal__return {
+  margin-top: var(--space-4xl);
+}
+
+/* ---------- Rodapé ---------- */
+.legal__footer {
+  border-top: 1px solid var(--legal-rule);
+}
+
+.legal__footer-in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-block: var(--space-lg);
+  font-size: var(--font-size-small);
+  color: var(--legal-ink-soft);
+}
+
+.legal__footer a {
+  padding: 6px 0;
+  color: var(--legal-ink);
+  text-underline-offset: 4px;
+}
+
+/* ---------- Telas menores ---------- */
+@media (max-width: 767px) {
+  .legal__bar {
+    min-height: 64px;
+  }
+
+  .legal__logo {
+    width: 96px;
+  }
+
+  .legal__main {
+    padding-block: var(--space-3xl) var(--space-2xl);
+  }
+
+  .legal__toc {
+    padding: var(--space-md);
+  }
+
+  .legal__toc ol {
+    grid-template-columns: 1fr;
+  }
+
+  .legal__facts {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .legal__facts dd + dt {
+    margin-top: var(--space-sm);
+  }
+
+  .legal section {
+    margin-top: var(--space-2xl);
+  }
+}

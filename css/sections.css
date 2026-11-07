@@ -1533,6 +1533,7 @@ html.js-reveal .faq.is-list-in .accordion__item {
   font-size: var(--font-size-small);
   line-height: 21px;
   color: color-mix(in srgb, var(--bf-ink) 95%, transparent); /* 78% caía a 4,2:1 sobre o Mocha + lavagem Páprica */
+  text-decoration: none; /* com destino real o sublinhado padrão do navegador apareceria; o traço do ::before é o indicador */
   transition: color 0.25s;
 }
 
