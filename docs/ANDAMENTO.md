@@ -1,6 +1,15 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Voo da águia removido da Hero (local, não publicado)
+## 07/11/2026 — Voo da águia removido da Hero (publicado em produção)
+
+**Publicação:** autorizada pelo usuário ("Sim, publicar").
+- A `main` avançou de `035b5ba` para `e2cd454` (fast-forward de `feat/sem-voo`).
+
+**Conferido em produção (1440 × 900):**
+- O `index.html` publicado é igual ao local.
+- Nenhum pedido de `hero/voo`; a Hero aparece pronta já no topo.
+- Os cards ficam em [1072, 322, 1382, 735].
+- O console não mostrou erros.
 
 **Pedido:** "tire o video da aguia, preserve tudo". Branch `feat/sem-voo`.
 
