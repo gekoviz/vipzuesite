@@ -1,6 +1,13 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Cromático v2 e correções funcionais (local, aguardando autorização)
+## 07/11/2026 — Cromático v2 e correções funcionais (publicado em produção)
+
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `760c678` para `ec9d0f0` (fast-forward de `feat/cromatico-v2`).
+
+**Conferido em produção:**
+- `index.html`, `css/hero.css`, `css/sections.css`, `js/light-field.js` e `js/scroll-narrative.js` iguais aos locais.
+- 1440 × 900: CTA com campo escuro, headline Marfim, painel Grafite e botão Páprica.
+- `data-cta` e `aria-disabled` intactos, sem filete 05 → 06, sem rolagem lateral e sem erros no console.
 
 **Pedido:** "PROMPT MESTRE DEFINITIVO DE IMPLEMENTAÇÃO CROMÁTICA E CORREÇÕES FUNCIONAIS". Branch `feat/cromatico-v2`. **Não publicado.**
 
