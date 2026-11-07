@@ -1,5 +1,24 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Display Cards V4: refinamento editorial e vidro fumê (não publicado)
+
+**Pedido:** "PROMPT MESTRE V4 — refinamento editorial e material translúcido dos Display Cards 3D". Branch `feat/display-cards-v4`. **Não publicado.**
+
+**Feito:**
+- Texto à esquerda e a partir do topo, em 13 px.
+- Card 1 com as três expressões, uma por linha.
+- Card 2 em duas colunas (frase | conclusão), com reserva vazia à direita.
+- Vidro fumê Grafite: blur de 10 px, borda Páprica .34/.56 e fallback a 88 %.
+- Movimento, geometria 3D, posição e JS iguais aos da V3.
+
+**Desvios medidos:**
+- Card 1 com 112 px, não 120: com 120, ele cobria a 1ª linha do card 2 na troca.
+- O esmaecer passou do grupo para as superfícies: opacidade no grupo desligava o blur durante a entrada.
+- A conclusão tem mínimo de ≈ 82 px, para "Sua empresa" não quebrar.
+- O card 2 cresce para 123 px abaixo de ~1330 px de largura.
+
+Detalhes, medidas e screenshots: `docs/display-cards-v4-relatorio.md`.
+
 ## 07/11/2026 — Display Cards V3 (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `43f8617` para `2cde96e` (fast-forward de `feat/display-cards-v3`).
