@@ -1,6 +1,10 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Display cards na Hero desktop (local, não publicado)
+## 07/11/2026 — Display cards na Hero desktop (publicado em produção)
+
+**Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` avançou de `13e0ac6` para `3b73301` (fast-forward da `feat/hero-display-cards`) e foi enviada.
+
+**Conferido em https://vipzuesite.vercel.app:** `index.html`, `css/hero.css`, `js/hero.js` e `js/hero-display-cards.js` iguais aos locais (ignorando CRLF). A 1440×900: oculto no topo; Hero pousada com o grupo em [1072, 322, 1382, 735], ciclo rodando; sem overflow. O único erro do console continua sendo o 404 do `/favicon.ico`, anterior a esta rodada.
 
 **Pedido:** "VIPZUE — PROMPT MESTRE V2 · DISPLAY CARDS NA HERO DESKTOP" ("Não publicar nem fazer deploy automaticamente"). Branch `feat/hero-display-cards`. Relatório completo: `docs/hero-display-cards-relatorio.md`.
 
