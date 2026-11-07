@@ -35,6 +35,19 @@
   // Teto de luminância: no celular o pico do campo fica atrás do texto Marfim. Em x = 0.70 (o máximo alcançável) a cor
   // resultante é #9B492A, luminância 0,119: Marfim a 95% passa com 4,99:1 (4,84 com a rampa da rodada 02).
   const PALETTE = ["#332B23", "#47392B", "#5B4632", "#6B402D", "#B04C27", "#D7673F"];
+  // Refino cromático (07/11): dois perfis escuros no MESMO shader, misturados pelo uniform u_tone (0 = legado, 1 = refinado).
+  //   legado   — PALETTE/STOPS acima, sem mudança: é a saída do close da seção 02, que esta rodada preserva.
+  //   refinado — Hero e campos escuros das seções (Método, FAQ, rodapé). Profundidade e Mocha (anchors 0–2) e as paradas
+  //              iguais; só os dois anchors de luz (0,56 e 0,78) ganham croma no matiz da Páprica (40°) com a MESMA
+  //              luminância OKLab (L 0,418 e 0,540): a luz deixa de passar por marrom e a luminância de cada ponto do campo
+  //              não muda, então o contraste do texto sobre ele também não. Medido na rampa (node, OKLab):
+  //                x 0,50  #68412E C 0,062 → #743A21 C 0,090      x 0,60  #71412D C 0,074 → #7F371B C 0,108
+  //                x 0,70  #9B492A C 0,118 → #A4411A C 0,140 (pico dos campos com teto; Marfim a 95% 5,00 → 5,01:1)
+  //              (testado com a parada 0,56 em 0,52: o foco do Método virava um disco de borda marcada; descartado.)
+  //              FIELD_CAP não muda: o pico alcançável continua em x ≈ 0,70.
+  // No canvas principal u_tone = 1 − composição (Hero 0 → close 1): o reforço cede na mesma janela de rolagem que já leva a
+  // luz da Hero para a do close, e é zero no close estabelecido.
+  const PALETTE_REFINED = ["#332B23", "#47392B", "#5B4632", "#7A351B", "#B64619", "#D7673F"];
   // Contexto claro (seções claras): BASE = Marfim #F3EDE3, o fundo; DEEP = Páprica Profunda #9F3930, o pigmento dos
   // focos (= --color-paprika-deep em tokens.css: a mesma decisão nos dois arquivos).
   // Rodada 03: a transferência foi invertida. Antes, a SOMBRA do campo era pigmentada (#C98468 a 32%: um rosado na
@@ -53,8 +66,16 @@
   // (com 0.42 ele só aparecia como um halo em volta dos cards, porque o foco fica atrás deles).
   // Teto do pigmento: 40% (≈ #D6A599, o "acento local visível" da tabela §73). Há texto Grafite sobre o campo (a 03 no
   // desktop tem o parágrafo a 87,8% de opacidade sobre o foco): a 40% ele fica em 5,96:1 e o secundário a 75% em 4,50:1;
-  // a 55% cairiam para 4,77 e 3,78.
-  const BEIGE = { from: 0.34, to: 0.7, amt: 0.4 };
+  // a 55% cairiam para 4,77 e 3,78. (Teto revisto no refino de 07/11, abaixo: hoje nenhum texto a 75% fica sobre o
+  // campo claro — a 03 usa 0,88 e o lead da 05 0,92 —, e o pior caso medido é o parágrafo da 03.)
+  // Refino cromático (07/11): o pico atrás dos cards quase não aparece (o card é opaco); o que se vê são os MEIOS-TONS ao
+  // redor deles, x ≈ 0,45–0,47 (campo portado para node e medido nas áreas abertas da 03, 05 e 06 a 1440 × 900). Por isso a
+  // base sobe ali — 46% entre x 0,30 e 0,60 — e o miolo (0,60 → 0,74) recebe mais 16 pontos, até 62%.
+  //   área aberta x 0,47: #EBD6CB (antes) → #DFBAAE           miolo x ≥ 0,74: #D6A599 → #C58275
+  // Texto sobre o campo claro, pior caso medido em 20 min de deriva: o parágrafo da 03 chega a x 0,656 na ponta direita →
+  // 52% → Grafite a 87,8% em 5,01:1; títulos e lead da 05 ficam abaixo de x 0,40 (≤ 12%, Marfim reconhecível); o título
+  // da 06 chega a 0,51 (36%, texto grande). Testada também 50%/0,28–0,58: tingia a coluna de leitura (18% em x 0,40); descartada.
+  const BEIGE = { from: 0.3, to: 0.6, amt: 0.46, coreFrom: 0.6, coreTo: 0.74, coreAmt: 0.16 };
   const toOklab = (hex) => {
     const lin = [1, 3, 5].map((i) => {
       const c = parseInt(hex.slice(i, i + 2), 16) / 255;
@@ -72,6 +93,7 @@
   };
   const v3 = (a) => `vec3(${a.map((n) => n.toFixed(6)).join(", ")})`;
   const LAB = PALETTE.map(toOklab);
+  const LAB_R = PALETTE_REFINED.map(toOklab);
 
   // Fase estática por bloom (hash da semente 184, como no Bloom Field) — nunca animada
   const SEED = 184;
@@ -112,6 +134,7 @@ uniform vec4 u_time;  // x: ph (fase do Bloom, t·0.20)  y: tempo do Silk  z: qu
 uniform vec4 u_look;  // x: layout (0 paisagem → 1 retrato)  y: vinheta  z: grão  w: escala de pixel (grão)
 uniform vec4 u_state; // x: frente escuro → claro (fração da altura a partir de baixo)  y: borda difusa
                       // z: teto de brilho (0 = sem teto)  w: ondulação da frente
+uniform float u_tone; // perfil da rampa escura: 0 = legado (close da seção 02), 1 = refinado (Hero e seções escuras)
 
 ${consts}
 const vec3 L0 = ${v3(LAB[0])};
@@ -120,6 +143,7 @@ const vec3 L2 = ${v3(LAB[2])};
 const vec3 L3 = ${v3(LAB[3])};
 const vec3 L4 = ${v3(LAB[4])};
 const vec3 L5 = ${v3(LAB[5])};
+${LAB_R.map((c, i) => `const vec3 R${i} = ${v3(c)};`).join("\n")}
 const vec3 K_BASE = ${v3(toOklab(LIGHT.BASE))};
 const vec3 K_DEEP = ${v3(toOklab(LIGHT.DEEP))};
 
@@ -137,14 +161,15 @@ vec3 linearToSrgb(vec3 c) {
   return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c));
 }
 float seg(float x, float a, float b) { return smoothstep(0.0, 1.0, clamp((x - a) / (b - a), 0.0, 1.0)); }
-// Rampa da paleta em OKLab (transições perceptualmente suaves profundidade → Mocha → Páprica)
-vec3 paletteLab(float x) {
-  vec3 c = L0;
-  c = mix(c, L1, seg(x, ${f(STOPS[0])}, ${f(STOPS[1])}));
-  c = mix(c, L2, seg(x, ${f(STOPS[1])}, ${f(STOPS[2])}));
-  c = mix(c, L3, seg(x, ${f(STOPS[2])}, ${f(STOPS[3])}));
-  c = mix(c, L4, seg(x, ${f(STOPS[3])}, ${f(STOPS[4])}));
-  c = mix(c, L5, seg(x, ${f(STOPS[4])}, ${f(STOPS[5])}));
+// Rampa da paleta em OKLab (transições perceptualmente suaves profundidade → Mocha → Páprica). k mistura os anchors do
+// perfil legado (0) com os do refinado (1); com k = 0 a saída é a mesma de antes do refino.
+vec3 paletteLab(float x, float k) {
+  vec3 c = mix(L0, R0, k);
+  c = mix(c, mix(L1, R1, k), seg(x, ${f(STOPS[0])}, ${f(STOPS[1])}));
+  c = mix(c, mix(L2, R2, k), seg(x, ${f(STOPS[1])}, ${f(STOPS[2])}));
+  c = mix(c, mix(L3, R3, k), seg(x, ${f(STOPS[2])}, ${f(STOPS[3])}));
+  c = mix(c, mix(L4, R4, k), seg(x, ${f(STOPS[3])}, ${f(STOPS[4])}));
+  c = mix(c, mix(L5, R5, k), seg(x, ${f(STOPS[4])}, ${f(STOPS[5])}));
   return c;
 }
 float grainHash(vec2 p) {
@@ -190,7 +215,8 @@ float field(vec2 Pw, vec2 aspect, float s, float silk) {
 // Rampa clara (seções claras): o fundo do campo assenta no Marfim #F3EDE3 e os focos do campo recebem Páprica
 // Profunda #9F3930 — o mesmo campo de luz da Hero, lido como pigmento quente sobre o Marfim
 vec3 beigeLab(float x) {
-  return mix(K_BASE, K_DEEP, ${f(BEIGE.amt)} * seg(x, ${f(BEIGE.from)}, ${f(BEIGE.to)}));
+  float amt = ${f(BEIGE.amt)} * seg(x, ${f(BEIGE.from)}, ${f(BEIGE.to)}) + ${f(BEIGE.coreAmt)} * seg(x, ${f(BEIGE.coreFrom)}, ${f(BEIGE.coreTo)});
+  return mix(K_BASE, K_DEEP, amt);
 }
 
 void main() {
@@ -215,7 +241,7 @@ void main() {
     float k = u_state.z * 0.72;
     light = light < k ? light : k + (u_state.z - k) * (1.0 - exp(-(light - k) / (u_state.z - k)));
   }
-  vec3 lab = m < 1.0 ? paletteLab(light) : beigeLab(light);
+  vec3 lab = m < 1.0 ? paletteLab(light, u_tone) : beigeLab(light);
   if (m > 0.0 && m < 1.0) lab = mix(lab, beigeLab(light), m);
   vec3 col = clamp(linearToSrgb(oklabToLin(lab)), 0.0, 1.0);
 
@@ -257,6 +283,7 @@ void main() {
         time: gl.getUniformLocation(p, "u_time"),
         look: gl.getUniformLocation(p, "u_look"),
         state: gl.getUniformLocation(p, "u_state"),
+        tone: gl.getUniformLocation(p, "u_tone"),
       };
     };
     try {
@@ -285,14 +312,16 @@ void main() {
       }
     };
 
-    // state: frente escuro → claro, borda difusa, ondulação; section: composição Hero (0) → close (1)
-    const draw = ([front, soft, warp, cap = 0], section) => {
+    // state: frente escuro → claro, borda difusa, ondulação; section: composição Hero (0) → close (1);
+    // tone: perfil da rampa escura (0 legado → 1 refinado)
+    const draw = ([front, soft, warp, cap = 0], section, tone) => {
       const layout = Math.min(1, Math.max(0, (1.1 - canvas.clientWidth / Math.max(1, canvas.clientHeight)) / 0.4));
       const silk = 0.9 - 0.6 * section; // o close já tem a textura das penas: o Silk recua
       gl.uniform2f(loc.res, canvas.width, canvas.height);
       gl.uniform4f(loc.time, t * 0.2, t * 0.12, silk, section);
       gl.uniform4f(loc.look, layout, 0.16 - 0.04 * section, 0.024, 1 / Math.max(pixelScale, 0.01));
       gl.uniform4f(loc.state, front, soft, cap, warp);
+      gl.uniform1f(loc.tone, tone);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
@@ -330,8 +359,8 @@ void main() {
   // a luz máxima fica em L ≈ 0,11 e todo texto passa de 4,5:1. É a única constante a mexer para chegar mais perto da Hero.
   const FIELD_CAP = 0.72;
   const FIELD_MODES = {
-    dark: { state: [-1, 0.004, 0, FIELD_CAP], comp: 0 }, // frente abaixo da tela: o campo inteiro na rampa escura; composição da Hero
-    light: { state: [2, 0.004, 0, 0], comp: 1 }, // frente acima da tela: o campo inteiro na rampa clara (sem teto); composição do close
+    dark: { state: [-1, 0.004, 0, FIELD_CAP], comp: 0, tone: 1 }, // frente abaixo da tela: o campo inteiro na rampa escura (perfil refinado); composição da Hero
+    light: { state: [2, 0.004, 0, 0], comp: 1, tone: 1 }, // frente acima da tela: o campo inteiro na rampa clara (sem teto); composição do close
   };
   const fields = [];
   FIELD_SECTIONS.forEach(([selector, mode]) => {
@@ -388,9 +417,10 @@ void main() {
     return x * x * (3 - 2 * x);
   };
   const drawAll = () => {
-    if (mainInView && !main.lost()) main.draw(frontState(), section);
+    // perfil refinado na Hero, cedendo ao legado na passagem para o close (zero no close estabelecido)
+    if (mainInView && !main.lost()) main.draw(frontState(), section, 1 - section);
     fields.forEach((fl) => {
-      if (fl.inView && !fl.field.lost()) fl.field.draw(fl.state, fl.comp);
+      if (fl.inView && !fl.field.lost()) fl.field.draw(fl.state, fl.comp, fl.tone);
     });
   };
   const frame = (now) => {
@@ -420,7 +450,7 @@ void main() {
   };
   main.resize();
   fields.forEach((fl) => fl.field.resize());
-  main.draw(frontState(), section);
+  main.draw(frontState(), section, 1 - section);
   const ro = new ResizeObserver(() => {
     main.resize();
     fields.forEach((fl) => fl.field.resize());
@@ -482,6 +512,7 @@ void main() {
   window.__vzLightField = {
     get running() { return !!raf; },
     get section() { return section; },
+    get tone() { return 1 - section; }, // perfil escuro do canvas principal (1 refinado na Hero → 0 legado no close)
     size: () => [canvas.width, canvas.height],
     whySize: () => (whyField ? [whyField.field.canvas.width, whyField.field.canvas.height] : null),
     cap: FIELD_CAP,

@@ -511,6 +511,15 @@
     rgb(34 32 29 / 0.66) 70%,
     rgb(34 32 29 / 0) 100%
   );
+  /* Refino cromático (07/11): o apoio pertence ao plano do texto, que fica acima da águia; com 62vw ele chegava ao lado
+     esquerdo da cabeça (~0,6 de Grafite sobre o olho a 1440). A máscara horizontal mantém o apoio inteiro até perto do fim
+     da headline (container + 7,1 × fonte; a linha mais longa vai a ~7,4) e o zera antes do olho esquerdo, que fica a
+     --face-x − 0,19 × largura da águia (as mesmas variáveis que posicionam a águia, então acompanha qualquer largura).
+     O pseudo começa na borda da tela, então as posições abaixo são coordenadas da janela. */
+  --scrim-full: calc(var(--container-left) + var(--hl-size) * 7.1);
+  --scrim-zero: calc(var(--face-x) - var(--eagle-w) * 0.225);
+  -webkit-mask-image: linear-gradient(90deg, #000 var(--scrim-full), rgb(0 0 0 / 0.55) calc((var(--scrim-full) + var(--scrim-zero)) / 2), transparent var(--scrim-zero));
+  mask-image: linear-gradient(90deg, #000 var(--scrim-full), rgb(0 0 0 / 0.55) calc((var(--scrim-full) + var(--scrim-zero)) / 2), transparent var(--scrim-zero));
 }
 
 .hero__title .br-m {
@@ -926,6 +935,9 @@
       rgb(34 32 29 / 0.52) var(--scrim-end),
       rgb(34 32 29 / 0) 100%
     );
+    /* empilhado: a faixa é horizontal e termina acima da cabeça; o corte lateral do desktop não se aplica */
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   .hero__title .br-d {

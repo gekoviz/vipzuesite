@@ -1,5 +1,32 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Refinamento cromático e limpeza visual (local, não publicado)
+
+**Pedido:** "VIPZUE — Refinamento cromático e limpeza visual da landing page existente". O pedido diz "Não publicar ou fazer deploy por iniciativa desta instrução". Branch local `feat/refino-cromatico`. O relatório completo está em `docs/refino-cromatico-relatorio.md`.
+
+**Feito:**
+- **Mocha mais Páprica:** perfil escuro refinado no mesmo shader (`PALETTE_REFINED` + `u_tone`).
+  - Os anchors de luz ganham croma com a mesma luminância OKLab.
+  - `FIELD_CAP` e `STOPS` não mudaram.
+  - O close da 02 fica no perfil legado (`u_tone = 1 − composição`, zero no close).
+- **Marfim mais Páprica Profunda:** curva clara `0,46 · seg(.30, .60) + 0,16 · seg(.60, .74)`. As áreas abertas vão de `#EBD6CB` para `#DFBAAE`, e a coluna de leitura continua Marfim.
+- **Sombra sobre a águia (desktop):** máscara horizontal no `.hero__content::before`, presa às variáveis da águia. No layout empilhado fica como estava.
+- **Método:** sem as 4 estrelas ✦. O padding de 36 px fica. O destaque do card usa `#7A351B` e borda Páprica a 85%.
+- **FAQ:** sem sublinhado no hover. O foco e as bordas ficam.
+- **Footer:** sem os filetes sob "© 2026 VIPZUE" e "Legal".
+
+**Verificado (local):**
+- **Contraste sobre fundo composto:** tudo dentro do AA. Os piores casos:
+  - Páprica da headline: 3,65:1, texto grande;
+  - parágrafo da 03: 5,33:1, ou 5,01 no pior ponto da deriva;
+  - card em destaque: 5,12:1.
+- **Geometria:** igual à base a 1440 (altura 12603) e a 390 (9815).
+- **Larguras:** 1920, 1366, 1024, 768, 390 e 360, sem rolagem horizontal.
+- **Movimento reduzido e sem WebGL:** conferidos.
+- **Testes e build:** `test-hero-voo` 11/11; build com 274 arquivos.
+
+**Limitação:** sem WebGL, a luz CSS da Hero ficou com os anchors antigos, porque é o mesmo elemento do close nesse modo.
+
 ## 07/11/2026 — Termos de Uso em /termos-de-uso (publicada em produção)
 
 **Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` avançou de `7656cfc` para `7fa1006` (fast-forward da `feat/termos-de-uso`) e foi enviada.
