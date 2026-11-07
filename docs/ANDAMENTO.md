@@ -1,6 +1,14 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Hero desktop: correção V2 do voo (local, não publicada)
+## 07/11/2026 — Hero desktop: correção V2 do voo (publicada em produção)
+
+**Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` avançou de `555f1cf` para `414f9cf` (fast-forward da `fix/hero-voo-v2`) e foi enviada.
+
+**Conferido em https://vipzuesite.vercel.app:**
+- `hero-voo.js`, `hero.js`, `hero.css` e `manifest.json` com o mesmo hash do local.
+- 1440×900: total 444, caixa 544 svh; quadro exato em 80 e 159,8 svh; pouso confirmado; CTA visível na tela; header no topo; canvas escondido depois do pouso.
+- 390×844: total 353, `docH` 9815, igual ao de antes; 0 pedidos `/voo/`.
+- Console sem erros.
 
 **Pedido:** "PROMPT MESTRE … HERO DESKTOP · V2" (115 tópicos), com cinco imagens da águia, tratadas só como referência visual. **Branch local `fix/hero-voo-v2`**; nada na `main` nem na Vercel.
 
