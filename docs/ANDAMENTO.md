@@ -1,6 +1,13 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Display Cards V3 (local, aguardando autorização)
+## 07/11/2026 — Display Cards V3 (publicado em produção)
+
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `43f8617` para `2cde96e` (fast-forward de `feat/display-cards-v3`).
+
+**Conferido em produção (1440 × 900, Chrome headless):**
+- `index.html`, `css/hero.css` e `js/hero-display-cards.js` iguais aos locais.
+- Cards visíveis na Hero pronta, com as duas copies novas e nenhum elemento antigo.
+- Ciclo de 6 s, sem rolagem lateral e sem erros no console.
 
 **Pedido:** "PROMPT MESTRE V3 — correção cirúrgica dos Display Cards". Branch `feat/display-cards-v3`. **Não publicado.**
 
