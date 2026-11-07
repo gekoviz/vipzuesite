@@ -1,6 +1,12 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Hero quente, como a referência do usuário (local, não publicado)
+## 07/11/2026 — Hero quente, como a referência do usuário (publicado em produção)
+
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `56b6bc0` para `0e1e17b` (fast-forward de `feat/hero-quente`).
+
+**Conferido em produção:**
+- `css/hero.css`, `aguia-1400.webp` e `aguia-900.webp` iguais aos locais.
+- 1440 × 900: Hero quente, cards visíveis, CTA com brilho, sem rolagem lateral e sem erros no console.
 
 **Pedido:** duas imagens de referência (desktop e mobile) — "consegue deixar a hero assim?". Decisões do usuário: manter os display cards; aquecer a imagem atual (sem imagem nova). Branch `feat/hero-quente`.
 
