@@ -1,5 +1,27 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Voo da águia removido da Hero (local, não publicado)
+
+**Pedido:** "tire o video da aguia, preserve tudo". Branch `feat/sem-voo`.
+
+**Feito:**
+- O `index.html` deixou de carregar `js/hero-voo.js`; a tag ficou comentada, com instrução para religar.
+- Sem o motor, o `js/hero.js` usa o caminho que já existia para desktop sem voo:
+  - nenhum quadro é baixado;
+  - a página abre direto na Hero pronta (águia estática, headline, CTA e display cards);
+  - a Visão e o resto da página não mudam.
+- O motor, os 241 quadros (`assets/hero/voo`) e os testes continuam no projeto.
+
+**Verificado (local, Chrome):**
+- **1440 × 900:**
+  - zero pedidos de `hero/voo`;
+  - `OFF = 0`;
+  - cards no mesmo lugar ([1072, 322, 1382, 735]) e ciclo rodando;
+  - os cards somem quando a headline começa a sair e voltam no topo;
+  - a Visão funciona.
+- **390 × 844:** sem mudança.
+- Console sem erros, voo 11/11 e build ok.
+
 ## 07/11/2026 — Display cards: aparecer nos notebooks comuns (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` foi de `e08a1d5` para `d3fd447` (fast-forward de `fix/cards-notebooks`). Em produção, `css/hero.css` e `js/hero-display-cards.js` estão iguais aos locais. A 1366 × 633 os cards aparecem em [1016, 197, 1310, 583] com o ciclo rodando e sem rolagem lateral. Único erro no console: o 404 do `/favicon.ico`, que já existia.
