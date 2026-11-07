@@ -22,8 +22,10 @@
 - Hero intacta: `test-hero-voo` 11/11.
 - O único 404 é `/favicon.ico`, que o site já não tinha.
 
+**Dados da empresa:** os 7 campos foram preenchidos com o que a VIPZUE informou: razão social, CNPJ, endereço, encarregado, conservação, segurança no atendimento e e-mail vipzue1@gmail.com.
+
 **Pendente:**
-- Dados jurídicos dos 7 campos.
+- Bairro, cidade/UF e CEP do endereço (ainda marcado na página).
 - Revisão jurídica.
 - Confirmar a rota sem barra na Vercel após o deploy.
 - Termos de Uso.

@@ -1,7 +1,7 @@
 # Política de Privacidade — relatório de implementação (07/11/2026)
 
 Página própria em `/privacidade`, ligada ao item "Política de Privacidade" do footer. Status: **feita e testada localmente, não publicada.**
-Ainda tem campos jurídicos a preencher (ver abaixo). **Não publicar enquanto houver `[A PREENCHER]` visível.**
+Falta só o complemento do endereço (ver abaixo). **Não publicar enquanto houver `[A PREENCHER]` visível.**
 
 ## Auditoria do site (o que o texto declara)
 | Item | Situação real hoje | Onde foi verificado |
@@ -49,14 +49,10 @@ A política descreve só isso. O WhatsApp aparece como meio de contato e como se
 
 O texto não afirma conformidade total com a LGPD, criptografia própria nem anonimização.
 
-## A preencher pela VIPZUE (marcados na página com `.pendente`)
-1. Razão social
-2. CNPJ
-3. Endereço
-4. Encarregado (DPO), ou canal que exerce a função
-5. Prazo ou critério de conservação das conversas e propostas
-6. Medidas de segurança no atendimento: quem acessa as conversas, como contas e aparelhos são protegidos
-7. E-mail ou canal oficial para assuntos de privacidade
+## Dados da empresa (informados pelo usuário em 07/11/2026)
+- Preenchidos: razão social (Vipzue Ltda.), CNPJ, endereço (logradouro e número), encarregado (atendido pelo canal oficial), conservação, segurança no atendimento e canal de privacidade (e-mail, com link `mailto:`).
+- **Ainda pendente (1):** bairro, cidade/UF e CEP do endereço. O logradouro veio sem esses dados.
+- Os textos de conservação e segurança são os informados pela VIPZUE, adaptados à redação da página. A página não acrescenta nenhuma medida além delas.
 
 Recomendação: revisão por profissional jurídico antes da publicação.
 
