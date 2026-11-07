@@ -1,6 +1,15 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Política de Privacidade em /privacidade (local, não publicada)
+## 07/11/2026 — Política de Privacidade em /privacidade (publicada em produção)
+
+**Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` avançou de `24d5b25` para `f8f080a` (fast-forward da `feat/privacidade`) e foi enviada.
+
+**Conferido em https://vipzuesite.vercel.app:**
+- `privacidade/index.html`, `css/privacidade.css`, `css/sections.css` e `index.html` com o mesmo hash do local.
+- `/privacidade` sem barra no final: 200, CSS carregado (os caminhos `../` resolvem).
+- 16 seções; 0 pendências; 0 assets do voo.
+- Clique real no item do footer da home leva a `/privacidade`; o item fica sem sublinhado em repouso.
+- Único erro do console: `/favicon.ico` 404, que o site inteiro já tinha.
 
 **Pedido:** "VIPZUE — Implementação da Política de Privacidade". O pedido diz "Não publicar automaticamente". Branch local `feat/privacidade`; nada na Vercel.
 
@@ -27,7 +36,6 @@
 **Pendente:**
 - Endereço final: Travessa Manoel Costa Homem, nº 143 — Santaluz/BA (nº confirmado; sem bairro e CEP, por decisão da VIPZUE).
 - Revisão jurídica.
-- Confirmar a rota sem barra na Vercel após o deploy.
 - Termos de Uso.
 - Detalhes em `docs/privacidade-relatorio.md`.
 
