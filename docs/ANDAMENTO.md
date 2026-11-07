@@ -1,6 +1,16 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Refinamento cromático e limpeza visual (local, não publicado)
+## 07/11/2026 — Refinamento cromático e limpeza visual (publicado em produção)
+
+**Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` avançou de `6b1cca6` para `9e7d31f` (fast-forward da `feat/refino-cromatico`) e foi enviada.
+
+**Conferido em https://vipzuesite.vercel.app:**
+- `js/light-field.js`, `css/hero.css`, `css/sections.css` e `index.html` são iguais aos locais, ignorando fim de linha CRLF/LF.
+- **Tom do campo:** 1 na Hero e ≈ 0 no close (5 × 10⁻⁸).
+- A máscara da headline está ativa a 1440, de 590 px em diante.
+- **Remoções:** sem ✦ e sem filetes.
+- Altura 12603, 5 campos de seção, Páprica Profunda visível na 05.
+- O único 404 no console é o `/favicon.ico`, pedido automático do navegador e anterior a esta rodada.
 
 **Pedido:** "VIPZUE — Refinamento cromático e limpeza visual da landing page existente". O pedido diz "Não publicar ou fazer deploy por iniciativa desta instrução". Branch local `feat/refino-cromatico`. O relatório completo está em `docs/refino-cromatico-relatorio.md`.
 
