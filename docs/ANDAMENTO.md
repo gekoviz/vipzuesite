@@ -1,5 +1,19 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Display cards na Hero desktop (local, não publicado)
+
+**Pedido:** "VIPZUE — PROMPT MESTRE V2 · DISPLAY CARDS NA HERO DESKTOP" ("Não publicar nem fazer deploy automaticamente"). Branch `feat/hero-display-cards`. Relatório completo: `docs/hero-display-cards-relatorio.md`.
+
+**Feito:**
+- Grupo com assinatura, dois cards inclinados sobrepostos e frase de apoio, à direita da cabeça da águia, dentro do palco da Hero (some sob a Visão). Copy literal; sem ícones, badges ou links.
+- `js/hero-display-cards.js`: uma timeline GSAP pausável alterna o destaque. Pausa com rolagem (retoma 1 s depois), hover, aba oculta e palco fora da tela.
+- `js/hero.js` só informa "Hero pronta" e "faixa da Hero". Correção: com movimento reduzido no desktop o `setup()` não roda, e a Hero estática agora avisa os cards.
+- Corte: ≥ 1200 × 650. Abaixo disso e no mobile/tablet, nada aparece.
+
+**Verificado (local, Chrome):** oculto no voo e na Visão; entra depois do CTA; reaparece ao voltar sem refazer o voo; movimento reduzido parado e legível; sem GSAP sem erros; sem overflow em 12 viewports; contraste AA (exceto o rodapé do card 1 coberto, 4,14:1); voo 11/11; build ok.
+
+**Limite:** os cards cobrem penas externas do lado direito da cabeça em todas as larguras; olhos, bico, headline e CTA ficam livres. **Em aberto:** iPad Pro em paisagem (1366×1024) mostra os cards.
+
 ## 07/11/2026 — Refinamento cromático e limpeza visual (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` avançou de `6b1cca6` para `9e7d31f` (fast-forward da `feat/refino-cromatico`) e foi enviada.

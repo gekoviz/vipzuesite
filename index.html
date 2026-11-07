@@ -141,6 +141,34 @@
           </template>
         </div>
 
+        <!-- Display cards da Hero desktop (≥ 1200 × 650), adaptação do display-cards (Codehagen/21st.dev): dois planos
+             inclinados, sem ícones nem selos. Informativos, não clicáveis. Só aparecem com a Hero pronta (depois do voo e
+             da entrada) e saem antes da Visão; o estado vem de js/hero.js, o movimento de js/hero-display-cards.js. -->
+        <div class="vz-hero-cards" role="group" aria-label="Benefícios de uma presença digital estratégica" hidden data-hero-cards>
+          <p class="vz-hero-cards__signature"><span>PRESENÇA FORTE ·</span> <span>MARCA VALORIZADA ·</span> <span>MAIS OPORTUNIDADES</span></p>
+          <div class="vz-hero-cards__stack" data-active="none">
+            <div class="vz-hero-cards__motion vz-hero-cards__motion--first" data-card="first">
+              <div class="vz-hero-cards__surface">
+                <div class="vz-hero-cards__body">
+                  <p class="vz-hero-cards__title">Presença digital forte</p>
+                  <p class="vz-hero-cards__description">Mostre o valor do seu negócio com clareza e profissionalismo.</p>
+                  <p class="vz-hero-cards__meta">Estratégia visual</p>
+                </div>
+              </div>
+            </div>
+            <div class="vz-hero-cards__motion vz-hero-cards__motion--second" data-card="second">
+              <div class="vz-hero-cards__surface">
+                <div class="vz-hero-cards__body">
+                  <p class="vz-hero-cards__title">Marca valorizada</p>
+                  <p class="vz-hero-cards__description">Design e estratégia para despertar interesse e aproximar o cliente do próximo passo.</p>
+                  <p class="vz-hero-cards__meta">Mais oportunidades</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="vz-hero-cards__support">Seu cliente já pesquisa, compara e decide no digital. Sua empresa precisa estar à altura.</p>
+        </div>
+
         <!-- VISÃO: águia → close do olho → mensagem única → passagem para "O que fazemos".
              Revisão 24/10: sem rótulos, anéis ou pupila artificial; a águia continua visível no close. -->
         <div class="visao-shade" aria-hidden="true" data-visao-shade></div>
@@ -519,6 +547,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script>
   <script src="js/menu.js" defer></script>
   <script src="js/hero-voo.js" defer></script>
+  <script src="js/hero-display-cards.js" defer></script>
   <script src="js/hero.js" defer></script>
   <!-- Fundo do palco: campo de luz procedural WebGL (js/light-field.js). js/aurora.js e js/silk.js ficam no projeto, sem carregar. -->
   <script src="js/light-field.js" defer></script>

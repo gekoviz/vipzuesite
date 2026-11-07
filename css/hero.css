@@ -974,3 +974,243 @@
   }
 }
 
+/* =========================================================
+   Display cards da Hero desktop (07/11/2026) — adaptação nativa do display-cards (Codehagen/21st.dev): dois planos
+   inclinados (−8°) e sobrepostos, destaque alternado. Sem ícones, selos ou bolinhas; o "·" da assinatura é pontuação.
+   Camadas: o palco é o bloco de contenção (isolado); o grupo fica acima do conteúdo (mesmo z-index, depois no DOM) e
+   abaixo da sombra da Visão. Quem é dono de quê:
+     .vz-hero-cards            — visibilidade (classes postas por js/hero-display-cards.js; transição em CSS)
+     .vz-hero-cards__motion    — x/y do ciclo (GSAP)        .vz-hero-cards__surface — inclinação e borda (CSS)
+   Só existe a partir de 1200 × 650 (mesmo corte no JS); abaixo disso a Hero fica exatamente como era.
+   ========================================================= */
+.vz-hero-cards {
+  --vzc-w: clamp(284px, 21.5vw, 316px);
+  --vzc-h: 148px; /* cabe a descrição em 3 linhas (o 2º plano, de 1366 em diante) com o rodapé solto */
+  --vzc-step: 88px; /* deslocamento vertical do segundo plano */
+  --vzc-shift: 28px; /* deslocamento horizontal do segundo plano */
+  /* folga acima do 1º plano: ele sobe 36 px no destaque e a inclinação levanta o canto direito ~18 px; sem ela o plano
+     cobriria a assinatura */
+  --vzc-lift: 56px;
+  position: absolute;
+  z-index: 3;
+  /* A headline é centrada na altura do palco: com o grupo a 128 px acima do meio, o segundo plano cai na altura da
+     última linha ("dele."), medido em 1280 × 720 e 1440 × 900 */
+  top: calc(50svh - 128px);
+  right: clamp(32px, 3vw, 64px);
+  width: var(--vzc-w);
+  color: var(--color-ivory);
+  pointer-events: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0s linear 0.5s;
+}
+
+/* Telas largas: a águia desliza para a direita (--face-x chega a 70vw) e o olho fica a ~40 px do grupo na mesma altura
+   (1920 × 1080). O grupo passa a começar abaixo da linha dos olhos e encosta um pouco mais na borda; o 2º plano
+   continua na faixa da última linha da headline. */
+@media (min-width: 1500px) {
+  .vz-hero-cards {
+    top: max(calc(50svh - 128px), calc(var(--eyes-y) + 56px));
+    right: 32px;
+  }
+}
+
+.vz-hero-cards[hidden] {
+  display: none !important;
+}
+
+.vz-hero-cards.is-shown {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0s;
+}
+
+/* Depois da 1ª revelação, sair (Visão) e voltar (Hero) é só um esmaecer curto, sem repetir a entrada */
+.vz-hero-cards.was-shown {
+  transform: none;
+  transition-duration: 0.3s, 0.3s, 0s;
+  transition-delay: 0s, 0s, 0.3s;
+}
+
+.vz-hero-cards.was-shown.is-shown {
+  transition-delay: 0s;
+}
+
+.vz-hero-cards p {
+  margin: 0;
+}
+
+.vz-hero-cards__signature {
+  position: relative;
+  font-family: var(--font-body);
+  font-size: clamp(10px, 0.76vw, 11px);
+  font-weight: var(--font-weight-semibold, 600);
+  line-height: 1.45;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* Apoio de leitura (Grafite difuso, como o da headline): a assinatura passa sobre o halo Páprica do campo e o
+   contorno claro das penas (pior ponto medido #936E50: Marfim a 3,9:1); com o apoio fica ≥ 4,5:1. Não é moldura:
+   sem borda, sem forma visível, só escurece o fundo atrás das letras. */
+.vz-hero-cards__signature::before {
+  content: "";
+  position: absolute;
+  inset: -26px -44px;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(34 32 29 / 0.62) 0%, rgb(34 32 29 / 0.52) 45%, rgb(34 32 29 / 0.2) 75%, rgb(34 32 29 / 0) 100%);
+  pointer-events: none;
+}
+
+/* cada expressão inteira na mesma linha; a quebra só acontece depois de um "·" (nunca abre linha) */
+.vz-hero-cards__signature span {
+  white-space: nowrap;
+}
+
+.vz-hero-cards__stack {
+  position: relative;
+  /* inclui a excursão do ciclo: a folga de cima (o 1º sobe) e 50 px embaixo (o 2º desce ~22 px + canto inclinado) */
+  height: calc(var(--vzc-lift) + var(--vzc-step) + var(--vzc-h) + 50px);
+}
+
+.vz-hero-cards__motion {
+  position: absolute;
+  top: var(--vzc-lift);
+  left: 0;
+  width: calc(100% - var(--vzc-shift));
+  height: var(--vzc-h);
+}
+
+.vz-hero-cards__motion--first {
+  z-index: 2;
+}
+
+.vz-hero-cards__motion--second {
+  top: calc(var(--vzc-lift) + var(--vzc-step));
+  left: var(--vzc-shift);
+  z-index: 3;
+}
+
+.vz-hero-cards__stack[data-active="first"] .vz-hero-cards__motion--first,
+.vz-hero-cards__stack[data-active="second"] .vz-hero-cards__motion--second {
+  z-index: 4;
+}
+
+/* Plano inclinado como no original (−8°); o conteúdo é contra-inclinado e fica reto */
+.vz-hero-cards__surface {
+  height: 100%;
+  border: 1px solid rgb(215 103 63 / 0.3);
+  border-radius: 14px;
+  background: linear-gradient(128deg, rgb(91 70 50 / 0.96) 0%, rgb(34 32 29 / 0.96) 100%);
+  box-shadow: 0 10px 24px rgb(16 12 9 / 0.24);
+  transform: skewY(-8deg);
+  transition: border-color 0.7s ease, box-shadow 0.7s ease;
+}
+
+.vz-hero-cards__body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  /* a inclinação baixa a borda de cima à esquerda (~18 px) e sobe a de baixo à direita: o respiro acompanha */
+  padding: 24px 18px 12px 16px;
+  transform: skewY(8deg);
+  opacity: 0.88; /* plano em espera: um passo atrás, ainda legível (rodapé ≥ 4,5:1) */
+  transition: opacity 0.7s ease;
+}
+
+/* Plano em destaque: borda Páprica mais presente, sombra um pouco mais longa e texto pleno */
+.vz-hero-cards__stack[data-active="first"] .vz-hero-cards__motion--first .vz-hero-cards__surface,
+.vz-hero-cards__stack[data-active="second"] .vz-hero-cards__motion--second .vz-hero-cards__surface {
+  border-color: rgb(215 103 63 / 0.62);
+  box-shadow: 0 14px 30px rgb(16 12 9 / 0.32);
+}
+
+.vz-hero-cards__stack[data-active="first"] .vz-hero-cards__motion--first .vz-hero-cards__body,
+.vz-hero-cards__stack[data-active="second"] .vz-hero-cards__motion--second .vz-hero-cards__body,
+.vz-hero-cards__stack[data-active="none"] .vz-hero-cards__body {
+  opacity: 1;
+}
+
+.vz-hero-cards__title {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.12vw, 17px);
+  font-weight: var(--font-weight-semibold, 600);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.vz-hero-cards__description {
+  margin-top: 6px !important;
+  font-family: var(--font-body);
+  font-size: clamp(12.5px, 0.95vw, 13.5px);
+  line-height: 1.38;
+  color: rgb(243 237 227 / 0.94);
+}
+
+.vz-hero-cards__meta {
+  margin-top: auto !important;
+  padding-top: 8px;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: var(--font-weight-medium, 500);
+  letter-spacing: 0.03em;
+  color: #EDC2B3; /* Páprica clareada (matiz da Páprica) sobre o Mocha do plano */
+}
+
+.vz-hero-cards__support {
+  font-family: var(--font-body);
+  font-size: clamp(12.5px, 0.95vw, 13.5px);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+/* Hover: destaque local na superfície (o invólucro com x/y é do GSAP; aqui só a borda e um passo curto) */
+@media (hover: hover) and (pointer: fine) {
+  .vz-hero-cards__motion:hover .vz-hero-cards__surface {
+    border-color: rgb(215 103 63 / 0.72);
+    box-shadow: 0 16px 32px rgb(16 12 9 / 0.34);
+  }
+
+  .vz-hero-cards__motion:hover .vz-hero-cards__body {
+    opacity: 1;
+  }
+
+  .vz-hero-cards__motion:hover {
+    z-index: 5;
+  }
+}
+
+/* Fora do desktop largo e alto o bloco não existe (o JS usa o mesmo corte) */
+@media (max-width: 1199.98px), (max-height: 649.98px) {
+  .vz-hero-cards {
+    display: none !important;
+  }
+}
+
+/* Sem movimento: os dois planos parados e separados o bastante para ler os dois inteiros, sem ciclo nem esmaecer */
+@media (prefers-reduced-motion: reduce) {
+  .vz-hero-cards,
+  .vz-hero-cards.was-shown,
+  .vz-hero-cards__surface,
+  .vz-hero-cards__body {
+    transition: none !important;
+  }
+
+  .vz-hero-cards {
+    --vzc-step: calc(var(--vzc-h) + 18px);
+    --vzc-lift: 26px;
+    transform: none;
+  }
+
+  .vz-hero-cards__stack {
+    height: calc(var(--vzc-lift) + var(--vzc-step) + var(--vzc-h) + 24px);
+  }
+
+  .vz-hero-cards__body {
+    opacity: 1;
+  }
+}
+

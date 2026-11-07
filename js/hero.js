@@ -169,8 +169,15 @@
   stage.append(svhMeter);
 
   const { gsap, ScrollTrigger, CustomEase } = window;
+  // Display cards da Hero desktop (js/hero-display-cards.js): este arquivo só informa o estado. "Pronta" = entrada de
+  // logo/menu, headline e CTA concluída; "faixa" = Hero pronta, antes de a Visão começar (a headline sai em ZOOM.start).
+  const cards = window.VZHeroCards?.create({ root: $("[data-hero-cards]"), stage, gsap }) ?? null;
+  if (window.__vzDebug) window.__vzDebug.cards = cards;
   if (!gsap || !ScrollTrigger) {
     root.classList.remove("js-story", "is-loading");
+    // Hero estática, já pronta: os cards aparecem parados
+    cards?.setHeroReady(true);
+    cards?.setHeroRange(true);
     return;
   }
   gsap.registerPlugin(ScrollTrigger);
@@ -297,6 +304,7 @@
       const t = gsap.timeline({
         onComplete: () => {
           this.state = "done";
+          cards?.setHeroReady(true);
           onDone?.();
         },
       });
@@ -318,6 +326,7 @@
       this.restoreReady();
       this.state = "done";
       titlePlayed = true;
+      cards?.setHeroReady(true);
     },
     restoreReady() {
       gsap.set(this.targets(), { autoAlpha: 1, y: 0 });
@@ -334,6 +343,16 @@
   const QUERIES = { story: STORY_QUERY, stacked: STACKED_QUERY, flow: FLOW_QUERY };
   let mm = gsap.matchMedia();
   mm.add(QUERIES, setup);
+  // Com movimento reduzido no desktop nenhuma das três condições casa e setup() nem roda: a Hero fica estática pelo
+  // CSS, já pronta. Os display cards precisam saber disso por aqui (ficam parados; ver js/hero-display-cards.js).
+  const storyMq = window.matchMedia(STORY_QUERY);
+  const staticHero = () => {
+    if (storyMq.matches) return;
+    cards?.setHeroReady(true);
+    cards?.setHeroRange(true);
+  };
+  staticHero();
+  storyMq.addEventListener("change", staticHero);
 
   // Remonta a Hero (ativação do voo): o percurso muda, então a timeline é refeita. A posição de rolagem não é tocada.
   function remount() {
@@ -369,6 +388,9 @@
       // Reduced motion ou tela baixa: Hero estática; a seção 02 mostra o emblema já alinhado.
       if (titleOwner === "prologue" && !entrance.isComplete()) entrance.finishImmediately();
       root.classList.remove("is-loading");
+      // Hero estática (sem timeline): pronta e na faixa; a visibilidade na tela fica com o observador dos cards
+      cards?.setHeroReady(true);
+      cards?.setHeroRange(true);
       return;
     }
 
@@ -394,7 +416,7 @@
             titlePlayed = true;
             const delay = Math.max(0, 0.45 - intro.time());
             gsap.fromTo(heroWords, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: SPRING_S, ease: spring, stagger: 0.07, delay });
-            gsap.fromTo(cta, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: easeEmph, delay: delay + heroWords.length * 0.07 + 0.2 });
+            gsap.fromTo(cta, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: easeEmph, delay: delay + heroWords.length * 0.07 + 0.2, onComplete: () => cards?.setHeroReady(true) });
           };
         } else {
           // Desktop com voo: palavras, CTA e logo/menu ocultos até o pouso; a águia estática fica oculta pelo CSS
@@ -458,6 +480,8 @@
     };
     const render = () => {
       renderNarrative();
+      // Cards: na faixa só antes de a headline começar a sair (tempo aplicado, o mesmo que a tela mostra)
+      if (tl) cards?.setHeroRange(tl.time() * TOTAL < OFF + ZOOM.start);
       if (!withPrologue || !tl) return;
       const t = tl.time() * TOTAL;
       // Fronteira obrigatória: nada da Visão antes da Hero pronta (a rolagem bruta normalmente já resolveu antes)
