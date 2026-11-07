@@ -25,7 +25,7 @@
 **Dados da empresa:** os 7 campos foram preenchidos com o que a VIPZUE informou: razão social, CNPJ, endereço, encarregado, conservação, segurança no atendimento e e-mail vipzue1@gmail.com.
 
 **Pendente:**
-- Bairro, cidade/UF e CEP do endereço (ainda marcado na página).
+- Bairro e CEP do endereço (ainda marcados na página). O endereço agora é Travessa Manoel Costa Homem, nº 143 — Santaluz/BA.
 - Revisão jurídica.
 - Confirmar a rota sem barra na Vercel após o deploy.
 - Termos de Uso.

@@ -50,8 +50,8 @@ A política descreve só isso. O WhatsApp aparece como meio de contato e como se
 O texto não afirma conformidade total com a LGPD, criptografia própria nem anonimização.
 
 ## Dados da empresa (informados pelo usuário em 07/11/2026)
-- Preenchidos: razão social (Vipzue Ltda.), CNPJ, endereço (logradouro e número), encarregado (atendido pelo canal oficial), conservação, segurança no atendimento e canal de privacidade (e-mail, com link `mailto:`).
-- **Ainda pendente (1):** bairro, cidade/UF e CEP do endereço. O logradouro veio sem esses dados.
+- Preenchidos: razão social (Vipzue Ltda.), CNPJ, endereço (Travessa Manoel Costa Homem, nº 143 — Santaluz/BA; o nº 69 enviado antes foi substituído pelo 143), encarregado (atendido pelo canal oficial), conservação, segurança no atendimento e canal de privacidade (e-mail, com link `mailto:`).
+- **Ainda pendente (1):** bairro e CEP do endereço.
 - Os textos de conservação e segurança são os informados pela VIPZUE, adaptados à redação da página. A página não acrescenta nenhuma medida além delas.
 
 Recomendação: revisão por profissional jurídico antes da publicação.
