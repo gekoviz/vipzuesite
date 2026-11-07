@@ -1,6 +1,15 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Termos de Uso em /termos-de-uso (local, não publicada)
+## 07/11/2026 — Termos de Uso em /termos-de-uso (publicada em produção)
+
+**Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` avançou de `7656cfc` para `7fa1006` (fast-forward da `feat/termos-de-uso`) e foi enviada.
+
+**Conferido em https://vipzuesite.vercel.app:**
+- `termos-de-uso/index.html`, `privacidade/index.html`, `css/legal.css` e `index.html` com o mesmo hash do local.
+- `/termos-de-uso` e `/termos-de-uso/`: 200, com o CSS carregado.
+- `/privacidade` segue com o mesmo visual, agora via `legal.css`; o antigo `css/privacidade.css` dá 404 e nada o referencia.
+- Clique real em "Termos de Uso" no footer da home leva à página: 18 seções, 0 assets do voo, console vazio.
+- Os dois itens legais do footer ficam sem sublinhado em repouso.
 
 **Pedido:** "VIPZUE — Implementação dos Termos de Uso". O pedido diz "Não publicar automaticamente". Branch local `feat/termos-de-uso`.
 
@@ -27,7 +36,6 @@
 
 **Pendente:**
 - Validação jurídica: foro, limitação de responsabilidade, licenças de terceiros e o "não gera cobrança".
-- Publicação, só quando pedida.
 - Detalhes em `docs/termos-de-uso-relatorio.md`.
 
 ## 07/11/2026 — Política de Privacidade em /privacidade (publicada em produção)
