@@ -77,6 +77,14 @@ assentamento. Isso muda a composição aprovada da Hero desktop:
 
 Isso é redesenho, por isso **não foi feito sem aprovação**.
 
+**Prévia da B (07/11), simulada no navegador sem mudar código:** `docs/qa/hero-video/v2-{1280,1440,1920}-opcao-b.png`.
+- A cabeça vai até o topo: os links "O que fazemos" e "Método" ficam sobre as penas nos três tamanhos.
+- Em 1920 (escala 1,21), "pode" cobre o olho esquerdo e "presença" encosta no bico.
+- O close da Visão ampliaria o quadro de vídeo cerca de 3,3×, contra cerca de 1,8× hoje.
+
+**Decisão do usuário (07/11/2026): manter a A.** Se a troca de 0,3 s incomodar na rolagem real, o próximo ajuste é só
+esse momento, sem mudar a composição.
+
 ## 5. Distâncias de rolagem
 
 | Voo | Px por quadro (1440×900) | Ticks de roda (~100 px) para atravessar |
@@ -158,7 +166,7 @@ Página em segundo plano: o rAF foi substituído por um timer de 16 ms para a l�
 | Movimento reduzido sem quadros | PASS |
 | Cache dentro do orçamento | PASS (124,9/128 MiB) |
 | Testes de lógica | PASS (11/11) |
-| Pouso sem salto de corpo/cor | **FAIL**: imagens diferentes (§4); decisão do usuário |
+| Pouso sem salto de corpo/cor | **FAIL aceito**: imagens diferentes (§4). O usuário escolheu a A (troca em 0,3s) em vez de redesenhar a Hero |
 | Calibração 140/160/180 por sensação real | NÃO TESTADO |
 | FPS / jank / p95 de desenho em GPU real | NÃO TESTADO (painel oculto) |
 | bfcache | NÃO TESTADO (só o código: `pageshow` reconcilia) |

@@ -31,7 +31,7 @@
 - Console limpo. Build com 271 arquivos.
 
 **Pendente:**
-- **Decisão do usuário sobre o pouso:** o último quadro não é a mesma imagem que a águia estática (corpo e cor diferentes; só olhos e bico coincidem). Opção A (atual): assenta e troca em 0,3 s. Opção B: o último quadro vira a pose estática do desktop, o que é um redesenho.
+- **Pouso — decidido em 07/11: manter a A.** O último quadro não é a mesma imagem que a águia estática; só olhos e bico coincidem. A A assenta o voo e troca para a estática em 0,3 s. A prévia da B (último quadro como pose estática) mostrou a cabeça sob o menu em 1280/1440/1920 e o título sobre o olho em 1920.
 - **Não testados:** calibração 140/160/180 por sensação real, FPS em GPU real, Safari/Firefox, bfcache.
 - Relatório completo: `docs/hero-video-v2-relatorio.md`.
 
