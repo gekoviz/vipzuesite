@@ -1,7 +1,7 @@
 # Política de Privacidade — relatório de implementação (07/11/2026)
 
 Página própria em `/privacidade`, ligada ao item "Política de Privacidade" do footer. Status: **feita e testada localmente, não publicada.**
-Falta só o complemento do endereço (ver abaixo). **Não publicar enquanto houver `[A PREENCHER]` visível.**
+Todos os dados da empresa preenchidos; pronta para revisão jurídica e publicação quando pedida. **Não publicar enquanto houver `[A PREENCHER]` visível.**
 
 ## Auditoria do site (o que o texto declara)
 | Item | Situação real hoje | Onde foi verificado |
@@ -51,7 +51,7 @@ O texto não afirma conformidade total com a LGPD, criptografia própria nem ano
 
 ## Dados da empresa (informados pelo usuário em 07/11/2026)
 - Preenchidos: razão social (Vipzue Ltda.), CNPJ, endereço (Travessa Manoel Costa Homem, nº 143 — Santaluz/BA; o nº 69 enviado antes foi substituído pelo 143), encarregado (atendido pelo canal oficial), conservação, segurança no atendimento e canal de privacidade (e-mail, com link `mailto:`).
-- **Ainda pendente (1):** bairro e CEP do endereço.
+- **Nenhum campo pendente.** Bairro e CEP ficaram fora do endereço por decisão da VIPZUE; o nº 143 foi confirmado.
 - Os textos de conservação e segurança são os informados pela VIPZUE, adaptados à redação da página. A página não acrescenta nenhuma medida além delas.
 
 Recomendação: revisão por profissional jurídico antes da publicação.
