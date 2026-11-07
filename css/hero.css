@@ -317,6 +317,20 @@
   mask-image: var(--wipe-hide, none);
 }
 
+/* Gradação quente da Hero (07/11/2026, referência do usuário): chocolate avermelhado à esquerda e um halo Páprica
+   amplo atrás da cabeça, preso à posição da águia (--face-x/--eyes-y), no desktop e no mobile. Fica entre o campo de
+   luz e a águia; sai junto com a faixa do topo na passagem para a seção 03 (mesma máscara). */
+.hero__bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(62% 82% at var(--face-x, 70%) var(--eyes-y, 40%), rgb(232 98 47 / 0.5) 0%, rgb(214 84 38 / 0.28) 45%, rgb(214 84 38 / 0) 78%),
+    linear-gradient(90deg, rgb(60 24 14 / 0.5) 0%, rgb(60 24 14 / 0.3) 48%, rgb(60 24 14 / 0.08) 100%);
+  -webkit-mask-image: var(--wipe-hide, none);
+  mask-image: var(--wipe-hide, none);
+}
+
 .has-light-field .hero__light,
 .has-light-field .hero__sheen,
 .has-light-field .hero__shadow,
@@ -478,10 +492,17 @@
   background: linear-gradient(
     0deg,
     var(--color-bg-deep) 0%,
-    rgb(51 43 35 / 0.9) 20%,
-    rgb(51 43 35 / 0.45) 55%,
-    rgb(51 43 35 / 0) 100%
+    rgb(52 30 20 / 0.88) 20%,
+    rgb(60 30 18 / 0.4) 55%,
+    rgb(60 30 18 / 0) 100%
   );
+}
+
+/* CTA da Hero: Páprica mais viva e um brilho curto (referência do usuário); o texto Grafite segue ≥ 4,5:1 */
+.hero .shiny-cta {
+  --shiny-bg: #E4622F;
+  --shiny-bg-subtle: color-mix(in srgb, #E4622F 90%, var(--color-graphite));
+  box-shadow: 0 0 26px rgb(232 98 47 / 0.38);
 }
 
 /* ---------- Conteúdo: headline na abertura (subheadline e CTA preservados em <template>) ---------- */
@@ -507,9 +528,9 @@
   width: 62vw;
   background: radial-gradient(
     70% 55% at 30% 50%,
-    rgb(34 32 29 / 0.8) 0%,
-    rgb(34 32 29 / 0.66) 70%,
-    rgb(34 32 29 / 0) 100%
+    rgb(36 20 14 / 0.8) 0%,
+    rgb(36 20 14 / 0.66) 70%,
+    rgb(36 20 14 / 0) 100%
   );
   /* Refino cromático (07/11): o apoio pertence ao plano do texto, que fica acima da águia; com 62vw ele chegava ao lado
      esquerdo da cabeça (~0,6 de Grafite sobre o olho a 1440). A máscara horizontal mantém o apoio inteiro até perto do fim
@@ -931,9 +952,9 @@
     height: calc(var(--scrim-end) + 72px);
     background: linear-gradient(
       180deg,
-      rgb(34 32 29 / 0.62) 0,
-      rgb(34 32 29 / 0.52) var(--scrim-end),
-      rgb(34 32 29 / 0) 100%
+      rgb(36 20 14 / 0.62) 0,
+      rgb(36 20 14 / 0.52) var(--scrim-end),
+      rgb(36 20 14 / 0) 100%
     );
     /* empilhado: a faixa é horizontal e termina acima da cabeça; o corte lateral do desktop não se aplica */
     -webkit-mask-image: none;

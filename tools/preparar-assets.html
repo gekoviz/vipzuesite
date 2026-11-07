@@ -10,14 +10,20 @@
 <pre id="log"></pre>
 <div id="out"></div>
 <script>
+// blur do brilho em px do arquivo final (1043 px de largura → 16; 900 px → 11)
+function HERO_EAGLE_FILTER(glow) {
+  return "saturate(0.92) contrast(1.04) sepia(0.45) saturate(1.9) hue-rotate(-12deg) brightness(1.28) contrast(1.06) " +
+    `drop-shadow(0 0 ${glow}px rgba(232, 98, 47, 0.5))`;
+}
 const jobs = [
   // [origem, destino, formato, qualidade, largura máxima, margem em px]
   ["assets/source/brand/vipzue-logo-marfim.png", "assets/brand/vipzue-logo-marfim.png", "image/png", 1, 1200, 0],
   ["assets/source/brand/vipzue-logo-champagne.png", "assets/brand/vipzue-logo-champagne.png", "image/png", 1, 1200, 0],
   ["assets/source/brand/vipzue-logo-marrom.png", "assets/brand/vipzue-logo-marrom.png", "image/png", 1, 1200, 0],
   // A águia recebe o ajuste tonal da Hero já gravado no arquivo (evita filter CSS animado/escalado).
-  ["assets/source/hero/aguia.png", "assets/hero/aguia-1400.webp", "image/webp", 0.9, 1400, 8, "saturate(0.92) contrast(1.04)"],
-  ["assets/source/hero/aguia.png", "assets/hero/aguia-900.webp", "image/webp", 0.88, 900, 8, "saturate(0.92) contrast(1.04)"],];
+  // 07/11/2026: tom quente (penas castanho-ferrugem) e luz Páprica nas bordas, como a referência do usuário.
+  ["assets/source/hero/aguia.png", "assets/hero/aguia-1400.webp", "image/webp", 0.84, 1400, 8, HERO_EAGLE_FILTER(16)],
+  ["assets/source/hero/aguia.png", "assets/hero/aguia-900.webp", "image/webp", 0.82, 900, 8, HERO_EAGLE_FILTER(11)],];
 const log = (m) => (document.getElementById("log").textContent += m + "\n");
 
 function load(src) {

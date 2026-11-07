@@ -1,5 +1,20 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Hero quente, como a referência do usuário (local, não publicado)
+
+**Pedido:** duas imagens de referência (desktop e mobile) — "consegue deixar a hero assim?". Decisões do usuário: manter os display cards; aquecer a imagem atual (sem imagem nova). Branch `feat/hero-quente`.
+
+**Feito:**
+- **Águia:** `assets/hero/aguia-1400.webp` e `aguia-900.webp` regerados do original (`assets/source/hero/aguia.png`) com tom castanho-ferrugem e luz Páprica nas bordas, gravados no arquivo (sem filter CSS na rolagem/zoom).
+  - Mesmas dimensões (1043 × 1377 e 900 × 1188). Pesos: 487 KB (antes 466) e 333 KB (antes 304).
+  - Receita em `tools/preparar-assets.html` (`HERO_EAGLE_FILTER`).
+- **Fundo:** nova camada `.hero__bg::before` com chocolate avermelhado à esquerda e halo Páprica atrás da cabeça, preso a `--face-x`/`--eyes-y`. Sai na passagem para a 03 com a mesma máscara da faixa do topo. `js/light-field.js` não foi alterado.
+- **Apoio da headline** (desktop e mobile): de Grafite para chocolate escuro `rgb(36 20 14)`, mais escuro, então o contraste não cai.
+- **Base da águia:** degradê para o fundo seguinte agora em marrom quente (a cor final continua `--color-bg-deep`, a emenda não muda).
+- **CTA da Hero:** Páprica mais viva `#E4622F` com brilho curto; texto Grafite ≈ 4,7:1.
+
+**Verificado (local, Chrome):** 1600 × 900, 1440 × 900 e 390 × 844 próximos da referência. Cards no lugar. A Visão e a passagem para a 03 continuam funcionando. Sem rolagem lateral e sem erros no console.
+
 ## 07/11/2026 — Voo da águia removido da Hero (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar").
