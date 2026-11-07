@@ -7,7 +7,7 @@
 // palco fora da tela. Movimento reduzido: dois planos parados, sem ciclo. Sem GSAP: os cards aparecem parados.
 (() => {
   const NOOP = { setHeroReady() {}, setHeroRange() {}, dispose() {}, state: null };
-  const ELIGIBLE = "(min-width: 1200px) and (min-height: 650px)"; // mesmo corte do CSS
+  const ELIGIBLE = "(min-width: 1024px) and (min-height: 560px) and (hover: hover) and (pointer: fine)"; // mesmo corte do CSS (e da Hero desktop com voo)
   const IDLE_MS = 1000;
 
   function create({ root, stage, gsap }) {

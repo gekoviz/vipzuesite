@@ -1,5 +1,13 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Display cards: aparecer nos notebooks comuns (local, não publicado)
+
+**Relato do usuário:** em outros navegadores e computadores os cards não apareciam.
+
+**Causa:** o corte de 1200 × 650 é medido na área útil da janela. No Windows, barra de tarefas e abas deixam notebooks de 1366 × 768 em ~635 px de altura e 1920 × 1080 a 150% em ~1280 × 590, abaixo do corte. Não era cache.
+
+**Correção:** o corte agora é ≥ 1024 × 560 com mouse ou touchpad (tablets de toque continuam sem cards). Para telas baixas e para larguras de 1024 a 1199 há tamanhos compactos, e o olho direito fica livre a 1024. Detalhes em `docs/hero-display-cards-relatorio.md`.
+
 ## 07/11/2026 — Display cards na Hero desktop (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` avançou de `13e0ac6` para `3b73301` (fast-forward da `feat/hero-display-cards`) e foi enviada.

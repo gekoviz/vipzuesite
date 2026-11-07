@@ -86,3 +86,20 @@ Não testados: Safari/iOS, Firefox, dispositivos reais, perfil de desempenho com
 `antes-1280.png`, `antes-1440.png` · `depois-1280-c1.png`, `depois-1280-c2.png`, `depois-1440-c1.png`, `depois-1440-c2.png`,
 `depois-1366-c2.png`, `depois-1920-c1.png`, `depois-1366x650.png`, `depois-1200x800.png` · `voo-1440-oculto.png`, `visao-1440-oculto.png`,
 `reduzido-1440.png`.
+
+## Atualização 07/11/2026 — cards sumiam em outros notebooks
+Causa: o corte 1200 × 650 era medido na **área útil** do navegador. No Windows a barra de tarefas e as abas tiram ~130 px,
+então notebooks comuns ficavam abaixo do corte: 1366 × 768 → ~1366 × 635; 1920 × 1080 a 150% → ~1280 × 590; 1280 × 800 a 125% → ~1024 × 640.
+Não era cache (a Vercel revalida todo pedido: `max-age=0, must-revalidate`).
+
+Correção:
+- Corte novo (CSS e JS iguais): ≥ 1024 × 560 (mesmo piso da Hero desktop com voo) **e** `(hover: hover) and (pointer: fine)` —
+  mouse/touchpad. Tablets de toque (inclusive iPad Pro em paisagem) não recebem os cards; isso resolve o ponto em aberto.
+- `max-height: 660px`: planos de 140 px, passo 80, folga 48, grupo 8 px mais alto.
+- `max-width: 1199.98px`: grupo de 256 px, `right: 20px`, textos um pouco menores — o olho direito fica livre a 1024.
+- Movimento reduzido + altura ≤ 660: planos separados por 10 px (cabe a 1024 × 560).
+
+Medido (grupo; folga até o olho direito; folga embaixo): 1366 × 633 [1016, 189–599]; 1280 × 590 [942, 175–558] 120 px / 32 px;
+1024 × 640 [733, 200–583] 40 px / 57 px; 1024 × 560 [733, 160–543] 40 px / 17 px; reduzido 1024 × 560 termina em 553.
+Sem estouro de texto nos planos, sem rolagem lateral. 1440 × 900 e 1920 × 1080 idênticos a antes. 1366 × 1024 com toque: oculto.
+Voo 11/11; build ok. Screenshots: `docs/qa/cards/v5-*.png`.

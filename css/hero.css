@@ -981,7 +981,8 @@
    abaixo da sombra da Visão. Quem é dono de quê:
      .vz-hero-cards            — visibilidade (classes postas por js/hero-display-cards.js; transição em CSS)
      .vz-hero-cards__motion    — x/y do ciclo (GSAP)        .vz-hero-cards__surface — inclinação e borda (CSS)
-   Só existe a partir de 1200 × 650 (mesmo corte no JS); abaixo disso a Hero fica exatamente como era.
+   Só existe na Hero desktop com mouse/touchpad: ≥ 1024 × 560, hover e ponteiro fino (mesmo corte no JS). Tablets e
+   celulares: a Hero fica exatamente como era.
    ========================================================= */
 .vz-hero-cards {
   --vzc-w: clamp(284px, 21.5vw, 316px);
@@ -1013,6 +1014,40 @@
   .vz-hero-cards {
     top: max(calc(50svh - 128px), calc(var(--eyes-y) + 56px));
     right: 32px;
+  }
+}
+
+/* Notebooks baixos (1366 × 768 e 1920 × 1080 a 150% no Windows: ~590–640 px úteis com barra de tarefas e abas): planos um
+   pouco mais baixos e o grupo sobe 8 px, para sobrar respiro embaixo. */
+@media (max-height: 660px) {
+  .vz-hero-cards {
+    --vzc-h: 140px;
+    --vzc-step: 80px;
+    --vzc-lift: 48px;
+    top: calc(50svh - 120px);
+  }
+}
+
+/* 1024–1199 (ex.: 1280 a 125%): a cabeça ocupa mais da largura; grupo mais estreito e mais encostado na borda para o
+   olho direito ficar livre (a 1024 o olho termina em ~693 px). */
+@media (max-width: 1199.98px) {
+  .vz-hero-cards {
+    --vzc-w: 256px;
+    --vzc-shift: 20px;
+    right: 20px;
+  }
+
+  .vz-hero-cards__signature {
+    font-size: 10px;
+  }
+
+  .vz-hero-cards__title {
+    font-size: 14.5px;
+  }
+
+  .vz-hero-cards__description,
+  .vz-hero-cards__support {
+    font-size: 12px;
   }
 }
 
@@ -1183,8 +1218,8 @@
   }
 }
 
-/* Fora do desktop largo e alto o bloco não existe (o JS usa o mesmo corte) */
-@media (max-width: 1199.98px), (max-height: 649.98px) {
+/* Fora da Hero desktop (estreita, baixa demais ou tela de toque sem mouse) o bloco não existe (o JS usa o mesmo corte) */
+@media (max-width: 1023.98px), (max-height: 559.98px), (hover: none), (pointer: coarse) {
   .vz-hero-cards {
     display: none !important;
   }
@@ -1214,3 +1249,11 @@
   }
 }
 
+
+/* Sem movimento em notebook baixo: planos separados por um respiro menor, para o grupo caber na altura do palco */
+@media (prefers-reduced-motion: reduce) and (max-height: 660px) {
+  .vz-hero-cards {
+    --vzc-step: calc(var(--vzc-h) + 10px);
+    --vzc-lift: 14px;
+  }
+}
