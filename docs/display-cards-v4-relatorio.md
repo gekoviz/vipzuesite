@@ -1,6 +1,6 @@
 # Display Cards V4 — relatório (07/11/2026)
 
-Branch `feat/display-cards-v4`. **Não publicado.** Aguarda autorização.
+Branch `feat/display-cards-v4`. **Publicado em produção** em 07/11/2026 (`main` em `6a5244f`).
 
 ## 1. Arquivos modificados
 

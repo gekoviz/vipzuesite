@@ -1,8 +1,16 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Display Cards V4: refinamento editorial e vidro fumê (não publicado)
+## 07/11/2026 — Display Cards V4: refinamento editorial e vidro fumê (publicado em produção)
 
-**Pedido:** "PROMPT MESTRE V4 — refinamento editorial e material translúcido dos Display Cards 3D". Branch `feat/display-cards-v4`. **Não publicado.**
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `8702ff6` para `6a5244f` (fast-forward de `feat/display-cards-v4`).
+
+**Conferido em produção (Chrome headless, 1440 × 900 e 1366 × 768):**
+- `index.html` e `css/hero.css` iguais aos locais.
+- Cards visíveis na Hero pronta, com as três expressões à esquerda (13 px) e o card 2 em duas colunas.
+- Vidro com `blur(10px) saturate(1.12)`, os dois cards com 112 px e o topo no mesmo pixel do teste local.
+- Ciclo de 6 s, sem rolagem lateral e sem erros no console.
+
+**Pedido:** "PROMPT MESTRE V4 — refinamento editorial e material translúcido dos Display Cards 3D". Branch `feat/display-cards-v4`.
 
 **Feito:**
 - Texto à esquerda e a partir do topo, em 13 px.
