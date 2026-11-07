@@ -33,25 +33,35 @@
   // Distância total do palco fixo, em svh de rolagem (ver --story-h no CSS: TOTAL + 100svh). No palco empilhado
   // (celular e tablet em retrato) a passagem final é mais longa (WIPE_LEN_STACKED) e TOTAL cresce junto.
   let TOTAL = 244;
-  // Prólogo do desktop (≥1024px, com movimento): antes de tudo acima, o voo da águia (assets/hero/voo, 241 quadros
-  // com alfa) é percorrido pela própria rolagem — atravessa da esquerda para a direita, sai, volta e para de frente.
-  // Ocupa OFF svh no início da MESMA timeline (nenhum pin novo): todas as marcas acima só são deslocadas por OFF.
-  //     0–200   voo (quadro = rolagem; nos últimos 30 a imagem assenta no enquadramento da águia estática)
-  //   200–224   último quadro; o voo cede à águia estática (mesma pose e posição)
-  //   224       headline + CTA entram com o efeito de sempre (palavra por palavra, mola)
-  //   224–260   leitura; a partir de 260 (= 0 acima) segue a Visão como era
-  // Mobile, tablet, movimento reduzido ou falha ao carregar os quadros: OFF = 0, a Hero de sempre.
-  const PROLOGUE = { clip: 200, settle: 30, hold: 24, read: 36, rearm: 12 };
+  // Prólogo do desktop (≥1024px, com movimento): antes de tudo acima, o voo da águia (assets/hero/voo, quadros com
+  // alfa) é percorrido pela própria rolagem. Motor (quadros, cache, desenho, fases): js/hero-voo.js.
+  //     0–160   voo: o quadro segue a rolagem BRUTA (sem o scrub de 0,6s da Visão); pousa no último quadro
+  //     160     pouso confirmado (quadro final desenhado) → trava de conclusão; logo/menu, headline e CTA entram
+  //             sozinhos com o efeito de sempre, sem pedir mais rolagem
+  //   160–200   Hero pronta (zona de leitura; não dispara nada); a partir de 200 (= 0 acima) segue a Visão como era
+  // Depois do pouso o voo não volta: subir mostra a Hero pronta. O percurso não encolhe depois da conclusão.
+  // Mobile, tablet, movimento reduzido, âncora na URL ou falha na preparação: OFF = 0, a Hero de sempre.
+  const VOO = window.VZVoo;
+  const PCFG = VOO?.CONFIG;
   const PROLOGUE_SRC = "assets/hero/voo/manifest.json";
-  const FRAME = { w: 1600, h: 890 }; // tamanho de cada quadro
-  let voo = null; // carregador dos quadros (loadVoo, abaixo)
-  // Último quadro do voo (1600×890): ponto médio dos olhos e distância entre eles, em px do quadro (medidos no
-  // master e afinados pela comparação de pixels com a águia estática: desvio ≤ 1px CSS de 1024 a 1920)
-  const VOO_EYES = { x: 992.2, y: 323.2, d: 321.3 };
+  // Pouso: nos últimos SETTLE_FRAMES quadros (a ave já estabilizando) o enquadramento passa da tela cheia para o da
+  // águia estática. Necessário porque, no enquadramento dos olhos, o quadro do vídeo fica menor que a tela e a ave
+  // seria cortada em linha reta nas bordas durante a travessia (medido: 1182×657 dentro de 1440×900).
+  const SETTLE_FRAMES = 40;
+  // Rolagem tolerada antes da ativação (preparação): além disso, a visita segue sem o voo
+  const ENTRY_GUARD_SVH = 4;
+  // Estado da visita (fora do matchMedia): uma vez concluído ou pulado, o voo não volta nesta vida do documento
+  const visit = { completed: false, bypassed: false };
+  let prep = "idle"; // idle | preparing | active | skipped | failed
+  let prologueOn = false; // percurso do voo instalado (não é removido nesta visita)
+  let remounting = false;
+  let lastRaw = 0; // rolagem bruta da Hero, em svh (último onUpdate)
+  let manifest = null;
+  let store = null;
+  let live = null; // instância montada do prólogo (coordenador, desenho, canvas)
   // Olho esquerdo (do observador) da águia estática, em frações do arquivo (o direito é EYE, abaixo)
   const EYE_L = { x: 0.257, y: 0.237 };
   let OFF = 0;
-  let prologueFailed = false;
   const at = (svh) => (svh + OFF) / TOTAL;
   const len = (svh) => svh / TOTAL;
 
@@ -249,77 +259,152 @@
   };
 
   let introPlayed = false;
-  // Entrada da headline: criada uma vez (na 1ª entrada) e tocada uma vez por carregamento, como sempre foi.
-  // No prólogo ela espera o fim do voo (titleGate).
+  // Headline palavra por palavra (equivalente ao SplittingText do projeto de referência: splitBy "words", preset
+  // "slide-up", y 20 → 0, opacidade 0 → 1, mola damping 20 / stiffness 200, stagger 0.07). Só as palavras animam na
+  // entrada; a saída por rolagem é do invólucro (.hero__content), então as duas nunca disputam as mesmas propriedades.
   let heroWords = [];
-  let playTitle = null;
-  let titlePlayed = false; // a entrada já tocou
+  const ensureWords = () => {
+    if (!heroWords.length) heroWords = splitWords(title);
+    return heroWords;
+  };
   let titleReady = false; // fonte pronta (ou 1,5s)
-  let titleGate = null; // no prólogo: decide, pela rolagem, quando a entrada toca
-  let titleBound = false; // depois da entrada, numa volta ao voo: visibilidade presa à rolagem
-  const setTitleAlpha = (a) => {
-    gsap.killTweensOf([...heroWords, cta]);
-    gsap.set([...heroWords, cta], { autoAlpha: a, y: 0 });
+  // Quem dispara a entrada: "legacy" (mobile, tablet e desktop sem voo: como sempre) ou "prologue" (desktop com voo:
+  // só o coordenador, no pouso)
+  let titleOwner = "legacy";
+  let titlePlayed = false;
+  let playTitle = null; // entrada de sempre (legacy)
+
+  // Entrada da Hero no desktop com voo: os mesmos tweens de sempre agrupados numa timeline própria, tocada uma vez a
+  // partir do pouso (sem o atraso antigo de intro.time()). Logo/menu entram 0,15s depois da 1ª palavra, a mesma
+  // distância de antes (0,6 − 0,45).
+  const entrance = {
+    tl: null,
+    state: "idle", // idle | hidden | playing | done
+    targets() {
+      return [...ensureWords(), cta, headerInner].filter(Boolean);
+    },
+    prepareHidden() {
+      this.tl?.kill();
+      this.tl = null;
+      gsap.set(ensureWords(), { autoAlpha: 0, y: 20 });
+      gsap.set(cta, { autoAlpha: 0, y: 12 });
+      if (headerInner) gsap.set(headerInner, { autoAlpha: 0, y: -8 });
+      this.state = "hidden";
+    },
+    playOnce(onDone) {
+      if (this.state === "playing" || this.state === "done") return;
+      const words = ensureWords();
+      const t = gsap.timeline({
+        onComplete: () => {
+          this.state = "done";
+          onDone?.();
+        },
+      });
+      t.fromTo(words, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: SPRING_S, ease: spring, stagger: 0.07 }, 0);
+      // CTA logo depois da última palavra, sem disputar a leitura
+      t.fromTo(cta, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: easeEmph }, words.length * 0.07 + 0.2);
+      if (headerInner) t.fromTo(headerInner, { autoAlpha: 0, y: -8 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: easeEmph }, 0.15);
+      this.tl = t;
+      this.state = "playing";
+      titlePlayed = true;
+    },
+    // Estado final de TODOS os alvos, já (cancela atrasos pendentes); não depende de callbacks da timeline
+    finishImmediately() {
+      if (this.tl) {
+        this.tl.progress(1);
+        this.tl.kill();
+        this.tl = null;
+      }
+      this.restoreReady();
+      this.state = "done";
+      titlePlayed = true;
+    },
+    restoreReady() {
+      gsap.set(this.targets(), { autoAlpha: 1, y: 0 });
+    },
+    isComplete() {
+      return this.state === "done";
+    },
+    dispose() {
+      this.tl?.kill();
+      this.tl = null;
+    },
   };
 
   const QUERIES = { story: STORY_QUERY, stacked: STACKED_QUERY, flow: FLOW_QUERY };
   let mm = gsap.matchMedia();
   mm.add(QUERIES, setup);
 
+  // Remonta a Hero (ativação do voo): o percurso muda, então a timeline é refeita. A posição de rolagem não é tocada.
+  function remount() {
+    remounting = true;
+    mm.revert();
+    remounting = false;
+    mm = gsap.matchMedia();
+    mm.add(QUERIES, setup);
+    ScrollTrigger.refresh();
+  }
+
   function setup(ctx) {
     const { story, stacked, flow } = ctx.conditions;
     root.classList.toggle("js-story", story);
     WIPE_LEN = stacked ? WIPE_LEN_STACKED : flow ? WIPE_LEN_FLOW : WIPE_LEN_WIDE;
     WIPE_SOFT = flow ? WIPE_SOFT_FLOW : WIPE_SOFT_WIDE;
-    // Prólogo só no desktop com movimento (e se os quadros carregaram)
-    const withPrologue = story && !flow && !prologueFailed;
-    OFF = withPrologue ? PROLOGUE.clip + PROLOGUE.hold + PROLOGUE.read : 0;
+    // Voo só no desktop com movimento. A condição é conferida ANTES de pedir o manifesto (no mobile nada é baixado).
+    const desk = story && !flow && !!VOO;
+    if (desk && prep === "idle") ctx.ignore(beginPreparing);
+    const withPrologue = desk && prologueOn;
+    const preparing = desk && prep === "preparing";
+    OFF = withPrologue ? PCFG.flightSvh + PCFG.readyZoneSvh : 0;
     TOTAL = OFF + WIPE_AT + WIPE_LEN + 2;
+    if (window.__vzDebug) (window.__vzDebug.heroSetups ||= []).push({ story, stacked, flow, prep, prologueOn, visit: { ...visit }, OFF });
     window.__vzStory.total = TOTAL;
     window.__vzStory.atmosphere = { start: ATMOSPHERE.start + OFF, end: ATMOSPHERE.end + OFF };
-    // Altura do contêiner = rolagem da timeline + 100svh (o CSS só conhece as versões sem prólogo)
+    // Altura do contêiner = rolagem da timeline + 100svh (o CSS só conhece as versões sem voo)
     if (withPrologue) hero.style.setProperty("--story-h", `${TOTAL + 100}svh`);
     else hero.style.removeProperty("--story-h");
+    hero.classList.toggle("has-prologue", withPrologue || preparing);
 
     if (!story) {
       // Reduced motion ou tela baixa: Hero estática; a seção 02 mostra o emblema já alinhado.
+      if (titleOwner === "prologue" && !entrance.isComplete()) entrance.finishImmediately();
       root.classList.remove("is-loading");
       return;
     }
 
-    // ---------- Entrada (uma vez por carregamento): só águia, luz e header ----------
+    // ---------- Entrada (uma vez por carregamento): águia, luz e header ----------
     if (!introPlayed) {
       introPlayed = true;
-      const intro = gsap.timeline({ defaults: { ease: easeEmph } });
-      intro
-        .from(light, { opacity: 0, duration: 1.4, ease: "power1.out" }, 0)
-        // Na imagem, não no invólucro: a opacidade do invólucro pertence à timeline de rolagem
-        // (ao recarregar no meio da Visão, a entrada não pode devolver a águia sobre o diagrama)
-        .from(eagleImg, { autoAlpha: 0, yPercent: 4, duration: 1.2 }, 0.1)
-        .from(headerInner, { autoAlpha: 0, y: -8, duration: 0.4 }, 0.6);
-
-      // Headline palavra por palavra: equivalente ao SplittingText do projeto de referência
-      // (splitBy "words", preset "slide-up": y 20 → 0, opacidade 0 → 1, mola damping 20 / stiffness 200),
-      // com o stagger de 0.07s aprovado. Só as palavras animam na entrada; a saída por rolagem é do
-      // invólucro (.hero__content), então as duas nunca disputam as mesmas propriedades.
-      // A entrada espera a Gloock (sem troca de fonte no meio); no máximo 1,5s.
-      heroWords = splitWords(title);
-      gsap.set(heroWords, { autoAlpha: 0, y: 20 });
-      gsap.set(cta, { autoAlpha: 0, y: 12 });
-      // Sempre a partir do estado oculto (fromTo com os mesmos valores do set acima): no prólogo a entrada pode
-      // tocar de novo depois que a rolagem volta para o voo.
-      playTitle = () => {
-        titlePlayed = true;
-        gsap.killTweensOf([...heroWords, cta]);
-        const delay = Math.max(0, 0.45 - intro.time());
-        gsap.fromTo(heroWords, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: SPRING_S, ease: spring, stagger: 0.07, delay });
-        // CTA logo depois da última palavra, sem disputar a leitura
-        gsap.fromTo(cta, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: easeEmph, delay: delay + heroWords.length * 0.07 + 0.2 });
-      };
-      Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]).then(() => {
-        titleReady = true;
-        if (titleGate) titleGate();
-        else if (!titlePlayed) playTitle();
+      // Fora do contexto do matchMedia: a remontagem da ativação não pode desfazer a entrada
+      ctx.ignore(() => {
+        titleOwner = preparing || withPrologue ? "prologue" : "legacy";
+        const intro = gsap.timeline({ defaults: { ease: easeEmph } });
+        intro.from(light, { opacity: 0, duration: 1.4, ease: "power1.out" }, 0);
+        if (titleOwner === "legacy") {
+          intro
+            // Na imagem, não no invólucro: a opacidade do invólucro pertence à timeline de rolagem
+            // (ao recarregar no meio da Visão, a entrada não pode devolver a águia sobre o diagrama)
+            .from(eagleImg, { autoAlpha: 0, yPercent: 4, duration: 1.2 }, 0.1)
+            .from(headerInner, { autoAlpha: 0, y: -8, duration: 0.4 }, 0.6);
+          ensureWords();
+          gsap.set(heroWords, { autoAlpha: 0, y: 20 });
+          gsap.set(cta, { autoAlpha: 0, y: 12 });
+          // A entrada espera a Gloock (sem troca de fonte no meio); no máximo 1,5s.
+          playTitle = () => {
+            titlePlayed = true;
+            const delay = Math.max(0, 0.45 - intro.time());
+            gsap.fromTo(heroWords, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: SPRING_S, ease: spring, stagger: 0.07, delay });
+            gsap.fromTo(cta, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: easeEmph, delay: delay + heroWords.length * 0.07 + 0.2 });
+          };
+        } else {
+          // Desktop com voo: palavras, CTA e logo/menu ocultos até o pouso; a águia estática fica oculta pelo CSS
+          entrance.prepareHidden();
+        }
+        // A fonte pronta só libera o recurso; no desktop com voo quem inicia a entrada é o coordenador
+        Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]).then(() => {
+          titleReady = true;
+          if (titleOwner === "legacy" && !titlePlayed) playTitle();
+        });
       });
       root.classList.remove("is-loading");
     }
@@ -335,34 +420,17 @@
 
     measure(cfg);
     applyWipe();
-    const prologue = withPrologue ? createPrologue() : null;
+    // Voo montado só enquanto ainda não houve pouso nem desvio; depois disso a Hero aparece pronta
+    const flying = withPrologue && !visit.completed && !visit.bypassed;
+    const prologue = flying ? mountPrologue() : null;
+    hero.classList.toggle("is-prologue", flying || preparing);
+    if (header) header.inert = flying || preparing;
+    if (withPrologue && !flying && titleOwner === "prologue" && !entrance.isComplete()) entrance.finishImmediately();
     const onRefreshInit = () => {
       measure(cfg);
       prologue?.measure();
     };
     ScrollTrigger.addEventListener("refreshInit", onRefreshInit);
-    // Headline no prólogo: a entrada original toca (uma vez) quando o voo termina e a águia estática assumiu.
-    // Se depois a rolagem volta para o voo, headline e CTA não repetem a entrada: ficam inteiros até a borda do
-    // prólogo e somem/voltam presos à rolagem nos PROLOGUE.rearm svh antes dela (estado determinístico, sem foco
-    // em CTA invisível — autoAlpha).
-    if (prologue) {
-      titleGate = () => {
-        if (!tl || !playTitle) return;
-        const t = tl.time() * TOTAL;
-        const gate = PROLOGUE.clip + PROLOGUE.hold;
-        if (!titlePlayed) {
-          if (titleReady && t >= gate) playTitle();
-          return;
-        }
-        if (t >= gate) {
-          if (titleBound) setTitleAlpha(1);
-          titleBound = false;
-          return;
-        }
-        titleBound = true;
-        setTitleAlpha(smoothstep(gate - PROLOGUE.rearm, gate, t));
-      };
-    }
 
     // Narrativa: estado derivado do tempo APLICADO da timeline (já suavizado pelo scrub), a cada render.
     // Parar mantém a etapa; voltar retorna; saltos e recarregamento caem no estado certo.
@@ -390,9 +458,19 @@
     };
     const render = () => {
       renderNarrative();
-      if (!prologue || !tl) return;
-      prologue.render(tl.time() * TOTAL);
-      titleGate?.();
+      if (!withPrologue || !tl) return;
+      const t = tl.time() * TOTAL;
+      // Fronteira obrigatória: nada da Visão antes da Hero pronta (a rolagem bruta normalmente já resolveu antes)
+      if (t > OFF) live?.coord.bypassToReady("legacy-boundary");
+      // Header junto do palco enquanto ele é visível (até o fim da sua saída original, 8–28 da Visão); depois volta
+      // ao lugar de sempre, oculto, e não acompanha o resto da página
+      header?.classList.toggle("is-prologue-fixed", t < OFF + 30);
+    };
+    // Rolagem bruta (sem suavização): é ela que escolhe o quadro do voo
+    const onRaw = (self) => {
+      lastRaw = self.progress * TOTAL;
+      if (preparing && prep === "preparing" && lastRaw > ENTRY_GUARD_SVH) skipPrologue("scrolled");
+      live?.coord.updateRaw(lastRaw);
     };
 
     tl = gsap.timeline({
@@ -404,14 +482,17 @@
         end: "bottom bottom",
         scrub: 0.6,
         invalidateOnRefresh: true,
+        onUpdate: onRaw,
         // Ao terminar, a seção real (idêntica à cópia revelada) assume e fica interativa.
         onLeave: (self) => {
+          live?.coord.bypassToReady("leave");
           self.getTween()?.progress(1);
           handOff(true);
         },
         onEnterBack: () => handOff(false),
         onRefresh: (self) => {
           handOff(self.progress >= 1);
+          onRaw(self);
           render();
         },
       },
@@ -479,19 +560,15 @@
     return () => {
       ScrollTrigger.removeEventListener("refreshInit", onRefreshInit);
       hero.style.removeProperty("--story-h");
-      if (prologue) {
-        prologue.destroy();
-        titleGate = null;
-        // fora do prólogo a headline não espera a rolagem: entra como sempre (se a fonte já está pronta;
-        // senão, a própria espera da fonte a mostra)
-        if (!titlePlayed && titleReady) {
-          requestAnimationFrame(() => {
-            if (!titlePlayed && !titleGate) playTitle();
-          });
-        } else if (titleBound) {
-          setTitleAlpha(1);
-          titleBound = false;
-        }
+      prologue?.destroy();
+      if (!remounting) {
+        // Saída do desktop (ou desmontagem geral): nada do voo fica para trás. Um voo interrompido não recomeça.
+        if (prep === "preparing") skipPrologue("breakpoint", true);
+        if (prologueOn && !visit.completed) visit.bypassed = true;
+        hero.classList.remove("is-prologue", "has-prologue");
+        header?.classList.remove("is-prologue-fixed");
+        if (header) header.inert = false;
+        if (titleOwner === "prologue" && !entrance.isComplete()) entrance.finishImmediately();
       }
       passage?.kill();
       handOff(false);
@@ -508,80 +585,91 @@
   // Fontes alteram medidas da cópia de "O que fazemos".
   document.fonts?.ready.then(() => ScrollTrigger.refresh());
 
-  // ---------- Prólogo do desktop: quadros do voo ----------
-  // Carregados uma vez, só quando o prólogo é montado (no mobile e no tablet nada é pedido). Primeiro e último quadros
-  // são obrigatórios (até 8s); os demais vêm depois do load da página, 6 de cada vez, a partir do ponto da rolagem.
-  // Sem o primeiro e o último a tempo, a Hero volta a ser a de sempre (fallbackToStatic).
-  function loadVoo() {
-    if (voo) return voo;
-    const v = (voo = { n: 0, frames: [], imgs: [], state: [], want: 0, inflight: 0, active: true, onLoad: null });
-    const get = (i) =>
-      new Promise((resolve, reject) => {
-        v.state[i] = 1;
-        v.inflight++;
-        const img = new Image();
-        img.decoding = "async";
-        // pronto no load (decode() pode ficar pendente com a aba em segundo plano; ele só é pedido perto do quadro atual)
-        img.onload = () => {
-          v.imgs[i] = img;
-          v.state[i] = 2;
-          v.inflight--;
-          resolve();
-          v.onLoad?.(i);
-        };
-        img.onerror = () => {
-          v.state[i] = 3;
-          v.inflight--;
-          reject(new Error(`voo: quadro ${i}`));
-        };
-        img.src = v.frames[i];
+  // ---------- Prólogo do desktop: preparação e ativação ----------
+  // A preparação não instala percurso: a Hero fica no estado de abertura (sem texto, sem águia estática) enquanto o
+  // manifesto e os quadros críticos (primeiro e último, decodificados) chegam. Pronto a tempo e com o visitante ainda
+  // no topo → ativa (percurso do voo instalado). Falha, tempo esgotado ou rolagem/âncora → a Hero de sempre, sem voo.
+  const devWarn = (...a) => /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && console.warn("[hero]", ...a);
+
+  function beginPreparing() {
+    if (location.hash) return skipPrologue("hash", true);
+    prep = "preparing";
+    const watchdog = PCFG.criticalTimeoutMs;
+    const started = performance.now();
+    const t0 = setTimeout(() => prep === "preparing" && skipPrologue("timeout"), watchdog);
+    fetch(PROLOGUE_SRC)
+      .then((r) => {
+        if (!r.ok) throw new Error(`voo: manifest ${r.status}`);
+        return r.json();
+      })
+      .then((m) => {
+        if (prep !== "preparing") return;
+        manifest = VOO.validateManifest(m);
+        store = VOO.createFrameStore({ manifest, config: PCFG });
+        // quadro decodificado → desenhar o ALVO ATUAL (nunca o índice capturado aqui)
+        store.onDecoded(() => live?.schedule());
+        store.onFailed(() => live?.schedule());
+        return store.critical(Math.max(0, watchdog - (performance.now() - started)));
+      })
+      .then(() => {
+        clearTimeout(t0);
+        if (prep !== "preparing") return;
+        if (location.hash || lastRaw > ENTRY_GUARD_SVH) return skipPrologue("scrolled");
+        prep = "active";
+        prologueOn = true;
+        remount();
+      })
+      .catch((err) => {
+        clearTimeout(t0);
+        if (prep === "preparing") skipPrologue("failed", false, err);
       });
-    // próximo quadro: o mais perto do que a rolagem pede
-    v.pump = () => {
-      while (v.active && v.inflight < 6) {
-        let pick = -1;
-        for (let d = 0; d < v.n && pick < 0; d++) {
-          if (v.want + d < v.n && !v.state[v.want + d]) pick = v.want + d;
-          else if (v.want - d >= 0 && !v.state[v.want - d]) pick = v.want - d;
-        }
-        if (pick < 0) return;
-        get(pick).catch(() => {}).then(v.pump);
-      }
-    };
-    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("voo: tempo esgotado")), 8000));
-    v.ready = Promise.race([
-      fetch(PROLOGUE_SRC)
-        .then((r) => {
-          if (!r.ok) throw new Error(`voo: manifest ${r.status}`);
-          return r.json();
-        })
-        .then((m) => {
-          v.frames = m.frames;
-          v.n = m.frames.length;
-          return Promise.all([get(0), get(v.n - 1)]);
-        }),
-      timeout,
-    ]).then(() => {
-      if (document.readyState === "complete") v.pump();
-      else window.addEventListener("load", v.pump, { once: true });
-    });
-    return v;
   }
 
-  // Camada do voo (canvas) no palco, acima da águia estática. A rolagem (tempo aplicado da timeline, já suavizado
-  // pelo scrub) escolhe o quadro; nos últimos PROLOGUE.settle svh a imagem sai do enquadramento de tela cheia para o
-  // da águia estática (olhos sobre os olhos) e, no HOLD, as duas trocam por opacidade.
-  function createPrologue() {
-    const v = loadVoo();
-    v.active = true;
+  // Sem voo nesta visita (antes da ativação): a Hero de sempre, sem percurso extra
+  function skipPrologue(reason, silent, err) {
+    if (prep !== "preparing" && prep !== "idle") return;
+    prep = reason === "failed" || reason === "timeout" ? "failed" : "skipped";
+    visit.bypassed = true;
+    devWarn(`voo desativado (${reason})`, err?.message || "");
+    store?.dispose();
+    store = null;
+    if (silent && titleOwner !== "prologue") return; // nada foi ocultado ainda
+    hero.classList.remove("is-prologue", "has-prologue");
+    if (header) header.inert = false;
+    if (titleOwner !== "prologue" || entrance.isComplete()) return;
+    // a águia estática entra como sempre; o texto também, ou já pronto se a Visão começou a escondê-lo
+    if (!silent) gsap.from(eagleImg, { autoAlpha: 0, yPercent: 4, duration: 1.2, ease: easeEmph });
+    const go = () => (lastRaw > 6 ? entrance.finishImmediately() : entrance.playOnce());
+    titleReady ? go() : Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]).then(go);
+  }
+
+  // Âncora, link de pular ou volta do histórico: o destino é respeitado e a Hero fica pronta (nunca volta ao topo)
+  const bypassAll = (reason) => {
+    if (prep === "preparing") skipPrologue(reason);
+    live?.coord.bypassToReady(reason);
+  };
+  document.querySelector(".skip-link")?.addEventListener("click", () => bypassAll("skip-link"));
+  window.addEventListener("hashchange", () => bypassAll("hash"));
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) live?.coord.updateRaw(lastRaw);
+  });
+
+  // ---------- Prólogo montado: canvas, desenho e coordenador ----------
+  // Uma instância por montagem; callbacks de uma instância desmontada não fazem nada (coord.alive).
+  function mountPrologue() {
     const canvas = document.createElement("canvas");
     canvas.className = "hero__prologue";
     canvas.setAttribute("aria-hidden", "true");
     figure.after(canvas);
-    const c = canvas.getContext("2d");
-    const geo = { idx: -1 };
-    let drawn = "";
-    let lastT = 0;
+    const ctx2d = canvas.getContext("2d");
+    const renderer = VOO.createRenderer({ ctx: ctx2d, frame: { w: manifest.width, h: manifest.height } });
+    const geo = {};
+    const span = manifest.finalFrame - manifest.firstFrame;
+    const settleFrom = PCFG.flightSvh * Math.max(0, (span - SETTLE_FRAMES) / span);
+    const a = manifest.finalAnchor;
+    const eyes = { x: (a.leftEye.x + a.rightEye.x) / 2, y: (a.leftEye.y + a.rightEye.y) / 2, d: Math.hypot(a.rightEye.x - a.leftEye.x, a.rightEye.y - a.leftEye.y) };
+    let raf = 0;
+    let fadeTimer = 0;
 
     const measure = () => {
       const w = stage.clientWidth;
@@ -589,131 +677,104 @@
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5, 2560 / Math.max(1, w));
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
-      // voo em tela cheia (cobre o palco)
-      const sc = Math.max(w / FRAME.w, h / FRAME.h);
-      // pose final sobre a águia estática: olhos do último quadro sobre os olhos da imagem (layout, sem transforms)
+      renderer.resize(w, h, dpr); // nova revisão: o mesmo quadro é redesenhado
+      // voo em tela cheia (uma só matriz para todos os quadros até o pouso)
+      const sc = Math.max(w / manifest.width, h / manifest.height);
+      geo.cover = { x: (w - manifest.width * sc) / 2, y: (h - manifest.height * sc) / 2, s: sc };
+      // pouso sobre a águia estática: olhos do último quadro sobre os olhos da imagem (layout, sem transforms)
       const fw = figure.offsetWidth;
       const fh = figure.offsetHeight;
-      const sf = ((EYE.x - EYE_L.x) * fw) / VOO_EYES.d;
+      const sf = ((EYE.x - EYE_L.x) * fw) / eyes.d;
       const mx = figure.offsetLeft + ((EYE.x + EYE_L.x) / 2) * fw;
       const my = figure.offsetTop + ((EYE.y + EYE_L.y) / 2) * fh;
-      Object.assign(geo, {
-        w,
-        h,
-        dpr,
-        cover: { x: (w - FRAME.w * sc) / 2, y: (h - FRAME.h * sc) / 2, s: sc },
-        final: { x: mx - VOO_EYES.x * sf, y: my - VOO_EYES.y * sf, s: sf },
+      geo.final = { x: mx - eyes.x * sf, y: my - eyes.y * sf, s: sf };
+      schedule();
+    };
+    // Matriz do quadro: fixa (tela cheia) até o pouso; nos últimos SETTLE_FRAMES vai ao enquadramento da estática
+    const matrixAt = (raw) => {
+      const k = smoothstep(settleFrom, PCFG.flightSvh, raw);
+      const { cover: c0, final: c1 } = geo;
+      const s = c0.s + (c1.s - c0.s) * k;
+      const x = c0.x + (c1.x - c0.x) * k;
+      const y = c0.y + (c1.y - c0.y) * k;
+      return { x, y, s, mask: k, key: `${x.toFixed(1)}|${y.toFixed(1)}|${s.toFixed(4)}` };
+    };
+    // Um desenho por quadro de tela, no máximo; o pedido mais recente vence
+    const schedule = () => {
+      if (raf || !coord.alive) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        coord.renderCurrentTarget();
       });
-      drawn = "";
-      render(lastT);
     };
-
-    const strip = (x0, y0, x1, y1, rx, ry, rw, rh) => {
-      if (rw <= 0 || rh <= 0) return;
-      const gr = c.createLinearGradient(x0, y0, x1, y1);
-      gr.addColorStop(0, "#000");
-      gr.addColorStop(1, "rgba(0,0,0,0)");
-      c.fillStyle = gr;
-      c.fillRect(rx, ry, rw, rh);
+    // Troca do voo pela Hero pronta. A águia estática já está exatamente sob o último quadro.
+    const handoff = (fade) => {
+      hero.classList.remove("is-prologue");
+      if (header) header.inert = false;
+      const finish = () => {
+        canvas.style.visibility = "hidden";
+        renderer.clear();
+        store?.releaseAll();
+      };
+      if (fade) {
+        canvas.style.opacity = "0";
+        fadeTimer = setTimeout(finish, 400);
+      } else finish();
     };
-
-    const render = (t) => {
-      lastT = t;
-      const P = PROLOGUE;
-      const fade = 1 - smoothstep(P.clip, P.clip + P.hold * 0.75, t);
-      const op = fade.toFixed(3);
-      if (canvas.style.opacity !== op) {
-        canvas.style.opacity = op;
-        figure.style.opacity = (1 - fade).toFixed(3);
-      }
-      if (fade <= 0 || !v.n || !geo.cover) return;
-      const want = Math.round(clamp01(t / P.clip) * (v.n - 1));
-      v.want = want;
-      let idx = -1;
-      for (let d = 0; d < v.n && idx < 0; d++) {
-        if (v.state[want - d] === 2) idx = want - d;
-        else if (v.state[want + d] === 2) idx = want + d;
-      }
-      if (idx < 0) return;
-      // decodificação adiantada só numa janela curta à frente e atrás (sem manter 241 quadros em RGBA)
-      for (let d = -3; d <= 3; d++) {
-        const im = v.imgs[want + d];
-        if (im && !im.__vzDecoded) {
-          im.__vzDecoded = true;
-          im.decode?.().catch(() => {});
-        }
-      }
-      const k = smoothstep(P.clip - P.settle, P.clip, t);
-      const { cover: a, final: b } = geo;
-      const s = a.s + (b.s - a.s) * k;
-      const x = a.x + (b.x - a.x) * k;
-      const y = a.y + (b.y - a.y) * k;
-      const key = `${idx}|${x.toFixed(1)}|${y.toFixed(1)}|${s.toFixed(4)}`;
-      if (key === drawn) return;
-      drawn = key;
-      geo.idx = idx;
-      const { w, h, dpr } = geo;
-      const dw = FRAME.w * s;
-      const dh = FRAME.h * s;
-      c.setTransform(dpr, 0, 0, dpr, 0, 0);
-      c.globalCompositeOperation = "source-over";
-      c.clearRect(0, 0, w, h);
-      c.drawImage(v.imgs[idx], x, y, dw, dh);
-      // As bordas do quadro se dissolvem: asa ou peito cortados pelo enquadramento do vídeo nunca viram linha dura
-      c.globalCompositeOperation = "destination-out";
-      const L = Math.max(0, x);
-      const R = Math.min(w, x + dw);
-      const T = Math.max(0, y);
-      const B = Math.min(h, y + dh);
-      const fl = dw * 0.06;
-      const fr = dw * 0.1;
-      const ft = dh * 0.04;
-      const fb = dh * 0.22;
-      strip(L, 0, L + fl, 0, L, T, fl, B - T);
-      strip(R, 0, R - fr, 0, R - fr, T, fr, B - T);
-      strip(0, T, 0, T + ft, L, T, R - L, ft);
-      strip(0, B, 0, B - fb, L, B - fb, R - L, fb);
-      c.globalCompositeOperation = "source-over";
-      if (window.__vzDebug) window.__vzDebug.prologue = { t, want, idx, settle: k, fade };
+    // Diagnóstico de desenvolvimento (só quando window.__vzDebug existe): fase, trava, quadro pedido/desenhado, cache
+    const diag = () => {
+      if (window.__vzDebug && live?.coord) window.__vzDebug.prologue = { prep, visit: { ...visit }, ...live.coord.snapshot(), store: store?.snapshot(), draw: renderer.timings.slice(-1)[0] };
     };
-
-    v.onLoad = (i) => {
-      // redesenha se o quadro que chegou está mais perto do pedido do que o que está na tela
-      if (geo.idx < 0 || Math.abs(i - v.want) < Math.abs(geo.idx - v.want)) {
-        drawn = "";
-        render(lastT);
-      }
-    };
-    v.ready.catch(fallbackToStatic);
-    v.pump();
+    const coord = VOO.createCoordinator({
+      config: PCFG,
+      manifest,
+      store,
+      renderer,
+      visit,
+      schedule,
+      hooks: {
+        matrixAt,
+        onCommit() {
+          store.stopSpeculative([manifest.finalFrame]);
+          handoff(true);
+          entrance.playOnce(() => coord.entranceComplete());
+        },
+        onBypass(reason) {
+          store.stopSpeculative();
+          handoff(false);
+          entrance.finishImmediately();
+          devWarn(`voo pulado (${reason})`);
+        },
+        onFallback(reason) {
+          store.stopSpeculative();
+          handoff(false);
+          lastRaw > OFF + 6 ? entrance.finishImmediately() : entrance.playOnce();
+          devWarn(`voo: estado final por falha (${reason})`);
+        },
+        finishEntrance: () => entrance.finishImmediately(),
+        onPhase(p) {
+          hero.dataset.prologue = p;
+          diag();
+        },
+        diag,
+      },
+    });
+    hero.dataset.prologue = coord.phase;
+    live = { coord, schedule, measure };
     measure();
+    coord.updateRaw(lastRaw);
 
     return {
       measure,
-      render,
       destroy() {
-        v.active = false;
-        v.onLoad = null;
+        coord.dispose();
+        if (live?.coord === coord) live = null;
+        cancelAnimationFrame(raf);
+        clearTimeout(fadeTimer);
         canvas.remove();
-        figure.style.opacity = "";
+        delete hero.dataset.prologue;
       },
     };
-  }
-
-  // Quadros indisponíveis (404, rede lenta): desmonta tudo e monta de novo sem o prólogo — a Hero de sempre.
-  // A rolagem que já estava dentro do prólogo volta ao início da Hero; depois dele, desconta a parte removida.
-  function fallbackToStatic(err) {
-    if (prologueFailed) return;
-    prologueFailed = true;
-    if (/^(localhost|127.0.0.1)$/.test(location.hostname)) console.warn("[hero] prólogo desativado:", err?.message || err);
-    if (!OFF) return; // o prólogo não está montado agora (ex.: janela estreita): só não volta a montar
-    const top = hero.offsetTop;
-    const y = window.scrollY;
-    const offPx = (OFF / 100) * (svhMeter.offsetHeight || window.innerHeight);
-    mm.revert();
-    mm = gsap.matchMedia();
-    mm.add(QUERIES, setup);
-    if (y > top) window.scrollTo(0, Math.max(top, y - offPx));
   }
 
   // ---------- Geometria ----------

@@ -438,6 +438,35 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  transition: opacity 0.3s linear;
+}
+
+/* Durante a preparação e o voo (.is-prologue, só desktop): a ave sem véu por cima — sem a atmosfera de base e sem o
+   apoio de contraste do texto, que voltam com a entrada da headline (.has-prologue dá a transição). A águia estática
+   espera o pouso. */
+.has-prologue .hero__atmosphere {
+  transition: filter 0.8s ease-out;
+}
+
+.has-prologue .hero__content::before {
+  transition: opacity 0.8s ease-out;
+}
+
+.is-prologue .hero__atmosphere {
+  filter: opacity(0);
+}
+
+.is-prologue .hero__content::before {
+  opacity: 0;
+}
+
+.is-prologue .hero__figure {
+  visibility: hidden;
+}
+
+/* Header no desktop com voo: acompanha o palco enquanto é visível (o JS liga só nesse trecho; ver js/hero.js) */
+.site-header.is-prologue-fixed {
+  position: fixed;
 }
 
 .hero__atmosphere {

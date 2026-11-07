@@ -1,5 +1,40 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Hero desktop: correção V2 do voo (local, não publicada)
+
+**Pedido:** "PROMPT MESTRE … HERO DESKTOP · V2" (115 tópicos), com cinco imagens da águia, tratadas só como referência visual. **Branch local `fix/hero-voo-v2`**; nada na `main` nem na Vercel.
+
+**Feito:**
+- **Motor novo `js/hero-voo.js`, sem DOM:**
+  - manifesto validado;
+  - rolagem → quadro;
+  - armazenamento com orçamento (`fetch` + `createImageBitmap`, LRU 128/32 MiB, 4 downloads e 2 decodes simultâneos, janela −4/+12);
+  - desenho com recibo exato;
+  - coordenador de fases com trava de conclusão.
+- **Testes:** `node tools/test-hero-voo.mjs`, 11/11.
+- **`js/hero.js`:**
+  - o quadro segue a rolagem bruta; a Visão mantém o scrub de 0,6 s;
+  - voo 160 + Hero 40 + Visão 244 = 444 svh;
+  - entrada original (palavras, CTA, logo/menu) automática no pouso confirmado;
+  - sem replay depois;
+  - header oculto e `inert` no voo, com `position: fixed` só até o fim da sua saída;
+  - sem sombra nem atmosfera sobre a ave;
+  - sem bordas apagadas na travessia;
+  - falha antes da ativação → Hero original sem percurso; falha depois → estado final, sem `scrollTo`;
+  - âncora, link de pular e reload restaurado → Hero pronta.
+- **Manifesto estendido:** `version`, `sourceTime`, `firstFrame`/`finalFrame`, `alpha`, olhos do pouso. `tools/recortar-voo.html` passa a gravar esse formato.
+
+**Conferido:**
+- Desktop 1280/1366/1440/1920: quadro exato, pouso, CTA e header visíveis.
+- Avanço rápido, âncora, link de pular, 404 (manifesto, último quadro, quadros intermediários), Slow 3G, movimento reduzido, resize no mesmo quadro e desktop → mobile → desktop.
+- Mobile 360/390/430 e tablet idênticos à produção, com 0 pedidos de quadro.
+- Console limpo. Build com 271 arquivos.
+
+**Pendente:**
+- **Decisão do usuário sobre o pouso:** o último quadro não é a mesma imagem que a águia estática (corpo e cor diferentes; só olhos e bico coincidem). Opção A (atual): assenta e troca em 0,3 s. Opção B: o último quadro vira a pose estática do desktop, o que é um redesenho.
+- **Não testados:** calibração 140/160/180 por sensação real, FPS em GPU real, Safari/Firefox, bfcache.
+- Relatório completo: `docs/hero-video-v2-relatorio.md`.
+
 ## 06/11/2026 — Hero desktop: voo da águia controlado pela rolagem (publicado em produção)
 
 **Pedido:** "PROMPT MESTRE DE IMPLEMENTAÇÃO — Hero Desktop · Vídeo da Águia Controlado por Scroll". Master enviado pelo usuário: `IMG_5747.MP4`, de fundo branco, que ficou fora do repositório.

@@ -103,11 +103,20 @@ document.getElementById("go").onclick = async () => {
     const name = `voo-${String(i).padStart(3, "0")}.webp`;
     const fh = await dir.getFileHandle(name, { create: true });
     const w = await fh.createWritable(); await w.write(blob); await w.close();
-    frames.push(`assets/hero/voo/${name}`);
+    frames.push({ url: `assets/hero/voo/${name}`, sourceTime: +Math.min(V.duration, (i + 0.5) / OUT.fps).toFixed(4) });
     px.clearRect(0, 0, prev.width, prev.height); px.drawImage(c, 0, 0, prev.width, prev.height);
     log(`${i + 1}/${n} — ${name} (${(blob.size / 1024).toFixed(0)} KB)`);
   }
-  const manifest = { source: "IMG_5747.MP4 (1928x1072, 24 fps, 241 quadros, 10,04 s)", fps: OUT.fps, width: OUT.w, height: OUT.h, frames };
+  // Formato lido por js/hero-voo.js (validateManifest). finalAnchor: olhos no último quadro, em px do quadro — medir de
+  // novo se o master ou o recorte mudarem (os valores abaixo são os do master de 06/11/2026).
+  const manifest = {
+    version: new Date().toISOString().slice(0, 10) + ".1",
+    source: "IMG_5747.MP4 (1928x1072, 24 fps, 241 quadros, 10,04 s)",
+    fps: OUT.fps, width: OUT.w, height: OUT.h, alpha: true,
+    firstFrame: 0, finalFrame: n - 1,
+    finalAnchor: { leftEye: { x: 831.6, y: 323.2 }, rightEye: { x: 1152.9, y: 323.2 } },
+    frames,
+  };
   const mh = await dir.getFileHandle("manifest.json", { create: true });
   const mw = await mh.createWritable(); await mw.write(JSON.stringify(manifest) + "\n"); await mw.close();
   log(`Pronto: ${n} quadros e manifest.json.`);
