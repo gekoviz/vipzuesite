@@ -1,6 +1,8 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Display cards: aparecer nos notebooks comuns (local, não publicado)
+## 07/11/2026 — Display cards: aparecer nos notebooks comuns (publicado em produção)
+
+**Publicação:** autorizada pelo usuário ("Yes, publish"). A `main` foi de `e08a1d5` para `d3fd447` (fast-forward de `fix/cards-notebooks`). Em produção, `css/hero.css` e `js/hero-display-cards.js` estão iguais aos locais. A 1366 × 633 os cards aparecem em [1016, 197, 1310, 583] com o ciclo rodando e sem rolagem lateral. Único erro no console: o 404 do `/favicon.ico`, que já existia.
 
 **Relato do usuário:** em outros navegadores e computadores os cards não apareciam.
 
