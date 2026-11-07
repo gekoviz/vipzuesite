@@ -997,23 +997,26 @@
 }
 
 /* =========================================================
-   Display cards da Hero desktop (07/11/2026) — adaptação nativa do display-cards (Codehagen/21st.dev): dois planos
-   inclinados (−8°) e sobrepostos, destaque alternado. Sem ícones, selos ou bolinhas; o "·" da assinatura é pontuação.
+   Display cards da Hero desktop — V3 (07/11/2026). Adaptação nativa do display-cards (Codehagen/21st.dev): dois planos
+   inclinados e sobrepostos, destaque alternado a cada 3 s. Sem ícones, selos, assinatura ou frase fora dos cards.
    Camadas: o palco é o bloco de contenção (isolado); o grupo fica acima do conteúdo (mesmo z-index, depois no DOM) e
    abaixo da sombra da Visão. Quem é dono de quê:
      .vz-hero-cards            — visibilidade (classes postas por js/hero-display-cards.js; transição em CSS)
-     .vz-hero-cards__motion    — x/y do ciclo (GSAP)        .vz-hero-cards__surface — inclinação e borda (CSS)
+     .vz-hero-cards__motion    — x/y do ciclo (GSAP) e a perspectiva do card
+     .vz-hero-cards__surface   — orientação 3D, material e borda (CSS). O texto está DENTRO da superfície, sem
+                                 contra-transformação: fundo, borda, sombra e letras são um objeto só.
    Só existe na Hero desktop com mouse/touchpad: ≥ 1024 × 560, hover e ponteiro fino (mesmo corte no JS). Tablets e
    celulares: a Hero fica exatamente como era.
    ========================================================= */
 .vz-hero-cards {
   --vzc-w: clamp(284px, 21.5vw, 316px);
-  --vzc-h: 148px; /* cabe a descrição em 3 linhas (o 2º plano, de 1366 em diante) com o rodapé solto */
-  --vzc-step: 88px; /* deslocamento vertical do segundo plano */
+  --vzc-h1: 112px; /* 1º card: três expressões curtas */
+  --vzc-h2: 126px; /* 2º card: a mensagem de duas frases (3–4 linhas) */
+  --vzc-step: 98px; /* deslocamento vertical do segundo plano (folga para o 2º, ao voltar, não cobrir a 3ª linha do 1º) */
   --vzc-shift: 28px; /* deslocamento horizontal do segundo plano */
-  /* folga acima do 1º plano: ele sobe 36 px no destaque e a inclinação levanta o canto direito ~18 px; sem ela o plano
-     cobriria a assinatura */
-  --vzc-lift: 56px;
+  /* folga acima do 1º plano: ele sobe 36 px no destaque e a inclinação levanta um canto. V3: + 32 px, a altura da
+     antiga assinatura, para os cards ficarem no mesmo lugar da tela sem mexer no top do grupo */
+  --vzc-lift: 88px;
   position: absolute;
   z-index: 3;
   /* A headline é centrada na altura do palco: com o grupo a 128 px acima do meio, o segundo plano cai na altura da
@@ -1039,13 +1042,13 @@
   }
 }
 
-/* Notebooks baixos (1366 × 768 e 1920 × 1080 a 150% no Windows: ~590–640 px úteis com barra de tarefas e abas): planos um
-   pouco mais baixos e o grupo sobe 8 px, para sobrar respiro embaixo. */
+/* Notebooks baixos (1366 × 768 e 1920 × 1080 a 150% no Windows: ~590–640 px úteis com barra de tarefas e abas): o grupo
+   sobe 8 px e os planos ficam um pouco mais juntos, para sobrar respiro embaixo. (+ 30 px na folga: a antiga
+   assinatura media 29 px nessa faixa.) */
 @media (max-height: 660px) {
   .vz-hero-cards {
-    --vzc-h: 140px;
-    --vzc-step: 80px;
-    --vzc-lift: 48px;
+    --vzc-step: 94px;
+    --vzc-lift: 78px;
     top: calc(50svh - 120px);
   }
 }
@@ -1057,19 +1060,6 @@
     --vzc-w: 256px;
     --vzc-shift: 20px;
     right: 20px;
-  }
-
-  .vz-hero-cards__signature {
-    font-size: 10px;
-  }
-
-  .vz-hero-cards__title {
-    font-size: 14.5px;
-  }
-
-  .vz-hero-cards__description,
-  .vz-hero-cards__support {
-    font-size: 12px;
   }
 }
 
@@ -1095,50 +1085,25 @@
   transition-delay: 0s;
 }
 
-.vz-hero-cards p {
-  margin: 0;
-}
-
-.vz-hero-cards__signature {
-  position: relative;
-  font-family: var(--font-body);
-  font-size: clamp(10px, 0.76vw, 11px);
-  font-weight: var(--font-weight-semibold, 600);
-  line-height: 1.45;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-wrap: balance;
-}
-
-/* Apoio de leitura (Grafite difuso, como o da headline): a assinatura passa sobre o halo Páprica do campo e o
-   contorno claro das penas (pior ponto medido #936E50: Marfim a 3,9:1); com o apoio fica ≥ 4,5:1. Não é moldura:
-   sem borda, sem forma visível, só escurece o fundo atrás das letras. */
-.vz-hero-cards__signature::before {
-  content: "";
-  position: absolute;
-  inset: -26px -44px;
-  z-index: -1;
-  background: radial-gradient(closest-side, rgb(34 32 29 / 0.62) 0%, rgb(34 32 29 / 0.52) 45%, rgb(34 32 29 / 0.2) 75%, rgb(34 32 29 / 0) 100%);
-  pointer-events: none;
-}
-
-/* cada expressão inteira na mesma linha; a quebra só acontece depois de um "·" (nunca abre linha) */
-.vz-hero-cards__signature span {
-  white-space: nowrap;
-}
-
 .vz-hero-cards__stack {
   position: relative;
+  isolation: isolate;
+  overflow: visible;
   /* inclui a excursão do ciclo: a folga de cima (o 1º sobe) e 50 px embaixo (o 2º desce ~22 px + canto inclinado) */
-  height: calc(var(--vzc-lift) + var(--vzc-step) + var(--vzc-h) + 50px);
+  height: calc(var(--vzc-lift) + var(--vzc-step) + var(--vzc-h2) + 50px);
 }
 
+/* GSAP escreve só x/y aqui. A perspectiva fica neste invólucro (pai direto da superfície): no stack ela não alcançaria
+   a superfície, porque o invólucro animado achata o 3D dos filhos. */
 .vz-hero-cards__motion {
   position: absolute;
   top: var(--vzc-lift);
   left: 0;
+  box-sizing: border-box;
   width: calc(100% - var(--vzc-shift));
-  height: var(--vzc-h);
+  height: var(--vzc-h1);
+  perspective: 900px;
+  perspective-origin: center;
 }
 
 .vz-hero-cards__motion--first {
@@ -1148,6 +1113,7 @@
 .vz-hero-cards__motion--second {
   top: calc(var(--vzc-lift) + var(--vzc-step));
   left: var(--vzc-shift);
+  height: var(--vzc-h2);
   z-index: 3;
 }
 
@@ -1156,83 +1122,93 @@
   z-index: 4;
 }
 
-/* Plano inclinado como no original (−8°); o conteúdo é contra-inclinado e fica reto */
+/* O card inteiro (material, borda, sombra e texto) é um plano inclinado com profundidade */
 .vz-hero-cards__surface {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 100%;
-  border: 1px solid rgb(215 103 63 / 0.3);
+  box-sizing: border-box;
+  border: 1px solid rgb(215 103 63 / 0.35);
   border-radius: 14px;
-  background: linear-gradient(128deg, rgb(91 70 50 / 0.96) 0%, rgb(34 32 29 / 0.96) 100%);
+  background: linear-gradient(135deg, #302A22 0%, #22201D 55%, #22201D 100%);
+  color: #F3EDE3;
   box-shadow: 0 10px 24px rgb(16 12 9 / 0.24);
-  transform: skewY(-8deg);
-  transition: border-color 0.7s ease, box-shadow 0.7s ease;
+  transform: rotateX(4deg) rotateY(-8deg) rotateZ(-4deg);
+  transform-origin: center;
+  transform-style: preserve-3d;
+  transition: border-color 0.65s ease, box-shadow 0.65s ease;
 }
 
+/* Só organiza a tipografia: sem transform próprio (o texto acompanha a orientação do plano) */
 .vz-hero-cards__body {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 100%;
-  /* a inclinação baixa a borda de cima à esquerda (~18 px) e sobe a de baixo à direita: o respiro acompanha */
-  padding: 24px 18px 12px 16px;
-  transform: skewY(8deg);
-  opacity: 0.88; /* plano em espera: um passo atrás, ainda legível (rodapé ≥ 4,5:1) */
-  transition: opacity 0.7s ease;
+  min-height: 0;
+  padding: 15px 17px;
+  box-sizing: border-box;
+  color: inherit;
+  text-align: center;
 }
 
-/* Plano em destaque: borda Páprica mais presente, sombra um pouco mais longa e texto pleno */
+/* Card superior: três expressões, mesma hierarquia, uma por linha */
+.vz-hero-cards__statement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: #F3EDE3;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.vz-hero-cards__statement span {
+  display: block;
+  width: 100%;
+}
+
+/* Card inferior: a mensagem inteira, com quebra natural */
+.vz-hero-cards__argument {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: #F3EDE3;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-align: center;
+  white-space: normal;
+}
+
+/* Plano em destaque: borda Páprica mais presente e sombra um pouco mais longa (mesmas sombras da V2) */
 .vz-hero-cards__stack[data-active="first"] .vz-hero-cards__motion--first .vz-hero-cards__surface,
 .vz-hero-cards__stack[data-active="second"] .vz-hero-cards__motion--second .vz-hero-cards__surface {
-  border-color: rgb(215 103 63 / 0.62);
+  border-color: rgb(215 103 63 / 0.65);
   box-shadow: 0 14px 30px rgb(16 12 9 / 0.32);
 }
 
-.vz-hero-cards__stack[data-active="first"] .vz-hero-cards__motion--first .vz-hero-cards__body,
-.vz-hero-cards__stack[data-active="second"] .vz-hero-cards__motion--second .vz-hero-cards__body,
-.vz-hero-cards__stack[data-active="none"] .vz-hero-cards__body {
-  opacity: 1;
-}
-
-.vz-hero-cards__title {
-  font-family: var(--font-body);
-  font-size: clamp(15px, 1.12vw, 17px);
-  font-weight: var(--font-weight-semibold, 600);
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-
-.vz-hero-cards__description {
-  margin-top: 6px !important;
-  font-family: var(--font-body);
-  font-size: clamp(12.5px, 0.95vw, 13.5px);
-  line-height: 1.38;
-  color: rgb(243 237 227 / 0.94);
-}
-
-.vz-hero-cards__meta {
-  margin-top: auto !important;
-  padding-top: 8px;
-  font-family: var(--font-body);
-  font-size: 11.5px;
-  font-weight: var(--font-weight-medium, 500);
-  letter-spacing: 0.03em;
-  color: #EDC2B3; /* Páprica clareada (matiz da Páprica) sobre o Mocha do plano */
-}
-
-.vz-hero-cards__support {
-  font-family: var(--font-body);
-  font-size: clamp(12.5px, 0.95vw, 13.5px);
-  line-height: 1.45;
-  text-wrap: pretty;
-}
-
-/* Hover: destaque local na superfície (o invólucro com x/y é do GSAP; aqui só a borda e um passo curto) */
+/* Hover: destaque local na superfície (o invólucro com x/y é do GSAP; aqui só a borda, a sombra e a frente) */
 @media (hover: hover) and (pointer: fine) {
   .vz-hero-cards__motion:hover .vz-hero-cards__surface {
     border-color: rgb(215 103 63 / 0.72);
     box-shadow: 0 16px 32px rgb(16 12 9 / 0.34);
-  }
-
-  .vz-hero-cards__motion:hover .vz-hero-cards__body {
-    opacity: 1;
   }
 
   .vz-hero-cards__motion:hover {
@@ -1251,31 +1227,25 @@
 @media (prefers-reduced-motion: reduce) {
   .vz-hero-cards,
   .vz-hero-cards.was-shown,
-  .vz-hero-cards__surface,
-  .vz-hero-cards__body {
+  .vz-hero-cards__surface {
     transition: none !important;
   }
 
   .vz-hero-cards {
-    --vzc-step: calc(var(--vzc-h) + 18px);
-    --vzc-lift: 26px;
+    --vzc-step: calc(var(--vzc-h1) + 18px);
+    --vzc-lift: 58px; /* + 32 px da antiga assinatura */
     transform: none;
   }
 
   .vz-hero-cards__stack {
-    height: calc(var(--vzc-lift) + var(--vzc-step) + var(--vzc-h) + 24px);
-  }
-
-  .vz-hero-cards__body {
-    opacity: 1;
+    height: calc(var(--vzc-lift) + var(--vzc-step) + var(--vzc-h2) + 24px);
   }
 }
-
 
 /* Sem movimento em notebook baixo: planos separados por um respiro menor, para o grupo caber na altura do palco */
 @media (prefers-reduced-motion: reduce) and (max-height: 660px) {
   .vz-hero-cards {
-    --vzc-step: calc(var(--vzc-h) + 10px);
-    --vzc-lift: 14px;
+    --vzc-step: calc(var(--vzc-h1) + 10px);
+    --vzc-lift: 44px; /* + 30 px da antiga assinatura */
   }
 }

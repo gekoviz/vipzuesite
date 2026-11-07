@@ -1,5 +1,19 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Display Cards V3 (local, aguardando autorização)
+
+**Pedido:** "PROMPT MESTRE V3 — correção cirúrgica dos Display Cards". Branch `feat/display-cards-v3`. **Não publicado.**
+
+**Feito:**
+- Saíram a assinatura e a frase de fora dos cards.
+- Card 1 com as três expressões; card 2 com a mensagem inteira.
+- Material Grafite, borda Páprica e texto Marfim.
+- O texto agora gira junto com o card (sem a contra-inclinação).
+- Novo destaque a cada 3 s, com retomada 0,7 s depois da rolagem.
+- Os cards continuam no mesmo ponto da tela.
+
+Detalhes e testes: `docs/display-cards-v3-relatorio.md`.
+
 ## 07/11/2026 — Cromático v2 e correções funcionais (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `760c678` para `ec9d0f0` (fast-forward de `feat/cromatico-v2`).

@@ -142,31 +142,25 @@
         </div>
 
         <!-- Display cards da Hero desktop (≥ 1200 × 650), adaptação do display-cards (Codehagen/21st.dev): dois planos
-             inclinados, sem ícones nem selos. Informativos, não clicáveis. Só aparecem com a Hero pronta (depois do voo e
+             inclinados, sem ícones, selos, assinatura ou frase externa (V3: todo o texto dentro dos dois cards). Informativos, não clicáveis. Só aparecem com a Hero pronta (depois do voo e
              da entrada) e saem antes da Visão; o estado vem de js/hero.js, o movimento de js/hero-display-cards.js. -->
-        <div class="vz-hero-cards" role="group" aria-label="Benefícios de uma presença digital estratégica" hidden data-hero-cards>
-          <p class="vz-hero-cards__signature"><span>PRESENÇA FORTE ·</span> <span>MARCA VALORIZADA ·</span> <span>MAIS OPORTUNIDADES</span></p>
-          <div class="vz-hero-cards__stack" data-active="none">
-            <div class="vz-hero-cards__motion vz-hero-cards__motion--first" data-card="first">
-              <div class="vz-hero-cards__surface">
+        <div class="vz-hero-cards" id="vzHeroCards" role="group" aria-label="Benefícios de uma presença digital estratégica" hidden data-hero-cards>
+          <div class="vz-hero-cards__stack" data-active="first">
+            <div class="vz-hero-cards__motion vz-hero-cards__motion--first">
+              <article class="vz-hero-cards__surface">
                 <div class="vz-hero-cards__body">
-                  <p class="vz-hero-cards__title">Presença digital forte</p>
-                  <p class="vz-hero-cards__description">Mostre o valor do seu negócio com clareza e profissionalismo.</p>
-                  <p class="vz-hero-cards__meta">Estratégia visual</p>
+                  <p class="vz-hero-cards__statement"><span>PRESENÇA FORTE</span> <span>MARCA VALORIZADA</span> <span>MAIS OPORTUNIDADES</span></p>
                 </div>
-              </div>
+              </article>
             </div>
-            <div class="vz-hero-cards__motion vz-hero-cards__motion--second" data-card="second">
-              <div class="vz-hero-cards__surface">
+            <div class="vz-hero-cards__motion vz-hero-cards__motion--second">
+              <article class="vz-hero-cards__surface">
                 <div class="vz-hero-cards__body">
-                  <p class="vz-hero-cards__title">Marca valorizada</p>
-                  <p class="vz-hero-cards__description">Design e estratégia para despertar interesse e aproximar o cliente do próximo passo.</p>
-                  <p class="vz-hero-cards__meta">Mais oportunidades</p>
+                  <p class="vz-hero-cards__argument">Seu cliente já pesquisa, compara e decide no digital. Sua empresa precisa estar à altura.</p>
                 </div>
-              </div>
+              </article>
             </div>
           </div>
-          <p class="vz-hero-cards__support">Seu cliente já pesquisa, compara e decide no digital. Sua empresa precisa estar à altura.</p>
         </div>
 
         <!-- VISÃO: águia → close do olho → mensagem única → passagem para "O que fazemos".

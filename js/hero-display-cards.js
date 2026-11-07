@@ -3,12 +3,18 @@
 //   setHeroReady(true)  — entrada de logo/menu, headline e CTA concluída (ou Hero estática/atalho que já a mostra pronta)
 //   setHeroRange(bool)  — true na Hero pronta; false a partir do início da Visão (a headline começa a sair)
 // Daqui saem: visibilidade do grupo (classes; a transição é do CSS), ciclo de destaque (uma timeline GSAP pausável, sem
-// ScrollTrigger, RAF ou intervalo próprios) e as pausas: rolagem (até 1 s parada), ponteiro sobre o grupo, aba oculta,
+// ScrollTrigger, RAF ou intervalo próprios) e as pausas: rolagem (retoma 0,7 s depois de parar), ponteiro sobre o grupo, aba oculta,
 // palco fora da tela. Movimento reduzido: dois planos parados, sem ciclo. Sem GSAP: os cards aparecem parados.
 (() => {
   const NOOP = { setHeroReady() {}, setHeroRange() {}, dispose() {}, state: null };
   const ELIGIBLE = "(min-width: 1024px) and (min-height: 560px) and (hover: hover) and (pointer: fine)"; // mesmo corte do CSS (e da Hero desktop com voo)
-  const IDLE_MS = 1000;
+  const IDLE_MS = 700;
+  // V3: um novo destaque começa a cada CYCLE_BEAT segundos (1º card em 0 s, 2º em 3 s, ciclo de 6 s)
+  const CYCLE_BEAT = 3.0;
+  const CYCLE = CYCLE_BEAT * 2;
+  const MOVE_IN = 0.55;
+  const RETURN_AT = 2.4;
+  const MOVE_OUT = CYCLE_BEAT - RETURN_AT; // 0,6 s: o retorno termina exatamente no início do próximo destaque
 
   function create({ root, stage, gsap }) {
     const stack = root?.querySelector(".vz-hero-cards__stack");
@@ -21,30 +27,26 @@
     const state = { heroReady: false, heroRange: false, stageVisible: true, scrolling: false, hovered: false, shown: false, disposed: false };
     let idleTimer = 0;
 
-    // Ciclo: 1º plano sobe e fica à frente, repousa, volta; 2º plano desce um passo e fica à frente, repousa, volta.
-    // Só x/y dos invólucros; a inclinação está na superfície interna (sem disputa de transform).
+    // Ciclo (6 s): 0 s o 1º plano sobe e fica à frente; 2,4 s volta; 3 s o 2º desce um passo e fica à frente; 5,4 s
+    // volta; 6 s recomeça. Só x/y dos invólucros; a orientação 3D está na superfície (sem disputa de transform).
+    // A duração sai da construção: o último retorno termina em CYCLE_BEAT + RETURN_AT + MOVE_OUT = CYCLE.
     let tl = null;
     if (gsap) {
       const setActive = (v) => () => (stack.dataset.active = v);
-      tl = gsap.timeline({ paused: true, repeat: -1, defaults: { ease: "power2.inOut" } });
-      tl.call(setActive("first"))
-        .to(first, { x: -4, y: -36, duration: 0.75, ease: "power2.out" })
-        .to({}, { duration: 3.9 })
-        .to(first, { x: 0, y: 0, duration: 0.72 })
-        .call(setActive("none"))
-        .to({}, { duration: 0.35 })
-        .call(setActive("second"))
-        .to(second, { x: 10, y: 22, duration: 0.75, ease: "power2.out" })
-        .to({}, { duration: 3.9 })
-        .to(second, { x: 0, y: 0, duration: 0.72 })
-        .call(setActive("none"))
-        .to({}, { duration: 0.35 });
+      tl = gsap.timeline({ paused: true, repeat: -1 });
+      tl.call(setActive("first"), null, 0)
+        .to(first, { x: -4, y: -36, duration: MOVE_IN, ease: "power2.out" }, 0)
+        .to(first, { x: 0, y: 0, duration: MOVE_OUT, ease: "power2.inOut" }, RETURN_AT)
+        .call(setActive("second"), null, CYCLE_BEAT)
+        .to(second, { x: 8, y: 22, duration: MOVE_IN, ease: "power2.out" }, CYCLE_BEAT)
+        .to(second, { x: 0, y: 0, duration: MOVE_OUT, ease: "power2.inOut" }, CYCLE_BEAT + RETURN_AT);
+      if (Math.abs(tl.duration() - CYCLE) > 1e-6) console.warn("[hero-cards] ciclo com duração inesperada:", tl.duration());
     }
 
     const resetPose = () => {
       tl?.pause(0);
       if (gsap) gsap.set([first, second], { x: 0, y: 0 });
-      stack.dataset.active = "none";
+      stack.dataset.active = "first";
     };
 
     function evaluate() {
@@ -143,7 +145,7 @@
         tl?.kill();
         tl = null;
         if (gsap) gsap.set([first, second], { clearProps: "transform" });
-        stack.dataset.active = "none";
+        stack.dataset.active = "first";
         root.classList.remove("is-shown", "was-shown");
         root.hidden = true;
       },
