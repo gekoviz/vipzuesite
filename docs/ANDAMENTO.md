@@ -1,8 +1,18 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Seção 03 V5: águia no galho e quatro Liquid Glass Cards (não publicado)
+## 07/11/2026 — Seção 03 V5: águia no galho e quatro Liquid Glass Cards (publicado em produção)
 
-**Pedido:** "PROMPT MESTRE V5 — Reconstrução visual da Seção 03". Branch `feat/s03-liquid-glass`. **Não publicado**: nenhum deploy, nenhum push.
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `a7a051b` para `453fe60` (fast-forward de `feat/s03-liquid-glass`).
+
+**Conferido em produção (Chrome headless, 1440 × 900, 1366 × 768 e 390 × 844):**
+- `index.html`, `css/sections.css`, `js/scroll-narrative.js` e os dois assets da águia iguais aos locais.
+- Desktop: cards ocultos antes do texto 1 (p = 0,10) e visíveis nos três momentos, com o vidro .76/.74, blur ativo e líquido correndo.
+- Águia no galho carregada e headline quebrada depois de "sua".
+- Celular: cards no fluxo e visíveis.
+- Sem rolagem lateral e sem erros no console.
+- Screenshots `prod-*.jpg` em `docs/qa/s03-liquid-glass/`.
+
+**Pedido:** "PROMPT MESTRE V5 — Reconstrução visual da Seção 03". Branch `feat/s03-liquid-glass`.
 
 **Feito:**
 - Águia de perfil trocada pela águia no galho (`assets/secao03/aguia-galho-1536/960.webp`): quadrante superior direito, `contain`, sem máscara e com os mesmos transforms da narrativa.

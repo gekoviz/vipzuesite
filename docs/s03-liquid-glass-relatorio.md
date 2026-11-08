@@ -1,6 +1,6 @@
 # Seção 03 — V5: águia no galho, composição editorial e quatro Liquid Glass Cards — relatório (07/11/2026)
 
-Branch `feat/s03-liquid-glass`. **Não publicado.** Nenhum deploy e nenhum push foram feitos.
+Branch `feat/s03-liquid-glass`. **Publicado em produção** em 07/11/2026 (`main` em `453fe60`), com autorização do usuário ("Sim, publicar"). Conferido no site publicado: arquivos iguais aos locais e o mesmo comportamento em 1440 × 900, 1366 × 768 e 390 × 844.
 
 Pedido: "VIPZUE — PROMPT MESTRE V5 — Reconstrução visual da Seção 03". A referência é a composição aprovada, a segunda imagem enviada.
 
