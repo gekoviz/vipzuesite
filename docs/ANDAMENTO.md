@@ -1,5 +1,23 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Seções 03 e 04 no celular: publicadas em produção (vipzuesite.vercel.app)
+
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `56f220e` para `b26cb7f` (fast-forward de `feat/s04-mobile-linha`, que contém a 03 mobile `9419171`). A Vercel publicou na primeira checagem.
+
+**Endereço:** o site deste projeto é o https://vipzuesite.vercel.app. O vipzue.com é outro site (outros arquivos CSS) e não recebe nada deste repositório.
+
+**Conferido em produção (Chrome headless):**
+- `index.html`, `css/sections.css`, `js/journey-lamp.js`, `js/scroll-narrative.js` e `assets/secao04/penas-s04.webp` iguais aos locais (os textos sem o CR; o webp byte a byte);
+- funcional da 04: 115/115 em 390 × 844 e 360 × 800 (linha, estados, reversão, limpeza celular ↔ desktop, movimento reduzido, penas com status 200);
+- funcional da 03: 24/24 em 390 × 844;
+- sonda da 04 em 390 igual à local (estados por ponto, linha, penas, sem rolagem lateral), com a águia da divisa igual;
+- desktop 1440 × 900 com a sonda igual em 4/4 e captura estável 0% diferente;
+- console limpo.
+
+Capturas `prod-*.jpg` em `docs/qa/s04-mobile/` (local).
+
+**Pendente:** conferir num iPhone e num Android reais.
+
 ## 08/11/2026 — Seção 04 no celular: linha viva do Método (branch, não publicado)
 
 **Pedido:** "VIPZUE — PROMPT MESTRE DE EXECUÇÃO · SEÇÃO 04 MOBILE · LINHA VIVA / MÉTODO", com a referência REF_01 (14.webp) e a plumagem (15.webp). Branch `feat/s04-mobile-linha`, a partir da 03 mobile (`9419171`). O prompt pede "não fazer deploy". Relatório completo: `docs/s04-mobile-relatorio.md`.
