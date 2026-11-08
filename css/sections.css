@@ -1750,49 +1750,79 @@ html:not(.s03-motion) .vz-s3-glass-card {
 }
 
 /* =========================================================
-   07 — FAQ · porte sem React do 21st.dev "frequently-asked-questions-with-accordion" (@scrollxui)
-   Estrutura: título centralizado → lista em coluna única (max-w-3xl = 768px) → itens com linha inferior.
-   Entradas: palavras do título com desfoque (0,4s, +0,08s por palavra), lista sobe 20px (0,5s, atraso 0,5s) e cada
-   item sobe 10px (0,35s, atraso 0,5s + 0,07s por item). Abertura: altura em 0,2s ease-out e seta que gira 180°.
-   Cores, fonte e fundo são os da VIPZUE; a copy não muda.
-   Rodada 4: a FAQ passa para o campo ESCURO (a cara do rodapé, que ela antecede): as cores viraram variáveis (--faq-*)
-   e o texto é marfim.
+   07 — FAQ · V5.0 (08/11/2026)
+   Prompt "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V5.0": cinco perguntas, fundo abstrato Mocha/Páprica em CSS e estático
+   (REF_01 no desktop, REF_02 no celular), título maior e lista larga, numa coluna só.
+   O accordion é o de antes: um item aberto por vez, altura por grid (0fr → 1fr) e seta que gira 180°.
+   A entrada (título palavra a palavra, perguntas em cascata) é do js/sections.js, com GSAP/ScrollTrigger. Nenhum estado
+   escondido mora aqui: sem JS, ou se o GSAP não carregar, tudo aparece.
+   O campo WebGL da FAQ saiu de js/light-field.js, porque o canvas cobria este fundo.
+   Este bloco SUBSTITUI o "07 — FAQ · porte sem React do 21st.dev" (rodada 4).
    ========================================================= */
-.faq {
-  --faq-ink: var(--color-ivory); /* títulos das perguntas */
-  --faq-rule: rgb(243 237 227 / 0.2); /* linha de cada item */
-  --faq-focus: var(--color-focus-on-dark); /* anel de foco */
+.faq.vz-faq {
+  /* tokens locais, só no root da FAQ, ligados aos globais (os mesmos valores do prompt) */
+  --vz-faq-mocha: var(--color-mocha);
+  --vz-faq-paprika: var(--color-paprika);
+  --vz-faq-deep-paprika: var(--color-paprika-deep);
+  --vz-faq-ivory: var(--color-ivory);
+  --vz-faq-ink: var(--color-graphite);
+  --vz-faq-line: rgb(243 237 227 / 0.25);
+  --faq-focus: var(--color-focus-on-dark);
+  /* força da luz Páprica (faixa do prompt: .55–.72 no desktop, .52–.70 no celular); baixa onde as respostas abertas
+     passariam por cima do miolo da luz, para o texto ficar acima de 4,5:1 */
+  --vz-faq-glow-a: 0.72;
   position: relative;
   isolation: isolate;
-  color: var(--faq-ink);
+  overflow: clip;
+  padding-block: clamp(94px, 8vw, 130px);
+  color: var(--vz-faq-ivory);
+  /* camadas: luz Páprica (centro-direita) → Mocha no meio → base escura em diagonal */
+  background-color: var(--vz-faq-mocha);
+  background-image:
+    radial-gradient(ellipse 67% 70% at 72% 50%, rgb(215 103 63 / var(--vz-faq-glow-a)) 0%, rgb(159 57 48 / 0.43) 42%, rgb(159 57 48 / 0) 82%),
+    radial-gradient(ellipse 69% 71% at 38% 61%, rgb(91 70 50 / 0.27) 0%, rgb(44 27 20 / 0) 78%),
+    linear-gradient(116deg, #20120E 0%, #312219 39%, #391F16 68%, #21130F 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.faq .faq__grid {
+/* a grade deixa de ser a coluna de 768px: o título e a lista medem a partir da largura da seção */
+.faq.vz-faq .faq__grid {
   display: block;
-  max-width: calc(768px + var(--page-margin) * 2);
+  width: 100%;
+  max-width: none;
+  padding-inline: 0;
 }
 
-.faq .faq__title {
+.faq.vz-faq .vz-faq__title {
+  position: relative;
+  z-index: 1;
+  width: fit-content;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+  color: var(--vz-faq-ivory);
+  font-size: clamp(60px, 5.3vw, 82px);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
   text-align: center;
   text-wrap: balance;
 }
 
-.faq .faq__word {
+/* cada palavra numa caixa própria (a entrada as move); o espaço entre elas é o texto real do HTML */
+.faq.vz-faq .vz-faq__title-word {
   display: inline-block;
+  white-space: nowrap;
 }
 
-.faq .faq__list {
-  margin-top: var(--space-xl);
+.faq.vz-faq .vz-faq__list {
+  position: relative;
+  z-index: 1;
+  width: min(calc(100% - 96px), 1060px);
+  margin: 76px auto 0;
 }
 
-@media (min-width: 768px) {
-  .faq .faq__list {
-    margin-top: var(--space-3xl);
-  }
-}
-
-.faq .accordion__item {
-  border-bottom: var(--border-width-default) solid var(--faq-rule);
+.faq.vz-faq .vz-faq__item {
+  border-bottom: 1px solid var(--vz-faq-line);
 }
 
 .faq .accordion__heading {
@@ -1801,25 +1831,27 @@ html:not(.s03-motion) .vz-s3-glass-card {
   font: inherit;
 }
 
-.faq .accordion__trigger {
+.faq.vz-faq .vz-faq__trigger {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-md);
+  gap: 16px;
   width: 100%;
-  min-height: 44px;
-  padding: var(--space-md) 0;
+  min-height: 64px;
+  /* 24px é o ponto de partida do prompt; cresce com a largura até o passo de linha da REF_01 (~6,8% da largura) */
+  padding: clamp(24px, 2.2vw, 34px) 0;
   border: 0;
   background: none;
   text-align: left;
   cursor: pointer;
   font-family: var(--font-body);
-  font-size: var(--font-size-body-lg);
-  line-height: 1.3;
+  font-size: clamp(17px, 1.35vw, 19px);
+  line-height: 1.4;
   font-weight: var(--font-weight-medium);
   letter-spacing: -0.01em;
-  color: var(--faq-ink);
+  color: var(--vz-faq-ivory);
+  transition: padding-bottom 0.2s ease-out;
 }
 
 /* Refino cromático (07/11): a pergunta não ganha sublinhado no hover; abrir/fechar e o anel de foco bastam */
@@ -1852,12 +1884,15 @@ html:not(.s03-motion) .vz-s3-glass-card {
   overflow: hidden;
 }
 
-.faq .accordion__panel p {
-  max-width: 62ch;
-  padding: 0 var(--space-xl) var(--space-md) 0;
-  font-size: var(--font-size-body);
-  line-height: var(--font-line-body);
-  color: var(--text-2); /* marfim a 0,88 no campo escuro */
+.faq.vz-faq .vz-faq__answer {
+  max-width: 78ch;
+  margin: 0;
+  padding: 0 32px 24px 0;
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.6;
+  /* o prompt pede "pelo menos" .86; a .92 a resposta aberta passa de 4,5:1 também sobre o miolo da luz */
+  color: rgb(243 237 227 / 0.92);
+  text-align: left;
 }
 
 .faq .accordion[data-ready] .accordion__panel {
@@ -1876,50 +1911,59 @@ html:not(.s03-motion) .vz-s3-glass-card {
     visibility 0s;
 }
 
-/* Entradas (só com movimento permitido: o <html> ganha .js-reveal no <head>) */
-html.js-reveal .faq .faq__word {
-  opacity: 0;
-  filter: blur(6px);
-  transform: translateY(12px);
-  transition:
-    opacity 0.4s ease-in-out,
-    filter 0.4s ease-in-out,
-    transform 0.4s ease-in-out;
-  transition-delay: calc(var(--w, 0) * 80ms);
+/* tablet e desktop pequeno: o título em escala intermediária */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .faq.vz-faq {
+    --vz-faq-glow-a: 0.58;
+  }
+
+  .faq.vz-faq .vz-faq__title {
+    font-size: clamp(44px, 5.8vw, 64px);
+  }
 }
 
-html.js-reveal .faq.is-title-in .faq__word {
-  opacity: 1;
-  filter: blur(0);
-  transform: none;
-}
+/* celular: luz mais central, título menor (pode ir a duas linhas só se não couber), lista a 22px das bordas */
+@media (max-width: 767.98px) {
+  .faq.vz-faq {
+    --vz-faq-glow-a: 0.52;
+    padding-block: clamp(66px, 12vw, 92px);
+    background-image:
+      radial-gradient(ellipse 115% 62% at 56% 52%, rgb(215 103 63 / var(--vz-faq-glow-a)) 0%, rgb(159 57 48 / 0.39) 38%, rgb(159 57 48 / 0) 79%),
+      linear-gradient(178deg, #190D0A 0%, #321810 28%, #462016 58%, #24120F 100%);
+  }
 
-html.js-reveal .faq .faq__list {
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 0.5s ease-in-out 0.5s,
-    transform 0.5s ease-in-out 0.5s;
-}
+  .faq.vz-faq .vz-faq__title {
+    font-size: clamp(31px, 8.3vw, 45px);
+    line-height: 1;
+  }
 
-html.js-reveal .faq .accordion__item {
-  opacity: 0;
-  transform: translateY(10px);
-  transition:
-    opacity 0.35s ease-out,
-    transform 0.35s ease-out;
-  transition-delay: calc(0.5s + var(--i, 0) * 70ms);
-}
+  .faq.vz-faq .vz-faq__list {
+    width: calc(100% - 44px);
+    margin-top: 48px;
+  }
 
-html.js-reveal .faq.is-list-in .faq__list,
-html.js-reveal .faq.is-list-in .accordion__item {
-  opacity: 1;
-  transform: none;
+  .faq.vz-faq .vz-faq__trigger {
+    min-height: 56px;
+    padding-block: 23px;
+    font-size: clamp(16px, 4.2vw, 18px);
+  }
+
+  /* aberta: 12px entre a pergunta e a resposta (o prompt pede 10–14px no celular) */
+  .faq.vz-faq .accordion[data-ready] .accordion__item[data-state="open"] .vz-faq__trigger {
+    padding-bottom: 12px;
+  }
+
+  .faq.vz-faq .vz-faq__answer {
+    padding-right: 0;
+    font-size: clamp(14.5px, 3.8vw, 16px);
+    line-height: 1.55;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .faq .accordion__panel,
-  .faq .accordion__icon {
+  .faq .accordion__icon,
+  .faq .accordion__trigger {
     transition: none !important;
   }
 }

@@ -357,9 +357,10 @@ void main() {
   // em CSS da referência aprovada (css/sections.css, "04 — Método, fundo Mocha/Páprica — V6"); o canvas dele cobria esse fundo.
   // 06 — CTA final saiu da lista em 08/11/2026 (prompt V4.0 da CTA final): o fundo dela passou a ser o campo abstrato
   // Mocha/Páprica em CSS, estático (css/sections.css, "06 — CTA final · V4.0"), pelo mesmo motivo.
+  // 07 — FAQ saiu da lista em 08/11/2026 (prompt V5.0 da FAQ): o fundo dela passou a ser o campo Mocha/Páprica em CSS,
+  // estático (css/sections.css, "07 — FAQ · V5.0"), pelo mesmo motivo.
   const FIELD_SECTIONS = [
     ["#para-quem-e", "light"], // 05 — Para quem é
-    ["#faq", "dark"], // 07 — FAQ (rodada 4: escuro, a cara do rodapé)
     ["[data-beam-footer]", "dark"], // 08 — Rodapé
   ];
   // Teto de brilho do campo escuro (u_state.z do shader, §4.1a). 0 = a Hero idêntica, mas o texto pequeno reprova nos focos

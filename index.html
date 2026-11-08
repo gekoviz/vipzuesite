@@ -478,77 +478,67 @@
       <span class="veil veil--long veil--end" aria-hidden="true"></span>
     </section>
 
-    <!-- 07 — FAQ (8.8). Somente perguntas com resposta sustentada pelo documento. Pendentes (sem resposta autorizada):
-         prazo de desenvolvimento, materiais para começar, o que está incluído, o que acontece depois da entrega. -->
-    <section class="section surface-dark faq" id="faq" aria-labelledby="faq-title">
+    <!-- 07 — FAQ · V5.0 (08/11/2026, prompt "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V5.0"): cinco perguntas com a copy literal
+         do prompt (saíram a pergunta sobre design e site e a do orçamento; entraram prazo e processo). O título já vem em
+         duas palavras (a entrada as revela uma a uma, js/sections.js); o espaço entre elas é texto real, então a frase é lida inteira. -->
+    <section class="section surface-dark faq vz-faq" id="faq" aria-labelledby="faq-title">
       <span class="veil veil--short veil--start" aria-hidden="true"></span>
       <div class="container faq__grid">
-        <h2 class="t-display-l faq__title" id="faq-title" data-faq-title>Perguntas frequentes</h2>
-        <div class="accordion faq__list" data-accordion>
-          <div class="accordion__item">
+        <h2 class="t-display-l faq__title vz-faq__title" id="faq-title" data-faq-title><span class="faq__word vz-faq__title-word">Perguntas</span> <span class="faq__word vz-faq__title-word">frequentes</span></h2>
+        <div class="accordion faq__list vz-faq__list" data-accordion>
+          <div class="accordion__item vz-faq__item">
             <h3 class="accordion__heading">
-              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-1" id="faq-1-btn">
+              <button class="accordion__trigger vz-faq__trigger" type="button" aria-expanded="false" aria-controls="faq-1" id="faq-1-btn">
                 <span>O que é uma Landing Page Estratégica?</span>
                 <svg class="accordion__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
               </button>
             </h3>
             <div class="accordion__panel" id="faq-1" role="region" aria-labelledby="faq-1-btn">
-              <div class="accordion__panel-in"><p>É uma página criada a partir do negócio, do cliente ideal e da função que ela precisa cumprir dentro da jornada comercial. Ela organiza as informações importantes, antecipa dúvidas e conduz o potencial cliente ao próximo passo.</p></div>
+              <div class="accordion__panel-in"><p class="vz-faq__answer">É uma página criada a partir do negócio, do cliente ideal e da função que ela precisa cumprir dentro da jornada comercial. Ela organiza as informações importantes, antecipa dúvidas e conduz o potencial cliente ao próximo passo.</p></div>
             </div>
           </div>
-          <div class="accordion__item">
+          <div class="accordion__item vz-faq__item">
             <h3 class="accordion__heading">
-              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-2" id="faq-2-btn">
+              <button class="accordion__trigger vz-faq__trigger" type="button" aria-expanded="false" aria-controls="faq-2" id="faq-2-btn">
                 <span>Qual a diferença para um site comum?</span>
                 <svg class="accordion__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
               </button>
             </h3>
             <div class="accordion__panel" id="faq-2" role="region" aria-labelledby="faq-2-btn">
-              <div class="accordion__panel-in"><p>A diferença está no ponto de partida. A construção não começa apenas pelo layout e pela estética, e sim pelo negócio, pelo cliente e pelo objetivo. Cada informação está na página para apresentar melhor a empresa, construir confiança e facilitar o caminho até o contato.</p></div>
+              <div class="accordion__panel-in"><p class="vz-faq__answer">A diferença está no ponto de partida. A construção não começa apenas pelo layout e pela estética, e sim pelo negócio, pelo cliente e pelo objetivo. Cada informação está na página para apresentar melhor a empresa, construir confiança e facilitar o caminho até o contato.</p></div>
             </div>
           </div>
-          <div class="accordion__item">
+          <div class="accordion__item vz-faq__item">
             <h3 class="accordion__heading">
-              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-3" id="faq-3-btn">
+              <button class="accordion__trigger vz-faq__trigger" type="button" aria-expanded="false" aria-controls="faq-3" id="faq-3-btn">
                 <span>Minha empresa já possui um site. Ainda faz sentido?</span>
                 <svg class="accordion__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
               </button>
             </h3>
             <div class="accordion__panel" id="faq-3" role="region" aria-labelledby="faq-3-btn">
-              <div class="accordion__panel-in"><p>Faz sentido quando o site está desatualizado, não representa mais o nível atual do negócio ou não cumpre uma função comercial clara. Esses são alguns dos cenários para os quais as Landing Pages Estratégicas foram pensadas.</p></div>
+              <div class="accordion__panel-in"><p class="vz-faq__answer">Faz sentido quando o site está desatualizado, não apresenta mais o nível atual do negócio ou não cumpre uma função comercial clara. Esses são alguns cenários para os quais as Landing Pages Estratégicas foram pensadas.</p></div>
             </div>
           </div>
-          <div class="accordion__item">
+          <div class="accordion__item vz-faq__item">
             <h3 class="accordion__heading">
-              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-4" id="faq-4-btn">
-                <span>A VIPZUE também desenvolve o design e o site?</span>
+              <button class="accordion__trigger vz-faq__trigger" type="button" aria-expanded="false" aria-controls="faq-4" id="faq-4-btn">
+                <span>Qual é o prazo de entrega da Landing Page?</span>
                 <svg class="accordion__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
               </button>
             </h3>
             <div class="accordion__panel" id="faq-4" role="region" aria-labelledby="faq-4-btn">
-              <div class="accordion__panel-in"><p>Sim. Depois do diagnóstico e da estratégia, transformamos a estratégia em experiência: arquitetura da informação, wireframe e UX, interface, desenvolvimento e publicação.</p></div>
+              <div class="accordion__panel-in"><p class="vz-faq__answer">O prazo varia conforme as necessidades e o escopo de cada projeto. Durante a conversa inicial, entendemos o que sua empresa precisa e, a partir disso, informamos uma previsão de entrega específica para o seu projeto.</p></div>
             </div>
           </div>
-          <div class="accordion__item">
+          <div class="accordion__item vz-faq__item">
             <h3 class="accordion__heading">
-              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-5" id="faq-5-btn">
-                <span>Como funciona o processo após solicitar o projeto?</span>
+              <button class="accordion__trigger vz-faq__trigger" type="button" aria-expanded="false" aria-controls="faq-5" id="faq-5-btn">
+                <span>Como funciona o processo após o primeiro contato?</span>
                 <svg class="accordion__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
               </button>
             </h3>
             <div class="accordion__panel" id="faq-5" role="region" aria-labelledby="faq-5-btn">
-              <div class="accordion__panel-in"><p>O contato começa por uma conversa pelo WhatsApp. O projeto segue três etapas: diagnóstico, para entender o negócio; estratégia, para definir a função da página; e construção, para transformar a estratégia em experiência.</p></div>
-            </div>
-          </div>
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-6" id="faq-6-btn">
-                <span>Como funciona o orçamento?</span>
-                <svg class="accordion__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </button>
-            </h3>
-            <div class="accordion__panel" id="faq-6" role="region" aria-labelledby="faq-6-btn">
-              <div class="accordion__panel-in"><p>O orçamento é solicitado pelo WhatsApp. O clique não representa uma compra: ele inicia uma conversa para entender sua empresa e as possibilidades do projeto.</p></div>
+              <div class="accordion__panel-in"><p class="vz-faq__answer">O contato começa por uma conversa pelo WhatsApp. A partir daí, nosso processo é organizado em quatro etapas: Diagnóstico, para compreender o negócio e as necessidades dos potenciais clientes; Estratégia, para definir as informações e a maneira como serão apresentadas; Construção, para desenvolver o conteúdo, a interface e a estrutura da página; e Entrega, para verificar o funcionamento e publicar a página conforme o escopo definido.</p></div>
             </div>
           </div>
         </div>

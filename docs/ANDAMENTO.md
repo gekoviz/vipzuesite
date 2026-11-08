@@ -1,5 +1,28 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Seção 07 (FAQ): V5.0 em desktop e celular (branch, não publicado)
+
+**Pedido:** "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V5.0 · FAQ", com a REF_01 (desktop) e a REF_02 (celular). Branch `feat/faq-v5`, a partir da `main` publicada (`ce41eb3`). O prompt pede "não publicar". Relatório completo: `docs/faq-v5-relatorio.md`.
+
+**Feito (só a `#faq`):**
+- cinco perguntas com a copy literal: saíram "design e site" e "orçamento"; entraram "prazo de entrega" e "processo após o primeiro contato" (Diagnóstico → Estratégia → Construção → Entrega); a resposta 03 teve dois ajustes de texto;
+- fundo abstrato Mocha/Páprica em CSS, estático: o campo WebGL da FAQ saiu de `js/light-field.js`;
+- título maior e lista de 1060px no desktop; no celular, 22px das bordas;
+- entrada com GSAP/ScrollTrigger (o que a página já carrega): "Perguntas" e "frequentes" com desfoque, depois as cinco perguntas em cascata; uma timeline, um gatilho (`top 82%`), uma vez só;
+- o accordion é o mesmo (um aberto por vez, teclado, regiões).
+
+**Validado (Chrome headless, 13 telas de 320 a 1920):** 120 verificações, 0 falhas.
+- copy literal, sem os itens antigos no DOM;
+- clique, toque, teclado e foco;
+- movimento reduzido, sem GSAP e sem JS;
+- recarga e histórico;
+- contraste AA em todas as telas, com as respostas abertas uma a uma;
+- sem rolagem lateral.
+
+**Decisão pendente:** a emenda 06 → 07. O esfumado do pé da CTA (`3c6475d`, publicado hoje) foi feito para a FAQ antiga e agora clareia o fim da CTA contra o topo escuro da FAQ nova. Tirá-lo deixaria a passagem quase contínua. Isso mexe na CTA, que o prompt da FAQ não autoriza.
+
+**Pendente:** Safari iOS / iPhone real; publicação só quando autorizada.
+
 ## 08/11/2026 — Seção 06 (CTA final): V4.0 publicada em produção (vipzuesite.vercel.app)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `4bfd270` para `3c6475d` (fast-forward de `feat/cta-v4`): a CTA V4.0 e o esfumado do pé até a FAQ. A Vercel publicou em cerca de 10 segundos.
