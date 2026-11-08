@@ -1,5 +1,17 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Seção 03 no celular: cards 1 × 4 (V3.1) publicados em produção (vipzuesite.vercel.app)
+
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `b5ec99e` para `0a56796` (fast-forward de `feat/s03-mobile-cards-1x4`). A Vercel já tinha publicado na primeira checagem.
+
+**Conferido em produção (Chrome headless):**
+- `index.html` e `css/sections.css` iguais aos locais (os textos sem o CR);
+- os cards a 390, 360, 320 e 430 batem nas 3.884 de 3.884 propriedades calculadas, tanto com a branch quanto com o publicado antes da V3: coluna 1 × 4, 24px da borda, 170px de altura, vãos de 14px;
+- funcional da 03: 24/24 em 390 × 844, 360 × 800 e 320 × 568;
+- console limpo.
+
+**Pendente:** conferir num iPhone e num Android reais.
+
 ## 08/11/2026 — Seção 03 no celular: cards de volta à coluna 1 × 4 (V3.1, branch, não publicado)
 
 **Pedido:** "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V3.1 · REVISÃO CIRÚRGICA". Os quatro cards voltam à coluna 1 × 4 publicada antes da V3, conforme a REFERENCIA_02 (17.webp, captura do iPhone). O topo da V3 fica como estava, conforme a REFERENCIA_01 (16.webp). Branch `feat/s03-mobile-cards-1x4`, a partir da `main` publicada (`b5ec99e`). O prompt pede "não fazer deploy". Relatório completo: `docs/s03-mobile-v31-relatorio.md`.

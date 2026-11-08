@@ -1,7 +1,7 @@
 # Seção 03 no celular — V3.1 · revisão cirúrgica dos cards
 
 Prompt: "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V3.1 · REVISÃO CIRÚRGICA" (08/11/2026).
-Branch `feat/s03-mobile-cards-1x4`, a partir da main publicada (`b5ec99e`). **Não publicado.**
+Branch `feat/s03-mobile-cards-1x4`, a partir da main publicada (`b5ec99e`). **Publicado em 08/11/2026** com autorização do usuário: `main` em `0a56796`, https://vipzuesite.vercel.app, conferido em produção (cards 3.884/3.884 iguais, funcional da 03 24/24).
 
 Status: **implementado e validado no Chrome (headless, emulação de celular)**. Safari iOS e aparelho real: **não testados**.
 
