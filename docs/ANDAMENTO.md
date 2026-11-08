@@ -19,7 +19,19 @@
 - contraste AA em todas as telas, com as respostas abertas uma a uma;
 - sem rolagem lateral.
 
-**Decisão pendente:** a emenda 06 → 07. O esfumado do pé da CTA (`3c6475d`, publicado hoje) foi feito para a FAQ antiga e agora clareia o fim da CTA contra o topo escuro da FAQ nova. Tirá-lo deixaria a passagem quase contínua. Isso mexe na CTA, que o prompt da FAQ não autoriza.
+**Emenda 06 → 07 (decidida):**
+- O esfumado do pé da CTA (`3c6475d`, publicado hoje) foi feito para a FAQ antiga e clareava o fim da CTA contra o topo escuro da FAQ nova.
+- Perguntado se devia tirá-lo, o usuário respondeu "o que ficar melhor". Comparei tirar e reajustar, e o reajuste ficou melhor.
+- O pé da CTA agora esfuma no tom real da 1ª faixa da FAQ nova: noite → `rgb(33 19 15)`, mais uma luz Mocha e uma Páprica baixas; no celular, `rgb(26 14 10)`, sem calor.
+- Maior salto de cor na emenda:
+
+  | | Desktop | Celular |
+  |---|---|---|
+  | antes | 108–147 | 114–120 |
+  | sem o esfumado | 60–68 | 13–14 |
+  | reajustado | **6–8** | **2** |
+
+- Mudou só o fundo da `#contato`: duas variáveis e um bloco `@media`; os dois `@media` de largura que só existiam para o calor antigo saíram. Nada mais da CTA mudou.
 
 **Pendente:** Safari iOS / iPhone real; publicação só quando autorizada.
 

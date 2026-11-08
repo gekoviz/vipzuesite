@@ -14,7 +14,7 @@ Prompt: "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V5.0 · FAQ" (08/11/2026), 
 | Arquivo | O que mudou |
 |---|---|
 | `index.html` | só a seção `#faq`. Cinco perguntas no lugar de seis; classes `.vz-faq*` acrescentadas sem tirar nenhuma; as duas palavras do título já vêm em `<span>` no HTML; o comentário da seção foi atualizado. |
-| `css/sections.css` | o bloco "07 — FAQ · porte sem React do 21st.dev" (rodada 4) foi **substituído** pelo "07 — FAQ · V5.0". Nenhuma outra regra mudou. |
+| `css/sections.css` | o bloco "07 — FAQ · porte sem React do 21st.dev" (rodada 4) foi **substituído** pelo "07 — FAQ · V5.0". Depois, com o aval do usuário, o **pé da CTA** (só o esfumado de baixo da `#contato`) foi reajustado para a FAQ nova; ver Observações, item 1. Nenhuma outra regra mudou. |
 | `js/sections.js` | o bloco da FAQ: o accordion é o mesmo (só mudou de lugar dentro do bloco); a entrada passou de IntersectionObserver + CSS para uma timeline GSAP com um ScrollTrigger. |
 | `js/light-field.js` | `#faq` saiu da lista `FIELD_SECTIONS` (uma linha + comentário). O canvas WebGL da FAQ cobriria o fundo em CSS; é o mesmo caso da 04 e da 06. |
 
@@ -197,7 +197,7 @@ Chrome headless, emulação de toque abaixo de 768px. As 13 telas são as 12 do 
 | linhas de 1px a .25; setas de 16px, centradas na pergunta | PASSOU |
 | contraste AA: título ≥ 3:1, perguntas e respostas ≥ 4,5:1, com a resposta aberta sobre a luz | PASSOU |
 | sem rolagem lateral nas 13 telas | PASSOU |
-| emenda 06 → 07 | **PARCIAL**: há um degrau (ver Observações) |
+| emenda 06 → 07 | PASSOU depois do reajuste do pé da CTA: salto máximo 6–8 no desktop e 2 no celular, também com uma resposta aberta (ver Observações) |
 | emenda 07 → 08 | PASSOU (o véu de 72px foi mantido) |
 
 **Técnico (§96)**
@@ -205,7 +205,7 @@ Chrome headless, emulação de toque abaixo de 768px. As 13 telas são as 12 do 
 | Verificação | Resultado |
 |---|---|
 | nenhum pacote, React, Tailwind ou TypeScript | PASSOU |
-| as outras seções iguais às de produção (comparação de estilos e caixas, 6 telas) | PASSOU |
+| as outras seções iguais às de produção (comparação de estilos e caixas, 6 telas); na `#contato`, só o fundo do pé mudou | PASSOU |
 | um `h1` só; nenhum id duplicado; nenhum botão dentro de botão | PASSOU |
 | `git diff --check`, build e fins de linha CRLF | PASSOU |
 | Safari iOS, Firefox, Chrome Android e iPhone real | **NÃO TESTADO** |
@@ -262,19 +262,32 @@ Ficam em `docs/qa/faq-v5/`; o git ignora essa pasta, então os arquivos ficam s�
 
 ## Observações (honestas)
 
-1. **A emenda 06 → 07 tem um degrau, e a causa está na CTA, não na FAQ.**
-   - O esfumado do pé da CTA (`3c6475d`, publicado hoje) foi feito para casar com o campo WebGL da FAQ antiga, que era mais claro no topo. Contra o topo escuro da FAQ nova, ele termina claro e a FAQ começa escura.
-   - Maior salto de cor na linha da emenda, medido em 8 colunas:
+1. **A emenda 06 → 07: o degrau vinha da CTA, e o pé dela foi reajustado.**
+   - O esfumado do pé da CTA (`3c6475d`, publicado hoje) foi feito para casar com o campo WebGL da FAQ antiga, que era mais claro no topo. Contra o topo escuro da FAQ nova, ele terminava claro e a FAQ começava escura.
+   - O prompt da FAQ não autoriza mexer na CTA, então perguntei. O usuário respondeu "o que ficar melhor". Comparei duas saídas: tirar o esfumado, ou reajustá-lo para a FAQ nova. O topo da FAQ continua como estava; ele não foi clareado para disfarçar o corte.
+   - **Reajuste aplicado (só o fundo da `#contato`):**
+     - de 768px para cima, a noite se dissolve em `rgb(33 19 15)`, o tom da 1ª faixa da FAQ à esquerda (o `#21130F` do gradiente dela);
+     - duas luzes baixas refazem a curva da faixa: Mocha até ~50% da largura e Páprica com pico a ~79%. Os valores vêm de um ajuste numérico contra a faixa medida em 16 colunas;
+     - no celular, a faixa da FAQ é uniforme, e o pé esfuma em `rgb(26 14 10)` sem calor;
+     - os dois `@media` (1024–1199 e 768–1023) que só existiam para o calor antigo saíram, porque a faixa da FAQ é a mesma em proporção de 768 a 1920.
+   - Maior salto de cor na linha da emenda (16 colunas, soma RGB):
 
-     | Tela | Hoje | Sem o esfumado da CTA |
-     |---|---|---|
-     | 1440 × 900 | 122 | 59 |
-     | 1024 × 768 | 138 | 61 |
-     | 768 × 1024 | 105 | 68 |
-     | 390 × 844 | 118 | 15 |
+     | Tela | Antes | Sem o esfumado | Reajustado |
+     |---|---|---|---|
+     | 1920 × 1080 | 131 | 60 | **6** |
+     | 1440 × 900 | 131 | 60 | **6** |
+     | 1280 × 720 | 129 | 61 | **7** |
+     | 1024 × 768 | 147 | 60 | **6** |
+     | 768 × 1024 | 108 | 68 | **8** |
+     | 390 × 844 | 120 | 14 | **2** |
+     | 320 × 568 | 114 | 13 | **2** |
 
-   - Tirar o esfumado deixa a passagem quase contínua no celular e reduz o salto à metade no desktop. Isso mexe na CTA, que o prompt da FAQ não autoriza, então ficou como está. Pela mesma regra, não clareei o topo da FAQ para disfarçar o corte.
-   - Capturas: `depois-emenda-06-07-*.jpg` (hoje) e `var-06-07-*.jpg` (com e sem o esfumado).
+   - Com a resposta 05 aberta (a FAQ fica mais alta), o reajustado continua em 6–8 no desktop e em 2 no celular.
+   - Na comparação com a produção, a única diferença nova é o `background-image` da própria `#contato`; nenhum elemento dentro dela mudou de estilo, posição ou tamanho. O esfumado novo é mais escuro que o antigo, então o contraste de qualquer texto perto do pé só sobe.
+   - Capturas:
+     - `v15-06-07-final-<tela>.jpg` (12 telas) e `v15-06-07-final-aberta5-*.jpg`;
+     - comparação: `v15-06-07-atual-*`, `-sem-esfumado-*` e `-reajustado2-*`;
+     - as `depois-emenda-06-07-*.jpg` e `var-06-07-*.jpg` mostram o estado de antes do reajuste.
 2. **A distância das referências vem do contrato.**
    - A REF_01 e a REF_02 usam um laranja-avermelhado bem mais saturado (azul ≈ 0), luz em faixa diagonal estreita e bordas quase pretas.
    - O contrato fixa a paleta (Mocha, Páprica, Páprica profunda), o formato das elipses e as faixas de força e posição; nesses limites, a luz sai mais terrosa e mais larga.

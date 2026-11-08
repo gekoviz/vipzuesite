@@ -1391,18 +1391,21 @@ html:not(.s03-motion) .vz-s3-glass-card {
      (centro, raio e intensidade; base e paleta do prompt): ponto de partida 57% 69% at 73% 39%, .38/.15 */
   --vz-cta-glow: radial-gradient(ellipse 52% 66% at 70% 32%, rgb(215 103 63 / 0.56) 0%, rgb(159 57 48 / 0.25) 42%, transparent 78%);
   --vz-cta-glow-low: radial-gradient(ellipse 70% 83% at 54% 86%, rgb(159 57 48 / 0.13) 0%, transparent 73%);
-  /* pé da CTA → topo da FAQ (decisão de 08/11/2026: suavizar a emenda 06 → 07, que o fundo escuro deixou em corte seco).
-     Nos últimos 22% a noite se dissolve no tom do topo da FAQ, medido no campo dela coluna a coluna: rgb(59 48 38), isto é, Mocha 20% +
-     Profundidade #332B23 80%. No alto à direita a FAQ tem um foco Páprica (~74% da largura no desktop; mais fraco no
-     celular): um calor baixo no mesmo ponto encontra esse foco, ajustado por faixa de largura logo abaixo. A FAQ não muda. */
+  /* pé da CTA → topo da FAQ (decisão de 08/11/2026: suavizar a emenda 06 → 07, que o fundo escuro deixou em corte seco;
+     reajustado no mesmo dia para a FAQ V5.0, cujo topo é escuro). Nos últimos 22% a noite se dissolve no tom da 1ª faixa
+     da FAQ, medida coluna a coluna de 768 a 1920px: rgb(33 19 15) à esquerda (o #21130F do gradiente dela). Para a direita
+     a faixa esquenta: primeiro Mocha (até ~50% da largura), depois Páprica (pico a ~79%). Duas luzes baixas, uma de cada,
+     refazem essa curva no pé (ajuste numérico; resíduo ≤ 8 de soma RGB por coluna). No celular, valor próprio logo abaixo. A FAQ não muda. */
   --vz-cta-fade: linear-gradient(
     to bottom,
     transparent 78%,
-    rgb(59 48 38 / 0.22) 86%,
-    rgb(59 48 38 / 0.62) 94%,
-    rgb(59 48 38) 100%
+    rgb(33 19 15 / 0.22) 86%,
+    rgb(33 19 15 / 0.62) 94%,
+    rgb(33 19 15) 100%
   );
-  --vz-cta-fade-warm: radial-gradient(ellipse 42% 24% at 74% 100%, rgb(215 103 63 / 0.52) 0%, rgb(215 103 63 / 0.24) 50%, transparent 100%);
+  --vz-cta-fade-warm:
+    radial-gradient(ellipse 65% 24% at 79% 100%, rgb(215 103 63 / 0.19) 0%, rgb(215 103 63 / 0.05) 50%, transparent 100%),
+    radial-gradient(ellipse 69% 24% at 47% 100%, rgb(91 70 50 / 0.19) 0%, rgb(91 70 50 / 0.04) 50%, transparent 100%);
   --vz-cta-card-bg: linear-gradient(
     155deg,
     color-mix(in srgb, var(--vz-cta-mocha) 47%, black 53%),
@@ -1683,24 +1686,18 @@ html:not(.s03-motion) .vz-s3-glass-card {
   }
 }
 
-/* desktop pequeno (1024–1199px): o foco Páprica da FAQ fica mais largo (~77%) */
-@media (min-width: 1024px) and (max-width: 1199.98px) {
-  .closing.vz-cta--v4 {
-    --vz-cta-fade-warm: radial-gradient(ellipse 50% 26% at 77% 100%, rgb(215 103 63 / 0.58) 0%, rgb(215 103 63 / 0.28) 50%, transparent 100%);
-  }
-}
-
-/* tablet (768–1023px): o foco da FAQ é mais fraco e mais à direita (~81%) */
-@media (min-width: 768px) and (max-width: 1023.98px) {
-  .closing.vz-cta--v4 {
-    --vz-cta-fade-warm: radial-gradient(ellipse 52% 26% at 81% 100%, rgb(215 103 63 / 0.4) 0%, rgb(215 103 63 / 0.24) 50%, transparent 100%);
-  }
-}
-
-/* celular: o topo da FAQ só esquenta de leve para a direita (rgb 59 → 70–80), então o calor do pé é largo e fraco */
+/* celular: a 1ª faixa da FAQ é uniforme, rgb(26 14 10) (o #190D0A do gradiente dela), então o pé esfuma nela sem calor.
+   De 768px para cima a faixa da FAQ é a mesma em proporção, e vale o pé do bloco principal. */
 @media (max-width: 767.98px) {
   .closing.vz-cta--v4 {
-    --vz-cta-fade-warm: radial-gradient(ellipse 58% 26% at 74% 100%, rgb(215 103 63 / 0.13) 0%, rgb(215 103 63 / 0.06) 55%, transparent 100%);
+    --vz-cta-fade: linear-gradient(
+      to bottom,
+      transparent 78%,
+      rgb(26 14 10 / 0.22) 86%,
+      rgb(26 14 10 / 0.62) 94%,
+      rgb(26 14 10) 100%
+    );
+    --vz-cta-fade-warm: none;
   }
 }
 
