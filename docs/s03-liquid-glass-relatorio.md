@@ -222,11 +222,11 @@ Em 1536 × 865, 1440 × 900, 1366 × 768, 1280 × 720, 1920 × 1080 e 1024 × 76
 - **A primeira imagem enviada foi usada como asset**, embora a especificação a chame de "estado anterior": é a águia recortada com transparência que a composição aprovada mostra.
 - **Início do líquido:** na primeira entrada, o Chrome segura o tempo das animações por 2–3 quadros (cerca de 180 ms), enquanto o card ainda está surgindo. Depois disso não há mais pausa.
 
-## 9. Decisão pendente com você
+## 9. Decisão do usuário sobre o material
 
-O material dos cards é o único ponto em que a fidelidade visual e a leitura entram em conflito:
+O material dos cards era o único ponto em que a fidelidade visual e a leitura entravam em conflito:
 
-- **Hoje (.76/.74):** leitura AA em todos os viewports, vidro mais escuro que o da referência.
+- **.76/.74:** leitura AA em todos os viewports, vidro mais escuro que o da referência.
 - **Especificação literal (.52/.50):** fiel ao tom da referência, mas as descrições ficam em cerca de 3:1.
 
-A troca é uma linha de CSS. Fiquei com a primeira porque a §80 diz que "a leitura precisa permanecer funcional".
+**Decidido em 07/11/2026:** manter .76/.74 (resposta do usuário: "Keep readable (.76)"). O desvio 3 fica aprovado.

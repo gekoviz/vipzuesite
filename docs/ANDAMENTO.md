@@ -12,7 +12,7 @@
 - Tablet com 2 colunas, celular com 1, e movimento reduzido ou sem a narrativa com os cards no fluxo.
 
 **Desvios medidos:**
-- Vidro a .76/.74 em vez de .52/.50: com o valor literal, as descrições ficavam em cerca de 3:1. É o maior desvio visual, e a decisão fica com o usuário.
+- Vidro a .76/.74 em vez de .52/.50: com o valor literal, as descrições ficavam em cerca de 3:1. É o maior desvio visual, e o usuário escolheu mantê-lo ("Keep readable (.76)").
 - Card 01 com menos pigmento (.45/.18), pela alavanca da §80.
 - A lista fica fora do palco, como faixa sticky na grade da seção.
 - `is-leaving` mantém o líquido correndo nos 600 ms da saída (§88).
