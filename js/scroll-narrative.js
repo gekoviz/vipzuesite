@@ -35,20 +35,28 @@
   // ---------- V5 (07/11/2026): quatro cards da 03 (#s03Insights) ----------
   // Só alternam uma classe e o aria-hidden; não criam controlador de rolagem. No desktop com a narrativa entram no
   // início real do texto 1 (render, abaixo) e saem só quando ela volta para antes dele; fora dela ficam visíveis.
-  // O líquido é CSS puro (keyframes): a classe apenas o põe para correr. Na volta, "is-leaving" o mantém correndo
-  // durante a saída de 600 ms (os cards ainda estão visíveis, §88) e cai quando a lista termina de ficar oculta.
+  // Na volta, "is-leaving" marca a saída de 600 ms (os cards ainda estão visíveis, §88) e cai quando a lista termina
+  // de ficar oculta.
+  // 08/11/2026 — onda dos cards de vidro (js/section3-liquid-glass.js): uma instância para os quatro cards; toca a
+  // partir da revelação e para quando a narrativa a reverte (as duas funções abaixo). A página não tem desmontagem global
+  // (a lista vive o tempo todo; os teardowns de cada modo a deixam visível), então destroy() não é chamado aqui.
   const s03Insights = document.getElementById("s03Insights");
+  const s03Glass = window.createVzSection3LiquidGlass?.(s03Insights) ?? null;
   const revealS03Insights = () => {
     if (!s03Insights) return;
     s03Insights.classList.remove("is-leaving");
     s03Insights.classList.add("is-revealed");
     s03Insights.setAttribute("aria-hidden", "false");
+    s03Glass?.markRevealed();
   };
   const resetS03Insights = () => {
     if (!s03Insights) return;
     if (s03Insights.classList.contains("is-revealed")) s03Insights.classList.add("is-leaving");
     s03Insights.classList.remove("is-revealed");
     s03Insights.setAttribute("aria-hidden", "true");
+    // a onda para já na reversão (não no transitionend da saída: quando revelar e reverter caem no mesmo quadro, como
+    // na remontagem da narrativa, a transição não roda e a onda ficaria tocando com os cards ocultos)
+    s03Glass?.markUnrevealed();
   };
   if (s03Insights) {
     s03Insights.addEventListener("transitionend", (e) => {

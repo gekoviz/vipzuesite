@@ -252,46 +252,53 @@
       </div>
       <!-- V5 — quatro cards informativos (uma única instância). Desktop com a narrativa: faixa inferior do palco
            visível (css/sections.css); a entrada acompanha o início do texto 1 (js/scroll-narrative.js, mesmo
-           ScrollTrigger). Abaixo de 1024px e sem a narrativa: fluxo normal depois dos textos. Sem links nem botões. -->
-      <ol class="s03-insights" id="s03Insights" aria-label="Informações que orientam a decisão do cliente" aria-hidden="true">
+           ScrollTrigger). Abaixo de 1024px e sem a narrativa: fluxo normal depois dos textos. Sem links nem botões.
+           Vidro translúcido e onda (08/11/2026): três camadas decorativas por card, antes do conteúdo — película de vidro,
+           janela da onda (um quarto do card; a onda SVG anda dentro dela) e contorno; o loop é liberado por
+           js/section3-liquid-glass.js. data-vz-wave diz em que quina fica a luz. -->
+      <ol class="s03-insights vz-s3-glass" id="s03Insights" aria-label="Informações que orientam a decisão do cliente" aria-hidden="true">
         <!-- CARD 01 -->
-        <li class="s03-insight s03-insight--01">
-          <span class="s03-insight__liquid s03-insight__liquid--a" aria-hidden="true"></span>
-          <span class="s03-insight__liquid s03-insight__liquid--b" aria-hidden="true"></span>
+        <li class="s03-insight s03-insight--01 vz-s3-glass-card" data-vz-wave="bottom-left">
+          <span class="vz-s3-glass__material" aria-hidden="true"></span>
+          <span class="vz-s3-glass__wave-window" aria-hidden="true"><span class="vz-s3-glass__wave"></span></span>
+          <span class="vz-s3-glass__rim" aria-hidden="true"></span>
           <div class="s03-insight__content">
-            <span class="s03-insight__number">01</span>
-            <h3 class="s03-insight__title">Oferta clara</h3>
-            <p class="s03-insight__description">O que a empresa oferece e quais soluções entrega.</p>
+            <span class="s03-insight__number" data-vz-s3-number>01</span>
+            <h3 class="s03-insight__title" data-vz-s3-title>Oferta clara</h3>
+            <p class="s03-insight__description" data-vz-s3-copy>O que a empresa oferece e quais soluções entrega.</p>
           </div>
         </li>
         <!-- CARD 02 -->
-        <li class="s03-insight s03-insight--02">
-          <span class="s03-insight__liquid s03-insight__liquid--a" aria-hidden="true"></span>
-          <span class="s03-insight__liquid s03-insight__liquid--b" aria-hidden="true"></span>
+        <li class="s03-insight s03-insight--02 vz-s3-glass-card" data-vz-wave="top-right">
+          <span class="vz-s3-glass__material" aria-hidden="true"></span>
+          <span class="vz-s3-glass__wave-window" aria-hidden="true"><span class="vz-s3-glass__wave"></span></span>
+          <span class="vz-s3-glass__rim" aria-hidden="true"></span>
           <div class="s03-insight__content">
-            <span class="s03-insight__number">02</span>
-            <h3 class="s03-insight__title">Valor percebido</h3>
-            <p class="s03-insight__description">Diferenciais e motivos para considerar aquela solução.</p>
+            <span class="s03-insight__number" data-vz-s3-number>02</span>
+            <h3 class="s03-insight__title" data-vz-s3-title>Valor percebido</h3>
+            <p class="s03-insight__description" data-vz-s3-copy>Diferenciais e motivos para considerar aquela solução.</p>
           </div>
         </li>
         <!-- CARD 03 -->
-        <li class="s03-insight s03-insight--03">
-          <span class="s03-insight__liquid s03-insight__liquid--a" aria-hidden="true"></span>
-          <span class="s03-insight__liquid s03-insight__liquid--b" aria-hidden="true"></span>
+        <li class="s03-insight s03-insight--03 vz-s3-glass-card" data-vz-wave="bottom-right-soft">
+          <span class="vz-s3-glass__material" aria-hidden="true"></span>
+          <span class="vz-s3-glass__wave-window" aria-hidden="true"><span class="vz-s3-glass__wave"></span></span>
+          <span class="vz-s3-glass__rim" aria-hidden="true"></span>
           <div class="s03-insight__content">
-            <span class="s03-insight__number">03</span>
-            <h3 class="s03-insight__title">Processo</h3>
-            <p class="s03-insight__description">Como funciona o serviço e o que o cliente pode esperar.</p>
+            <span class="s03-insight__number" data-vz-s3-number>03</span>
+            <h3 class="s03-insight__title" data-vz-s3-title>Processo</h3>
+            <p class="s03-insight__description" data-vz-s3-copy>Como funciona o serviço e o que o cliente pode esperar.</p>
           </div>
         </li>
         <!-- CARD 04 -->
-        <li class="s03-insight s03-insight--04">
-          <span class="s03-insight__liquid s03-insight__liquid--a" aria-hidden="true"></span>
-          <span class="s03-insight__liquid s03-insight__liquid--b" aria-hidden="true"></span>
+        <li class="s03-insight s03-insight--04 vz-s3-glass-card" data-vz-wave="bottom-right">
+          <span class="vz-s3-glass__material" aria-hidden="true"></span>
+          <span class="vz-s3-glass__wave-window" aria-hidden="true"><span class="vz-s3-glass__wave"></span></span>
+          <span class="vz-s3-glass__rim" aria-hidden="true"></span>
           <div class="s03-insight__content">
-            <span class="s03-insight__number">04</span>
-            <h3 class="s03-insight__title">Próximo passo</h3>
-            <p class="s03-insight__description">Como avançar sem precisar descobrir sozinho o caminho.</p>
+            <span class="s03-insight__number" data-vz-s3-number>04</span>
+            <h3 class="s03-insight__title" data-vz-s3-title>Próximo passo</h3>
+            <p class="s03-insight__description" data-vz-s3-copy>Como avançar sem precisar descobrir sozinho o caminho.</p>
           </div>
         </li>
       </ol>
@@ -611,6 +618,7 @@
   <!-- Fundo do palco: campo de luz procedural WebGL (js/light-field.js). js/aurora.js e js/silk.js ficam no projeto, sem carregar. -->
   <script src="js/light-field.js" defer></script>
   <script src="js/sections.js" defer></script>
+  <script src="js/section3-liquid-glass.js" defer></script>
   <script src="js/scroll-narrative.js" defer></script>
   <script src="js/journey-lamp.js" defer></script>
   <script src="js/beam-footer.js" defer></script>

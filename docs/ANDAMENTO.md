@@ -1,5 +1,30 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Seção 03: vidro translúcido e onda Páprica nos cards (não publicado)
+
+**Pedido:** "VIPZUE — PROMPT MESTRE DE EXECUÇÃO · SEÇÃO 03 · GLASS TRANSLÚCIDO E ONDA PÁPRICA", referência 12.jpg. Branch `feat/s03-glass-onda`. O prompt pede para não publicar.
+
+**Feito:**
+- **Vidro.** Os quatro cards da 03 trocam o vidro opaco (.76) e o líquido animado por vidro translúcido: Mocha .30/.19/.27, blur 10 px (7 px no celular), contorno champanhe e aro fino.
+- **Onda.** Uma onda Páprica/champanhe num único SVG (`assets/ui/vz-s3-wave.svg`), dentro de uma janela de 50% × 50% na quina de cada card (01 embaixo à esquerda, 02 no alto à direita e mais forte, 03 embaixo à direita suave, 04 embaixo à direita). Ela se move em loop de 10 s, com fases diferentes.
+- **Controlador.** `js/section3-liquid-glass.js` toca a onda só com os cards revelados, na tela, com a aba visível e sem movimento reduzido. Ligado em `revealS03Insights` / `resetS03Insights`.
+- Layout, tipografia, textos, águia, headline, rolagem e outras seções iguais.
+
+**Desvios:**
+- **Texto escuro.** Títulos e descrições em Grafite, números em Páprica Profunda: o Marfim da referência ficava em 1,35–1,96:1 sobre o vidro claro. A versão literal está documentada em uma linha.
+- **Véu de leitura no fluxo.** No celular, no tablet e no desktop com movimento reduzido, os cards passam pelo foco Páprica do campo de luz. Sem o véu, o número caía a 1,56:1. O véu é Marfim .52 → 0 de cima para baixo, abaixo da onda, e a narrativa do desktop não muda.
+
+**Testes (Chrome headless):**
+- Geometria igual ao "antes" em 8 telas.
+- Contraste sem falhas: narrativa em 4 momentos da onda e varredura da rolagem inteira no fluxo (celular, tablet, desktop baixo e movimento reduzido).
+- Funcionamento 18/18 no desktop e 14/14 no fluxo.
+- Dois quadros reais da onda em movimento por tela.
+- `test-hero-voo` 11/11 e build ok.
+- Não testado em Safari/iPhone nem em aparelho real.
+
+Detalhes: `docs/s03-glass-onda-relatorio.md`.
+
+
 ## 08/11/2026 — Display cards V5: vidro, diagramação e celular (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `ae25fda` para `756dd73` (fast-forward de `feat/hero-cards-glass`).

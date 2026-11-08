@@ -335,10 +335,10 @@ html:not(.s03-motion) .s03__stage {
 
 /* =========================================================
    VIPZUE — SECTION 03 / INSIGHTS GLASS (V5, 07/11/2026)
-   Quatro cards informativos (#s03Insights, uma instância). Vidro fumê Mocha/Grafite com backdrop blur estático,
-   duas camadas líquidas por card (Páprica e Páprica Profunda, só transform, CSS keyframes) e conteúdo por cima.
+   Quatro cards informativos (#s03Insights, uma instância). 08/11/2026: vidro Mocha translúcido e onda luminosa (bloco
+   "Seção 03 · material glass", abaixo); as duas manchas líquidas da V5 saíram — a onda é a única luz do card.
    Desktop com a narrativa (.s03-motion): faixa inferior da área visível do palco; entram no início do texto 1
-   (js/scroll-narrative.js, mesmo ScrollTrigger) e o líquido corre independente da rolagem.
+   (js/scroll-narrative.js, mesmo ScrollTrigger) e a onda corre independente da rolagem.
    Sem a narrativa (abaixo de 1024px, movimento reduzido, tela baixa): fluxo normal depois dos textos, sempre visíveis.
    ========================================================= */
 .s03-insights {
@@ -453,148 +453,10 @@ html:not(.s03-motion) .s03__stage {
   overflow: hidden;
   isolation: isolate;
   border-radius: 28px;
-  border: 1px solid rgb(243 237 227 / 0.72);
-  /* Mocha → Grafite da especificação (145deg). Alfa calibrado pelo contraste real (§80): com 0,52/0,50 o Marfim das
-     descrições ficava em 2,75–3,07:1 sobre o vidro (títulos 2,63–2,9:1), medido nos pixels sob cada linha ao longo
-     do ciclo do líquido; 0,76/0,74 deixa todas as descrições ≥ 4,5:1 (desktop, tablet e celular) e os títulos
-     ≥ 4,4:1 sem cobrir as palavras — o ambiente Marfim continua aparecendo, desfocado, pelo vidro */
-  background: linear-gradient(145deg, rgb(91 70 50 / 0.76), rgb(34 32 29 / 0.74));
-  box-shadow:
-    inset 0 1px 0 rgb(243 237 227 / 0.32),
-    0 14px 30px rgb(91 70 50 / 0.15);
-  -webkit-backdrop-filter: blur(10px) saturate(112%);
-  backdrop-filter: blur(10px) saturate(112%);
+  border: 1px solid; /* cor e material: bloco do vidro translúcido (08/11/2026), abaixo */
 }
 
-/* Camadas líquidas: recortadas pelo próprio card (overflow: hidden), abaixo do conteúdo */
-.s03-insight__liquid {
-  position: absolute;
-  z-index: 0;
-  width: 90%;
-  height: 95%;
-  pointer-events: none;
-  border-radius: 50%;
-  will-change: transform;
-  animation-play-state: paused;
-}
-
-.s03-insight__liquid--a {
-  left: var(--liquid-a-left, 0%);
-  top: var(--liquid-a-top, 0%);
-  opacity: var(--liquid-a-opacity, 0.65);
-  background: radial-gradient(
-    ellipse at center,
-    rgb(215 103 63 / 0.85) 0%,
-    rgb(215 103 63 / 0.5) 28%,
-    rgb(159 57 48 / 0.18) 52%,
-    transparent 72%
-  );
-  animation: s03-liquid-flow-a 13s ease-in-out infinite alternate;
-  animation-delay: var(--liquid-a-delay, 0s);
-  animation-play-state: paused;
-}
-
-.s03-insight__liquid--b {
-  left: var(--liquid-b-left, 0%);
-  top: var(--liquid-b-top, 0%);
-  opacity: var(--liquid-b-opacity, 0.28);
-  background: radial-gradient(
-    ellipse at center,
-    rgb(159 57 48 / 0.6) 0%,
-    rgb(215 103 63 / 0.28) 35%,
-    transparent 72%
-  );
-  animation: s03-liquid-flow-b 17s ease-in-out infinite alternate;
-  animation-delay: var(--liquid-b-delay, 0s);
-  animation-play-state: paused;
-}
-
-.s03-insights.is-revealed .s03-insight__liquid,
-.s03-insights.is-leaving .s03-insight__liquid {
-  animation-play-state: running;
-}
-
-@keyframes s03-liquid-flow-a {
-  0% {
-    transform: translate3d(-7%, 5%, 0) scale(0.92);
-  }
-  50% {
-    transform: translate3d(5%, -6%, 0) scale(1.06);
-  }
-  100% {
-    transform: translate3d(11%, 3%, 0) scale(0.97);
-  }
-}
-
-@keyframes s03-liquid-flow-b {
-  0% {
-    transform: translate3d(8%, -4%, 0) scale(1.04);
-  }
-  50% {
-    transform: translate3d(-5%, 7%, 0) scale(0.93);
-  }
-  100% {
-    transform: translate3d(-10%, -3%, 0) scale(1.02);
-  }
-}
-
-/* Focos por card (estado cromático da referência; o movimento fica em volta deles) */
-/* 01 — brilho inferior esquerdo. Intensidade reduzida só aqui (§80): no ciclo, a borda da mancha sobe até a 2ª linha
-   da descrição; com 0,78/0,26 ela caía a 4,04–4,16:1, com 0,45/0,18 fica ≥ 4,56:1 */
-.s03-insight--01 {
-  --liquid-a-left: -34%;
-  --liquid-a-top: 52%;
-  --liquid-a-opacity: 0.45;
-  --liquid-b-left: -27%;
-  --liquid-b-top: 47%;
-  --liquid-b-opacity: 0.18;
-  --liquid-a-delay: -2s;
-  --liquid-b-delay: -8s;
-}
-
-/* no fluxo (tablet/celular) o card é mais baixo e a 2ª linha da descrição cai no núcleo da mancha: menos pigmento */
-html:not(.s03-motion) .s03-insight--01 {
-  --liquid-a-opacity: 0.32;
-  --liquid-b-opacity: 0.14;
-}
-
-/* 02 — brilho superior direito */
-.s03-insight--02 {
-  --liquid-a-left: 55%;
-  --liquid-a-top: -43%;
-  --liquid-a-opacity: 0.7;
-  --liquid-b-left: 48%;
-  --liquid-b-top: -33%;
-  --liquid-b-opacity: 0.24;
-  --liquid-a-delay: -7s;
-  --liquid-b-delay: -3s;
-}
-
-/* 03 — iluminação discreta */
-.s03-insight--03 {
-  --liquid-a-left: 38%;
-  --liquid-a-top: 27%;
-  --liquid-a-opacity: 0.19;
-  --liquid-b-left: -22%;
-  --liquid-b-top: 49%;
-  --liquid-b-opacity: 0.12;
-  --liquid-a-delay: -11s;
-  --liquid-b-delay: -5s;
-}
-
-/* 04 — brilho inferior direito */
-.s03-insight--04 {
-  --liquid-a-left: 59%;
-  --liquid-a-top: 53%;
-  --liquid-a-opacity: 0.82;
-  --liquid-b-left: 48%;
-  --liquid-b-top: 54%;
-  --liquid-b-opacity: 0.26;
-  --liquid-a-delay: -5s;
-  --liquid-b-delay: -13s;
-}
-
-/* Conteúdo acima do líquido (Switzer, a família de interface carregada) */
+/* Conteúdo acima das camadas do vidro (Switzer, a família de interface carregada) */
 .s03-insight__content {
   position: relative;
   z-index: 2;
@@ -643,10 +505,222 @@ html:not(.s03-motion) .s03-insight--01 {
   word-break: normal;
 }
 
-/* Fallback do vidro: sem backdrop-filter, superfície mais opaca (manchas e copy permanecem) */
+/* =========================================================
+   VIPZUE · Seção 03 · material glass aprovado · escopo local (08/11/2026)
+   Prompt "Seção 03 · glass translúcido e onda Páprica". Só a aparência dos quatro cards: dimensões, padding, raio,
+   grid, entrada e transform continuam nas regras acima. Três camadas decorativas por card (index.html), atrás do
+   conteúdo: película de vidro (tinta Mocha baixa + blur), janela da onda (50% × 50% do card, bordas dissolvidas por
+   máscara; a onda SVG anda dentro dela) e contorno fino. A animação é só da onda (transform); o card nunca se move por
+   ela. Quem libera o loop é js/section3-liquid-glass.js (cards revelados, na tela, aba visível, sem movimento reduzido).
+   ========================================================= */
+.vz-s3-glass-card {
+  --vz-s3-ivory: #F3EDE3;
+  --vz-s3-mocha: #5B4632;
+  --vz-s3-paprika: #D7673F;
+  --vz-s3-paprika-deep: #9F3930;
+  --vz-s3-charcoal: #22201D;
+  --vz-s3-glass-blur: 10px;
+  --vz-s3-wave-strength: 0.84;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* as dimensões, o padding, o transform e o raio existentes permanecem intactos */
+  background: transparent;
+  border-color: rgb(255 239 221 / 0.76);
+  box-shadow:
+    0 11px 26px rgb(73 43 27 / 0.11),
+    inset 0 1px 0 rgb(255 248 237 / 0.43);
+}
+
+.vz-s3-glass-card > .vz-s3-glass__material,
+.vz-s3-glass-card > .vz-s3-glass__wave-window,
+.vz-s3-glass-card > .vz-s3-glass__rim {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+/* Película de vidro real (nunca opacity no card inteiro) */
+.vz-s3-glass__material {
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    var(--vz-s3-read-veil, none),
+    linear-gradient(128deg, rgb(91 70 50 / 0.3) 0%, rgb(91 70 50 / 0.19) 47%, rgb(91 70 50 / 0.27) 100%);
+  -webkit-backdrop-filter: blur(var(--vz-s3-glass-blur)) saturate(135%);
+  backdrop-filter: blur(var(--vz-s3-glass-blur)) saturate(135%);
+}
+
+/* Só um quarto do card recebe a onda; a janela não se move */
+.vz-s3-glass__wave-window {
+  width: 50%;
+  height: 50%;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  overflow: hidden;
+  opacity: var(--vz-s3-wave-strength);
+  -webkit-mask-image: radial-gradient(ellipse 100% 106% at 14% 87%, #000 0%, #000 38%, rgb(0 0 0 / 0.7) 60%, transparent 100%);
+  mask-image: radial-gradient(ellipse 100% 106% at 14% 87%, #000 0%, #000 38%, rgb(0 0 0 / 0.7) 60%, transparent 100%);
+}
+
+/* A geometria da onda é um único SVG vetorial (vz-s3-wave.svg, na pasta ui dos assets) */
+.vz-s3-glass__wave {
+  display: block;
+  position: absolute;
+  width: 175%;
+  height: 175%;
+  left: -38%;
+  bottom: -30%;
+  background-image: url("../assets/ui/vz-s3-wave.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  transform-origin: 48% 63%;
+  will-change: auto;
+  animation: vz-s3-wave-drift 10s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+/* Contorno de vidro fino, sem linha grossa nem neon */
+.vz-s3-glass__rim {
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 243 227 / 0.27),
+    inset 0 1px 0 rgb(255 250 241 / 0.41),
+    inset 0 -1px 0 rgb(255 207 160 / 0.23);
+}
+
+/* Camadas decorativas atrás dos filhos originais do card */
+.vz-s3-glass-card > :not(.vz-s3-glass__material):not(.vz-s3-glass__wave-window):not(.vz-s3-glass__rim) {
+  position: relative;
+  z-index: 3;
+}
+
+/* Quinas da referência */
+.vz-s3-glass-card[data-vz-wave="top-right"] .vz-s3-glass__wave-window {
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: auto;
+  transform: rotate(180deg);
+  --vz-s3-wave-strength: 0.92;
+}
+
+.vz-s3-glass-card[data-vz-wave="bottom-right"] .vz-s3-glass__wave-window,
+.vz-s3-glass-card[data-vz-wave="bottom-right-soft"] .vz-s3-glass__wave-window {
+  left: auto;
+  right: 0;
+  bottom: 0;
+  transform: scaleX(-1);
+}
+
+.vz-s3-glass-card[data-vz-wave="bottom-right-soft"] {
+  --vz-s3-wave-strength: 0.52;
+}
+
+.vz-s3-glass-card[data-vz-wave="bottom-right"] {
+  --vz-s3-wave-strength: 0.86;
+}
+
+/* A luz sobe, avança à direita, desce e retorna; sem quinas no movimento */
+@keyframes vz-s3-wave-drift {
+  0%,
+  100% {
+    transform: translate3d(-9%, 9%, 0) rotate(-8deg);
+  }
+  25% {
+    transform: translate3d(-1%, -13%, 0) rotate(-2deg);
+  }
+  50% {
+    transform: translate3d(15%, -20%, 0) rotate(9deg);
+  }
+  75% {
+    transform: translate3d(10%, 2%, 0) rotate(5deg);
+  }
+}
+
+/* A animação pertence só à luz, nunca ao card */
+.vz-s3-glass.vz-s3-glass--playing .vz-s3-glass__wave {
+  animation-play-state: running;
+  will-change: transform;
+}
+
+/* Fases diferentes: os quatro não acendem juntos */
+.vz-s3-glass-card[data-vz-wave="bottom-left"] .vz-s3-glass__wave {
+  animation-delay: -1s;
+}
+
+.vz-s3-glass-card[data-vz-wave="top-right"] .vz-s3-glass__wave {
+  animation-delay: -4s;
+}
+
+.vz-s3-glass-card[data-vz-wave="bottom-right-soft"] .vz-s3-glass__wave {
+  animation-delay: -6.6s;
+}
+
+.vz-s3-glass-card[data-vz-wave="bottom-right"] .vz-s3-glass__wave {
+  animation-delay: -8.2s;
+}
+
+/* Tamanho e tipografia dos números, títulos e descrições não mudam: só a pintura.
+   Leitura (medida nos pixels sob cada linha, 4 momentos do ciclo da onda): com o vidro claro, o Marfim da especificação
+   ficava em 1,35–1,96:1 (títulos, descrições e números Páprica, 1440 × 900 e 390 × 844) — o vidro deixa passar o
+   Marfim do fundo. Um véu escuro atrás do texto chegava a 3,8–4,6:1 nas descrições, com números a 1,3:1, e
+   devolvia a placa cinza que o prompt proíbe. Por isso a tinta inverte: títulos e descrições em Grafite e números em
+   Páprica Profunda (paleta), sobre o mesmo vidro claro — na narrativa, títulos ≥ 7,8:1, descrições ≥ 6,6:1, números ≥ 3,2:1.
+   Versão literal: números #D7673F, títulos/descrições #F3EDE3 com text-shadow 0 1px 3px rgb(34 32 29 / .55). */
+.vz-s3-glass-card [data-vz-s3-number] {
+  color: #9F3930 !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.vz-s3-glass-card [data-vz-s3-title],
+.vz-s3-glass-card [data-vz-s3-copy] {
+  color: #22201D;
+  text-shadow: 0 1px 0 rgb(255 248 237 / 0.35);
+}
+
+/* Véu de leitura, só no fluxo (celular, tablet, desktop baixo ou com movimento reduzido). O campo de luz é fixo na tela
+   e, no estado claro, pinta os focos com Páprica Profunda; na narrativa os cards ficam presos embaixo e não chegam ao
+   foco, mas no fluxo cada card passa por ele ao rolar. Varrendo a rolagem, sem véu: números 1,56:1 e descrições 4,0:1
+   no desktop com movimento reduzido, números 2,33:1 no tablet, 3,01:1 no celular. Este reflexo Marfim de cima para
+   baixo fica na película (abaixo da onda, que continua inteira) e clareia só a parte do texto: com ele, nenhum texto
+   abaixo do mínimo em nenhuma posição de rolagem. Não escurece o vidro. */
+html:not(.s03-motion) .vz-s3-glass-card {
+  --vz-s3-read-veil: linear-gradient(172deg, rgb(243 237 227 / 0.52) 0%, rgb(243 237 227 / 0.42) 42%, rgb(243 237 227 / 0.18) 74%, rgb(243 237 227 / 0) 100%);
+}
+
+/* Celular: o mesmo material, com o grid e a composição atuais */
+@media (max-width: 767.98px) {
+  .vz-s3-glass-card {
+    --vz-s3-glass-blur: 7px;
+  }
+
+  .vz-s3-glass__wave-window {
+    opacity: calc(var(--vz-s3-wave-strength) * 0.88);
+  }
+}
+
+/* Movimento reduzido: onda parada, o mesmo vidro */
+@media (prefers-reduced-motion: reduce) {
+  .vz-s3-glass__wave {
+    animation: none !important;
+    transform: translate3d(0, 0, 0) rotate(0);
+    will-change: auto !important;
+  }
+}
+
+/* Sem backdrop-filter: a mesma transparência controlada, um pouco mais de tinta */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .s03-insight {
-    background: linear-gradient(145deg, rgb(91 70 50 / 0.9), rgb(34 32 29 / 0.88));
+  .vz-s3-glass__material {
+    background:
+      var(--vz-s3-read-veil, none),
+      linear-gradient(128deg, rgb(91 70 50 / 0.34), rgb(91 70 50 / 0.27) 50%, rgb(91 70 50 / 0.32));
   }
 }
 
@@ -695,13 +769,8 @@ html:not(.s03-motion) .s03-insight--01 {
   }
 }
 
-/* Movimento reduzido: manchas paradas nas posições de referência, cards legíveis sem entrada */
+/* Movimento reduzido: cards legíveis sem entrada (a onda parada fica no bloco do vidro) */
 @media (prefers-reduced-motion: reduce) {
-  .s03-insight__liquid {
-    animation: none !important;
-    will-change: auto;
-  }
-
   .s03-insights,
   .s03-insight {
     transition: none !important;
