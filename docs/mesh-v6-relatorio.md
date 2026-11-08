@@ -2,6 +2,8 @@
 
 Prompt: "VIPZUE — PROMPT MESTRE V6.0 · Mesh Drift / ShaderBackground como sobreposição translúcida em TODAS as seções — desktop e mobile" (08/11/2026). As capturas e os mockups citados no prompt não vieram anexados; o "antes" foi capturado no próprio site (`docs/qa/mesh-v6/antes-*.jpg`).
 
+**Publicado em 08/11/2026**, a pedido do usuário ("Sim, publicar"): `main` em `2da0e50`, em vipzuesite.vercel.app. Em produção, as capturas em movimento reduzido saíram idênticas às locais, nas 7 seções e nas duas telas (390 e 1440); a matriz no 390 e no 1440 passou, e o console ficou limpo.
+
 **Status:** implementado na branch `feat/mesh-v6`. O prompt proibia commit e publicação; a publicação foi pedida depois por você ("agiliza aí… pra nós publicar logo"), com os testes já fechados. Validado no Chrome headless com a GPU real da máquina (Intel Iris Xe, ANGLE/Direct3D 11), em emulação de celular, tablet e desktop. **Safari iOS, Firefox, Android e iPhone real: não testados.**
 
 ## 1. Branch, estado do git e arquivos

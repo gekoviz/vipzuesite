@@ -1,5 +1,18 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Mesh Drift V6.0: publicada em produção (vipzuesite.vercel.app)
+
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `f22e323` para `2da0e50` (fast-forward de `feat/mesh-v6`).
+- O 1º push foi bloqueado pela permissão do Claude Code (deploy em produção). Saiu depois da confirmação.
+- A Vercel já servia a versão nova na primeira consulta.
+
+**Conferido em produção (Chrome headless):**
+- `index.html`, `css/vz-mesh-overlay.css` e `js/vz-mesh-overlay.js` iguais aos locais, e também `sections.css`, `light-field.js` e `hero.js` (os textos sem o CR);
+- em movimento reduzido, 14 capturas (7 seções × 390 e 1440) idênticas pixel a pixel às locais, com a película nas 7 seções;
+- matriz no 390 e no 1440 sem falhas: 1 contexto da película criado no celular, 2 no desktop, ouvintes estáveis, console limpo.
+
+**Pendente:** conferir num iPhone e num Android reais.
+
 ## 08/11/2026 — Mesh Drift V6.0: película WebGL translúcida em todas as seções
 
 **Pedido:** "VIPZUE — PROMPT MESTRE V6.0 · Mesh Drift / ShaderBackground como sobreposição translúcida em TODAS as seções — desktop e mobile". Branch `feat/mesh-v6`, a partir da `main` publicada (`f22e323`). O prompt proibia commit e deploy. Depois dos testes, o usuário pediu a publicação ("agiliza aí… pra nós publicar logo"). Relatório completo: `docs/mesh-v6-relatorio.md`; evidências locais: `docs/qa/mesh-v6/`.
