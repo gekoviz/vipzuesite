@@ -1,5 +1,19 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Seção 06 (CTA final): V4.0 publicada em produção (vipzuesite.vercel.app)
+
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `4bfd270` para `3c6475d` (fast-forward de `feat/cta-v4`): a CTA V4.0 e o esfumado do pé até a FAQ. A Vercel publicou em cerca de 10 segundos.
+
+**Conferido em produção (Chrome headless):**
+- `index.html`, `css/sections.css` e `js/light-field.js` iguais aos locais (os textos sem o CR);
+- as três águias da CTA respondem 200;
+- headline em 4 linhas no desktop e 3 no celular; sem o aviso do WhatsApp; sem rolagem lateral;
+- função e contraste nas 14 telas: 0 falhas;
+- emenda 06 → 07 contínua, como na branch;
+- console limpo.
+
+**Pendente:** conferir num iPhone e num Android reais. O botão segue sem destino enquanto `js/config.js` não tiver o número do WhatsApp (comportamento de antes).
+
 ## 08/11/2026 — Seção 06 (CTA final): V4.0 em desktop e celular (branch, não publicado)
 
 **Pedido:** "VIPZUE — PROMPT MESTRE DE EXECUÇÃO V4.0 · SEÇÃO CTA FINAL", com a REFERENCIA_01 (desktop) e a REFERENCIA_02 (celular). Branch `feat/cta-v4`, a partir da `main` publicada (`4bfd270`). O prompt pede "não publicar". Relatório completo: `docs/cta-v4-relatorio.md`.

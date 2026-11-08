@@ -2,7 +2,7 @@
 
 Prompt: "VIPZUE — PROMPT MESTRE DE EXECUÇÃO V4.0 · SEÇÃO CTA FINAL · DESKTOP + MOBILE" (08/11/2026), com a REFERENCIA_01 (desktop) e a REFERENCIA_02 (celular). A REFERENCIA_03 (estado atual) não veio anexada; o "antes" foi capturado no próprio site (`antes-*.jpg`).
 
-**Não publicado:** sem deploy e sem push. O trabalho está na branch `feat/cta-v4`, a partir da `main` publicada (`4bfd270`).
+**Publicado em 08/11/2026** (vipzuesite.vercel.app), a pedido do usuário ("Sim, publicar"): a `main` avançou de `4bfd270` para `3c6475d` (fast-forward de `feat/cta-v4`). O trabalho foi feito na branch `feat/cta-v4`. Ver a seção 11.
 
 **Status:** implementado e validado no Chrome (headless, emulação de celular e desktop). **Safari iOS e iPhone real: não testados.**
 
@@ -282,4 +282,16 @@ Ficam em `docs/qa/cta-v4/`; o git ignora essa pasta, então os arquivos ficam s�
 
 ## 11. Deploy
 
-**NÃO houve deploy nem push.** As mudanças estão só na branch local `feat/cta-v4`.
+**Publicado em 08/11/2026**, a pedido do usuário. A `main` avançou por fast-forward de `4bfd270` para `3c6475d` e foi enviada ao GitHub; a Vercel publicou em cerca de 10 segundos.
+
+**Conferido em produção (Chrome headless):**
+- `index.html`, `css/sections.css` e `js/light-field.js` iguais aos do build local (comparados sem o CR);
+- os três tamanhos da águia respondem 200;
+- headline em 4 linhas no desktop e 3 no celular, destaques certos, sem o aviso do WhatsApp e sem rolagem lateral (1536, 1280, 390 e 360);
+- função e contraste nas 14 telas: 0 falhas, os mesmos números da branch;
+- emenda 06 → 07 igual à da branch: (88, 58, 42) → (89, 58, 42) no desktop e (67, 50, 38) → (65, 52, 39) no celular;
+- console limpo.
+
+Capturas da produção: `prod-*.jpg` e `emenda-06-07-prod-*.jpg`, em `docs/qa/cta-v4/`.
+
+**Pendente:** conferir num iPhone e num Android reais.
