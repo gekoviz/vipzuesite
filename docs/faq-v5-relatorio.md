@@ -2,7 +2,7 @@
 
 Prompt: "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V5.0 · FAQ" (08/11/2026), com a REF_01 (desktop) e a REF_02 (celular). A REF_03 e a REF_04 (estado anterior) não vieram anexadas; o "antes" foi capturado no próprio site (`antes-*.jpg`).
 
-**Não publicado:** sem deploy e sem push. O trabalho está na branch `feat/faq-v5`, a partir da `main` publicada (`ce41eb3`).
+**Publicado em 08/11/2026**, a pedido do usuário ("Sim, publicar"): `main` em `794ad08`, em vipzuesite.vercel.app. A suíte de 120 verificações e a emenda 06 → 07 foram repetidas em produção, com o mesmo resultado da branch. O trabalho foi feito na branch `feat/faq-v5`, a partir da `main` publicada (`ce41eb3`).
 
 **Status:** implementado e validado no Chrome (headless, emulação de celular e desktop). **Safari iOS, Firefox, Android e iPhone real: não testados.**
 

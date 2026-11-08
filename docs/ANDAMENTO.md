@@ -1,5 +1,20 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Seção 07 (FAQ) V5.0 e pé da CTA: publicados em produção (vipzuesite.vercel.app)
+
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `ce41eb3` para `794ad08` (fast-forward de `feat/faq-v5`):
+- a FAQ V5.0 (`ad6db38`);
+- o pé da CTA reajustado ao topo da FAQ nova (`794ad08`).
+
+A Vercel já servia a versão nova na primeira consulta, poucos segundos depois do push.
+
+**Conferido em produção (Chrome headless):**
+- `index.html`, `css/sections.css`, `js/sections.js` e `js/light-field.js` iguais aos locais (os textos sem o CR);
+- a suíte da FAQ nas 13 telas: 120 verificações, 0 falhas, console limpo;
+- emenda 06 → 07 igual à da branch: maior salto de cor 6–8 no desktop e 2 no celular.
+
+**Pendente:** conferir num iPhone e num Android reais. A distância das referências (laranja mais saturado, tipos maiores) segue em aberto; ir além do contrato do prompt depende do usuário.
+
 ## 08/11/2026 — Seção 07 (FAQ): V5.0 em desktop e celular (branch, não publicado)
 
 **Pedido:** "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V5.0 · FAQ", com a REF_01 (desktop) e a REF_02 (celular). Branch `feat/faq-v5`, a partir da `main` publicada (`ce41eb3`). O prompt pede "não publicar". Relatório completo: `docs/faq-v5-relatorio.md`.
