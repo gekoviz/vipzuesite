@@ -355,9 +355,10 @@ void main() {
   // no compositor, sem o atraso que uma frente desenhada no canvas fixo teria no Safari do iPhone.
   // 04 — Método saiu da lista em 07/11/2026 (prompt mestre da Seção 04): o fundo dele passou a ser o campo Mocha/Páprica
   // em CSS da referência aprovada (css/sections.css, "04 — Método, fundo Mocha/Páprica — V6"); o canvas dele cobria esse fundo.
+  // 06 — CTA final saiu da lista em 08/11/2026 (prompt V4.0 da CTA final): o fundo dela passou a ser o campo abstrato
+  // Mocha/Páprica em CSS, estático (css/sections.css, "06 — CTA final · V4.0"), pelo mesmo motivo.
   const FIELD_SECTIONS = [
     ["#para-quem-e", "light"], // 05 — Para quem é
-    ["#contato", "dark"], // 06 — CTA final (07/11/2026: ambiente Mocha/Páprica, como a Hero; era claro)
     ["#faq", "dark"], // 07 — FAQ (rodada 4: escuro, a cara do rodapé)
     ["[data-beam-footer]", "dark"], // 08 — Rodapé
   ];

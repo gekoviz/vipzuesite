@@ -1,5 +1,35 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Seção 06 (CTA final): V4.0 em desktop e celular (branch, não publicado)
+
+**Pedido:** "VIPZUE — PROMPT MESTRE DE EXECUÇÃO V4.0 · SEÇÃO CTA FINAL", com a REFERENCIA_01 (desktop) e a REFERENCIA_02 (celular). Branch `feat/cta-v4`, a partir da `main` publicada (`4bfd270`). O prompt pede "não publicar". Relatório completo: `docs/cta-v4-relatorio.md`.
+
+**Feito (só a `#contato`):**
+- headline "Tenha agora uma presença digital forte que informa e gera mais interesse pros seus clientes.":
+  - desktop: 4 linhas, com "presença digital forte" em Páprica;
+  - celular: 3 linhas, com "presença digital" em Páprica;
+  - um único `h2`, com `<br>` por largura;
+- subheadline nova;
+- botão "Quero fortalecer minha presença digital": o mesmo `.shiny-cta`, com o efeito intacto;
+- aviso do WhatsApp removido;
+- desktop em duas colunas; celular e tablet numa coluna centralizada;
+- a mesma águia, agora encaixada por margem negativa;
+- fundo abstrato estático em CSS (Mocha escurecido + luz Páprica): o campo WebGL da 06 saiu de `js/light-field.js`.
+
+**Validado (Chrome headless, 14 telas de 320 a 1920):**
+- linhas e destaques certos;
+- sem rolagem lateral;
+- a CTA cabe na primeira tela;
+- contraste AA;
+- botão: mesmo nó, mesmas animações, hover;
+- copy literal, sem a copy antiga;
+- movimento reduzido, histórico e recarga;
+- as outras seções idênticas à `main`.
+
+**Decisão pendente:** a emenda 06 → 07 virou um corte seco (CTA quase preta → FAQ Mocha). Antes era contínua.
+
+**Pendente:** Safari iOS / iPhone real; publicação só quando autorizada.
+
 ## 08/11/2026 — Seção 03 no celular: cards 1 × 4 (V3.1) publicados em produção (vipzuesite.vercel.app)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `b5ec99e` para `0a56796` (fast-forward de `feat/s03-mobile-cards-1x4`). A Vercel já tinha publicado na primeira checagem.
