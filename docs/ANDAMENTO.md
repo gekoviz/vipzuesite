@@ -1,6 +1,17 @@
 # Andamento — VIPZUE 2026
 
-## 08/11/2026 — Display cards V5: vidro, diagramação e celular (não publicado)
+## 08/11/2026 — Display cards V5: vidro, diagramação e celular (publicado em produção)
+
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `ae25fda` para `756dd73` (fast-forward de `feat/hero-cards-glass`).
+
+**Conferido em produção (Chrome headless):**
+- `index.html`, `css/hero.css` e `js/hero-display-cards.js` iguais aos locais;
+- geometria igual à local em 1536 × 864, 1366 × 768, 1280 × 720, 390 × 844, 432 × 768 e 360 × 640 (±1 px no card 2 em movimento);
+- autoplay §68 13/13 em 1536 × 864 e 12/12 em 390 × 844;
+- contraste sem falhas em 1280, 1536, 390 e 320;
+- console limpo.
+
+Screenshots `prod-*.jpg` em `docs/qa/hero-cards-glass/`.
 
 **Pedido:** "VIPZUE — PROMPT MESTRE V3 — HERO DESKTOP + MOBILE — DISPLAY CARDS, GLASS EFFECT E COMPOSIÇÃO FINAL". Branch `feat/hero-cards-glass`.
 

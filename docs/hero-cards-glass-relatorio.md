@@ -1,7 +1,7 @@
 # Display Cards V5 — vidro, diagramação e celular — relatório (08/11/2026)
 
 Pedido: "VIPZUE — PROMPT MESTRE V3 — HERO DESKTOP + MOBILE — DISPLAY CARDS, GLASS EFFECT E COMPOSIÇÃO FINAL", com as
-referências 1536 × 864 (desktop) e 864 × 1536 (celular). Branch `feat/hero-cards-glass`. **Não publicado.**
+referências 1536 × 864 (desktop) e 864 × 1536 (celular). Branch `feat/hero-cards-glass`. **Publicado em produção** em 08/11/2026 (`main` em `756dd73`): arquivos iguais aos locais, geometria igual à local, autoplay §68 completo no desktop e no celular, contraste sem falhas e console limpo.
 
 ## 1. Arquivos modificados
 
