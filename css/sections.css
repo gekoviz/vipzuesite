@@ -744,7 +744,31 @@ html:not(.s03-motion) .vz-s3-glass-card {
   }
 }
 
-/* Celular: grade 2 × 2 no bloco "S03 MOBILE · composição editorial" (fim do arquivo da parte mobile) */
+/* Celular: uma coluna (mesma especificidade da regra de 1199px). A coluna 1 × 4 publicada antes da composição
+   editorial, restaurada sem mudança na V3.1 (08/11/2026): a grade 2 × 2 da V3 foi revogada. */
+@media (max-width: 767px) {
+  html:not(.s03-motion) .s03-insights {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  html:not(.s03-motion) .s03-insight {
+    min-height: 170px;
+    border-radius: 22px;
+  }
+
+  .s03-insight__content {
+    padding: 22px 24px;
+  }
+
+  .s03-insight__title {
+    font-size: 24px;
+  }
+
+  .s03-insight__description {
+    font-size: 16px;
+  }
+}
 
 /* Movimento reduzido: cards legíveis sem entrada (a onda parada fica no bloco do vidro) */
 @media (prefers-reduced-motion: reduce) {
@@ -2410,10 +2434,10 @@ html.js-reveal .faq.is-list-in .accordion__item {
 
 /* =========================================================
    VIPZUE · S03 MOBILE · composição editorial (08/11/2026) — mudança exclusivamente responsiva (≤ 767px)
-   Prompt "Seção 03 Mobile · composição editorial, águia no galho, narrativa scroll-driven e 2 × 2", referência
-   REFERENCIA_FINAL_MOBILE_SECAO03. Os mesmos elementos do desktop, sem duplicar nada: headline em três linhas (spans
-   do markup), a águia no galho no alto à direita, os três textos direto sobre o fundo claro (a apresentação de painel
-   dos 768–1023px não é pintada aqui) e os quatro cards de vidro em 2 × 2.
+   Prompt "Seção 03 Mobile · composição editorial, águia no galho, narrativa scroll-driven", V3 e revisão V3.1 (os cards
+   NÃO são 2 × 2). Os mesmos elementos do desktop, sem duplicar nada: headline em três linhas (spans do markup), a
+   águia no galho no alto à direita, os três textos direto sobre o fundo claro (a apresentação de painel dos
+   768–1023px não é pintada aqui) e, depois do palco, os quatro cards de vidro na coluna 1 × 4 já publicada.
    Base (movimento reduzido, sem JS, celular deitado < 560px): tudo em fluxo e visível, na ordem de leitura.
    Com .s03-motion-m (<head> + js/scroll-narrative.js): a narrativa do desktop. O palco (headline, águia, texto) fica
    preso pela altura do próprio conteúdo durante o percurso medido; a grade vem logo depois dele, em fluxo, e nunca fica
@@ -2480,7 +2504,7 @@ html.js-reveal .faq.is-list-in .accordion__item {
   #o-que-fazemos.s03 .s03-mobile__narrative {
     width: calc(100% - 4px);
     max-width: none;
-    margin: 0 2px; /* 20px da borda (a headline e a grade ficam a 18px) */
+    margin: 0 2px; /* 20px da borda (a headline fica a 18px; os cards, na margem de página de 24px) */
     row-gap: 20px;
   }
 
@@ -2514,42 +2538,11 @@ html.js-reveal .faq.is-list-in .accordion__item {
     text-align: left;
   }
 
-  /* quatro cards de vidro em 2 × 2 (01 | 02 / 03 | 04) */
+  /* quatro cards de vidro: a coluna 1 × 4 já publicada (regra "Celular: uma coluna", acima), sem nenhuma medida nova.
+     Só a margem lateral é devolvida: a regra de 1023px usa --s03-inset, que aqui virou 18px por causa da headline; a
+     dos cards sempre foi a margem de página (24px). */
   #o-que-fazemos.s03 .s03-mobile__feature-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin: clamp(32px, 8vw, 46px) 18px 0;
-    align-items: stretch;
-  }
-
-  #o-que-fazemos.s03 .s03-mobile__feature-card {
-    height: auto;
-    min-height: clamp(154px, 42vw, 182px);
-    border-radius: 18px;
-  }
-
-  #o-que-fazemos.s03 .s03-mobile__feature-card .s03-insight__content {
-    padding: 14px 13px;
-  }
-
-  /* números a partir de 24px: texto grande (WCAG), 3:1 basta sobre o vidro claro */
-  #o-que-fazemos.s03 .s03-mobile__feature-card [data-vz-s3-number] {
-    margin-bottom: 8px;
-    font-size: clamp(24px, 6vw, 28px);
-    line-height: 1;
-  }
-
-  #o-que-fazemos.s03 .s03-mobile__feature-card [data-vz-s3-title] {
-    margin: 0 0 8px;
-    font-size: clamp(14px, 3.9vw, 17px);
-    font-weight: 600;
-    line-height: 1.15;
-  }
-
-  #o-que-fazemos.s03 .s03-mobile__feature-card [data-vz-s3-copy] {
-    font-size: clamp(12.5px, 3.32vw, 14px);
-    line-height: 1.28;
-    overflow-wrap: normal;
+    margin-inline: var(--page-margin);
   }
 
   /* ---------- narrativa (mesma do desktop) ---------- */
@@ -2638,16 +2631,6 @@ html.js-reveal .faq.is-list-in .accordion__item {
     top: 58px; /* o bico desce para a linha 2, mais curta */
     right: -47vw;
     width: 88vw;
-  }
-
-  #o-que-fazemos.s03 .s03-mobile__feature-card .s03-insight__content {
-    padding: 12px 11px;
-  }
-}
-
-@media (max-width: 339.98px) {
-  #o-que-fazemos.s03 .s03-mobile__feature-grid {
-    grid-template-columns: 1fr;
   }
 }
 

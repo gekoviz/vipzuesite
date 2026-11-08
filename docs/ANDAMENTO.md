@@ -1,5 +1,29 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Seção 03 no celular: cards de volta à coluna 1 × 4 (V3.1, branch, não publicado)
+
+**Pedido:** "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V3.1 · REVISÃO CIRÚRGICA". Os quatro cards voltam à coluna 1 × 4 publicada antes da V3, conforme a REFERENCIA_02 (17.webp, captura do iPhone). O topo da V3 fica como estava, conforme a REFERENCIA_01 (16.webp). Branch `feat/s03-mobile-cards-1x4`, a partir da `main` publicada (`b5ec99e`). O prompt pede "não fazer deploy". Relatório completo: `docs/s03-mobile-v31-relatorio.md`.
+
+**Feito:**
+- a regra "Celular: uma coluna" voltou exatamente como estava em `56f220e`;
+- as medidas da 2 × 2 saíram do bloco da composição editorial;
+- uma linha nova devolve à grade a margem de página (24px);
+- nenhum CSS novo para número, título ou descrição;
+- nenhuma mudança em JS ou copies.
+
+**Validado (Chrome headless):**
+- os cards, nos 7 celulares, têm 6.797 de 6.797 propriedades calculadas iguais ao publicado antes da V3: 24px da borda, 170px de altura, vãos de 14px, número 28px, título 24px, descrição 16px;
+- funcional da 03: 24/24 em cada celular;
+- desktop e tablet sem mudança (20/20);
+- a onda roda sozinha;
+- contraste AA.
+
+**Observações anteriores a esta mudança:**
+- o número "02" a 320 px, só no instante em que o card entra pela borda de baixo;
+- a página a 320 px montada com 348px de largura e escala de 92%.
+
+**Pendente:** Safari iOS / iPhone real; publicação só quando autorizada.
+
 ## 08/11/2026 — Seções 03 e 04 no celular: publicadas em produção (vipzuesite.vercel.app)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `56f220e` para `b26cb7f` (fast-forward de `feat/s04-mobile-linha`, que contém a 03 mobile `9419171`). A Vercel publicou na primeira checagem.
