@@ -1,8 +1,19 @@
 # Andamento — VIPZUE 2026
 
-## 08/11/2026 — Seção 03: vidro translúcido e onda Páprica nos cards (não publicado)
+## 08/11/2026 — Seção 03: vidro translúcido e onda Páprica nos cards (publicado em produção)
 
-**Pedido:** "VIPZUE — PROMPT MESTRE DE EXECUÇÃO · SEÇÃO 03 · GLASS TRANSLÚCIDO E ONDA PÁPRICA", referência 12.jpg. Branch `feat/s03-glass-onda`. O prompt pede para não publicar.
+**Publicação:** autorizada pelo usuário ("Sim, publicar"), depois da revisão. A `main` avançou de `c06af2a` para `74ee645` (fast-forward de `feat/s03-glass-onda`).
+
+**Conferido em produção (Chrome headless):**
+- `index.html`, `css/sections.css`, `js/section3-liquid-glass.js`, `js/scroll-narrative.js` e `assets/ui/vz-s3-wave.svg` iguais aos locais (o git guarda LF; sem o CR, conteúdo idêntico);
+- posições e tamanhos dos cards e dos textos iguais ao "antes" em 1440 × 900, 1280 × 720, 1920 × 1080, 768 × 1024, 390 × 844 e 360 × 800;
+- funcionamento da onda 18/18 em 1440 × 900 e 14/14 em 390 × 844, com dois quadros reais em movimento;
+- contraste sem falhas na narrativa (1280 e 1440) e na varredura do fluxo (390 e 1440 com movimento reduzido);
+- console limpo.
+
+Screenshots `prod-*.jpg` em `docs/qa/s03-glass-onda/`.
+
+**Pedido:** "VIPZUE — PROMPT MESTRE DE EXECUÇÃO · SEÇÃO 03 · GLASS TRANSLÚCIDO E ONDA PÁPRICA", referência 12.jpg. Branch `feat/s03-glass-onda`. O prompt pedia para não publicar sem revisão.
 
 **Feito:**
 - **Vidro.** Os quatro cards da 03 trocam o vidro opaco (.76) e o líquido animado por vidro translúcido: Mocha .30/.19/.27, blur 10 px (7 px no celular), contorno champanhe e aro fino.

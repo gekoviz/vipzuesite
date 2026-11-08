@@ -2,7 +2,12 @@
 
 Pedido: "VIPZUE — PROMPT MESTRE DE EXECUÇÃO · SEÇÃO 03 · GLASS TRANSLÚCIDO E ONDA PÁPRICA", com a referência 12.jpg
 (fundo claro, cards translúcidos, texto claro, ondas Páprica/champanhe nas quinas). Branch `feat/s03-glass-onda`.
-**Não publicado** (o prompt diz "NÃO publique").
+**Publicado em produção** em 08/11/2026, depois da revisão (`main` em `74ee645`). Em produção:
+- arquivos iguais aos locais;
+- posições e tamanhos iguais;
+- onda 18/18 no desktop e 14/14 no celular;
+- contraste sem falhas;
+- console limpo.
 
 Escopo: só o material e a luz interna dos quatro cards da 03, no desktop e no celular. Layout, posições, tamanhos,
 tipografia (tamanho, peso, entrelinha), textos, águia, headline, GSAP/rolagem e outras seções não mudaram.
