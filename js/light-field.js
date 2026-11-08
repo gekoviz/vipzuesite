@@ -19,7 +19,8 @@
 // A passagem é uma frente que sobe de baixo para cima com a rolagem (a mesma da cópia de "O que fazemos" em
 // js/hero.js), com borda difusa levemente ondulada pelo Silk. Sem storytelling, a frente é o topo real da
 // seção 03. O canvas é fixo atrás da página: continua vivo atrás da seção 03 depois que o palco sai de cena.
-// Seção 04: um segundo canvas (mesmo shader e relógio) dentro dela, só na rampa escura e na composição da Hero.
+// Seções 05 a 08: um canvas por seção (mesmo shader e relógio) dentro dela (FIELD_SECTIONS, abaixo). A 04 (Método)
+// usa fundo CSS desde 07/11/2026.
 (() => {
   const hero = document.querySelector("[data-hero]");
   if (!hero) return;
@@ -352,8 +353,9 @@ void main() {
   // do tamanho dela). "dark" = o campo escuro da Hero (Background Principal, composição da Hero, com teto de brilho); "light" = o campo claro da
   // Seção 03 (Background Secundário, composição do close). A borda superior é a da própria seção: rola junto com a página
   // no compositor, sem o atraso que uma frente desenhada no canvas fixo teria no Safari do iPhone.
+  // 04 — Método saiu da lista em 07/11/2026 (prompt mestre da Seção 04): o fundo dele passou a ser o campo Mocha/Páprica
+  // em CSS da referência aprovada (css/sections.css, "04 — Método, fundo Mocha/Páprica — V6"); o canvas dele cobria esse fundo.
   const FIELD_SECTIONS = [
-    ["#metodo", "dark"], // 04 — Método
     ["#para-quem-e", "light"], // 05 — Para quem é
     ["#contato", "dark"], // 06 — CTA final (07/11/2026: ambiente Mocha/Páprica, como a Hero; era claro)
     ["#faq", "dark"], // 07 — FAQ (rodada 4: escuro, a cara do rodapé)

@@ -1,5 +1,33 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Seção 04 Método V6: reconstrução fiel à referência aprovada (não publicado)
+
+**Pedido:** "PROMPT MESTRE DE IMPLEMENTAÇÃO — SEÇÃO 04 — MÉTODO". Branch `feat/s04-metodo`. Aguarda autorização para publicar.
+
+**Feito (desktop ≥ 1024 px):**
+- Headline em duas linhas ("O que entregamos é" / "uma página."), no alto à esquerda (topo das maiúsculas a 13,6 %).
+- O parágrafo novo à direita ("**Mas a diferença está no processo.** O que faz a diferença é tudo que vem antes de ser entregue.") no lugar da subheadline antiga.
+- Os quatro cards em linha, sem transform: base a 86,3 % e a seção cabendo na tela em 1280 × 720, 1366 × 768, 1440 × 900, 1536 × 864 e 1920 × 1080.
+- Contorno Páprica sempre visível e um destaque mais forte, pela mesma `--hl` da rodada 5.
+- Fundo Mocha/Páprica em CSS calibrado contra a imagem. O canvas WebGL do Método saiu de `js/light-field.js`.
+
+**Celular e tablet:** só o fundo, com o preset da especificação. Geometria idêntica à da `main` em 360, 390, 430 e 768.
+
+**Desvios medidos:**
+- Gloock e Switzer no lugar de Epicene e Founders, que não estão no projeto; negrito 600.
+- Cards 19 px mais altos que na referência: a copy do card 04 no repositório é mais longa.
+- Fundo estático: sem o drift e o grão do WebGL.
+- Três ajustes de legibilidade (§81): piso de 24 px no parágrafo e nos nomes; a luz do card aceso escurece antes da descrição; tablet com o fundo do celular.
+
+**Testes:**
+- Contraste em 10 viewports, com repouso e hover nos 4 cards: descrições ≥ 4,62:1 e textos grandes ≥ 3,13:1.
+- Entrada, rolagem reversa e movimento reduzido.
+- Campos de luz das seções 05 a 08 intactos.
+- `test-hero-voo` 11/11, build ok, console limpo.
+- Só Chrome.
+
+Detalhes, checklist §95 e limitações: `docs/s04-metodo-relatorio.md`.
+
 ## 07/11/2026 — Seção 03 V5: águia no galho e quatro Liquid Glass Cards (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `a7a051b` para `453fe60` (fast-forward de `feat/s03-liquid-glass`).

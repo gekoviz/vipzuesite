@@ -2439,11 +2439,15 @@ html.has-curtain .footer-curtain .site-footer {
 }
 
 /* =========================================================
-   04 — Método, desktop (≥ 1024 px): quatro cards em linha, no estilo da referência (rodada 5)
-   Contorno fino, número grande (01–04, decorativo), nome em negrito, texto menor e apagado (o ✦ do canto saiu no refino cromático de 07/11) e um
-   card em destaque com gradiente. O destaque nasce no card 02 e passa para o card sob o ponteiro (ou com foco).
-   Celular e tablet (< 1024 px) NÃO mudam: a linha do tempo com o ponto aceso continua a mesma.
-   O tilt, o spotlight, o reveal e o js/journey-lamp.js continuam como estão (nenhuma linha de JS muda).
+   04 — Método, desktop (≥ 1024 px) — V6 (07/11/2026, prompt mestre da Seção 04)
+   Referência aprovada (calibração em 1536 × 864): headline em duas linhas no alto à esquerda, o parágrafo .why__aside
+   no alto à direita e os quatro cards na faixa de baixo, distribuídos no palco de 100svh da própria seção (nenhum
+   sticky novo, nenhum ScrollTrigger). A geometria é só CSS: as entradas (data-reveal) continuam as mesmas e chegam
+   a estas posições, com ou sem movimento.
+   O destaque continua o da rodada 5: nasce no card 02 e passa para o card sob o ponteiro (ou com foco), pela mesma
+   variável --hl; a V6 só intensifica a resposta (contorno Páprica, halo externo e luz no alto do card). Tilt,
+   spotlight, reveal e js/journey-lamp.js não mudam. Celular e tablet (< 1024 px) não mudam: só o fundo, no bloco
+   seguinte.
    ========================================================= */
 @property --hl {
   syntax: "<number>";
@@ -2452,34 +2456,109 @@ html.has-curtain .footer-curtain .site-footer {
 }
 
 @media (min-width: 1024px) {
-  /* Título: grande, à esquerda, em duas linhas (a frase é a mesma; só a largura da caixa muda).
-     8.4em medido com a Gloock real: "O que entregamos" (8,05em) cabe; "O que entregamos é" (8,75em) quebra. */
+  /* Palco: a própria seção, com no mínimo a altura da tela. O bloco superior fica no alto e os cards descem até a
+     margem inferior (space-between); se o conteúdo não couber, a seção cresce (nunca sobrepõe). */
+  #metodo {
+    --why-pad-x: clamp(44px, 5.2vw, 90px); /* 80 px em 1536: a margem dos cards da referência (5,2%) */
+    --why-title-size: clamp(60px, 5.55vw, 94px);
+    --why-top: calc(13.6svh - 0.081 * var(--why-title-size)); /* topo das maiúsculas da headline a 13,6% da altura (a caixa da linha começa 0,081em acima delas) */
+    --why-bottom: clamp(56px, 13.7svh, 130px); /* base dos cards a 86,3% da altura */
+    --why-gap: clamp(24px, 5svh, 64px); /* espaço mínimo entre o bloco superior e os cards */
+    /* piso de 24 px (texto grande na WCAG): sobre a Páprica do card aceso o marfim fica em ≈ 3,5:1, que só passa no
+       texto grande; acima de 1297 px de largura o valor é o de sempre (1,85vw) */
+    --step-name-size: clamp(1.5rem, 1.85vw, 1.8rem);
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+    padding-block: var(--why-top) var(--why-bottom);
+  }
+
+  #metodo > .container {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: var(--why-gap);
+    max-width: none;
+    padding-inline: var(--why-pad-x);
+  }
+
+  /* Duas colunas editoriais de pesos diferentes: a headline domina; o parágrafo é o contraponto */
+  .why__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) minmax(300px, 1fr);
+    column-gap: clamp(70px, 6vw, 112px);
+    align-items: start;
+  }
+
+  /* Headline: as duas linhas vêm do markup (.why__title-line); a fonte é a display do site (Gloock, token --font-display) */
   #metodo .why__title {
-    max-width: 8.4em;
+    max-width: none;
+    margin: 0;
+    font-size: var(--why-title-size);
+    line-height: 0.95; /* a entrelinha da referência (0,96 da especificação, ajustada pela medida da imagem) */
+    letter-spacing: -0.035em;
+    font-weight: var(--font-weight-regular);
+    color: var(--color-ivory);
     text-align: left;
+  }
+
+  .why__title-line {
+    display: block;
+  }
+
+  /* a subheadline antiga sai do desktop; o parágrafo novo entra à direita */
+  .why__sub {
+    display: none;
+  }
+
+  /* Parágrafo à direita: as duas frases no mesmo corpo, só o peso muda (600, o mais pesado da Switzer carregado).
+     15,5em: a 1ª frase (≈ 15,2em) cabe numa linha e a 2ª quebra antes de "vem", como na referência.
+     Piso de 24 px: ele fica sobre o núcleo Páprica do fundo (≈ 3,3:1), o que só passa no texto grande da WCAG. Abaixo
+     de ≈ 1246 px a coluna (mínimo 300 px) não comporta a 1ª frase numa linha; o balance divide em duas iguais. */
+  .why__aside {
+    display: block;
+    max-width: 15.5em;
+    margin: 0;
+    padding-top: 0.38em; /* topo das maiúsculas ≈ 14 px abaixo do da headline, como na referência */
+    font-family: var(--font-body);
+    font-size: clamp(24px, 1.85vw, 29px);
+    line-height: 1.32;
+    letter-spacing: -0.015em;
+    font-weight: var(--font-weight-regular);
+    font-synthesis: none;
+    color: var(--color-ivory);
+  }
+
+  .why__aside strong {
+    display: block;
+    margin: 0 0 5px;
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  .why__aside span {
+    display: block;
+    text-wrap: pretty; /* sem palavra sozinha na última linha quando a coluna estreita (1024 px) */
   }
 
   .journey {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(16px, 1.7vw, 24px);
+    gap: clamp(16px, 1.45vw, 24px);
+    margin: 0;
     counter-reset: etapa;
   }
 
   .journey__stage {
-    --journey-radius: 24px;
-    --journey-pad: clamp(20px, 1.95vw, 28px);
-    --journey-line: rgb(243 237 227 / 0.14); /* contorno fino (--color-border-on-dark é 0,12: aqui 0,14 para ler sobre o campo) */
-    --journey-fill: color-mix(in srgb, var(--color-graphite) 62%, transparent);
-    /* Refino cromático (07/11): o pigmento do topo do destaque passa do --color-card-glint (#6A3C2B, croma 0,071) para o
-       anchor de luz do perfil refinado do campo (js/light-field.js, PALETTE_REFINED[3]): mesma família e luminância
-       (Y 0,065 → 0,068), croma 0,104 no matiz da Páprica. Marfim a 74% sobre ele: 5,12 → 4,97:1. */
-    --journey-hl-1: #7A351B;
-    --journey-hl-2: var(--color-mocha);
+    --journey-radius: 28px;
+    --journey-pad: clamp(22px, 1.85vw, 28px);
+    --journey-pad-x: clamp(18px, 1.55vw, 26px); /* coluna de texto de ≈ 279 px em 1536, a da referência */
     --hl: 0;
     counter-increment: etapa;
     display: flex;
     flex-direction: column;
-    padding: var(--journey-pad) var(--journey-pad) calc(var(--journey-pad) + 36px); /* 36 px de respiro na base do card (reservavam o ✦, removido em 07/11; mantidos para não mudar a geometria) */
+    min-height: clamp(300px, 47.4svh, 440px);
+    padding: var(--journey-pad) var(--journey-pad-x);
     background: transparent;
   }
 
@@ -2497,17 +2576,35 @@ html.has-curtain .footer-curtain .site-footer {
     --hl: 1;
   }
 
-  /* placa: contorno de 1 px + fundo translúcido; o gradiente de destaque entra por cima, com a força de --hl */
+  /* Placa: superfície Grafite → Mocha translúcida com contorno Páprica sempre visível (0,40); com --hl o contorno vai
+     a 1, entra o halo externo e a luz Páprica no alto do card (a referência do card Estratégia). Tudo pela mesma --hl,
+     então a transição é a de sempre (0,45 s) e o texto fica acima (o ::before está em z-index −1).
+     Calibrado contra a imagem aprovada (o ponto de partida da especificação — radial 125% × 80%, 0,84 → 0,42 em 35% —
+     deixava só um brilho no canto): a Páprica segura até a altura do número e do nome e escurece em Páprica Profunda
+     até a metade do card; o halo passa de 17 px a 22 px + 56 px. Base com menos Mocha (0,42): a da imagem é escura.
+     Contraste: a passagem para a Páprica Profunda termina onde a descrição começa (0,55 em 35%, não 0,6 em 38%), para
+     a descrição aceso — e com o spotlight do hover — ficar acima de 4,5:1. Entre 1024 e 1239 px os cards são mais
+     altos em proporção ao topo (número + nome), então a luz encurta (--hl-ry 68%, bloco abaixo). */
   .journey__stage::before {
-    border: 1px solid color-mix(in srgb, var(--color-paprika) calc(var(--hl) * 85%), var(--journey-line)); /* 70% → 85% (refino 07/11) */
+    border: 1px solid rgb(215 103 63 / calc(0.4 + 0.6 * var(--hl)));
     background:
-      linear-gradient(
-        158deg,
-        color-mix(in srgb, var(--journey-hl-1) calc(var(--hl) * 100%), transparent) 0%,
-        color-mix(in srgb, var(--journey-hl-2) calc(var(--hl) * 92%), transparent) 46%,
-        color-mix(in srgb, var(--color-graphite) calc(var(--hl) * 100%), transparent) 100%
+      radial-gradient(
+        ellipse 160% var(--hl-ry, 90%) at 30% 0%,
+        rgb(215 103 63 / calc(0.98 * var(--hl))) 0%,
+        rgb(215 103 63 / calc(0.9 * var(--hl))) 20%,
+        rgb(215 103 63 / calc(0.55 * var(--hl))) 35%,
+        rgb(159 57 48 / calc(0.5 * var(--hl))) 54%,
+        rgb(159 57 48 / calc(0.2 * var(--hl))) 76%,
+        transparent 100%
       ),
-      var(--journey-fill);
+      linear-gradient(150deg, rgb(34 32 29 / 0.86), rgb(91 70 50 / 0.42));
+    box-shadow:
+      0 0 0 1px rgb(215 103 63 / calc(0.6 * var(--hl))),
+      0 0 22px rgb(215 103 63 / calc(0.62 * var(--hl))),
+      0 0 56px rgb(215 103 63 / calc(0.22 * var(--hl))),
+      0 15px 38px rgb(159 57 48 / calc(0.26 * var(--hl))),
+      0 9px 28px rgb(34 32 29 / 0.18),
+      inset 0 1px 0 rgb(243 237 227 / calc(0.08 + 0.12 * var(--hl)));
   }
 
   .journey--fx .journey__stage {
@@ -2523,27 +2620,84 @@ html.has-curtain .footer-curtain .site-footer {
     content: counter(etapa, decimal-leading-zero); /* navegadores sem o texto alternativo: o número entra, sem prejuízo */
     content: counter(etapa, decimal-leading-zero) / "";
     display: block;
-    margin-bottom: clamp(18px, 1.9vw, 28px);
-    font-size: clamp(2.25rem, 3.4vw, 3rem);
+    margin-bottom: clamp(16px, 1.5vw, 24px);
+    font-size: clamp(2.25rem, 2.95vw, 2.875rem);
     line-height: 1;
     font-weight: var(--font-weight-regular);
     letter-spacing: -0.03em;
-    color: var(--color-text-on-dark);
+    color: var(--color-ivory);
   }
 
-  #metodo {
-    --step-name-size: clamp(1.25rem, 1.65vw, 1.5rem);
-  }
-
-  /* texto menor e apagado (a escala --t-card-* da 03 não cabe em 4 colunas; vale no celular e no tablet) */
   #metodo .journey__detail {
-    margin-block-start: 0.6em;
+    margin-block-start: 0.65em;
     max-width: none;
-    font-size: clamp(0.9375rem, 1.05vw, 1rem);
-    line-height: 1.5;
+    font-size: clamp(0.9375rem, 1.19vw, 1.15rem);
+    line-height: 1.3;
     letter-spacing: -0.005em;
     font-weight: var(--font-weight-regular);
-    color: rgb(243 237 227 / 0.74);
+    color: rgb(243 237 227 / calc(0.88 + 0.12 * var(--hl))); /* marfim pleno no card aceso (contraste sobre a Páprica) */
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1239.98px) {
+  .journey__stage {
+    --hl-ry: 68%;
+  }
+}
+
+/* =========================================================
+   04 — Método, fundo Mocha/Páprica — V6 (todas as larguras)
+   O campo da referência aprovada, em CSS: base Grafite Quente com faixa Mocha Profundo na diagonal, campo Páprica →
+   Páprica Profunda no centro/direita do alto e um segundo foco profundo na borda direita; a lateral esquerda fica
+   escura, atrás da headline. Só as cinco cores da marca, com alfa. O canvas WebGL do Método saiu (js/light-field.js):
+   ele cobria este fundo. No celular e no tablet o foco se adapta à proporção vertical (§68).
+   ========================================================= */
+#metodo {
+  /* o valor que o campo escuro dava ao texto secundário: com ele, celular e tablet ficam como estavam */
+  --text-2: rgb(243 237 227 / 0.95);
+  /* Calibrado contra a imagem aprovada a partir do preset da especificação (radial 65% × 82% em 67% 25% + foco em 94% e
+     base 114° Grafite → Mocha → Grafite): a base Mocha a 100% deixava a faixa de baixo marrom-oliva e o foco, abafado.
+     Camadas, de cima para baixo: sombra Grafite na lateral esquerda (atrás da headline) · núcleo Páprica no centro do
+     alto · extensão Páprica até o parágrafo · campo Páprica Profunda · foco profundo na borda direita · calor
+     profundo na base · diagonal Mocha a 0,26. */
+  background-color: #22201d;
+  background-image:
+    radial-gradient(ellipse 50% 85% at 0% 38%, rgb(34 32 29 / 0.62) 0%, transparent 100%),
+    radial-gradient(ellipse 30% 44% at 61% 25%, rgb(215 103 63 / 1) 0%, rgb(215 103 63 / 0.6) 42%, transparent 100%),
+    radial-gradient(ellipse 26% 34% at 79% 18%, rgb(215 103 63 / 0.42) 0%, transparent 100%),
+    radial-gradient(
+      ellipse 72% 92% at 62% 22%,
+      rgb(159 57 48 / 0.95) 0%,
+      rgb(159 57 48 / 0.62) 38%,
+      rgb(159 57 48 / 0.26) 70%,
+      transparent 100%
+    ),
+    radial-gradient(ellipse 50% 70% at 97% 40%, rgb(159 57 48 / 0.4) 0%, transparent 80%),
+    radial-gradient(ellipse 80% 55% at 50% 100%, rgb(159 57 48 / 0.16) 0%, transparent 100%),
+    linear-gradient(114deg, rgb(159 57 48 / 0.1) 0%, rgb(91 70 50 / 0.26) 50%, transparent 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Celular: o preset da especificação (§68). O tablet (768–1023 px) usa o mesmo: o campo do desktop punha o núcleo
+   Páprica atrás da subheadline e do 2º card da grade 2 × 2 (descrição a 4,3:1); com este, tudo acima de 4,9:1. */
+@media (max-width: 1023.98px) {
+  #metodo {
+    background-image:
+      radial-gradient(
+        ellipse 112% 56% at 77% 17%,
+        rgb(215 103 63 / 0.67) 0%,
+        rgb(159 57 48 / 0.5) 38%,
+        transparent 82%
+      ),
+      linear-gradient(165deg, #22201d 0%, #5b4632 48%, #22201d 100%);
+  }
+}
+
+/* o parágrafo novo é só do desktop (abaixo de 1024 px fica a subheadline antiga, §66) */
+@media (max-width: 1023.98px) {
+  .why__aside {
+    display: none;
   }
 }
 
@@ -2588,8 +2742,9 @@ html.has-curtain .footer-curtain .site-footer {
   }
 
   /* centraliza o conteúdo na vertical (seções de bloco simples: .container + camadas absolutas); o min-height repete o da regra acima
-     porque um seletor de id vence qualquer min-height de classe que a seção já tenha */
-  #metodo,
+     porque um seletor de id vence qualquer min-height de classe que a seção já tenha.
+     V6 (07/11/2026): o Método saiu desta lista; a distribuição dele (headline no alto, cards embaixo) está no bloco
+     "04 — Método, desktop — V6". Ele continua no encaixe da rolagem, abaixo. */
   #para-quem-e,
   #contato,
   #faq {

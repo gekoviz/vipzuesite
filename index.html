@@ -311,11 +311,16 @@
          da rodada 2). Tablet: pontos em 2 colunas. Celular: pontos que acendem com a rolagem (js/journey-lamp.js,
          21st.dev tubelight-navbar). O id #metodo é o do menu e também o gancho do campo de luz em js/light-field.js:
          não renomear sem atualizar o seletor lá. Sem relevo 3D nesta seção (removido na rodada 2). -->
-    <section class="section surface-dark why" id="metodo" aria-labelledby="method-title method-sub">
+    <!-- V6 (07/11/2026, prompt mestre da Seção 04): no desktop (≥ 1024px) a headline em duas linhas controladas
+         ("O que entregamos é" / "uma página.") e, à direita, o parágrafo .why__aside no lugar da subheadline antiga.
+         Abaixo de 1024px a composição não muda (§66): as linhas da headline ficam em linha e a subheadline antiga continua;
+         o .why__aside só existe no desktop. O fundo deixou o campo WebGL e é CSS em todas as larguras. -->
+    <section class="section surface-dark why" id="metodo" aria-labelledby="method-title">
       <div class="container">
         <header class="why__head">
-          <h2 class="t-display-l why__title" id="method-title" data-reveal="fade-up">O que entregamos é uma página.</h2>
+          <h2 class="t-display-l why__title" id="method-title" data-reveal="fade-up"><span class="why__title-line">O que entregamos é</span> <span class="why__title-line">uma página.</span></h2>
           <p class="why__sub" id="method-sub" data-reveal="fade-up" data-reveal-step="1">O que a torna estratégica é o propósito por trás de cada decisão.</p>
+          <p class="why__aside" data-reveal="fade-up" data-reveal-step="1"><strong>Mas a diferença está no processo.</strong> <span>O que faz a diferença é tudo que vem antes de ser entregue.</span></p>
         </header>
 
         <ol class="journey" aria-label="Método: diagnóstico, estratégia, construção e entrega">
