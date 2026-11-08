@@ -1,5 +1,31 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Mesh Drift V6.0: película WebGL translúcida em todas as seções
+
+**Pedido:** "VIPZUE — PROMPT MESTRE V6.0 · Mesh Drift / ShaderBackground como sobreposição translúcida em TODAS as seções — desktop e mobile". Branch `feat/mesh-v6`, a partir da `main` publicada (`f22e323`). O prompt proibia commit e deploy. Depois dos testes, o usuário pediu a publicação ("agiliza aí… pra nós publicar logo"). Relatório completo: `docs/mesh-v6-relatorio.md`; evidências locais: `docs/qa/mesh-v6/`.
+
+**Feito:**
+- `css/vz-mesh-overlay.css` e `js/vz-mesh-overlay.js` novos: o código do prompt, com as variáveis de foco por seção e cinco adaptações marcadas no JS:
+  - a camada entra depois do canvas opaco do `light-field.js`;
+  - o rodapé é medido pela cortina; root oculto não disputa contexto;
+  - sem WebGL, nenhuma camada entra no DOM;
+  - **contextos que migram entre as seções**, criados e compilados uma vez só (aprovado pelo usuário: "Sim, aplicar");
+  - a 1ª película espera a página ficar ociosa (no máximo 1 s).
+- `index.html`: o link, o script e `data-vz-mesh` em sete roots: `.hero__stage`, `#o-que-fazemos`, `#metodo`, `#para-quem-e`, `#contato`, `#faq` e `.site-footer`.
+- Nenhum fundo, token, imagem, texto ou animação GSAP mudou. Presets do prompt sem mudança (alfa 0,105 / 0,032).
+
+**Validado (Chrome headless, GPU real Intel Iris Xe), com o código final:**
+- **desligado = antes, pixel a pixel**;
+- ligado: só o fundo muda (média 1 a 5, máximo cerca de 14 de soma RGB);
+- a película migrante desenha os mesmos pixels que a primeira versão (18 capturas idênticas);
+- matriz de 14 telas sem falha: 1 contexto criado no celular para a página toda, até 2 no desktop;
+- bordas sem falha: sem WebGL, falha de compilação, perda de contexto, aba oculta, movimento reduzido, recarga e histórico;
+- suítes anteriores: FAQ, CTA, linha viva 207/207, 03 celular 72/72, onda 32/32.
+
+**Desempenho:** o código original do prompt recriava o contexto a cada seção. Num navegador frio, isso dava travadas de 2 a 7 s na 1ª chegada a várias seções. Com os contextos migrando, a página fica no nível dela sem película.
+
+**Pendente:** iPhone, Android, Safari e Firefox reais.
+
 ## 08/11/2026 — Seção 07 (FAQ) V5.0 e pé da CTA: publicados em produção (vipzuesite.vercel.app)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `ce41eb3` para `794ad08` (fast-forward de `feat/faq-v5`):
