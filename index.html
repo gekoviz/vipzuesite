@@ -25,10 +25,12 @@
       // Entradas simples das seções 03–08 (somente com movimento permitido)
       if (window.matchMedia && matchMedia("(prefers-reduced-motion: no-preference)").matches) root.classList.add("js-reveal");
       setTimeout(function () { if (!window.__vzRevealReady) root.classList.remove("js-reveal"); }, 3000);
-      // Seção 03: palco de narrativa por rolagem só no desktop (≥ 1024px) com movimento permitido; se o script não
-      // assumir, volta ao fluxo normal. Abaixo de 1024px a seção é sempre fluxo (painéis numerados).
+      // Seção 03: palco de narrativa por rolagem no desktop (≥ 1024px) e, desde 08/11/2026, no celular (≤ 767px), com
+      // movimento permitido e altura ≥ 560px; se o script não assumir, volta ao fluxo normal. De 768 a 1023px a seção
+      // segue em fluxo (painéis numerados).
       if (window.matchMedia && matchMedia("(prefers-reduced-motion: no-preference) and (min-height: 560px) and (min-width: 1024px)").matches) root.classList.add("s03-motion");
-      setTimeout(function () { if (!window.__vzS03Ready) root.classList.remove("s03-motion"); }, 3000);
+      if (window.matchMedia && matchMedia("(prefers-reduced-motion: no-preference) and (min-height: 560px) and (max-width: 767.98px)").matches) root.classList.add("s03-motion-m");
+      setTimeout(function () { if (!window.__vzS03Ready) root.classList.remove("s03-motion", "s03-motion-m"); }, 3000);
       // Segurança: nunca deixar o conteúdo oculto se o JS de motion não carregar.
       setTimeout(function () { root.classList.remove("is-loading"); }, 2500);
     })();
@@ -206,17 +208,21 @@
          V5 (07/11/2026): águia pousada no galho (asset isolado com transparência) e quatro cards de vidro
          (#s03Insights) que entram com o texto 1. A quebra da headline ("sua / empresa") está no markup (<br> seguido
          de espaço: o texto lido pelo Word Reveal continua com as mesmas palavras) e é mantida pela largura em em no CSS
-         depois que as palavras são preparadas. -->
-    <section class="next-section s03" id="o-que-fazemos" aria-labelledby="s03-title" data-next data-s03>
+         depois que as palavras são preparadas.
+         Celular (≤ 767px, 08/11/2026): composição editorial com a MESMA narrativa do desktop — headline em três linhas
+         (os três spans abaixo; no desktop eles são inline e a quebra continua a do <br>), a mesma águia no galho no alto
+         à direita, os três textos sem placa no lugar dos painéis e os quatro cards em 2 × 2 depois do palco. -->
+    <section class="next-section s03 s03--editorial-mobile" id="o-que-fazemos" aria-labelledby="s03-title" data-next data-s03>
       <div class="s03__stage" data-s03-stage>
         <div class="s03__figure" data-s03-figure aria-hidden="true">
-          <img class="s03__eagle" src="assets/secao03/aguia-galho-960.webp" srcset="assets/secao03/aguia-galho-960.webp 960w, assets/secao03/aguia-galho-1536.webp 1536w" sizes="52vw" width="1536" height="1024" alt="" decoding="async" loading="lazy" draggable="false">
+          <img class="s03__eagle s03-mobile__eagle" src="assets/secao03/aguia-galho-960.webp" srcset="assets/secao03/aguia-galho-960.webp 960w, assets/secao03/aguia-galho-1536.webp 1536w" sizes="52vw" width="1536" height="1024" alt="" decoding="async" loading="lazy" draggable="false">
         </div>
         <div class="container s03__grid">
-          <h2 class="s03__title" id="s03-title" data-s03-scene="title">Apenas encontrar sua<br> empresa não é suficiente.</h2>
-          <!-- Fonte única da copy: no desktop os três textos se sucedem no mesmo lugar do palco; abaixo de 1024px viram
-               três painéis numerados no fluxo (o número ordena argumentos; a lista ordenada já comunica a ordem). -->
-          <ol class="s03__slot s03__list" data-s03-slot>
+          <h2 class="s03__title s03-mobile__headline" id="s03-title" data-s03-scene="title"><span class="s03-mobile__headline-line">Apenas encontrar</span> <span class="s03-mobile__headline-line">sua<br class="s03__br-desk"> empresa</span> <span class="s03-mobile__headline-line">não é suficiente.</span></h2>
+          <!-- Fonte única da copy: no desktop e no celular os três textos se sucedem no mesmo lugar do palco; de 768 a
+               1023px viram três painéis numerados no fluxo (o número ordena argumentos; a lista ordenada já comunica a
+               ordem). No celular a apresentação de painel não é pintada: os textos ficam direto sobre o fundo claro. -->
+          <ol class="s03__slot s03__list s03-mobile__narrative" data-s03-slot>
             <li class="s03__panel" data-s03-panel>
               <div class="s03__card">
                 <span class="s03__card-surface" aria-hidden="true"></span>
@@ -256,9 +262,9 @@
            Vidro translúcido e onda (08/11/2026): três camadas decorativas por card, antes do conteúdo — película de vidro,
            janela da onda (um quarto do card; a onda SVG anda dentro dela) e contorno; o loop é liberado por
            js/section3-liquid-glass.js. data-vz-wave diz em que quina fica a luz. -->
-      <ol class="s03-insights vz-s3-glass" id="s03Insights" aria-label="Informações que orientam a decisão do cliente" aria-hidden="true">
+      <ol class="s03-insights vz-s3-glass s03-mobile__feature-grid" id="s03Insights" aria-label="Informações que orientam a decisão do cliente" aria-hidden="true">
         <!-- CARD 01 -->
-        <li class="s03-insight s03-insight--01 vz-s3-glass-card" data-vz-wave="bottom-left">
+        <li class="s03-insight s03-insight--01 vz-s3-glass-card s03-mobile__feature-card" data-vz-wave="bottom-left">
           <span class="vz-s3-glass__material" aria-hidden="true"></span>
           <span class="vz-s3-glass__wave-window" aria-hidden="true"><span class="vz-s3-glass__wave"></span></span>
           <span class="vz-s3-glass__rim" aria-hidden="true"></span>
@@ -269,7 +275,7 @@
           </div>
         </li>
         <!-- CARD 02 -->
-        <li class="s03-insight s03-insight--02 vz-s3-glass-card" data-vz-wave="top-right">
+        <li class="s03-insight s03-insight--02 vz-s3-glass-card s03-mobile__feature-card" data-vz-wave="top-right">
           <span class="vz-s3-glass__material" aria-hidden="true"></span>
           <span class="vz-s3-glass__wave-window" aria-hidden="true"><span class="vz-s3-glass__wave"></span></span>
           <span class="vz-s3-glass__rim" aria-hidden="true"></span>
@@ -280,7 +286,7 @@
           </div>
         </li>
         <!-- CARD 03 -->
-        <li class="s03-insight s03-insight--03 vz-s3-glass-card" data-vz-wave="bottom-right-soft">
+        <li class="s03-insight s03-insight--03 vz-s3-glass-card s03-mobile__feature-card" data-vz-wave="bottom-right-soft">
           <span class="vz-s3-glass__material" aria-hidden="true"></span>
           <span class="vz-s3-glass__wave-window" aria-hidden="true"><span class="vz-s3-glass__wave"></span></span>
           <span class="vz-s3-glass__rim" aria-hidden="true"></span>
@@ -291,7 +297,7 @@
           </div>
         </li>
         <!-- CARD 04 -->
-        <li class="s03-insight s03-insight--04 vz-s3-glass-card" data-vz-wave="bottom-right">
+        <li class="s03-insight s03-insight--04 vz-s3-glass-card s03-mobile__feature-card" data-vz-wave="bottom-right">
           <span class="vz-s3-glass__material" aria-hidden="true"></span>
           <span class="vz-s3-glass__wave-window" aria-hidden="true"><span class="vz-s3-glass__wave"></span></span>
           <span class="vz-s3-glass__rim" aria-hidden="true"></span>

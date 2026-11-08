@@ -1,5 +1,27 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Seção 03 no celular: composição editorial (branch, não publicado)
+
+**Pedido:** "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V3 · Seção 03 Mobile", com a referência REFERENCIA_FINAL_MOBILE_SECAO03. Branch `feat/s03-mobile-editorial`. O prompt pede "não publique". Relatório completo: `docs/s03-mobile-relatorio.md`.
+
+**Feito (só abaixo de 768 px):**
+- **Headline:** o mesmo `h2`, em três linhas fixas ("Apenas encontrar / sua empresa / não é suficiente."), Gloock Grafite, topo 68 px.
+- **Águia:** a mesma águia no galho do desktop, no alto à direita e cortada pela borda. Foi calibrada pelos pixels opacos e não encosta nas letras nem no texto (folga ≥ 11 px de 320 a 430).
+- **Textos:** os três, sem placa, direto sobre o fundo claro, revelados pela MESMA narrativa do desktop (`build("mobile")`). Ficam presos só headline, águia e texto; o percurso é igual ao do desktop.
+- **Cards:** os quatro de vidro com a onda, em 2 × 2, em fluxo depois do palco. Entram quando chegam à tela.
+- **Desktop e tablet:** iguais (sonda e pixels).
+
+**Desvios:**
+- espaçamento da headline −0,025em, porque o −0,045em funde as serifas;
+- texto escuro nos cards (decisão "o melhor");
+- número com no mínimo 24 px;
+- marco dos cards na chegada à tela.
+
+**Pendências:**
+- Safari/iOS e aparelhos reais não testados;
+- a águia em voo da divisa 03→04 continua no celular (fora do escopo);
+- a rolagem lateral de 28 px em 320 px vem do `#contato` e já existe em produção.
+
 ## 08/11/2026 — Seção 03: vidro translúcido e onda Páprica nos cards (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"), depois da revisão. A `main` avançou de `c06af2a` para `74ee645` (fast-forward de `feat/s03-glass-onda`).

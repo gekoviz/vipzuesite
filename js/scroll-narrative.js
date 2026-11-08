@@ -1,8 +1,11 @@
 // VIPZUE — Seção 03 "Por que isso importa?" (25–26/10/2026).
 //
 // Duas apresentações da mesma copy (fonte única no HTML):
-//   ≥ 1024px — palco fixo com a narrativa abaixo (uma cena, quatro estados);
-//   < 1024px — headline + três cards numerados num palco sticky local que dá percurso de leitura a cada card, e a
+//   ≥ 1024px e ≤ 767px — palco fixo com a narrativa abaixo (uma cena, quatro estados; build). No celular (08/11/2026)
+//              é a MESMA montagem, com geometria própria: o palco prende só headline, águia e texto (altura do
+//              conteúdo, não 100svh), o trilho é medido (palco + 320svh, o mesmo percurso do desktop) e os quatro cards
+//              ficam em fluxo logo depois dele, entrando quando chegam à tela;
+//   768–1023px — headline + três cards numerados num palco sticky local que dá percurso de leitura a cada card, e a
 //              águia em voo na divisa com a seção seguinte (buildPanels, mais abaixo).
 //
 // Desktop: a headline é a tese e permanece; o raciocínio se revela abaixo dela, num único espaço narrativo:
@@ -114,7 +117,11 @@
 
   // ---------- Palavras: texto completo lido uma vez (visually-hidden) + palavras visuais aria-hidden ----------
   const originals = new Map();
-  const splitWords = (el, className) => {
+  // lines (só a headline no celular): as palavras de cada .s03-mobile__headline-line do markup ficam dentro de um
+  // invólucro de linha na camada visual, para as três linhas fixas sobreviverem ao corte. O texto lido, a ordem e as
+  // palavras são os mesmos; sem lines, a saída é a de sempre (desktop e tablet não mudam).
+  const LINE = "s03-mobile__headline-line";
+  const splitWords = (el, className, lines = false) => {
     originals.set(el, el.innerHTML);
     const text = el.textContent.replace(/\s+/g, " ").trim();
     const sr = document.createElement("span");
@@ -123,22 +130,38 @@
     const visual = document.createElement("span");
     visual.setAttribute("aria-hidden", "true");
     const words = [];
-    text.split(" ").forEach((word, i, all) => {
-      const span = document.createElement("span");
-      span.className = className;
-      span.textContent = word;
-      visual.append(span);
-      words.push(span);
-      if (i < all.length - 1) visual.append(" ");
+    const groups = lines ? [...el.querySelectorAll(`.${LINE}`)] : [];
+    const parts = groups.length ? groups.map((g) => g.textContent.replace(/\s+/g, " ").trim()) : [text];
+    parts.forEach((part, li) => {
+      let host = visual;
+      if (groups.length) {
+        host = document.createElement("span");
+        host.className = LINE;
+        visual.append(host);
+        if (li < parts.length - 1) visual.append(" ");
+      }
+      part.split(" ").forEach((word, i, all) => {
+        const span = document.createElement("span");
+        span.className = className;
+        span.textContent = word;
+        host.append(span);
+        words.push(span);
+        if (i < all.length - 1) host.append(" ");
+      });
     });
     el.replaceChildren(sr, visual);
     return words;
   };
 
   let state = null;
+  // celular: percurso preso igual ao do desktop (trilho de 420svh − palco de 100svh = 320svh de rolagem)
+  const TRAVEL_M = 3.2;
+  // celular: os cards entram quando o topo da grade chega a 92% da altura visível (é quando ficam à vista)
+  const CARDS_IN_M = 0.92;
 
-  const build = () => {
-    const titleWords = splitWords(title, "s03__w");
+  const build = (mode = "desktop") => {
+    const mobile = mode === "mobile";
+    const titleWords = splitWords(title, "s03__w", mobile);
     const paraWords = paras.map((el) => splitWords(el, "s03__rw"));
     const reveals = [
       createWordReveal(paraWords[0], { rest: 0.3 }),
@@ -147,14 +170,38 @@
     ];
     const n = titleWords.length;
     const center = (n - 1) / 2;
-    const geo = { dy: 0, narrow: false };
+    const geo = { dy: 0, narrow: false, vh: 0, travel: 0, cardsAt: T.p[0].in[0] };
     let insightsShown = null; // estado dos cards (só escreve no DOM quando muda)
 
+    // Celular: altura visível estável (100svh, a barra do Safari não reconstrói a cena) e o trilho medido. Roda antes de
+    // o ScrollTrigger recalcular (refreshInit): grava a altura do palco e o percurso; a seção vira palco + percurso
+    // (css/sections.css, .s03-motion-m), e o gatilho termina exatamente quando o palco se solta.
+    const box = title.parentElement; // coluna headline + texto (no celular é ela que fica presa; o palco é o trilho)
+    const meter = mobile ? document.createElement("div") : null;
+    if (meter) {
+      meter.setAttribute("aria-hidden", "true");
+      meter.style.cssText = "position:absolute;top:0;left:0;width:1px;height:100vh;height:100svh;visibility:hidden;pointer-events:none";
+      section.append(meter);
+    }
+    const layout = () => {
+      geo.vh = meter.offsetHeight || window.innerHeight;
+      geo.travel = Math.round(geo.vh * TRAVEL_M);
+      section.style.setProperty("--s03-m-stage", `${box.offsetHeight}px`);
+      section.style.setProperty("--s03-m-travel", `${geo.travel}px`);
+    };
+
     // Distância vertical do assentamento: do centro do palco até a posição tipográfica final da headline
-    // (offsetTop ignora transforms; recalculado a cada refresh/resize)
+    // (offsetTop ignora transforms; recalculado a cada refresh/resize). No celular o que fica preso tem a altura do
+    // conteúdo: o centro é o da área visível, como no desktop (onde palco = 100svh); a coluna presa é o offsetParent.
     const measure = () => {
       geo.narrow = window.innerWidth < 768;
-      geo.dy = stage.clientHeight / 2 - (title.offsetTop + title.offsetHeight / 2);
+      const center = mobile ? geo.vh / 2 : stage.clientHeight / 2;
+      geo.dy = center - (title.offsetTop + title.offsetHeight / 2);
+      if (mobile && s03Insights) {
+        // marco dos cards: rolagem (desde o início do trilho) em que o topo da grade chega a 92% da altura visível
+        geo.cardsAt = Math.min(0.995, Math.max(T.p[0].in[0], (s03Insights.offsetTop - geo.vh * CARDS_IN_M) / Math.max(1, geo.travel)));
+      }
+      if (window.__vzDebug && mobile) window.__vzDebug.s03track = { travel: geo.travel, stage: box.offsetHeight, cardsAt: +geo.cardsAt.toFixed(4), vh: geo.vh };
     };
 
     const render = (p) => {
@@ -208,8 +255,9 @@
         // MICRO — revelação por palavra com o progresso local do parágrafo
         reveals[i](range(p, seg.reveal));
       });
-      // V5 — cards: mesmo marco do texto 1 (começa a entrar em T.p[0].in[0]); permanecem nos textos 2 e 3
-      const insightsOn = p > T.p[0].in[0];
+      // V5 — cards: mesmo marco do texto 1 (começa a entrar em T.p[0].in[0]); permanecem nos textos 2 e 3. No celular a
+      // grade fica depois do palco: o marco é a chegada dela à tela (geo.cardsAt, medido), nunca antes do texto 1
+      const insightsOn = p > geo.cardsAt;
       if (insightsOn !== insightsShown) {
         insightsShown = insightsOn;
         if (insightsOn) revealS03Insights();
@@ -218,6 +266,10 @@
       if (window.__vzDebug) window.__vzDebug.s03 = p;
     };
 
+    if (mobile) {
+      ScrollTrigger.addEventListener("refreshInit", layout);
+      layout();
+    }
     const proxy = { p: 0 };
     const tween = gsap.to(proxy, {
       p: 1,
@@ -226,7 +278,8 @@
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "bottom bottom",
+        // celular: o fim é a soltura do palco (o resto da seção é a grade e a reserva da águia da divisa)
+        end: mobile ? () => `+=${Math.max(1, geo.travel)}` : "bottom bottom",
         scrub: 0.4,
         invalidateOnRefresh: true,
         // recarga no meio / resize / orientação: remede e desenha o estado do progresso real
@@ -238,10 +291,41 @@
     });
     measure();
     render(proxy.p);
-    state = { tween };
+    // celular: a altura do conteúdo preso depende das quebras reais (fontes, zoom de texto) — mudança real remede pelo
+    // refresh (o trilho é derivado dela; o conteúdo não depende do trilho, então não há laço)
+    let ro = null;
+    if (mobile) {
+      let queued = 0;
+      let lastH = box.offsetHeight;
+      ro = new ResizeObserver(() => {
+        if (queued || box.offsetHeight === lastH) return;
+        queued = requestAnimationFrame(() => {
+          queued = 0;
+          lastH = box.offsetHeight;
+          ScrollTrigger.refresh();
+        });
+      });
+      ro.observe(box);
+    }
+    state = {
+      tween,
+      stop: () => {
+        if (!mobile) return;
+        ScrollTrigger.removeEventListener("refreshInit", layout);
+        ro?.disconnect();
+        meter?.remove();
+        section.style.removeProperty("--s03-m-stage");
+        section.style.removeProperty("--s03-m-travel");
+        if (window.__vzDebug) delete window.__vzDebug.s03track;
+      },
+    };
     // as caixas das palavras dependem das fontes reais: remede quando elas terminam de carregar
     document.fonts?.ready.then(() => {
       if (state?.tween !== tween) return;
+      if (mobile) {
+        ScrollTrigger.refresh();
+        return;
+      }
       measure();
       render(proxy.p);
     });
@@ -251,6 +335,7 @@
     if (!state) return;
     state.tween.scrollTrigger?.kill();
     state.tween.kill();
+    state.stop();
     originals.forEach((html, el) => {
       el.innerHTML = html;
       el.removeAttribute("style");
@@ -525,15 +610,29 @@
     flow = null;
   };
 
-  // cards: visíveis em todo modo que não seja a narrativa desktop (a narrativa os esconde até o texto 1)
-  if (!root.classList.contains("s03-motion")) revealS03Insights();
+  // cards: visíveis em todo modo que não seja uma narrativa (a narrativa os esconde até o marco dela)
+  if (!root.classList.contains("s03-motion") && !root.classList.contains("s03-motion-m")) revealS03Insights();
 
   const mm = gsap.matchMedia();
-  // abaixo de 1024px com movimento permitido: painéis que acendem (sem JS ou com movimento reduzido: estado final)
-  mm.add("(prefers-reduced-motion: no-preference) and (max-width: 1023.98px)", () => {
+  // 768–1023px com movimento permitido: painéis que acendem (sem JS ou com movimento reduzido: estado final)
+  mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px) and (max-width: 1023.98px)", () => {
     window.__vzS03Ready = true;
     buildPanels();
     return teardownPanels;
+  });
+  // celular (08/11/2026): a narrativa do desktop, mesma montagem (build), com a geometria do celular. Mesma condição do
+  // <head>; abaixo de 560px de altura (celular deitado) a seção fica no fluxo editorial estático, tudo visível.
+  mm.add("(prefers-reduced-motion: no-preference) and (min-height: 560px) and (max-width: 767.98px)", () => {
+    window.__vzS03Ready = true;
+    const added = !root.classList.contains("s03-motion-m");
+    root.classList.add("s03-motion-m");
+    build("mobile");
+    if (added) ScrollTrigger.refresh();
+    return () => {
+      teardown();
+      root.classList.remove("s03-motion-m");
+      ScrollTrigger.refresh();
+    };
   });
   // mesma condição do <head>: desktop, movimento permitido e altura que comporta headline + parágrafo juntos
   mm.add("(prefers-reduced-motion: no-preference) and (min-height: 560px) and (min-width: 1024px)", () => {

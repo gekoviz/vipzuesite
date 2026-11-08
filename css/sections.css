@@ -744,30 +744,7 @@ html:not(.s03-motion) .vz-s3-glass-card {
   }
 }
 
-/* Celular: uma coluna (mesma especificidade da regra de 1199px) */
-@media (max-width: 767px) {
-  html:not(.s03-motion) .s03-insights {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  html:not(.s03-motion) .s03-insight {
-    min-height: 170px;
-    border-radius: 22px;
-  }
-
-  .s03-insight__content {
-    padding: 22px 24px;
-  }
-
-  .s03-insight__title {
-    font-size: 24px;
-  }
-
-  .s03-insight__description {
-    font-size: 16px;
-  }
-}
+/* Celular: grade 2 × 2 no bloco "S03 MOBILE · composição editorial" (fim do arquivo da parte mobile) */
 
 /* Movimento reduzido: cards legíveis sem entrada (a onda parada fica no bloco do vidro) */
 @media (prefers-reduced-motion: reduce) {
@@ -2370,21 +2347,9 @@ html.js-reveal .faq.is-list-in .accordion__item {
    Mobile
    ========================================================= */
 @media (max-width: 767px) {
-  /* Seção 03 no celular: margens de 24px, headline de seção (não de Hero), painéis com padding de 24px */
+  /* Seção 03 no celular: a águia da divisa; a composição da seção está no bloco "S03 MOBILE", adiante */
   :root {
     --s03-seam-w: min(72vw, 320px, 36svh);
-  }
-
-  .s03 {
-    --s03-top: 48px;
-    --s03-title: clamp(2rem, 8.5vw, 2.5rem);
-    --s03-title-w: none;
-    --s03-copy-w: none;
-    --s03-panel-pad: 24px;
-  }
-
-  .s03__panel {
-    --s03-radius: 24px;
   }
 
   /* Jornada vertical, sem linha: os pontos ficam sozinhos na margem e acendem com a rolagem (js/journey-lamp.js) */
@@ -2451,6 +2416,249 @@ html.js-reveal .faq.is-list-in .accordion__item {
 
   .site-footer__col--brand {
     max-width: none;
+  }
+}
+
+/* =========================================================
+   VIPZUE · S03 MOBILE · composição editorial (08/11/2026) — mudança exclusivamente responsiva (≤ 767px)
+   Prompt "Seção 03 Mobile · composição editorial, águia no galho, narrativa scroll-driven e 2 × 2", referência
+   REFERENCIA_FINAL_MOBILE_SECAO03. Os mesmos elementos do desktop, sem duplicar nada: headline em três linhas (spans
+   do markup), a águia no galho no alto à direita, os três textos direto sobre o fundo claro (a apresentação de painel
+   dos 768–1023px não é pintada aqui) e os quatro cards de vidro em 2 × 2.
+   Base (movimento reduzido, sem JS, celular deitado < 560px): tudo em fluxo e visível, na ordem de leitura.
+   Com .s03-motion-m (<head> + js/scroll-narrative.js): a narrativa do desktop. O palco (headline, águia, texto) fica
+   preso pela altura do próprio conteúdo durante o percurso medido; a grade vem logo depois dele, em fluxo, e nunca fica
+   sob o palco. Material e cores dos cards: o bloco do vidro (acima), sem segunda implementação.
+   ========================================================= */
+@media (max-width: 767.98px) {
+  #o-que-fazemos.s03.s03--editorial-mobile {
+    --s03-inset: 18px;
+    --s03-top: 68px; /* topo da headline a partir do início da seção (o cabeçalho não é fixo) */
+    --s03-title: clamp(30px, 8.1vw, 39px);
+    --s03-title-lh: 0.94;
+    --s03-title-w: min(74%, 310px);
+    --s03-text: clamp(15px, 3.9vw, 17px);
+    --s03-text-lh: 1.43;
+    --s03-copy-w: none;
+    --s03-gap: 0px;
+    --s03-m-intro: clamp(265px, 70vw, 330px); /* altura da área inicial (headline + águia) até o texto */
+    overflow-x: clip;
+  }
+
+  /* headline: o h2 original, Gloock, três linhas literais */
+  #o-que-fazemos.s03 .s03-mobile__headline {
+    color: var(--color-graphite);
+    letter-spacing: -0.025em; /* o −0,045em do prompt funde as serifas do Gloock ("encontrar", "Apenas"); −0,025em as separa (desktop: −0,02em) */
+    text-align: left;
+    -webkit-hyphens: none;
+    hyphens: none;
+  }
+
+  #o-que-fazemos.s03 .s03-mobile__headline-line {
+    display: block;
+    white-space: nowrap;
+    perspective: 900px; /* a formação das palavras continua em 3D dentro de cada linha */
+  }
+
+  #o-que-fazemos.s03 .s03__br-desk {
+    display: none;
+  }
+
+  /* área inicial: a coluna da headline reserva a altura da águia antes do texto */
+  #o-que-fazemos.s03 .container.s03__grid {
+    grid-template-rows: minmax(calc(var(--s03-m-intro) - var(--s03-top)), auto) auto;
+    align-items: start;
+  }
+
+  /* a mesma águia no galho do desktop, no alto à direita e cortada pela borda (a seção recorta: sem rolagem lateral).
+     Calibrada pelos pixels opacos do asset: olho na altura das duas primeiras linhas, corpo no canto, galho entre a
+     headline e o texto; folga medida ≥ 11px até as letras e ≥ 14px até o texto de 320 a 430px (docs/s03-mobile-relatorio.md) */
+  #o-que-fazemos.s03 .s03__figure {
+    display: block;
+  }
+
+  #o-que-fazemos.s03 .s03-mobile__eagle {
+    top: 44px;
+    right: -39vw;
+    bottom: auto;
+    width: min(92vw, 400px);
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* texto narrativo direto sobre o fundo claro (sem placa, sem número, sem luz, sem tilt) */
+  #o-que-fazemos.s03 .s03-mobile__narrative {
+    width: calc(100% - 4px);
+    max-width: none;
+    margin: 0 2px; /* 20px da borda (a headline e a grade ficam a 18px) */
+    row-gap: 20px;
+  }
+
+  #o-que-fazemos.s03 .s03__card {
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: inherit;
+    transform: none;
+    transform-style: flat;
+    transition: none;
+    will-change: auto;
+  }
+
+  #o-que-fazemos.s03 .s03__card-surface,
+  #o-que-fazemos.s03 .s03__card-light,
+  #o-que-fazemos.s03 .s03__num,
+  #o-que-fazemos.s03 .s03__spot {
+    display: none;
+  }
+
+  #o-que-fazemos.s03 .s03__panel-body {
+    display: block;
+    padding: 0;
+  }
+
+  #o-que-fazemos.s03 .s03-mobile__narrative .s03__text {
+    max-width: none;
+    color: var(--color-graphite);
+    font-weight: var(--font-weight-regular);
+    text-align: left;
+  }
+
+  /* quatro cards de vidro em 2 × 2 (01 | 02 / 03 | 04) */
+  #o-que-fazemos.s03 .s03-mobile__feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: clamp(32px, 8vw, 46px) 18px 0;
+    align-items: stretch;
+  }
+
+  #o-que-fazemos.s03 .s03-mobile__feature-card {
+    height: auto;
+    min-height: clamp(154px, 42vw, 182px);
+    border-radius: 18px;
+  }
+
+  #o-que-fazemos.s03 .s03-mobile__feature-card .s03-insight__content {
+    padding: 14px 13px;
+  }
+
+  /* números a partir de 24px: texto grande (WCAG), 3:1 basta sobre o vidro claro */
+  #o-que-fazemos.s03 .s03-mobile__feature-card [data-vz-s3-number] {
+    margin-bottom: 8px;
+    font-size: clamp(24px, 6vw, 28px);
+    line-height: 1;
+  }
+
+  #o-que-fazemos.s03 .s03-mobile__feature-card [data-vz-s3-title] {
+    margin: 0 0 8px;
+    font-size: clamp(14px, 3.9vw, 17px);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  #o-que-fazemos.s03 .s03-mobile__feature-card [data-vz-s3-copy] {
+    font-size: clamp(12.5px, 3.32vw, 14px);
+    line-height: 1.28;
+    overflow-wrap: normal;
+  }
+
+  /* ---------- narrativa (mesma do desktop) ---------- */
+  /* O .s03__stage vira o trilho (conteúdo + percurso, medidos pelo JS) e o que fica preso é o conteúdo dele — a coluna
+     headline + texto e, sobreposta a ela, a figura da águia —, como na cena dos painéis do tablet. O sticky solta
+     exatamente no fim do trilho, e a grade, logo depois dele em fluxo, encosta no texto sem nunca passar por baixo. */
+  .s03-motion-m #o-que-fazemos.s03 .s03__stage {
+    height: calc(var(--s03-m-stage, 470px) + var(--s03-m-travel, 320svh));
+    padding-top: 0;
+  }
+
+  /* A sobreposição é a margem negativa NO TOPO da coluna (não embaixo da figura): o sticky mantém a caixa de margem
+     dentro do trilho, e uma margem negativa embaixo da figura a deixaria presa 1 palco a mais depois da coluna (a grade
+     passava por cima da águia). Assim figura e coluna têm a mesma altura, o mesmo topo e soltam no mesmo pixel. */
+  .s03-motion-m #o-que-fazemos.s03 .container.s03__grid {
+    position: sticky;
+    top: 0;
+    margin-top: calc(-1 * var(--s03-m-stage, 470px));
+    padding-top: var(--s03-top);
+    overflow-x: clip; /* a formação espalha as palavras além da coluna: nunca cria rolagem horizontal */
+  }
+
+  .s03-motion-m #o-que-fazemos.s03 .s03__figure {
+    position: sticky;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: var(--s03-m-stage, 470px);
+  }
+
+  .s03-motion-m #o-que-fazemos.s03 .s03-mobile__feature-grid {
+    /* entrada do desktop: a visibilidade é da grade; opacidade e deslocamento, de cada card */
+    visibility: hidden;
+    transition: visibility 0s linear 600ms;
+  }
+
+  .s03-motion-m #o-que-fazemos.s03 .s03-mobile__feature-grid.is-revealed {
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .s03-motion-m #o-que-fazemos.s03 .s03-mobile__feature-card {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 600ms ease,
+      transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .s03-motion-m #o-que-fazemos.s03 .s03-mobile__feature-grid.is-revealed .s03-mobile__feature-card {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* águia na narrativa: perspectiva da convergência e zoom ancorado no olho (os valores do desktop) */
+  .s03-motion-m #o-que-fazemos.s03 .s03__figure {
+    perspective: 1400px;
+  }
+
+  .s03-motion-m #o-que-fazemos.s03 .s03__eagle {
+    transform-origin: 31.6% 18.6%;
+    will-change: transform;
+  }
+
+  /* os três textos ocupam a mesma célula do espaço narrativo */
+  .s03-motion-m #o-que-fazemos.s03 .s03__slot > .s03__panel {
+    grid-area: 1 / 1;
+  }
+
+  .s03-motion-m #o-que-fazemos.s03 .s03__title {
+    transform-origin: 0 50%;
+  }
+}
+
+@media (max-width: 374.98px) {
+  #o-que-fazemos.s03 .s03-mobile__eagle {
+    right: -43vw; /* a headline ocupa mais da largura: a águia recua para manter a folga */
+  }
+}
+
+@media (max-width: 359.98px) {
+  #o-que-fazemos.s03 .s03-mobile__headline {
+    font-size: clamp(29px, 8.65vw, 31px);
+  }
+
+  #o-que-fazemos.s03 .s03-mobile__eagle {
+    top: 58px; /* o bico desce para a linha 2, mais curta */
+    right: -47vw;
+    width: 88vw;
+  }
+
+  #o-que-fazemos.s03 .s03-mobile__feature-card .s03-insight__content {
+    padding: 12px 11px;
+  }
+}
+
+@media (max-width: 339.98px) {
+  #o-que-fazemos.s03 .s03-mobile__feature-grid {
+    grid-template-columns: 1fr;
   }
 }
 
