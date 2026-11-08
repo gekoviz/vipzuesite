@@ -323,8 +323,8 @@
 
     <!-- 04 — MÉTODO (8.5). Cabeçalho: headline + subheadline, entrada "fade-up" (21st.dev underline-hero-section).
          Desktop (≥ 1024px): 4 cards 2 × 2 no padrão visual do .s03__card (exceções UI.01/UI.20 registradas no relatório
-         da rodada 2). Tablet: pontos em 2 colunas. Celular: pontos que acendem com a rolagem (js/journey-lamp.js,
-         21st.dev tubelight-navbar). O id #metodo é o do menu e também o gancho do campo de luz em js/light-field.js:
+         da rodada 2). Tablet: pontos em 2 colunas. Celular (08/11/2026, "linha viva"): uma linha SVG orgânica liga os
+         quatro pontos e acende com a rolagem (js/journey-lamp.js); os atributos data-vz-s4m-* só servem ao celular. O id #metodo é o do menu e também o gancho do campo de luz em js/light-field.js:
          não renomear sem atualizar o seletor lá. Sem relevo 3D nesta seção (removido na rodada 2). -->
     <!-- V6 (07/11/2026, prompt mestre da Seção 04): no desktop (≥ 1024px) a headline em duas linhas controladas
          ("O que entregamos é" / "uma página.") e, à direita, o parágrafo .why__aside no lugar da subheadline antiga.
@@ -338,22 +338,22 @@
           <p class="why__aside" data-reveal="fade-up" data-reveal-step="1"><strong>Mas a diferença está no processo.</strong> <span>O que faz a diferença é tudo que vem antes de ser entregue.</span></p>
         </header>
 
-        <ol class="journey" aria-label="Método: diagnóstico, estratégia, construção e entrega">
-          <li class="journey__stage" data-reveal>
-            <h3 class="journey__name">Diagnóstico</h3>
-            <p class="journey__detail">Cada negócio possui suas próprias dúvidas, objeções e informações que nem sempre chegam ao cliente no momento certo. Identificamos o que seus potenciais clientes mais precisam saber antes do contato, para que cheguem à conversa mais informados e preparados.</p>
+        <ol class="journey vz-s4m-steps" data-vz-s4m-steps aria-label="Método: diagnóstico, estratégia, construção e entrega">
+          <li class="journey__stage" data-reveal data-vz-s4m-step="0">
+            <h3 class="journey__name" data-vz-s4m-title>Diagnóstico</h3>
+            <p class="journey__detail" data-vz-s4m-copy>Cada negócio possui suas próprias dúvidas, objeções e informações que nem sempre chegam ao cliente no momento certo. Identificamos o que seus potenciais clientes mais precisam saber antes do contato, para que cheguem à conversa mais informados e preparados.</p>
           </li>
-          <li class="journey__stage" data-reveal>
-            <h3 class="journey__name">Estratégia</h3>
-            <p class="journey__detail">Organizamos as informações, os argumentos e as provas que precisam aparecer na página, definindo o que apresentar e em qual ordem. Cada elemento é pensado para esclarecer dúvidas, construir confiança e conduzir o potencial cliente ao próximo passo.</p>
+          <li class="journey__stage" data-reveal data-vz-s4m-step="1">
+            <h3 class="journey__name" data-vz-s4m-title>Estratégia</h3>
+            <p class="journey__detail" data-vz-s4m-copy>Organizamos as informações, os argumentos e as provas que precisam aparecer na página, definindo o que apresentar e em qual ordem. Cada elemento é pensado para esclarecer dúvidas, construir confiança e conduzir o potencial cliente ao próximo passo.</p>
           </li>
-          <li class="journey__stage" data-reveal>
-            <h3 class="journey__name">Construção</h3>
-            <p class="journey__detail">A partir dessas decisões, desenvolvemos o conteúdo, a interface e a estrutura da página, unindo apresentação visual e objetivo comercial. Cada elemento ganha forma para criar uma experiência clara, profissional e alinhada ao seu negócio.</p>
+          <li class="journey__stage" data-reveal data-vz-s4m-step="2">
+            <h3 class="journey__name" data-vz-s4m-title>Construção</h3>
+            <p class="journey__detail" data-vz-s4m-copy>A partir dessas decisões, desenvolvemos o conteúdo, a interface e a estrutura da página, unindo apresentação visual e objetivo comercial. Cada elemento ganha forma para criar uma experiência clara, profissional e alinhada ao seu negócio.</p>
           </li>
-          <li class="journey__stage" data-reveal>
-            <h3 class="journey__name">Entrega</h3>
-            <p class="journey__detail">Finalizamos, verificamos o funcionamento e publicamos a página conforme o escopo definido. Na entrega, apresentamos o que foi desenvolvido e as principais decisões estratégicas que orientaram sua criação, para que você compreenda não apenas o resultado, mas também o propósito por trás dele.</p>
+          <li class="journey__stage" data-reveal data-vz-s4m-step="3">
+            <h3 class="journey__name" data-vz-s4m-title>Entrega</h3>
+            <p class="journey__detail" data-vz-s4m-copy>Finalizamos, verificamos o funcionamento e publicamos a página conforme o escopo definido. Na entrega, apresentamos o que foi desenvolvido e as principais decisões estratégicas que orientaram sua criação, para que você compreenda não apenas o resultado, mas também o propósito por trás dele.</p>
           </li>
         </ol>
       </div>

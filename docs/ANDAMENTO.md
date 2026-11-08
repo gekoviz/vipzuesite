@@ -1,5 +1,32 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Seção 04 no celular: linha viva do Método (branch, não publicado)
+
+**Pedido:** "VIPZUE — PROMPT MESTRE DE EXECUÇÃO · SEÇÃO 04 MOBILE · LINHA VIVA / MÉTODO", com a referência REF_01 (14.webp) e a plumagem (15.webp). Branch `feat/s04-mobile-linha`, a partir da 03 mobile (`9419171`). O prompt pede "não fazer deploy". Relatório completo: `docs/s04-mobile-relatorio.md`.
+
+**Feito (só abaixo de 768 px):**
+- **Linha:** uma linha SVG orgânica liga os centros reais dos quatro pontos, no corredor à esquerda do texto, e se preenche com a rolagem (frente a 54% da tela). É calculada pela posição real dos pontos e refeita em resize, rotação, fontes e `pageshow`.
+- **Estados:**
+  - ativo: núcleo champanhe, aro Páprica e halo;
+  - concluído: ponto Páprica;
+  - futuro: ponto escuro e texto atenuado, que clareia nos últimos 18% do trecho.
+  Desce acende, sobe regride.
+- **Plumagem:** `assets/secao04/penas-s04.webp`, atrás das etapas, do fim da Estratégia ao fim da Entrega, saindo pela direita.
+- **Desktop e tablet:** iguais (sonda e pixels). A águia da divisa não mudou.
+
+**Desvios:**
+- parágrafos em .76 (futuro) e .86 (concluído), contra .58 e .83 no prompt, porque com estes ficam abaixo do AA no próprio fundo;
+- penas em `right: -44vw` / `opacity: .5`, contra −30vw / .58, porque assim não cobrem as letras;
+- pontos e penas como pseudo-elementos (`::before` / `::after`).
+
+**Verificação:**
+- funcional 207/207 em 360, 375, 390 e 430;
+- contraste sem falhas;
+- herói 11/11;
+- build OK.
+
+**Pendências:** Safari/iOS e aparelhos reais não testados.
+
 ## 08/11/2026 — Seção 03 no celular: composição editorial (branch, não publicado)
 
 **Pedido:** "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V3 · Seção 03 Mobile", com a referência REFERENCIA_FINAL_MOBILE_SECAO03. Branch `feat/s03-mobile-editorial`. O prompt pede "não publique". Relatório completo: `docs/s03-mobile-relatorio.md`.

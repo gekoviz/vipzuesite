@@ -948,8 +948,9 @@ html:not(.s03-motion) .vz-s3-glass-card {
 }
 
 /* Jornada do Método. Desktop (≥ 1024px): cards 2 × 2, no fim deste bloco. Tablet: 2 colunas com um ponto no topo de
-   cada etapa (regras de 1023px, abaixo e adiante). Celular: 1 coluna, e cada ponto acende com a rolagem (regras de
-   767px, adiante; js/journey-lamp.js). Nenhuma linha liga as etapas, em nenhuma largura. */
+   cada etapa (regras de 1023px, abaixo e adiante). Celular: 1 coluna, e uma linha SVG liga os pontos e acende com a
+   rolagem (bloco "S04 MOBILE · linha viva", no fim do arquivo; js/journey-lamp.js). No tablet e no desktop nenhuma linha
+   liga as etapas. */
 .journey {
   position: relative;
   display: grid;
@@ -2352,7 +2353,8 @@ html.js-reveal .faq.is-list-in .accordion__item {
     --s03-seam-w: min(72vw, 320px, 36svh);
   }
 
-  /* Jornada vertical, sem linha: os pontos ficam sozinhos na margem e acendem com a rolagem (js/journey-lamp.js) */
+  /* Jornada vertical: os pontos na margem; a linha que os liga e acende com a rolagem é o bloco "S04 MOBILE · linha
+     viva", no fim do arquivo (js/journey-lamp.js) */
   .journey {
     grid-template-columns: 1fr;
     row-gap: var(--space-xl);
@@ -2393,21 +2395,8 @@ html.js-reveal .faq.is-list-in .accordion__item {
     }
   }
 
-  /* Ponto aceso, "tubelight-navbar" (21st.dev) em CSS: a barra acesa vira o preenchimento do ponto e os halos
-     (bg-primary/20 + blur) viram dois box-shadow na cor de destaque. --a (0 → 1) vem da rolagem; sem JS ou com
-     movimento reduzido a classe .journey--lamp não existe e ficam os pontos de sempre. */
-  .journey--lamp .journey__stage {
-    --a: 0;
-  }
-
-  .journey--lamp .journey__stage::before,
-  .journey--lamp .journey__stage:last-child::before {
-    border-color: color-mix(in srgb, var(--color-brand-accent) calc(40% + 60% * var(--a)), transparent);
-    background: color-mix(in srgb, var(--color-ivory) calc(var(--a) * 100%), var(--color-bg-primary)); /* núcleo Marfim (≥ 3:1); halo e borda Páprica */
-    box-shadow:
-      0 0 0 calc(var(--a) * 4px) color-mix(in srgb, var(--color-brand-accent) calc(var(--a) * 16%), transparent),
-      0 0 calc(var(--a) * 16px) calc(var(--a) * 2px) color-mix(in srgb, var(--color-brand-accent) calc(var(--a) * 45%), transparent);
-  }
+  /* Os pontos acesos do celular (antes "tubelight-navbar", .journey--lamp) agora são da linha viva: bloco
+     "S04 MOBILE · linha viva", no fim do arquivo. */
 
   .site-footer__grid {
     grid-template-columns: 1fr;
@@ -3048,5 +3037,178 @@ html.has-curtain .footer-curtain .site-footer {
 @media (min-width: 1024px) and (min-height: 600px) and (prefers-reduced-motion: reduce) {
   html {
     scroll-snap-type: none;
+  }
+}
+
+/* =========================================================
+   VIPZUE · S04 MOBILE · linha viva (08/11/2026) — nunca aplicar no desktop (só max-width: 767.98px)
+   Prompt "SEÇÃO 04 MOBILE · LINHA VIVA / MÉTODO". Os mesmos quatro blocos, na altura natural e na rolagem natural (sem
+   pin): uma única linha SVG orgânica (js/journey-lamp.js) liga os centros dos quatro pontos no corredor à esquerda do
+   texto; a frente de luz percorre a linha com a rolagem, acende o ponto alcançado e leva o título e o parágrafo de
+   atenuado a pleno. Os pontos são os de sempre (o ::before de cada etapa), com o acabamento do hover dos cards do
+   desktop. Atrás das etapas, uma única plumagem (background do ::after do invólucro das etapas: um <img> dentro do <ol>
+   não seria HTML válido). Fundo: o campo Mocha/Páprica do Método, sem mudança. A águia da divisa não é tocada.
+   Sem JS: pontos escuros com aro Páprica e textos plenos. Movimento reduzido: linha inteira e estática, textos plenos.
+   ========================================================= */
+@media (max-width: 767.98px) {
+  #metodo {
+    overflow-x: clip; /* a plumagem sai pela borda direita sem rolagem lateral (a águia da divisa não está dentro da 04) */
+  }
+
+  #metodo .vz-s4m-steps {
+    position: relative;
+    isolation: isolate;
+  }
+
+  #metodo .vz-s4m-steps > [data-vz-s4m-step] {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* plumagem: uma imagem, posicionada no invólucro completo das etapas, proporção nativa (941 × 1672), saindo pela direita.
+     top e height como no prompt; right −30vw → −44vw e opacidade .58 → .5 porque, no ajuste inicial, as penas ficavam
+     sob o fim das linhas de Construção e Entrega (em 360px nem o parágrafo pleno passava de 4,6:1); assim o pior trecho
+     do parágrafo futuro (.76) fica em 4,57:1. Regra do prompt: mover para a direita e/ou reduzir a opacidade, sem véu. */
+  #metodo .vz-s4m-steps::after {
+    content: "";
+    position: absolute;
+    top: 28%;
+    right: -44vw;
+    height: 72%;
+    aspect-ratio: 941 / 1672;
+    background: url("../assets/secao04/penas-s04.webp") right bottom / contain no-repeat;
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
+  #metodo .vz-s4m-track {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  #metodo .vz-s4m-segment-base {
+    fill: none;
+    stroke: rgb(215 103 63 / 0.24);
+    stroke-width: 1.45;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  #metodo .vz-s4m-segment-glow {
+    fill: none;
+    stroke: #9f3930;
+    stroke-width: 5.5;
+    stroke-opacity: 0.38;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 4px rgb(215 103 63 / 0.48));
+  }
+
+  #metodo .vz-s4m-segment-core {
+    fill: none;
+    stroke: #d7673f;
+    stroke-width: 2.05;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 2px rgb(255 213 166 / 0.4));
+  }
+
+  /* o ponto de sempre (::before), 19px (era 15px) com o mesmo centro vertical, acima da linha */
+  #metodo .vz-s4m-steps > [data-vz-s4m-step]::before {
+    top: calc(0.35em - 2px);
+    width: 19px;
+    height: 19px;
+    z-index: 3;
+    border: 1.5px solid rgb(215 103 63 / 0.55);
+    border-radius: 999px;
+    background: rgb(34 32 29 / 0.68);
+    box-shadow: inset 0 1px 2px rgb(255 213 166 / 0.11);
+    transition:
+      background-color 170ms ease-out,
+      border-color 170ms ease-out,
+      box-shadow 170ms ease-out;
+  }
+
+  /* futuro: escuro, aro Páprica; na aproximação (--vz-s4m-k, 0 → 1) o aro firma e nasce um halo local */
+  #metodo .vz-s4m-steps > [data-vz-s4m-step].is-vz-future::before {
+    background: rgb(34 32 29 / 0.65);
+    border-color: rgb(215 103 63 / calc(0.5 + 0.5 * var(--vz-s4m-k, 0)));
+    box-shadow:
+      inset 0 1px 2px rgb(255 213 166 / 0.07),
+      0 0 calc(12px * var(--vz-s4m-k, 0)) calc(3px * var(--vz-s4m-k, 0)) rgb(215 103 63 / calc(0.56 * var(--vz-s4m-k, 0)));
+  }
+
+  /* ativo: núcleo champanhe, anel Marfim, aro Páprica e halo quente local (os pigmentos do hover dos cards do desktop) */
+  #metodo .vz-s4m-steps > [data-vz-s4m-step].is-vz-active::before {
+    background: #ffd5a6;
+    border-color: #d7673f;
+    box-shadow:
+      inset 0 0 0 2px rgb(243 237 227 / 0.76),
+      0 0 0 5px rgb(215 103 63 / 0.16),
+      0 0 12px 3px rgb(215 103 63 / 0.56),
+      0 0 26px 8px rgb(159 57 48 / 0.22);
+  }
+
+  /* concluído: reconhecível, menos intenso */
+  #metodo .vz-s4m-steps > [data-vz-s4m-step].is-vz-complete::before {
+    background: rgb(215 103 63 / 0.78);
+    border-color: rgb(255 213 166 / 0.62);
+    box-shadow: 0 0 10px rgb(215 103 63 / 0.26);
+  }
+
+  /* textos: Marfim; só a opacidade muda (sem transform, sem filtro). Títulos como no prompt (.62 / 1 / .86). Parágrafos
+     acima do prompt (.58 → .76 no futuro, .83 → .86 no concluído): com .58 o pior trecho ficava em 3,55:1 e com .83 em
+     4,42:1 no próprio campo Mocha/Páprica (360px), abaixo do AA 4,5:1; legibilidade acima da referência. */
+  #metodo .vz-s4m-steps [data-vz-s4m-title],
+  #metodo .vz-s4m-steps [data-vz-s4m-copy] {
+    color: var(--color-ivory);
+    transition: opacity 170ms linear;
+  }
+
+  #metodo .vz-s4m-steps .is-vz-future [data-vz-s4m-title] {
+    opacity: calc(0.62 + 0.38 * var(--vz-s4m-k, 0));
+  }
+
+  #metodo .vz-s4m-steps .is-vz-future [data-vz-s4m-copy] {
+    opacity: calc(0.76 + 0.24 * var(--vz-s4m-k, 0));
+  }
+
+  #metodo .vz-s4m-steps .is-vz-active [data-vz-s4m-title],
+  #metodo .vz-s4m-steps .is-vz-active [data-vz-s4m-copy] {
+    opacity: 1;
+  }
+
+  #metodo .vz-s4m-steps .is-vz-complete [data-vz-s4m-title] {
+    opacity: 0.86;
+  }
+
+  #metodo .vz-s4m-steps .is-vz-complete [data-vz-s4m-copy] {
+    opacity: 0.86;
+  }
+}
+
+@media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
+  #metodo .vz-s4m-steps > [data-vz-s4m-step]::before,
+  #metodo .vz-s4m-steps [data-vz-s4m-title],
+  #metodo .vz-s4m-steps [data-vz-s4m-copy] {
+    transition: none !important;
+  }
+
+  #metodo .vz-s4m-steps [data-vz-s4m-step] [data-vz-s4m-title],
+  #metodo .vz-s4m-steps [data-vz-s4m-step] [data-vz-s4m-copy] {
+    opacity: 1 !important;
+  }
+
+  #metodo .vz-s4m-segment-core,
+  #metodo .vz-s4m-segment-glow {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
   }
 }
