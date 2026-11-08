@@ -26,7 +26,7 @@
 - movimento reduzido, histórico e recarga;
 - as outras seções idênticas à `main`.
 
-**Decisão pendente:** a emenda 06 → 07 virou um corte seco (CTA quase preta → FAQ Mocha). Antes era contínua.
+**Emenda 06 → 07:** o fundo do prompt deixava um corte seco (CTA quase preta → FAQ Mocha). O usuário escolheu suavizar: o pé da CTA esfuma até o tom do topo da FAQ, rgb(59 48 38), com um calor Páprica baixo onde a FAQ tem o foco dela. Na fronteira, desktop (88, 58, 42) → (89, 58, 42) e celular (67, 50, 38) → (65, 52, 39). A FAQ não mudou.
 
 **Pendente:** Safari iOS / iPhone real; publicação só quando autorizada.
 

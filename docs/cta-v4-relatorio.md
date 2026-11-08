@@ -83,6 +83,10 @@ As cores vêm dos tokens globais (`--color-mocha`, `--color-paprika`, `--color-p
 | base | `linear-gradient(112deg, Mocha 17% / 29% / 25% com preto)`, literal do prompt | — | — |
 | luz principal | — | `ellipse 52% 66% at 70% 32%`: Páprica .56 → Páprica Profunda .25 em 42% → transparente em 78% | `ellipse 100% 46% at 50% 45%`: .44 → .20 em 46% → transparente em 80% |
 | calor baixo | — | `ellipse 70% 83% at 54% 86%`: Páprica Profunda .13 → 73% (igual ao prompt) | `ellipse 90% 34% at 50% 80%`: .16 → 72% |
+| pé (esfumado) | `linear-gradient(to bottom)`: transparente até 78%, rgb(59 48 38) a .22 em 86%, a .62 em 94%, opaco em 100% | — | — |
+| calor do pé | — | `ellipse 42% 24% at 74% 100%`: Páprica .52 → .24 em 50% → transparente (de 1024 a 1199px: `50% 26% at 77%`, .58 → .28) | tablet, 768–1023px: `52% 26% at 81%`, .40 → .24; celular: `58% 26% at 74%`, .13 → .06 |
+
+**Pé da seção (decisão do usuário em 08/11, "Sim, suavizar"):** as duas últimas camadas não estavam no prompt, que pede "não introduzir outros efeitos" no fundo. Foram acrescentadas porque o fundo do prompt deixava um corte seco na passagem para a FAQ (observação 1). Continuam estáticas, só gradiente. O tom rgb(59 48 38) é Mocha 20% + Profundidade #332B23 80%, medido coluna a coluna no topo do campo da FAQ. O calor do pé encontra o foco Páprica que a FAQ tem no alto à direita; a posição e a força desse foco mudam com a proporção da tela, por isso há quatro faixas. A FAQ não mudou.
 
 **Por que os radiais mudaram:** os pontos de partida do prompt eram `57% 69% at 73% 39%` com .38/.15 no desktop e `92% 49% at 50% 43%` com .30/.11 no celular. Comparei a cor do fundo em pontos fixos das referências com a captura real: atrás da águia, a luz saía com cerca de metade do brilho da referência. Por isso subi a intensidade e levei o centro para a cabeça da águia. A referência é mais vermelha (azul ≈ 0); a paleta do prompt vence (§03.6), então o tom continua Páprica/Mocha.
 
@@ -243,7 +247,16 @@ Com movimento normal, as diferenças são só de estado de animação: o ângulo
 
 ### Observações (honestas)
 
-1. **Emenda 06 → 07 (CTA → FAQ).** Antes, as duas seções usavam o mesmo campo escuro, e a passagem era contínua: (90, 60, 43) → (89, 58, 42) no desktop. Com o fundo do prompt, a CTA termina quase preta, (31, 20, 15), e a FAQ começa no Mocha do campo dela, (89, 58, 42). Agora há um **corte seco** visível. Capturas: `emenda-06-07-antes-*.jpg` e `emenda-06-07-depois-*.jpg`. O prompt proíbe mexer na FAQ e pede "não introduzir outros efeitos" no fundo, então nada foi feito sem decisão. A alternativa é um esfumado só no pé da CTA, até o tom da FAQ.
+1. **Emenda 06 → 07 (CTA → FAQ): resolvida com o esfumado do pé.** Na `main`, as duas seções usavam o mesmo campo escuro e a passagem era contínua: (90, 60, 43) → (89, 58, 42) no desktop. O fundo do prompt, sozinho, terminava a CTA quase preta, (31, 20, 15), contra a FAQ em (89, 58, 42): um corte seco. O usuário escolheu suavizar (08/11). Faixas de 8px logo acima e logo abaixo da fronteira, agora:
+
+   | Tela | Pé da CTA | Topo da FAQ |
+   |---|---|---|
+   | 1536×864 | (88, 58, 42) | (89, 58, 42) |
+   | 1024×768 | (96, 60, 43) | (96, 60, 43) |
+   | 768×1024 | (86, 57, 42) | (90, 60, 43) |
+   | 390×844 | (67, 50, 38) | (65, 52, 39) |
+
+   Coluna a coluna (8 faixas na largura), a diferença fica em até ~11 unidades de vermelho. Ainda se nota uma linha fina em algumas telas: o campo da FAQ tem grão e a CTA é lisa, e a FAQ tem uma borda própria no topo, que já aparecia na `main`. Capturas: `emenda-06-07-antes-*.jpg` (main) e `emenda-06-07-depois-*.jpg` (branch, 1536, 1024, 768 e 390). Depois do esfumado, a verificação de função e contraste rodou de novo nas 14 telas: 0 falhas, mesmos contrastes.
 2. **Ganho colateral:** a 320px a página era montada com 348px de largura e o navegador reduzia a escala para 92%. A causa era o título antigo ("acompanhou?" a 52px). Agora fica em 320px.
 3. **A emenda 05 → 06 continua um corte seco**, claro → escuro, como antes.
 
