@@ -1,13 +1,20 @@
-// Display cards da Hero desktop (adaptação nativa do display-cards de Codehagen/21st.dev, sem React nem ícones).
+// Display cards da Hero (adaptação nativa do display-cards de Codehagen/21st.dev, sem React nem ícones): desktop com
+// mouse/touchpad e, desde a V5, celular em retrato (os mesmos cards empilhados à esquerda; ver css/hero.css).
 // Este arquivo só define o controlador; quem informa o estado da Hero é js/hero.js:
 //   setHeroReady(true)  — entrada de logo/menu, headline e CTA concluída (ou Hero estática/atalho que já a mostra pronta)
 //   setHeroRange(bool)  — true na Hero pronta; false a partir do início da Visão (a headline começa a sair)
 // Daqui saem: visibilidade do grupo (classes; a transição é do CSS), ciclo de destaque (uma timeline GSAP pausável, sem
 // ScrollTrigger, RAF ou intervalo próprios) e as pausas: rolagem (retoma 0,7 s depois de parar), ponteiro sobre o grupo, aba oculta,
-// palco fora da tela. Movimento reduzido: dois planos parados, sem ciclo. Sem GSAP: os cards aparecem parados.
+// palco fora da tela. A pausa do ponteiro vale só com mouse/touchpad (no toque, tocar no card não congela o ciclo).
+// Movimento reduzido: dois planos parados, sem ciclo. Sem GSAP: os cards aparecem parados.
 (() => {
   const NOOP = { setHeroReady() {}, setHeroRange() {}, dispose() {}, state: null };
-  const ELIGIBLE = "(min-width: 1024px) and (min-height: 560px) and (hover: hover) and (pointer: fine)"; // mesmo corte do CSS (e da Hero desktop com voo)
+  // Mesmo corte do CSS: desktop com mouse/touchpad (o da Hero desktop com voo) ou celular em retrato. Tablet
+  // (768–1023 px) e celular deitado ficam de fora.
+  const DESKTOP = "(min-width: 1024px) and (min-height: 560px) and (hover: hover) and (pointer: fine)";
+  const MOBILE = "(max-width: 767.98px) and (orientation: portrait)";
+  const ELIGIBLE = `${DESKTOP}, ${MOBILE}`;
+  const FINE_POINTER = "(hover: hover) and (pointer: fine)";
   const IDLE_MS = 700;
   // V3: um novo destaque começa a cada CYCLE_BEAT segundos (1º card em 0 s, 2º em 3 s, ciclo de 6 s)
   const CYCLE_BEAT = 3.0;
@@ -24,6 +31,7 @@
 
     const eligible = window.matchMedia(ELIGIBLE);
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const finePointer = window.matchMedia(FINE_POINTER);
     const state = { heroReady: false, heroRange: false, stageVisible: true, scrolling: false, hovered: false, shown: false, disposed: false };
     let idleTimer = 0;
 
@@ -92,6 +100,7 @@
       }, IDLE_MS);
     };
     const onEnter = () => {
+      if (!finePointer.matches) return;
       state.hovered = true;
       evaluate();
     };

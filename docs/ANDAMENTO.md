@@ -1,5 +1,29 @@
 # Andamento — VIPZUE 2026
 
+## 08/11/2026 — Display cards V5: vidro, diagramação e celular (não publicado)
+
+**Pedido:** "VIPZUE — PROMPT MESTRE V3 — HERO DESKTOP + MOBILE — DISPLAY CARDS, GLASS EFFECT E COMPOSIÇÃO FINAL". Branch `feat/hero-cards-glass`.
+
+**Feito:**
+- **Desktop.** O vidro da Seção 03 nos dois cards: Mocha translúcido, blur 11 px, contorno Marfim e halo Páprica, sem o líquido animado. Card 1 em caixa baixa, à esquerda e centrado na altura. Card 2 num parágrafo contínuo de três linhas. Posição, tamanho, inclinação e ciclo iguais.
+- **Celular em retrato.** Os mesmos cards, planos, empilhados à esquerda abaixo dos olhos e sobre as penas, ancorados na águia, com o autoplay ligado (mesmo controlador e mesma timeline; o toque não pausa). Headline, CTA e águia reenquadrados pela referência.
+- **Regra de ocultação corrigida na origem.** Tablet e celular deitado continuam sem cards.
+
+**Desvios:**
+- Vidro a .32 em vez de .25, pelo contraste AA do card 1 sobre o halo.
+- Cards desktop menores que na referência, porque a geometria foi mantida.
+- Headline do celular maior que na revisão de 24/10.
+
+**Testes (Chrome headless):**
+- Quebras e texto dentro do card em 12 telas.
+- Contraste sem falhas: desktop ≥ 4,64:1 e celular ≥ 5,64:1.
+- Autoplay §68 12/12 no desktop e no celular, mais mouse, toque, aba oculta e movimento reduzido.
+- Desktop idêntico ao "antes" (headline, CTA, águia, card 1 e grupo).
+- `test-hero-voo` 11/11 e build ok.
+- Não testado em Safari/iPhone nem em aparelho real.
+
+Detalhes: `docs/hero-cards-glass-relatorio.md`.
+
 ## 07/11/2026 — Seção 04 Método V6: reconstrução fiel à referência aprovada (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `7d4df63` para `4aa494b` (fast-forward de `feat/s04-metodo`).

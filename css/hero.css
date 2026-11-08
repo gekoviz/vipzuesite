@@ -870,19 +870,22 @@
 @media (max-width: 767px) {
   .hero {
     /* 3 linhas; a mais longa ("a presença digital dele.") mede 9,68em com −0.03em e cabe entre as
-       margens de 24px até 320px. Revisão no iPhone (24/10): 28,9 → 26,5px em 390, topo em header + 8px. */
-    --hl-size: clamp(23px, min(6.8vw, 4.2svh), 34px);
-    --hl-leading: 0.92;
+       margens de 24px até 320px. Revisão no iPhone (24/10): 28,9 → 26,5px em 390, topo em header + 8px.
+       V5 dos cards (07/11, referência mobile aprovada): headline um pouco maior e mais baixa (33 px em 432 × 768,
+       topo a ~75 px), águia ~9% menor e mais à direita, para os olhos ficarem livres e os cards caberem à esquerda,
+       abaixo deles. Valores anteriores: 6,8vw/4,2svh, .92, header + 8 px, 118vw, 63vw e + 20 px nos olhos. */
+    --hl-size: clamp(23px, min(7.7vw, 4.4svh), 36px);
+    --hl-leading: 0.95;
     --hl-tracking: -0.03em;
-    --content-top: calc(var(--header-height) + var(--space-xs));
+    --content-top: calc(var(--header-height) + clamp(8px, 2.9svh, 24px));
     /* Fim do bloco headline + CTA (3 linhas + 16px + CTA de 44px), calculado só com variáveis */
     --copy-bottom: calc(var(--content-top) + var(--hl-size) * var(--hl-leading) * 3 + 16px + 44px);
     /* Águia ancorada abaixo do CTA (não mais em % da altura: no Safari, com as barras, ela subia sobre
-       o botão). Maior, para ocupar o fundo que ficava vazio; a cabeça começa 20px abaixo do CTA. */
-    --eagle-w: min(118vw, 70svh);
+       o botão); a cabeça começa logo abaixo do CTA. */
+    --eagle-w: min(107.6vw, 70svh);
     --eagle-h: calc(var(--eagle-w) / 0.757);
-    --face-x: 63vw;
-    --eyes-y: calc(var(--copy-bottom) + 20px + var(--eagle-h) * 0.234);
+    --face-x: 69.4vw;
+    --eyes-y: calc(var(--copy-bottom) + var(--eagle-h) * 0.234);
   }
 
   .hero__figure {
@@ -1001,20 +1004,33 @@
    inclinados e sobrepostos, destaque alternado a cada 3 s. Sem ícones, selos, assinatura ou frase fora dos cards.
    V4 (07/11/2026): texto à esquerda e a partir do topo, 13 px, 2º card em duas colunas e vidro fumê Grafite. Movimento,
    geometria 3D e posição do grupo são os da V3.
+   V5 (07/11/2026, prompt mestre "Hero desktop + mobile"): o material passa a ser o vidro da Seção 03 (.s03-insight:
+   blur estático, contorno Marfim, brilho interno no alto), mais transparente sobre a Hero escura e sem o líquido
+   animado; o texto vira um bloco só, alinhado à esquerda e centrado na altura (1º card em caixa baixa, 2º num
+   parágrafo contínuo em três linhas). Tamanho e posição dos planos, inclinação e ciclo não mudam. Os mesmos cards
+   entram no celular em retrato (bloco no fim desta parte).
    Camadas: o palco é o bloco de contenção (isolado); o grupo fica acima do conteúdo (mesmo z-index, depois no DOM) e
    abaixo da sombra da Visão. Quem é dono de quê:
      .vz-hero-cards            — visibilidade (classes postas por js/hero-display-cards.js; transição em CSS)
      .vz-hero-cards__motion    — x/y do ciclo (GSAP) e a perspectiva do card
      .vz-hero-cards__surface   — orientação 3D, material e borda (CSS). O texto está DENTRO da superfície, sem
                                  contra-transformação: fundo, borda, sombra e letras são um objeto só.
-   Só existe na Hero desktop com mouse/touchpad: ≥ 1024 × 560, hover e ponteiro fino (mesmo corte no JS). Tablets e
-   celulares: a Hero fica exatamente como era.
+   Existe na Hero desktop com mouse/touchpad (≥ 1024 × 560, hover e ponteiro fino) e no celular em retrato (< 768 px),
+   o mesmo corte do JS. Tablets e celulares deitados: a Hero fica exatamente como era.
    ========================================================= */
 .vz-hero-cards {
   --vzc-w: clamp(284px, 21.5vw, 316px);
-  --vzc-glass-base: #22201D;
-  --vzc-glass-ink: #F3EDE3;
-  --vzc-glass-accent: #D7673F;
+  --vzc-mocha: #5B4632;
+  --vzc-ivory: #F3EDE3;
+  --vzc-paprika: #D7673F;
+  --vzc-graphite: #22201D;
+  /* V5: texto. O 2º card fica em três linhas ("…compara / …Sua empresa / precisa estar à altura.") quando a coluna de
+     texto mede entre 14,31em e 15,05em (Switzer 400, −0,015em, medido no navegador); a fonte sai da largura do plano
+     para a coluna ficar em ~14,7em. Abaixo de 1366 px o piso de 15 px vale e, abaixo de ~1270 px, o texto passa a 4
+     linhas (a altura do plano acompanha). */
+  --vzc-pad-x: clamp(16px, 1.45vw, 24px);
+  --vzc-pad-y: 14px;
+  --vzc-font: clamp(15px, calc((var(--vzc-w) - var(--vzc-shift) - 2 * var(--vzc-pad-x)) / 14.7), 19px);
   /* 1º card: três expressões a partir do topo (o texto termina a ~85 px do topo do card). A especificação partia de
      120 px; com 120 o 1º card, ao voltar no fim do seu destaque, passa por cima do topo da 1ª linha do 2º (texto agora no topo) nos ~150 ms antes
      da troca. Com 112 (a altura da V3) a sobreposição é a mesma de antes e não alcança o texto. */
@@ -1147,20 +1163,29 @@
 }
 
 /* O card inteiro (material, borda, sombra e texto) é um plano inclinado com profundidade.
-   V4: vidro fumê Grafite. A transparência do vidro é só da pintura do fundo: em repouso a superfície tem opacidade 1, e
-   borda, sombra e texto ficam opacos. Sem suporte a backdrop-filter, Grafite a 88% para a leitura não depender do que
-   está atrás. */
+   V5: o vidro da Seção 03 (.s03-insight), em quatro camadas: o fundo da Hero e a águia atrás (backdrop), a superfície
+   Mocha translúcida com blur estático (só o que está atrás; o texto não é desfocado), o acabamento (contorno Marfim
+   fino, brilho interno no alto e na base, halo Páprica curto e sombra quente) e o texto por cima. Sem o líquido
+   animado da 03. A transparência é só da pintura do fundo: borda, sombra e texto ficam opacos. */
 .vz-hero-cards__surface {
   position: relative;
-  display: block;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  border: 1px solid rgb(215 103 63 / 0.34);
-  border-radius: 14px;
-  background: rgb(34 32 29 / 0.88);
-  color: var(--vzc-glass-ink);
-  box-shadow: 0 10px 24px rgb(16 12 9 / 0.24);
+  border: 1px solid rgb(243 237 227 / 0.6);
+  border-radius: 16px;
+  /* sem backdrop-filter (fallback, abaixo): Mocha quase opaco, para a leitura não depender do que está atrás */
+  background: rgb(91 70 50 / 0.82);
+  color: var(--vzc-ivory);
+  box-shadow:
+    inset 0 1px 0 rgb(243 237 227 / 0.2),
+    inset 0 -1px 0 rgb(243 237 227 / 0.07),
+    0 0 12px rgb(215 103 63 / 0.18),
+    0 12px 30px rgb(34 32 29 / 0.2);
   transform: rotateX(4deg) rotateY(-8deg) rotateZ(-4deg);
   transform-origin: center;
   transform-style: preserve-3d;
@@ -1168,115 +1193,95 @@
   transition: opacity 0.5s ease-out, border-color 0.65s ease, box-shadow 0.65s ease;
 }
 
-/* Vidro fumê: o fundo da Hero (Mocha/Páprica) aparece desfocado através do Grafite. Blur estático de 10 px, nunca
-   animado; age só sobre o que está atrás do card, não sobre o texto. */
+/* Vidro: o fundo da Hero e as penas aparecem desfocados através do Mocha. Blur estático de 11 px, nunca animado.
+   Mocha a 32% (a especificação partia de 25%): com 25% o 1º card, sobre o halo Páprica, ficava em 4,34–4,42:1 em
+   1280–1440 px (abaixo de AA para 15–17 px); com 32% fica em ≥ 4,6:1 em todas as telas medidas. */
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .vz-hero-cards__surface {
-    background: linear-gradient(135deg, rgb(34 32 29 / 0.66) 0%, rgb(34 32 29 / 0.56) 100%);
-    -webkit-backdrop-filter: blur(10px) saturate(112%);
-    backdrop-filter: blur(10px) saturate(112%);
+    background: rgb(91 70 50 / 0.32);
+    -webkit-backdrop-filter: blur(11px) saturate(140%);
+    backdrop-filter: blur(11px) saturate(140%);
   }
 }
 
-/* Só organiza a tipografia: sem transform próprio (o texto acompanha a orientação do plano). V4: texto alinhado à
-   esquerda e a partir do topo; o espaço livre fica à direita e embaixo. */
+/* Só organiza a tipografia: sem transform próprio (o texto acompanha a orientação do plano). V5: um bloco à esquerda,
+   centrado na altura do card; o espaço livre fica à direita. */
 .vz-hero-cards__body {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: flex-start;
   box-sizing: border-box;
   width: 100%;
-  height: 100%;
   min-height: 0;
-  padding: 16px 17px 14px 18px;
-  color: var(--vzc-glass-ink);
+  padding: var(--vzc-pad-y) var(--vzc-pad-x);
+  color: var(--vzc-ivory);
+  font-family: var(--font-body, inherit);
+  font-size: var(--vzc-font);
+  font-weight: 400;
+  letter-spacing: -0.015em;
   text-align: left;
+  text-transform: none;
 }
 
-.vz-hero-cards__motion--first .vz-hero-cards__body {
-  padding: 16px 16px 14px 18px;
-}
-
-.vz-hero-cards__motion--second .vz-hero-cards__body {
-  padding: 16px 17px 14px 17px;
-}
-
-/* Card superior: três expressões, uma por linha, todas começando no mesmo x */
+/* Card superior: três expressões, uma por linha, na mesma escala e no mesmo x */
 .vz-hero-cards__statement {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start;
-  gap: 7px;
   width: 100%;
   margin: 0;
   padding: 0;
-  color: #F3EDE3;
-  font-family: var(--font-body, inherit);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.4;
-  letter-spacing: 0.035em;
+  font: inherit;
+  line-height: 1.35;
+  letter-spacing: inherit;
   text-align: left;
-  text-transform: uppercase;
 }
 
 .vz-hero-cards__statement span {
   display: block;
-  margin: 0;
-  padding: 0;
-  text-align: left;
 }
 
-/* Card inferior: duas colunas de texto (frase | conclusão) e uma terceira coluna vazia à direita, que é só respiro.
-   Nada é posto nela. A conclusão nunca fica abaixo de 6,3em (~82 px): é o que "Sua empresa" precisa para não virar
-   uma palavra por linha nos cards mais estreitos. A partir de ~1420 px de largura a proporção 1.4 : 1 vale inteira. */
+/* Card inferior: um parágrafo só, contínuo (as duas frases na mesma linha de leitura, sem colunas) */
 .vz-hero-cards__argument {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(6.3em, 1fr) minmax(20px, 0.3fr);
-  column-gap: 10px;
-  align-items: start;
+  display: block;
   width: 100%;
   margin: 0;
   padding: 0;
-  color: #F3EDE3;
-  font-family: var(--font-body, inherit);
-  font-size: 13px;
-  line-height: 1.4;
-  letter-spacing: normal;
-  text-align: left;
-  white-space: normal;
-}
-
-.vz-hero-cards__argument-lead {
-  grid-column: 1;
-  display: block;
-  min-width: 0;
-  font-weight: 500;
+  font: inherit;
+  line-height: 1.34;
+  letter-spacing: inherit;
   text-align: left;
 }
 
+.vz-hero-cards__argument-lead,
 .vz-hero-cards__argument-outcome {
-  grid-column: 2;
-  display: block;
-  min-width: 0;
-  font-weight: 600;
-  text-align: left;
+  display: inline;
 }
 
-/* Plano em destaque: borda Páprica mais presente e sombra um pouco mais longa (mesmas sombras da V2) */
+/* Plano em destaque: o mesmo vidro com o contorno e o halo mais presentes (a troca é a de sempre, 0,65 s) */
 .vz-hero-cards__stack[data-active="first"] .vz-hero-cards__motion--first .vz-hero-cards__surface,
 .vz-hero-cards__stack[data-active="second"] .vz-hero-cards__motion--second .vz-hero-cards__surface {
-  border-color: rgb(215 103 63 / 0.56);
-  box-shadow: 0 14px 30px rgb(16 12 9 / 0.32);
+  border-color: rgb(243 237 227 / 0.82);
+  box-shadow:
+    inset 0 1px 0 rgb(243 237 227 / 0.28),
+    inset 0 -1px 0 rgb(243 237 227 / 0.09),
+    0 0 18px rgb(215 103 63 / 0.3),
+    0 14px 32px rgb(34 32 29 / 0.26);
 }
 
 /* Hover: destaque local na superfície (o invólucro com x/y é do GSAP; aqui só a borda, a sombra e a frente) */
 @media (hover: hover) and (pointer: fine) {
   .vz-hero-cards__motion:hover .vz-hero-cards__surface {
-    border-color: rgb(215 103 63 / 0.72);
-    box-shadow: 0 16px 32px rgb(16 12 9 / 0.34);
+    border-color: rgb(243 237 227 / 0.92);
+    box-shadow:
+      inset 0 1px 0 rgb(243 237 227 / 0.32),
+      inset 0 -1px 0 rgb(243 237 227 / 0.1),
+      0 0 22px rgb(215 103 63 / 0.36),
+      0 16px 34px rgb(34 32 29 / 0.3);
   }
 
   .vz-hero-cards__motion:hover {
@@ -1284,8 +1289,9 @@
   }
 }
 
-/* Fora da Hero desktop (estreita, baixa demais ou tela de toque sem mouse) o bloco não existe (o JS usa o mesmo corte) */
-@media (max-width: 1023.98px), (max-height: 559.98px), (hover: none), (pointer: coarse) {
+/* Onde não há composição aprovada o bloco não existe (o JS usa o mesmo corte): tablet (768–1023 px), desktop baixo
+   demais ou sem mouse/touchpad, e celular deitado. Celular em retrato: bloco no fim desta parte. */
+@media (min-width: 768px) and (max-width: 1023.98px), (min-width: 768px) and (max-height: 559.98px), (min-width: 768px) and (hover: none), (min-width: 768px) and (pointer: coarse), (max-width: 767.98px) and (orientation: landscape) {
   .vz-hero-cards {
     display: none !important;
   }
@@ -1315,5 +1321,65 @@
   .vz-hero-cards {
     --vzc-step: calc(var(--vzc-h1) + 10px);
     --vzc-lift: 44px; /* + 30 px da antiga assinatura */
+  }
+}
+
+/* Celular em retrato (V5): os mesmos dois cards, planos (sem inclinação), empilhados à esquerda logo abaixo dos olhos,
+   na altura do bico, sobre as penas. Ancorados na águia (--eyes-y/--eagle-h, as variáveis que a posicionam), então
+   acompanham qualquer altura de tela. O ciclo, os tempos e o deslocamento são os do desktop (GSAP, só x/y no
+   invólucro); o empilhamento é feito com fluxo normal (flex), não com x/y. Depois das regras de movimento reduzido
+   para a altura do grupo ser a do conteúdo também nesse modo. */
+@media (max-width: 767.98px) and (orientation: portrait) {
+  .vz-hero-cards {
+    /* 2º card em quatro linhas ("Seu cliente já pesquisa, / compara e decide no digital. / Sua empresa precisa /
+       estar à altura."): as duas frases quebram equilibradas, então basta a coluna de texto medir entre 12,33em (a
+       linha mais longa) e ~15,4em (a conclusão inteira) — Switzer 400, −0,01em. */
+    --vzc-m-font: clamp(10px, 2.75vw, 12px);
+    top: calc(var(--eyes-y) + var(--eagle-h) * 0.142);
+    right: auto;
+    left: 4.6%;
+    width: max(42.6%, 150px);
+  }
+
+  .vz-hero-cards__stack {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, 1.1svh, 13px);
+    height: auto;
+  }
+
+  .vz-hero-cards__motion,
+  .vz-hero-cards__motion--second {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    perspective: none;
+  }
+
+  .vz-hero-cards__surface,
+  .vz-hero-cards__motion--second .vz-hero-cards__surface {
+    height: auto;
+    min-height: 0;
+    border-radius: 12px;
+    transform: none;
+  }
+
+  .vz-hero-cards__body {
+    padding: clamp(8px, 2.35vw, 12px) clamp(9px, 2.35vw, 14px) clamp(8px, 2.35vw, 12px) clamp(12px, 4.6vw, 20px);
+    font-size: var(--vzc-m-font);
+    letter-spacing: -0.01em;
+  }
+
+  .vz-hero-cards__statement,
+  .vz-hero-cards__argument {
+    line-height: 1.32;
+  }
+
+  .vz-hero-cards__argument-lead,
+  .vz-hero-cards__argument-outcome {
+    display: block;
+    text-wrap: balance;
   }
 }
