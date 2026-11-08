@@ -1,6 +1,13 @@
 # Seção 04 — Método — V6: reconstrução fiel à referência aprovada — relatório (07/11/2026)
 
-Branch `feat/s04-metodo`. **Não publicado**: aguarda a sua autorização.
+Branch `feat/s04-metodo`. **Publicado em produção** em 07/11/2026 (`main` em `4aa494b`), com autorização do usuário ("Sim, publicar").
+
+**Conferido no site publicado:**
+- `index.html`, `css/sections.css` e `js/light-field.js` iguais aos locais;
+- geometria idêntica à do teste local em 1536 × 864, 1440 × 900 e 1366 × 768;
+- contraste sem falhas em 1440, 1366 e 390, com repouso e hover;
+- celular (390 × 844) com a geometria da versão anterior;
+- campos de luz das seções 05 a 08 intactos e console limpo.
 
 Pedido: "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO — SEÇÃO 04 — MÉTODO". A referência é a imagem aprovada enviada na conversa, calibrada em 1536 × 864.
 

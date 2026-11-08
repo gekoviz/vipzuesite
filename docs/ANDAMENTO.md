@@ -1,8 +1,19 @@
 # Andamento — VIPZUE 2026
 
-## 07/11/2026 — Seção 04 Método V6: reconstrução fiel à referência aprovada (não publicado)
+## 07/11/2026 — Seção 04 Método V6: reconstrução fiel à referência aprovada (publicado em produção)
 
-**Pedido:** "PROMPT MESTRE DE IMPLEMENTAÇÃO — SEÇÃO 04 — MÉTODO". Branch `feat/s04-metodo`. Aguarda autorização para publicar.
+**Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `7d4df63` para `4aa494b` (fast-forward de `feat/s04-metodo`).
+
+**Conferido em produção (Chrome headless):**
+- os três arquivos iguais aos locais;
+- geometria igual à local em 1536 × 864, 1440 × 900 e 1366 × 768;
+- contraste sem falhas em 1440, 1366 e 390;
+- celular com a geometria anterior;
+- campos das seções 05 a 08 intactos e console limpo.
+
+Screenshots `prod-*.jpg` em `docs/qa/s04-metodo/`.
+
+**Pedido:** "PROMPT MESTRE DE IMPLEMENTAÇÃO — SEÇÃO 04 — MÉTODO". Branch `feat/s04-metodo`.
 
 **Feito (desktop ≥ 1024 px):**
 - Headline em duas linhas ("O que entregamos é" / "uma página."), no alto à esquerda (topo das maiúsculas a 13,6 %).
