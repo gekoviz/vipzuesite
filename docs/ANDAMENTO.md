@@ -11,7 +11,7 @@
 - Layout, tipografia, textos, águia, headline, rolagem e outras seções iguais.
 
 **Desvios:**
-- **Texto escuro.** Títulos e descrições em Grafite, números em Páprica Profunda: o Marfim da referência ficava em 1,35–1,96:1 sobre o vidro claro. A versão literal está documentada em uma linha.
+- **Texto escuro.** Títulos e descrições em Grafite, números em Páprica Profunda: o Marfim da referência ficava em 1,35–1,96:1 sobre o vidro claro. A versão literal está documentada em uma linha. Decisão na revisão: o usuário pediu "o melhor", e o texto escuro foi mantido (é o único que passa no contraste em todas as telas).
 - **Véu de leitura no fluxo.** No celular, no tablet e no desktop com movimento reduzido, os cards passam pelo foco Páprica do campo de luz. Sem o véu, o número caía a 1,56:1. O véu é Marfim .52 → 0 de cima para baixo, abaixo da onda, e a narrativa do desktop não muda.
 
 **Testes (Chrome headless):**

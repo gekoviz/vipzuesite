@@ -124,6 +124,9 @@ ficaram entre 1,35 e 1,96:1. Foi medido nos pixels sob cada linha, em 4 momentos
 Versão literal em uma linha, se preferir a referência à leitura: números `#D7673F`; títulos e descrições `#F3EDE3` com
 `text-shadow: 0 1px 3px rgb(34 32 29 / .55)`.
 
+**Decisão (08/11/2026):** perguntado entre o texto escuro e o claro da referência, o usuário respondeu "o melhor". O texto
+escuro foi mantido, porque é a única versão que passa no contraste em todas as telas.
+
 ### 7.2 Véu de leitura no fluxo
 
 O campo de luz (`canvas.page-light-field`) é fixo na tela e, no estado claro da 03, pinta os focos com Páprica Profunda.
