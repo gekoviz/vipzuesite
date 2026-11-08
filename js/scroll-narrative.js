@@ -32,6 +32,32 @@
   const eagle = figure?.querySelector("img");
   if (!stage || !title || paras.some((el) => !el)) return;
 
+  // ---------- V5 (07/11/2026): quatro cards da 03 (#s03Insights) ----------
+  // Só alternam uma classe e o aria-hidden; não criam controlador de rolagem. No desktop com a narrativa entram no
+  // início real do texto 1 (render, abaixo) e saem só quando ela volta para antes dele; fora dela ficam visíveis.
+  // O líquido é CSS puro (keyframes): a classe apenas o põe para correr. Na volta, "is-leaving" o mantém correndo
+  // durante a saída de 600 ms (os cards ainda estão visíveis, §88) e cai quando a lista termina de ficar oculta.
+  const s03Insights = document.getElementById("s03Insights");
+  const revealS03Insights = () => {
+    if (!s03Insights) return;
+    s03Insights.classList.remove("is-leaving");
+    s03Insights.classList.add("is-revealed");
+    s03Insights.setAttribute("aria-hidden", "false");
+  };
+  const resetS03Insights = () => {
+    if (!s03Insights) return;
+    if (s03Insights.classList.contains("is-revealed")) s03Insights.classList.add("is-leaving");
+    s03Insights.classList.remove("is-revealed");
+    s03Insights.setAttribute("aria-hidden", "true");
+  };
+  if (s03Insights) {
+    s03Insights.addEventListener("transitionend", (e) => {
+      if (e.target === s03Insights && e.propertyName === "visibility" && !s03Insights.classList.contains("is-revealed")) {
+        s03Insights.classList.remove("is-leaving");
+      }
+    });
+  }
+
   // ---------- Linha do tempo (frações do trilho da seção) ----------
   const T = {
     form: [-0.03, 0.14], // headline se forma no centro do palco (já começando quando a seção assume)
@@ -114,6 +140,7 @@
     const n = titleWords.length;
     const center = (n - 1) / 2;
     const geo = { dy: 0, narrow: false };
+    let insightsShown = null; // estado dos cards (só escreve no DOM quando muda)
 
     // Distância vertical do assentamento: do centro do palco até a posição tipográfica final da headline
     // (offsetTop ignora transforms; recalculado a cada refresh/resize)
@@ -173,6 +200,13 @@
         // MICRO — revelação por palavra com o progresso local do parágrafo
         reveals[i](range(p, seg.reveal));
       });
+      // V5 — cards: mesmo marco do texto 1 (começa a entrar em T.p[0].in[0]); permanecem nos textos 2 e 3
+      const insightsOn = p > T.p[0].in[0];
+      if (insightsOn !== insightsShown) {
+        insightsShown = insightsOn;
+        if (insightsOn) revealS03Insights();
+        else resetS03Insights();
+      }
       if (window.__vzDebug) window.__vzDebug.s03 = p;
     };
 
@@ -216,6 +250,7 @@
     originals.clear();
     figure?.style.removeProperty("opacity");
     eagle?.style.removeProperty("transform");
+    revealS03Insights(); // fora da narrativa desktop os cards ficam visíveis no fluxo
     state = null;
   };
 
@@ -481,6 +516,9 @@
     seamMove?.style.removeProperty("transform");
     flow = null;
   };
+
+  // cards: visíveis em todo modo que não seja a narrativa desktop (a narrativa os esconde até o texto 1)
+  if (!root.classList.contains("s03-motion")) revealS03Insights();
 
   const mm = gsap.matchMedia();
   // abaixo de 1024px com movimento permitido: painéis que acendem (sem JS ou com movimento reduzido: estado final)

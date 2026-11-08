@@ -1,5 +1,32 @@
 # Andamento — VIPZUE 2026
 
+## 07/11/2026 — Seção 03 V5: águia no galho e quatro Liquid Glass Cards (não publicado)
+
+**Pedido:** "PROMPT MESTRE V5 — Reconstrução visual da Seção 03". Branch `feat/s03-liquid-glass`. **Não publicado**: nenhum deploy, nenhum push.
+
+**Feito:**
+- Águia de perfil trocada pela águia no galho (`assets/secao03/aguia-galho-1536/960.webp`): quadrante superior direito, `contain`, sem máscara e com os mesmos transforms da narrativa.
+- Headline quebrada em "Apenas encontrar sua / empresa não é suficiente." e nova copy do texto 1. Momentos 2 e 3 intactos.
+- Lista `#s03Insights` com o HTML exato da especificação: quatro cards de vidro (blur de 10 px, borda Marfim .72, raio 28) e líquido só em CSS (13 s / 17 s, fases distintas).
+- Os cards entram no início real do texto 1 (p = 0,20), pelo `render(p)` já existente, e saem só antes dele. Nenhum ScrollTrigger novo; start, end, scrub e pin iguais; a altura da seção é a mesma.
+- Tablet com 2 colunas, celular com 1, e movimento reduzido ou sem a narrativa com os cards no fluxo.
+
+**Desvios medidos:**
+- Vidro a .76/.74 em vez de .52/.50: com o valor literal, as descrições ficavam em cerca de 3:1. É o maior desvio visual, e a decisão fica com o usuário.
+- Card 01 com menos pigmento (.45/.18), pela alavanca da §80.
+- A lista fica fora do palco, como faixa sticky na grade da seção.
+- `is-leaving` mantém o líquido correndo nos 600 ms da saída (§88).
+
+**Testes:**
+- Layout em 12 viewports desktop, 4 de celular e tablet, e 4 sem a narrativa.
+- Rolagem real com a roda em 6 viewports: 0 reinícios do líquido, 0 px de salto e nada duplicado.
+- Contraste: descrições ≥ 4,55:1.
+- Desempenho igual ao da `main`; `test-hero-voo` 11/11; build ok; console limpo.
+
+Observação: o encaixe `proximity` do Método segura a rolagem lenta para cima, igual na `main`. É anterior à V5 e não foi tocado.
+
+Detalhes, medidas e limitações: `docs/s03-liquid-glass-relatorio.md`.
+
 ## 07/11/2026 — Display Cards V4: refinamento editorial e vidro fumê (publicado em produção)
 
 **Publicação:** autorizada pelo usuário ("Sim, publicar"). A `main` avançou de `8702ff6` para `6a5244f` (fast-forward de `feat/display-cards-v4`).

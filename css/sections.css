@@ -143,24 +143,34 @@ a:not([href]) {
    Com .s03-motion (script do <head>): trilho de rolagem com um único palco sticky de 100svh.
    ========================================================= */
 .s03 {
-  /* Composição da referência (25/10): copy à esquerda, águia à direita olhando para ela. Desktop por padrão. */
-  --s03-inset: 7vw; /* exceção local ao container global: a referência alinha a copy a ~7% da largura */
-  --s03-top: 25svh; /* topo visual da headline no palco */
+  /* Composição V5 (07/11/2026, referência 1536×865): headline e texto à esquerda a 5,3% da largura, águia pousada
+     no galho no quadrante superior direito e a faixa dos quatro cards (#s03Insights) embaixo. Desktop por padrão. */
+  --s03-inset: 5.3vw; /* exceção local ao container global: a referência alinha a copy a 5,3% da largura */
+  --s03-top: 19svh; /* topo da caixa da headline no palco (as maiúsculas começam em ~20% da altura) */
   --s03-title: clamp(3.25rem, 4vw, 3.75rem);
-  --s03-title-w: min(calc(60vw - 40px), 14.4em); /* "Apenas encontrar sua empresa / não é suficiente." */
+  /* "Apenas encontrar sua / empresa não é suficiente.": em Gloock a 2ª linha mede 11,07em e "Apenas encontrar sua
+     empresa" 13,59em; 12,2em cabe a 2ª linha e nunca a 1ª com "empresa" (vale também depois do Word Reveal, que
+     descarta o <br> do markup) */
+  --s03-title-w: 12.2em;
   --s03-text: clamp(1.375rem, 1.6vw, 1.5rem);
-  --s03-copy-w: min(55vw, 880px); /* borda direita da leitura em ~62% da largura */
-  --s03-gap: 40px;
+  /* coluna editorial: até 700px (referência, ~3 linhas no 16:9) e sempre ≥ 40px antes das folhas da ponta do galho
+     (borda esquerda visível da águia = 100vw − 1,434 × a altura dela; ver --s03-eagle-h) */
+  --s03-copy-w: min(700px, calc(100vw - 1.434 * var(--s03-eagle-h) - var(--s03-inset) - 40px));
+  --s03-gap: clamp(40px, 7.5svh, 72px); /* intervalo headline → texto (≈ 65px no 1536×865) */
   /* tom secundário dos parágrafos: o token (0,75) dá ~4,1:1 sobre o ponto mais escuro do campo bege; 0,88 mantém
      o grafite atenuado com ≥ 4,5:1 (medido nos pixels do canvas sob a copy) */
   --s03-text-alpha: 0.88;
-  /* Águia (asset 941×1672, transparente): altura e topo pelos pixels visíveis — bico em ~67% e olho em ~88%
-     da largura (o olho fica a 31,5% da altura do arquivo); borda direita no limite do palco. */
-  --s03-eagle-h: 89.5vw;
-  --s03-eagle-top: calc(25svh - 28.2vw);
+  /* Águia no galho (asset 1536×1024 com transparência real; pixels visíveis em x 68–1535, y 18–1006): inteira
+     (equivalente a contain), pela altura, com a borda direita no limite do palco, onde o galho termina, e a cabeça
+     perto do alto. 34,3vw no 16:9 = 61% da altura; em telas mais altas a largura manda. 3º limite: as folhas da
+     ponta do galho (a 4,4% da largura do arquivo; largura = 1,5 × altura → 1,434 × altura até a borda) ficam
+     ≥ 40px à direita da coluna de texto (margem + 11,07em da headline), também no 4:3 e com a barra de rolagem. */
+  --s03-eagle-h: min(61svh, 34.3vw, calc((100vw - var(--s03-inset) - 11.07 * var(--s03-title) - 40px) / 1.434));
+  /* cabeça perto do alto (2svh no 16:9); quando a ave fica menor que a faixa acima dos cards (≈ 64svh), ela se
+     centra nessa faixa em vez de colar no topo */
+  --s03-eagle-top: max(2svh, calc((64svh - var(--s03-eagle-h)) / 2));
   --s03-eagle-bottom: auto;
   --s03-eagle-right: 0px;
-  --s03-eagle-fade: 86%; /* o arquivo termina num corte reto: se o pé da figura entrar no palco, ele some suave */
   padding-top: 0;
 }
 
@@ -196,8 +206,9 @@ html:not(.s03-motion) .s03__stage {
   width: auto;
   max-width: none;
   height: var(--s03-eagle-h);
-  -webkit-mask-image: linear-gradient(to bottom, #000 var(--s03-eagle-fade), transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 var(--s03-eagle-fade), transparent 100%);
+  object-fit: contain;
+  /* V5: sem a máscara de fim do arquivo (a águia de perfil terminava num corte reto); a nova é recortada com
+     transparência e a cauda/as garras ficam inteiras */
 }
 
 .container.s03__grid {
@@ -284,8 +295,9 @@ html:not(.s03-motion) .s03__stage {
   }
 }
 
+/* origem no olho da águia no galho (≈ 485 × 190 px do arquivo 1536×1024); os transforms continuam os da narrativa */
 .s03-motion .s03__eagle {
-  transform-origin: 79% 32.4%;
+  transform-origin: 31.6% 18.6%;
   will-change: transform;
 }
 
@@ -307,6 +319,394 @@ html:not(.s03-motion) .s03__stage {
 .s03__title .s03__w {
   display: inline-block;
   transform-origin: 50% 60%;
+}
+
+/* V5 — desktop: a quebra "sua / empresa" também em balance (se a Gloock ainda não carregou, as duas linhas seguem
+   equilibradas); os textos da narrativa em linhas equilibradas dentro da coluna de 700px */
+@media (min-width: 1024px) {
+  .s03__title {
+    text-wrap: balance;
+  }
+
+  .s03__slot .s03__text {
+    text-wrap: balance;
+  }
+}
+
+/* =========================================================
+   VIPZUE — SECTION 03 / INSIGHTS GLASS (V5, 07/11/2026)
+   Quatro cards informativos (#s03Insights, uma instância). Vidro fumê Mocha/Grafite com backdrop blur estático,
+   duas camadas líquidas por card (Páprica e Páprica Profunda, só transform, CSS keyframes) e conteúdo por cima.
+   Desktop com a narrativa (.s03-motion): faixa inferior da área visível do palco; entram no início do texto 1
+   (js/scroll-narrative.js, mesmo ScrollTrigger) e o líquido corre independente da rolagem.
+   Sem a narrativa (abaixo de 1024px, movimento reduzido, tela baixa): fluxo normal depois dos textos, sempre visíveis.
+   ========================================================= */
+.s03-insights {
+  /* posições da referência (1536×865): faixa de 66% a 94% da altura, margens de 4,2% e 3,5% */
+  --s03-insights-left: clamp(28px, 4.2vw, 64px);
+  --s03-insights-right: clamp(28px, 3.5vw, 56px);
+  --s03-insights-bottom: clamp(38px, 6.3svh, 56px);
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 1.3vw, 20px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+/* Desktop com a narrativa. O palco é sticky dentro do trilho de 420svh (.s03); a faixa é irmã dele (uma só instância
+   para todas as larguras: abaixo de 1024px o palco vira o trilho da cena dos painéis e não pode receber a faixa).
+   A seção vira uma grade de uma coluna: o palco ocupa as duas linhas (mesmo sticky, mesma altura, mesmo trilho) e a
+   faixa fica na linha de baixo, no fim do trilho, colada pelo sticky à base da área visível — no mesmo lugar em que
+   ficaria absoluta no palco (bottom 6,3svh), durante todo o trecho fixo, e sai junto com ele no fim. */
+.s03-motion .s03 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 100svh 1fr;
+}
+
+.s03-motion .s03__stage {
+  grid-area: 1 / 1 / -1 / 2; /* posição explícita: as duas peças dividem a mesma coluna */
+  align-self: start;
+}
+
+.s03-motion .s03-insights {
+  grid-area: 2 / 1 / 3 / 2;
+  align-self: end;
+  position: sticky;
+  bottom: var(--s03-insights-bottom);
+  margin: 0 var(--s03-insights-right) var(--s03-insights-bottom) var(--s03-insights-left);
+  /* entrada: a visibilidade é da faixa; opacidade e deslocamento são de cada card (uma opacidade < 1 no <ol>
+     desligaria o backdrop-filter dos filhos durante o fade e o blur entraria de uma vez no fim) */
+  visibility: hidden;
+  transition: visibility 0s linear 600ms;
+}
+
+.s03-motion .s03-insights.is-revealed {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.s03-motion .s03-insight {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 600ms ease,
+    transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.s03-motion .s03-insights.is-revealed .s03-insight {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Altura do card pelo conteúdo, com o piso da referência (27,5svh entre 195 e 242px no 16:9); em telas baixas o piso
+   cai com a altura (até 150px) e a tipografia/padding vertical também passam a respeitar a altura (termo em svh).
+   Nos viewports de referência o termo em vw continua o menor: os valores são os mesmos da especificação. */
+.s03-motion .s03-insight {
+  height: auto;
+  min-height: clamp(150px, 27.5svh, 242px);
+}
+
+.s03-motion .s03-insight__content {
+  padding-block: clamp(24px, min(2vw, 3.6svh), 32px);
+}
+
+.s03-motion .s03-insight__number {
+  font-size: clamp(28px, min(2.75vw, 5.2svh), 42px);
+}
+
+.s03-motion .s03-insight__title {
+  font-size: clamp(22px, min(2vw, 3.9svh), 30px);
+}
+
+.s03-motion .s03-insight__description {
+  font-size: clamp(15px, min(1.28vw, 2.6svh), 19px);
+}
+
+/* Desktop baixo (altura < 760px): headline mais perto do alto e intervalo menor, em rampa contínua a partir de 760px
+   (no limite os valores são os de cima), para a faixa dos cards nunca alcançar o texto */
+@media (min-width: 1024px) and (max-height: 760px) {
+  .s03 {
+    --s03-top: max(56px, calc(19svh - (760px - 100svh) * 0.35));
+    --s03-gap: max(28px, calc(7.5svh - (760px - 100svh) * 0.1));
+  }
+}
+
+/* Sem a narrativa no desktop (movimento reduzido ou tela baixa): fluxo normal depois do palco, que já termina com o
+   respiro da seção; o mesmo respiro fecha a faixa antes da 04 */
+@media (min-width: 1024px) {
+  html:not(.s03-motion) .s03-insights {
+    margin: 0 var(--s03-insights-right) var(--section-space-default) var(--s03-insights-left);
+  }
+}
+
+/* Material dos cards */
+.s03-insight {
+  position: relative;
+  min-width: 0;
+  height: clamp(195px, 27.5svh, 242px);
+  box-sizing: border-box;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 28px;
+  border: 1px solid rgb(243 237 227 / 0.72);
+  /* Mocha → Grafite da especificação (145deg). Alfa calibrado pelo contraste real (§80): com 0,52/0,50 o Marfim das
+     descrições ficava em 2,75–3,07:1 sobre o vidro (títulos 2,63–2,9:1), medido nos pixels sob cada linha ao longo
+     do ciclo do líquido; 0,76/0,74 deixa todas as descrições ≥ 4,5:1 (desktop, tablet e celular) e os títulos
+     ≥ 4,4:1 sem cobrir as palavras — o ambiente Marfim continua aparecendo, desfocado, pelo vidro */
+  background: linear-gradient(145deg, rgb(91 70 50 / 0.76), rgb(34 32 29 / 0.74));
+  box-shadow:
+    inset 0 1px 0 rgb(243 237 227 / 0.32),
+    0 14px 30px rgb(91 70 50 / 0.15);
+  -webkit-backdrop-filter: blur(10px) saturate(112%);
+  backdrop-filter: blur(10px) saturate(112%);
+}
+
+/* Camadas líquidas: recortadas pelo próprio card (overflow: hidden), abaixo do conteúdo */
+.s03-insight__liquid {
+  position: absolute;
+  z-index: 0;
+  width: 90%;
+  height: 95%;
+  pointer-events: none;
+  border-radius: 50%;
+  will-change: transform;
+  animation-play-state: paused;
+}
+
+.s03-insight__liquid--a {
+  left: var(--liquid-a-left, 0%);
+  top: var(--liquid-a-top, 0%);
+  opacity: var(--liquid-a-opacity, 0.65);
+  background: radial-gradient(
+    ellipse at center,
+    rgb(215 103 63 / 0.85) 0%,
+    rgb(215 103 63 / 0.5) 28%,
+    rgb(159 57 48 / 0.18) 52%,
+    transparent 72%
+  );
+  animation: s03-liquid-flow-a 13s ease-in-out infinite alternate;
+  animation-delay: var(--liquid-a-delay, 0s);
+  animation-play-state: paused;
+}
+
+.s03-insight__liquid--b {
+  left: var(--liquid-b-left, 0%);
+  top: var(--liquid-b-top, 0%);
+  opacity: var(--liquid-b-opacity, 0.28);
+  background: radial-gradient(
+    ellipse at center,
+    rgb(159 57 48 / 0.6) 0%,
+    rgb(215 103 63 / 0.28) 35%,
+    transparent 72%
+  );
+  animation: s03-liquid-flow-b 17s ease-in-out infinite alternate;
+  animation-delay: var(--liquid-b-delay, 0s);
+  animation-play-state: paused;
+}
+
+.s03-insights.is-revealed .s03-insight__liquid,
+.s03-insights.is-leaving .s03-insight__liquid {
+  animation-play-state: running;
+}
+
+@keyframes s03-liquid-flow-a {
+  0% {
+    transform: translate3d(-7%, 5%, 0) scale(0.92);
+  }
+  50% {
+    transform: translate3d(5%, -6%, 0) scale(1.06);
+  }
+  100% {
+    transform: translate3d(11%, 3%, 0) scale(0.97);
+  }
+}
+
+@keyframes s03-liquid-flow-b {
+  0% {
+    transform: translate3d(8%, -4%, 0) scale(1.04);
+  }
+  50% {
+    transform: translate3d(-5%, 7%, 0) scale(0.93);
+  }
+  100% {
+    transform: translate3d(-10%, -3%, 0) scale(1.02);
+  }
+}
+
+/* Focos por card (estado cromático da referência; o movimento fica em volta deles) */
+/* 01 — brilho inferior esquerdo. Intensidade reduzida só aqui (§80): no ciclo, a borda da mancha sobe até a 2ª linha
+   da descrição; com 0,78/0,26 ela caía a 4,04–4,16:1, com 0,45/0,18 fica ≥ 4,56:1 */
+.s03-insight--01 {
+  --liquid-a-left: -34%;
+  --liquid-a-top: 52%;
+  --liquid-a-opacity: 0.45;
+  --liquid-b-left: -27%;
+  --liquid-b-top: 47%;
+  --liquid-b-opacity: 0.18;
+  --liquid-a-delay: -2s;
+  --liquid-b-delay: -8s;
+}
+
+/* no fluxo (tablet/celular) o card é mais baixo e a 2ª linha da descrição cai no núcleo da mancha: menos pigmento */
+html:not(.s03-motion) .s03-insight--01 {
+  --liquid-a-opacity: 0.32;
+  --liquid-b-opacity: 0.14;
+}
+
+/* 02 — brilho superior direito */
+.s03-insight--02 {
+  --liquid-a-left: 55%;
+  --liquid-a-top: -43%;
+  --liquid-a-opacity: 0.7;
+  --liquid-b-left: 48%;
+  --liquid-b-top: -33%;
+  --liquid-b-opacity: 0.24;
+  --liquid-a-delay: -7s;
+  --liquid-b-delay: -3s;
+}
+
+/* 03 — iluminação discreta */
+.s03-insight--03 {
+  --liquid-a-left: 38%;
+  --liquid-a-top: 27%;
+  --liquid-a-opacity: 0.19;
+  --liquid-b-left: -22%;
+  --liquid-b-top: 49%;
+  --liquid-b-opacity: 0.12;
+  --liquid-a-delay: -11s;
+  --liquid-b-delay: -5s;
+}
+
+/* 04 — brilho inferior direito */
+.s03-insight--04 {
+  --liquid-a-left: 59%;
+  --liquid-a-top: 53%;
+  --liquid-a-opacity: 0.82;
+  --liquid-b-left: 48%;
+  --liquid-b-top: 54%;
+  --liquid-b-opacity: 0.26;
+  --liquid-a-delay: -5s;
+  --liquid-b-delay: -13s;
+}
+
+/* Conteúdo acima do líquido (Switzer, a família de interface carregada) */
+.s03-insight__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: clamp(24px, 2vw, 32px) clamp(24px, 2.5vw, 38px);
+  color: var(--color-ivory);
+  text-align: left;
+}
+
+.s03-insight__number {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--color-paprika);
+  font-family: var(--font-body);
+  font-size: clamp(28px, 2.75vw, 42px);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 600 = o peso mais forte da Switzer carregada (fonts.css); sem negrito sintetizado */
+.s03-insight__title {
+  margin: 0 0 13px;
+  color: var(--color-ivory);
+  font-family: var(--font-body);
+  font-size: clamp(22px, 2vw, 30px);
+  font-weight: 600;
+  font-synthesis: none;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.s03-insight__description {
+  margin: 0;
+  color: var(--color-ivory);
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.28vw, 19px);
+  font-weight: 400;
+  line-height: 1.35;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/* Fallback do vidro: sem backdrop-filter, superfície mais opaca (manchas e copy permanecem) */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .s03-insight {
+    background: linear-gradient(145deg, rgb(91 70 50 / 0.9), rgb(34 32 29 / 0.88));
+  }
+}
+
+/* Tablet e desktop sem a narrativa até 1199px: duas colunas (01 — 02 / 03 — 04), altura pelo conteúdo */
+@media (max-width: 1199px) {
+  html:not(.s03-motion) .s03-insights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  html:not(.s03-motion) .s03-insight {
+    height: auto;
+    min-height: 205px;
+  }
+}
+
+/* Abaixo de 1024px: depois da cena dos painéis (fora do trilho do palco), alinhada às margens dos painéis; a reserva
+   da águia da divisa (padding-bottom da seção) vem em seguida */
+@media (max-width: 1023px) {
+  .s03-insights {
+    margin: 32px var(--s03-inset) 0;
+  }
+}
+
+/* Celular: uma coluna (mesma especificidade da regra de 1199px) */
+@media (max-width: 767px) {
+  html:not(.s03-motion) .s03-insights {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  html:not(.s03-motion) .s03-insight {
+    min-height: 170px;
+    border-radius: 22px;
+  }
+
+  .s03-insight__content {
+    padding: 22px 24px;
+  }
+
+  .s03-insight__title {
+    font-size: 24px;
+  }
+
+  .s03-insight__description {
+    font-size: 16px;
+  }
+}
+
+/* Movimento reduzido: manchas paradas nas posições de referência, cards legíveis sem entrada */
+@media (prefers-reduced-motion: reduce) {
+  .s03-insight__liquid {
+    animation: none !important;
+    will-change: auto;
+  }
+
+  .s03-insights,
+  .s03-insight {
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 /* =========================================================
