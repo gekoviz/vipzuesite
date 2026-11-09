@@ -525,14 +525,25 @@
     tl.to({}, { duration: 1 }, 0); // duração total 1 = progresso da rolagem
 
     // ---------- Abertura sai: header e atmosfera de base ----------
-    tl.to(header, { autoAlpha: 0, y: -16, duration: len(20) }, at(8)).to(atmosphere, { opacity: 0, duration: len(56) }, at(22));
+    // Correção (09/11/2026): opacity com início explícito + visibility pelo progresso do próprio tween, no lugar de
+    // autoAlpha. Com invalidateOnRefresh, recarregar a página abaixo da Hero gravava o fim (autoAlpha 0) como início: ao
+    // subir, o y voltava e a headline, o CTA e o cabeçalho continuavam invisíveis (opacity 0, visibility hidden). Mesma
+    // animação, mesmos tempos; invisível continua sem clique.
+    const hideAtEnd = (el) => function () {
+      el.style.visibility = this.progress() > 0.999 ? "hidden" : "";
+    };
+    tl.fromTo(
+      header,
+      { opacity: 1, y: 0 },
+      { opacity: 0, y: -16, duration: len(20), immediateRender: false, onUpdate: hideAtEnd(header) },
+      at(8)
+    ).to(atmosphere, { opacity: 0, duration: len(56) }, at(22));
     // Headline + CTA: inteiros nos primeiros 6svh; depois sobem levemente e esmaecem antes de a aproximação
     // levar a cabeça da águia até a coluna do texto (~30svh). Ao subir, reverte (sem repetir a entrada).
-    // autoAlpha: invisível também deixa de ser clicável.
     tl.fromTo(
       content,
-      { autoAlpha: 1, y: 0 },
-      { autoAlpha: 0, y: () => -0.05 * stage.clientHeight, duration: len(32), ease: "power1.inOut", immediateRender: false },
+      { opacity: 1, y: 0 },
+      { opacity: 0, y: () => -0.05 * stage.clientHeight, duration: len(32), ease: "power1.inOut", immediateRender: false, onUpdate: hideAtEnd(content) },
       at(6)
     );
 

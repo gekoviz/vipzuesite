@@ -32,6 +32,38 @@
   --color-surface-mid: #52402F;    /* superfície intermediária (cards da 03) */
   --color-mocha-paprika: #8D5337;  /* reflexo Mocha/Páprica (cards da 03, painéis da 05) */
 
+  /* 01c. Ambiente escuro — a identidade da Hero, fonte única (correção visual V7, 08/11/2026).
+     A Hero é a soma de: campo de luz (rampa #332B23 → Páprica, js/light-field.js), fallback CSS (radial Mocha →
+     profundidade), sombra quente lateral e halo Páprica (css/hero.css, .hero__bg). Método, CTA final, FAQ e rodapé
+     compõem as MESMAS camadas, cada um com a geometria da própria luz. Os canais RGB servem às luzes com alfa:
+     rgb(var(--env-dark-glow) / 0.5). Nenhuma cor nova de marca: só a paleta e misturas dela. */
+  --env-dark-deep: var(--color-deep);        /* #332B23 — base e profundidade (1ª cor da rampa do campo) */
+  --env-dark-mid: #443829;                   /* meio do fallback da Hero: Mocha 45% + profundidade 55% */
+  --env-dark-night: #2C201B;                 /* sombra dos cantos: profundidade + 50% da sombra quente, 22% mais escura */
+  --env-dark-shade: 62 38 33;                /* sombra quente lateral: Grafite com 22% de Páprica Profunda */
+  --env-dark-glow: 215 103 63;               /* Páprica — núcleo da luz */
+  --env-dark-glow-edge: 198 89 58;           /* Páprica com 30% de Páprica Profunda — borda do halo */
+  --env-dark-depth: 159 57 48;               /* Páprica Profunda — campo profundo da luz */
+  --env-dark-mocha: 91 70 50;                /* Mocha Profundo — faixa de meio-tom */
+
+  /* 01d. Vidro líquido — o material dos quatro cards da Seção 03, fonte única (correção visual V7, 08/11/2026).
+     Só a película: tinta Mocha em diagonal, desfoque com saturação, contorno Marfim, reflexo no alto, contorno interno
+     (rim) e sombra. A onda (janela, SVG e loop) é da Seção 03 e fica fora do material. Quem usa: os cards da 03
+     (css/sections.css, texto Grafite sobre o vidro claro) e os dois cards da Hero no celular (css/hero.css, o mesmo
+     vidro sobre o fundo escuro, texto Marfim). O desfoque fica no consumidor (blur(var(--vz-glass-blur))), para cada
+     variante poder ajustá-lo sem redefinir o material. */
+  --vz-glass-fill: linear-gradient(128deg, rgb(91 70 50 / 0.3) 0%, rgb(91 70 50 / 0.19) 47%, rgb(91 70 50 / 0.27) 100%);
+  --vz-glass-fill-fallback: linear-gradient(128deg, rgb(91 70 50 / 0.34), rgb(91 70 50 / 0.27) 50%, rgb(91 70 50 / 0.32)); /* sem backdrop-filter */
+  --vz-glass-blur: 10px;
+  --vz-glass-saturate: 135%;
+  --vz-glass-border: rgb(255 239 221 / 0.76);
+  --vz-glass-highlight: inset 0 1px 0 rgb(255 248 237 / 0.43);  /* reflexo estático no alto */
+  --vz-glass-shadow: 0 11px 26px rgb(73 43 27 / 0.11);
+  --vz-glass-rim:
+    inset 0 0 0 1px rgb(255 243 227 / 0.27),
+    inset 0 1px 0 rgb(255 250 241 / 0.41),
+    inset 0 -1px 0 rgb(255 207 160 / 0.23);
+
   /* 02. Semantic */
   --color-bg-primary: var(--color-mocha);
   --color-bg-secondary: var(--color-ivory);

@@ -240,11 +240,13 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
+  /* V7: as cores vêm dos tokens do ambiente escuro (tokens.css, 01c), a fonte única que Método, CTA, FAQ e rodapé
+     também consomem; valores iguais aos de antes */
   background: radial-gradient(
     120% 95% at 58% 40%,
     var(--color-bg-primary) 0%,
-    color-mix(in srgb, var(--color-bg-primary) 45%, var(--color-bg-deep)) 55%,
-    var(--color-bg-deep) 100%
+    var(--env-dark-mid) 55%,
+    var(--env-dark-deep) 100%
   );
 }
 
@@ -327,8 +329,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(62% 82% at var(--face-x, 70%) var(--eyes-y, 40%), rgb(215 103 63 / 0.5) 0%, rgb(198 89 58 / 0.28) 45%, rgb(198 89 58 / 0) 78%),
-    linear-gradient(90deg, rgb(62 38 33 / 0.5) 0%, rgb(62 38 33 / 0.3) 48%, rgb(62 38 33 / 0.08) 100%);
+    radial-gradient(62% 82% at var(--face-x, 70%) var(--eyes-y, 40%), rgb(var(--env-dark-glow) / 0.5) 0%, rgb(var(--env-dark-glow-edge) / 0.28) 45%, rgb(var(--env-dark-glow-edge) / 0) 78%),
+    linear-gradient(90deg, rgb(var(--env-dark-shade) / 0.5) 0%, rgb(var(--env-dark-shade) / 0.3) 48%, rgb(var(--env-dark-shade) / 0.08) 100%);
   -webkit-mask-image: var(--wipe-hide, none);
   mask-image: var(--wipe-hide, none);
 }
@@ -1041,6 +1043,10 @@
   /* folga acima do 1º plano: ele sobe 36 px no destaque e a inclinação levanta um canto. V3: + 32 px, a altura da
      antiga assinatura, para os cards ficarem no mesmo lugar da tela sem mexer no top do grupo */
   --vzc-lift: 88px;
+  /* V7: excursão vertical do ciclo (px, sem unidade; lida por js/hero-display-cards.js): o 1º plano sobe, o 2º desce.
+     Desktop: os valores de sempre. O celular reduz (bloco do retrato, no fim desta parte). */
+  --vzc-cycle-rise: 36;
+  --vzc-cycle-drop: 22;
   position: absolute;
   z-index: 3;
   /* A headline é centrada na altura do palco: com o grupo a 128 px acima do meio, o segundo plano cai na altura da
@@ -1333,18 +1339,27 @@
   .vz-hero-cards {
     /* 2º card em quatro linhas ("Seu cliente já pesquisa, / compara e decide no digital. / Sua empresa precisa /
        estar à altura."): as duas frases quebram equilibradas, então basta a coluna de texto medir entre 12,33em (a
-       linha mais longa) e ~15,4em (a conclusão inteira) — Switzer 400, −0,01em. */
+       linha mais longa) e ~15,4em (a conclusão inteira) — Switzer 400, −0,01em.
+       V7 (correção visual, 08/11/2026): ~7% menores sem reduzir a letra (10–12 px, já no limite da leitura): a largura
+       cai ~6% (42,6% → 40%; piso 150 → 145 px) e o respiro interno diminui (o padding esquerdo, que era o maior,
+       perde mais), o que tira ~6% da altura (~12% da área). A coluna de texto continua ≥ 12,4em em 320–430 px, então
+       o 2º card segue em quatro linhas (medido). */
     --vzc-m-font: clamp(10px, 2.75vw, 12px);
+    /* o ciclo continua (mesmos tempos, mesmo destaque alternado), com a excursão vertical reduzida para o vão
+       aparente entre os cards ficar em 20–23 px durante todo o ciclo (antes: 9 px parado, 45 px no destaque do 1º) */
+    --vzc-cycle-rise: 3;
+    --vzc-cycle-drop: 2;
     top: calc(var(--eyes-y) + var(--eagle-h) * 0.142);
     right: auto;
     left: 4.6%;
-    width: max(42.6%, 150px);
+    width: max(40%, 145px);
   }
 
+  /* V7: o vão entre os cards é do layout (gap do flex), não do movimento: 20 px parado */
   .vz-hero-cards__stack {
     display: flex;
     flex-direction: column;
-    gap: clamp(8px, 1.1svh, 13px);
+    gap: 20px;
     height: auto;
   }
 
@@ -1358,16 +1373,38 @@
     perspective: none;
   }
 
+  /* V7: o vidro líquido da Seção 03 (tokens --vz-glass-*, css/tokens.css 01d): a mesma tinta Mocha em diagonal, o
+     mesmo desfoque com saturação, o contorno Marfim, o reflexo no alto e o rim interno. Sem a onda (janela, SVG e
+     loop são só da 03). O rim e o reflexo vão no box-shadow da própria superfície, que não tem filhos decorativos.
+     A opacidade de entrada/saída e o x/y do ciclo continuam onde estavam (superfície e invólucro). O texto segue
+     Marfim: aqui o vidro está sobre o fundo escuro. Raio proporcional: 12 → 11 px. */
   .vz-hero-cards__surface,
   .vz-hero-cards__motion--second .vz-hero-cards__surface {
     height: auto;
     min-height: 0;
-    border-radius: 12px;
+    border-radius: 11px;
+    border-color: var(--vz-glass-border);
+    box-shadow: var(--vz-glass-rim), var(--vz-glass-highlight), 0 0 16px rgb(215 103 63 / 0), var(--vz-glass-shadow);
     transform: none;
   }
 
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .vz-hero-cards__surface {
+      background: var(--vz-glass-fill);
+      -webkit-backdrop-filter: blur(var(--vz-glass-blur)) saturate(var(--vz-glass-saturate));
+      backdrop-filter: blur(var(--vz-glass-blur)) saturate(var(--vz-glass-saturate));
+    }
+  }
+
+  /* Destaque do ciclo: o mesmo vidro com o contorno mais claro e um halo Páprica curto (a troca de sempre, 0,65 s) */
+  .vz-hero-cards__stack[data-active="first"] .vz-hero-cards__motion--first .vz-hero-cards__surface,
+  .vz-hero-cards__stack[data-active="second"] .vz-hero-cards__motion--second .vz-hero-cards__surface {
+    border-color: rgb(255 239 221 / 0.92);
+    box-shadow: var(--vz-glass-rim), var(--vz-glass-highlight), 0 0 16px rgb(215 103 63 / 0.26), var(--vz-glass-shadow);
+  }
+
   .vz-hero-cards__body {
-    padding: clamp(8px, 2.35vw, 12px) clamp(9px, 2.35vw, 14px) clamp(8px, 2.35vw, 12px) clamp(12px, 4.6vw, 20px);
+    padding: clamp(6.5px, 1.8vw, 9.5px) clamp(8px, 2.1vw, 11px) clamp(6.5px, 1.8vw, 9.5px) clamp(10px, 3vw, 14px);
     font-size: var(--vzc-m-font);
     letter-spacing: -0.01em;
   }

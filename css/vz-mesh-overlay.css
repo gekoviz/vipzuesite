@@ -1,8 +1,10 @@
 /* =========================================================
-   VIPZUE — Mesh Drift (prompt mestre V6.0, 08/11/2026)
+   VIPZUE — Mesh Drift (prompt mestre V6.0, 08/11/2026) · V6.1 "Fitas"
    Película WebGL translúcida (js/vz-mesh-overlay.js) atrás do conteúdo de cada seção marcada com data-vz-mesh.
    Este arquivo só posiciona e recorta a camada nova: nenhum fundo, gradiente ou token das seções é tocado aqui.
    Tirar o atributo, este arquivo ou o script devolve cada seção ao aspecto anterior.
+   V6.1: o canvas fica num quadro do tamanho da tela, preso (sticky) dentro da seção; a máscara e o foco das fitas
+   são medidos nesse quadro, isto é, na tela.
    ========================================================= */
 
 /* Camada exclusivamente decorativa: nenhum background original é sobrescrito. */
@@ -14,156 +16,155 @@
   pointer-events: none;
   user-select: none;
   overflow: hidden;
-  mix-blend-mode: soft-light;
-  opacity: 1;
+  overflow: clip; /* recorta sem virar contêiner de rolagem: o quadro abaixo consegue ficar preso */
+}
+/* O quadro: do tamanho da tela (ou da seção, se ela for mais baixa), preso ao topo enquanto a seção passa. Sem suporte a
+   overflow: clip, fica no alto da seção, como uma faixa do tamanho da tela. */
+[data-vz-mesh] > .vz-mesh-layer > .vz-mesh-view {
+  position: sticky;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 100vh;
+  max-height: 100lvh;
+  /* V6.1: composição normal (na V6.0, soft-light): as fitas precisam da cor delas, não de um realce do fundo */
   -webkit-mask-image: radial-gradient(
-    ellipse var(--vz-mesh-radius-x, 105%) var(--vz-mesh-radius-y, 95%)
-    at var(--vz-mesh-focus-x, 67%) var(--vz-mesh-focus-y, 48%),
-    #000 0%, rgba(0,0,0,.86) 42%, transparent 100%
+    ellipse var(--vz-mesh-radius-x, 130%) var(--vz-mesh-radius-y, 120%)
+    at var(--vz-mesh-focus-x, 50%) var(--vz-mesh-focus-y, 50%),
+    #000 0%, #000 55%, transparent 100%
   );
   mask-image: radial-gradient(
-    ellipse var(--vz-mesh-radius-x, 105%) var(--vz-mesh-radius-y, 95%)
-    at var(--vz-mesh-focus-x, 67%) var(--vz-mesh-focus-y, 48%),
-    #000 0%, rgba(0,0,0,.86) 42%, transparent 100%
+    ellipse var(--vz-mesh-radius-x, 130%) var(--vz-mesh-radius-y, 120%)
+    at var(--vz-mesh-focus-x, 50%) var(--vz-mesh-focus-y, 50%),
+    #000 0%, #000 55%, transparent 100%
   );
 }
-[data-vz-mesh] > .vz-mesh-layer > .vz-mesh-canvas {
+[data-vz-mesh] .vz-mesh-canvas {
   display: block;
   width: 100%;
   height: 100%;
   pointer-events: none;
 }
+/* Marcador do foco das fitas (sem tamanho, invisível): o script lê a posição dele no quadro */
+[data-vz-mesh] .vz-mesh-anchor {
+  position: absolute;
+  left: var(--vz-rib-x, 50%);
+  top: var(--vz-rib-y, 50%);
+  width: 0;
+  height: 0;
+}
 /* A cor, o gradiente e as imagens da seção permanecem nos seletores ORIGINAIS. */
 
-/* ---------- Foco da máscara por seção (só as variáveis; os fundos ficam nos seletores originais) ----------
-   Cada foco parte da luz que a seção JÁ tem, medida nas capturas de antes (docs/qa/mesh-v6, "antes-*"). */
+/* ---------- Por seção: foco das fitas (--vz-rib-x/y) e ajustes (ver os presets em js/vz-mesh-overlay.js) ----------
+   --vz-rib-angle (graus), --vz-rib-radius e --vz-rib-flat (anéis), --vz-rib-gap (distância entre fitas),
+   --vz-rib-reach (quantas fitas em volta da principal), --vz-rib-strength (força), --vz-glow / --vz-glow-r (halo). */
 
-/* Hero: o palco é o root visual que tem o fundo (o section.hero, com a história, cobre também a Seção 03 e fica acima
-   dela). Foco no halo Páprica atrás da cabeça da águia, preso às mesmas variáveis do halo (hero.css); elipse estreita na
-   horizontal para a coluna da headline receber pouco. Na passagem para a Seção 03 a camada sai à frente do claro com a
-   mesma máscara do halo (--wipe-hide, definida por js/hero.js no palco). */
+/* Hero (referência 22.jpg): arcos Páprica em volta da cabeça da águia, presos às mesmas variáveis que a posicionam
+   (hero.css). Na passagem para a Seção 03 a camada sai à frente do claro com a mesma máscara do halo (--wipe-hide,
+   definida por js/hero.js no palco). */
+/* O apoio Grafite atrás da headline e a névoa da base (hero.css) ficam acima da película e seguem garantindo o AA: por
+   isso as fitas da Hero passam pelo alto e em volta da cabeça, onde a 22.jpg as mostra mais fortes. */
 .hero__stage[data-vz-mesh] {
+  --vz-rib-x: var(--face-x, 67%);
+  --vz-rib-y: var(--eyes-y, 40%);
+  --vz-rib-radius: 0.85;
+  --vz-rib-flat: 0.66;
+  --vz-rib-angle: 12;
+  --vz-rib-strength: 1.3;
+  --vz-rib-reach: 0.22;
   --vz-mesh-focus-x: var(--face-x, 67%);
   --vz-mesh-focus-y: var(--eyes-y, 40%);
-  --vz-mesh-radius-x: 62%;
-  --vz-mesh-radius-y: 82%;
 }
-.hero__stage[data-vz-mesh] > .vz-mesh-layer {
+.hero__stage[data-vz-mesh] > .vz-mesh-layer > .vz-mesh-view {
   -webkit-mask-image:
     radial-gradient(
-      ellipse var(--vz-mesh-radius-x) var(--vz-mesh-radius-y) at var(--vz-mesh-focus-x) var(--vz-mesh-focus-y),
-      #000 0%, rgba(0,0,0,.86) 42%, transparent 100%
+      ellipse var(--vz-mesh-radius-x, 130%) var(--vz-mesh-radius-y, 120%) at var(--vz-mesh-focus-x) var(--vz-mesh-focus-y),
+      #000 0%, #000 55%, transparent 100%
     ),
     var(--wipe-hide, linear-gradient(#000, #000));
   -webkit-mask-composite: source-in;
   mask-image:
     radial-gradient(
-      ellipse var(--vz-mesh-radius-x) var(--vz-mesh-radius-y) at var(--vz-mesh-focus-x) var(--vz-mesh-focus-y),
-      #000 0%, rgba(0,0,0,.86) 42%, transparent 100%
+      ellipse var(--vz-mesh-radius-x, 130%) var(--vz-mesh-radius-y, 120%) at var(--vz-mesh-focus-x) var(--vz-mesh-focus-y),
+      #000 0%, #000 55%, transparent 100%
     ),
     var(--wipe-hide, linear-gradient(#000, #000));
   mask-composite: intersect;
 }
 
-/* 03: o calor rosado fica no centro-direita, atrás da águia e do alto dos cards; a seção é longa (palco sticky), então a
-   elipse é ampla */
+/* 03 (referência 23.jpg): dobras de cetim no claro, com o calor atrás da águia no galho (alto à direita) */
 #o-que-fazemos[data-vz-mesh] {
-  --vz-mesh-focus-x: 62%;
-  --vz-mesh-focus-y: 40%;
-  --vz-mesh-radius-x: 95%;
-  --vz-mesh-radius-y: 90%;
+  --vz-rib-x: 78%;
+  --vz-rib-y: 30%;
 }
 
-/* 04 Método: núcleo Páprica no centro-direita do alto (o mesmo ponto do radial do fundo, 61–62% 22–25%) */
+/* 04 Método: arcos em volta do núcleo Páprica no centro-direita do alto (o mesmo ponto do radial do fundo) */
 #metodo[data-vz-mesh] {
-  --vz-mesh-focus-x: 62%;
-  --vz-mesh-focus-y: 24%;
-  --vz-mesh-radius-x: 80%;
-  --vz-mesh-radius-y: 85%;
+  --vz-rib-x: 62%;
+  --vz-rib-y: 30%;
 }
 
-/* 05 Para quem é: o calor do campo claro fica no alto, entre o título e o primeiro card */
+/* 05 Para quem é: cetim no claro */
 #para-quem-e[data-vz-mesh] {
-  --vz-mesh-focus-x: 58%;
-  --vz-mesh-focus-y: 24%;
-  --vz-mesh-radius-x: 90%;
-  --vz-mesh-radius-y: 80%;
+  --vz-rib-x: 58%;
+  --vz-rib-y: 30%;
 }
 
-/* §15: sobre o Marfim, soft-light com o alfa do preset claro não tem efeito (medido: no máximo 3 a 5 de soma RGB, 0,0–0,1%
-   dos pixels acima de 3). Só esta camada volta à composição alfa normal, como já acontece na 03 (cujo fundo é o canvas
-   fixo atrás da página, fora do grupo isolado da seção). */
-#para-quem-e[data-vz-mesh] > .vz-mesh-layer {
-  mix-blend-mode: normal;
-}
-
-/* 06 CTA: a luz Páprica atrás da águia e do card (a mesma posição do --vz-cta-glow, 70% 32%) */
+/* 06 CTA: arcos em volta da luz Páprica atrás da águia e do card (a mesma posição do --vz-cta-glow, 70% 32%) */
 #contato[data-vz-mesh] {
-  --vz-mesh-focus-x: 70%;
-  --vz-mesh-focus-y: 32%;
-  --vz-mesh-radius-x: 85%;
-  --vz-mesh-radius-y: 90%;
+  --vz-rib-x: 70%;
+  --vz-rib-y: 36%;
 }
 
-/* 07 FAQ: a luz principal à direita do centro (a mesma posição do fundo, 72% 50%) */
+/* 07 FAQ: arcos em volta da luz principal, à direita do centro (72% 50%) */
 #faq[data-vz-mesh] {
-  --vz-mesh-focus-x: 72%;
-  --vz-mesh-focus-y: 50%;
-  --vz-mesh-radius-x: 90%;
-  --vz-mesh-radius-y: 95%;
+  --vz-rib-x: 72%;
+  --vz-rib-y: 50%;
+}
+/* V7 (correção visual, 08/11/2026, tarefa I): CTA → FAQ é a única emenda escuro/escuro entre seções. O pé da CTA
+   esfuma no escuro do alto da FAQ (o fundo das duas casa: #351E16 → #341E16 a 1440), mas as fitas da FAQ começavam com
+   força total na borda de cima e desenhavam ali uma linha reta (#352017 → #5B3121). A película da FAQ agora nasce do
+   escuro: transparente na borda, inteira depois de --vz-faq-mesh-in. Só a película; o fundo da FAQ não muda. */
+#faq[data-vz-mesh] > .vz-mesh-layer {
+  --vz-faq-mesh-in: clamp(160px, 28svh, 280px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, calc(var(--vz-faq-mesh-in) * 0.6), #000 var(--vz-faq-mesh-in));
+  mask-image: linear-gradient(to bottom, transparent 0, calc(var(--vz-faq-mesh-in) * 0.6), #000 var(--vz-faq-mesh-in));
 }
 
-/* 08 Rodapé: o feixe muda de posição, então não há um foco fixo; elipse ampla e centrada */
+/* 08 Rodapé: o feixe muda de posição; arcos centrados */
 .site-footer[data-vz-mesh] {
-  --vz-mesh-focus-x: 50%;
-  --vz-mesh-focus-y: 50%;
-  --vz-mesh-radius-x: 105%;
-  --vz-mesh-radius-y: 95%;
+  --vz-rib-x: 50%;
+  --vz-rib-y: 50%;
 }
 
-/* Abaixo de 1024px o Método e a CTA viram coluna: o Método leva o núcleo para o alto à direita (77% 17%) e a CTA, para o
-   centro (50% 45%), como os fundos deles nessa faixa */
+/* Abaixo de 1024px o Método e a CTA viram coluna */
 @media (max-width: 1023.98px) {
   #metodo[data-vz-mesh] {
-    --vz-mesh-focus-x: 77%;
-    --vz-mesh-focus-y: 17%;
-    --vz-mesh-radius-x: 110%;
-    --vz-mesh-radius-y: 60%;
+    --vz-rib-x: 77%;
+    --vz-rib-y: 22%;
   }
 
   #contato[data-vz-mesh] {
-    --vz-mesh-focus-x: 50%;
-    --vz-mesh-focus-y: 45%;
-    --vz-mesh-radius-x: 110%;
-    --vz-mesh-radius-y: 70%;
+    --vz-rib-x: 50%;
+    --vz-rib-y: 45%;
   }
 }
 
-/* Celular: a luz da 03 e da 05 fica à direita; a da FAQ, no centro (56% 52%, a mesma do fundo); a da Hero segue a águia */
+/* Celular */
 @media (max-width: 767.98px) {
-  .hero__stage[data-vz-mesh] {
-    --vz-mesh-radius-x: 110%;
-    --vz-mesh-radius-y: 60%;
-  }
-
   #o-que-fazemos[data-vz-mesh] {
-    --vz-mesh-focus-x: 80%;
-    --vz-mesh-focus-y: 40%;
-    --vz-mesh-radius-x: 110%;
-    --vz-mesh-radius-y: 80%;
+    --vz-rib-x: 80%;
+    --vz-rib-y: 35%;
   }
 
   #para-quem-e[data-vz-mesh] {
-    --vz-mesh-focus-x: 82%;
-    --vz-mesh-focus-y: 30%;
-    --vz-mesh-radius-x: 110%;
-    --vz-mesh-radius-y: 60%;
+    --vz-rib-x: 82%;
+    --vz-rib-y: 30%;
   }
 
   #faq[data-vz-mesh] {
-    --vz-mesh-focus-x: 56%;
-    --vz-mesh-focus-y: 52%;
-    --vz-mesh-radius-x: 115%;
-    --vz-mesh-radius-y: 80%;
+    --vz-rib-x: 56%;
+    --vz-rib-y: 52%;
   }
 }

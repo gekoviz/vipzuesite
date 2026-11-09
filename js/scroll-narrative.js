@@ -154,10 +154,15 @@
   };
 
   let state = null;
-  // celular: percurso preso igual ao do desktop (trilho de 420svh − palco de 100svh = 320svh de rolagem)
-  const TRAVEL_M = 3.2;
-  // celular: os cards entram quando o topo da grade chega a 92% da altura visível (é quando ficam à vista)
-  const CARDS_IN_M = 0.92;
+  // celular: percurso preso. V7 (08/11/2026): 3,2 → 2,4 alturas visíveis. Era o do desktop (320svh), mas no telefone
+  // o percurso é feito de swipes curtos e os três textos se liam em ~2.700 px; com 2,4 cada texto ainda se revela em
+  // ~350–470 px de rolagem (a linha do tempo T não muda, só a distância).
+  const TRAVEL_M = 2.4;
+  // celular (V7): marcos de entrada dos quatro cards no progresso da narrativa — o 01 entra enquanto o texto 1 se
+  // revela (já está no lugar quando ele termina, em 0,42), o 02 com a entrada do texto 2, o 03 com a da conclusão e o
+  // 04 quando ela termina de se revelar (sobe pela rolagem normal logo depois, já revelado). Reverso: saem na ordem
+  // inversa.
+  const CARDS_M = [T.p[0].reveal[0] + 0.05, T.p[1].in[0], T.p[2].in[0], T.p[2].reveal[1]];
 
   const build = (mode = "desktop") => {
     const mobile = mode === "mobile";
@@ -188,6 +193,9 @@
       geo.travel = Math.round(geo.vh * TRAVEL_M);
       section.style.setProperty("--s03-m-stage", `${box.offsetHeight}px`);
       section.style.setProperty("--s03-m-travel", `${geo.travel}px`);
+      // V7: altura da coluna dos cards (offsetHeight ignora o translate de entrada): a linha do percurso a soma para a
+      // faixa presa soltar no mesmo pixel que o conteúdo (css/sections.css)
+      if (s03Insights) section.style.setProperty("--s03-m-cards", `${s03Insights.offsetHeight}px`);
     };
 
     // Distância vertical do assentamento: do centro do palco até a posição tipográfica final da headline
@@ -197,11 +205,7 @@
       geo.narrow = window.innerWidth < 768;
       const center = mobile ? geo.vh / 2 : stage.clientHeight / 2;
       geo.dy = center - (title.offsetTop + title.offsetHeight / 2);
-      if (mobile && s03Insights) {
-        // marco dos cards: rolagem (desde o início do trilho) em que o topo da grade chega a 92% da altura visível
-        geo.cardsAt = Math.min(0.995, Math.max(T.p[0].in[0], (s03Insights.offsetTop - geo.vh * CARDS_IN_M) / Math.max(1, geo.travel)));
-      }
-      if (window.__vzDebug && mobile) window.__vzDebug.s03track = { travel: geo.travel, stage: box.offsetHeight, cardsAt: +geo.cardsAt.toFixed(4), vh: geo.vh };
+      if (window.__vzDebug && mobile) window.__vzDebug.s03track = { travel: geo.travel, stage: box.offsetHeight, cards: s03Insights?.offsetHeight ?? 0, cardsAt: CARDS_M, vh: geo.vh };
     };
 
     const render = (p) => {
@@ -255,13 +259,25 @@
         // MICRO — revelação por palavra com o progresso local do parágrafo
         reveals[i](range(p, seg.reveal));
       });
-      // V5 — cards: mesmo marco do texto 1 (começa a entrar em T.p[0].in[0]); permanecem nos textos 2 e 3. No celular a
-      // grade fica depois do palco: o marco é a chegada dela à tela (geo.cardsAt, medido), nunca antes do texto 1
-      const insightsOn = p > geo.cardsAt;
-      if (insightsOn !== insightsShown) {
-        insightsShown = insightsOn;
-        if (insightsOn) revealS03Insights();
-        else resetS03Insights();
+      // V5 — cards: mesmo marco do texto 1 (começa a entrar em T.p[0].in[0]); permanecem nos textos 2 e 3.
+      // V7 — celular: a faixa está presa logo abaixo do texto; cada card entra no seu marco (CARDS_M) e o atributo
+      // data-s03-shown diz ao CSS quantos já entraram. Só escreve no DOM quando a contagem muda.
+      if (mobile) {
+        let shown = 0;
+        while (shown < CARDS_M.length && p > CARDS_M[shown]) shown++;
+        if (shown !== insightsShown) {
+          insightsShown = shown;
+          if (s03Insights) s03Insights.dataset.s03Shown = String(shown);
+          if (shown) revealS03Insights();
+          else resetS03Insights();
+        }
+      } else {
+        const insightsOn = p > geo.cardsAt;
+        if (insightsOn !== insightsShown) {
+          insightsShown = insightsOn;
+          if (insightsOn) revealS03Insights();
+          else resetS03Insights();
+        }
       }
       if (window.__vzDebug) window.__vzDebug.s03 = p;
     };
@@ -296,16 +312,19 @@
     let ro = null;
     if (mobile) {
       let queued = 0;
-      let lastH = box.offsetHeight;
+      // V7: a coluna dos cards também (quebras e fontes reais); nenhuma das duas depende do trilho, então não há laço
+      const sizes = () => `${box.offsetHeight}|${s03Insights?.offsetHeight ?? 0}`;
+      let last = sizes();
       ro = new ResizeObserver(() => {
-        if (queued || box.offsetHeight === lastH) return;
+        if (queued || sizes() === last) return;
         queued = requestAnimationFrame(() => {
           queued = 0;
-          lastH = box.offsetHeight;
+          last = sizes();
           ScrollTrigger.refresh();
         });
       });
       ro.observe(box);
+      if (s03Insights) ro.observe(s03Insights);
     }
     state = {
       tween,
@@ -316,6 +335,8 @@
         meter?.remove();
         section.style.removeProperty("--s03-m-stage");
         section.style.removeProperty("--s03-m-travel");
+        section.style.removeProperty("--s03-m-cards");
+        if (s03Insights) delete s03Insights.dataset.s03Shown;
         if (window.__vzDebug) delete window.__vzDebug.s03track;
       },
     };

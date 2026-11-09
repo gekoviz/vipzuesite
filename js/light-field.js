@@ -414,7 +414,16 @@ void main() {
     return [1 - next.getBoundingClientRect().top / Math.max(1, canvas.clientHeight), 0.004, 0];
   };
   const sectionTarget = () => {
-    if (!document.documentElement.classList.contains("js-story")) return 0;
+    if (!document.documentElement.classList.contains("js-story")) {
+      // V7 (correção visual, 08/11/2026): sem a história da Hero (telas baixas como 320 × 568 e 375 × 667, movimento
+      // reduzido) a seção 03 recebia a rampa clara com a composição da HERO — o foco Páprica Profunda dela caía atrás
+      // dos cards de vidro (números a 2,0:1). Agora a composição do close (a mesma da 03 com a história e do campo claro
+      // da seção 05, FIELD_MODES.light) entra enquanto a 03 sobe da base da tela até 40% da altura. O perfil escuro da
+      // Hero não muda nesse caminho (tone fixo em 1, em drawAll).
+      if (!next) return 0;
+      const x = Math.min(1, Math.max(0, (1 - next.getBoundingClientRect().top / Math.max(1, canvas.clientHeight)) / 0.6));
+      return x * x * (3 - 2 * x);
+    }
     const r = hero.getBoundingClientRect();
     const span = Math.max(1, hero.offsetHeight - window.innerHeight);
     const p = Math.min(1, Math.max(0, -r.top / span));
@@ -427,7 +436,7 @@ void main() {
   };
   const drawAll = () => {
     // perfil refinado na Hero, cedendo ao legado na passagem para o close (zero no close estabelecido)
-    if (mainInView && !main.lost()) main.draw(frontState(), section, 1 - section);
+    if (mainInView && !main.lost()) main.draw(frontState(), section, root.classList.contains("js-story") ? 1 - section : 1);
     fields.forEach((fl) => {
       if (fl.inView && !fl.field.lost()) fl.field.draw(fl.state, fl.comp, fl.tone);
     });

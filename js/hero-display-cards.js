@@ -30,6 +30,7 @@
     if (!root || !stage || !stack || !first || !second) return NOOP;
 
     const eligible = window.matchMedia(ELIGIBLE);
+    const mobile = window.matchMedia(MOBILE);
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const finePointer = window.matchMedia(FINE_POINTER);
     const state = { heroReady: false, heroRange: false, stageVisible: true, scrolling: false, hovered: false, shown: false, disposed: false };
@@ -38,15 +39,22 @@
     // Ciclo (6 s): 0 s o 1º plano sobe e fica à frente; 2,4 s volta; 3 s o 2º desce um passo e fica à frente; 5,4 s
     // volta; 6 s recomeça. Só x/y dos invólucros; a orientação 3D está na superfície (sem disputa de transform).
     // A duração sai da construção: o último retorno termina em CYCLE_BEAT + RETURN_AT + MOVE_OUT = CYCLE.
+    // V7: a excursão vertical vem do CSS (--vzc-cycle-rise/--vzc-cycle-drop, css/hero.css): no desktop os 36/22 px de
+    // sempre; no celular em retrato 3/2 px, para o vão aparente entre os cards ficar em 20–23 px (o vão parado é do
+    // layout). Valores-função, relidos quando a timeline é invalidada (troca entre desktop e celular).
+    const excursion = (name, fallback) => {
+      const v = parseFloat(getComputedStyle(root).getPropertyValue(name));
+      return Number.isFinite(v) ? v : fallback;
+    };
     let tl = null;
     if (gsap) {
       const setActive = (v) => () => (stack.dataset.active = v);
       tl = gsap.timeline({ paused: true, repeat: -1 });
       tl.call(setActive("first"), null, 0)
-        .to(first, { x: -4, y: -36, duration: MOVE_IN, ease: "power2.out" }, 0)
+        .to(first, { x: -4, y: () => -excursion("--vzc-cycle-rise", 36), duration: MOVE_IN, ease: "power2.out" }, 0)
         .to(first, { x: 0, y: 0, duration: MOVE_OUT, ease: "power2.inOut" }, RETURN_AT)
         .call(setActive("second"), null, CYCLE_BEAT)
-        .to(second, { x: 8, y: 22, duration: MOVE_IN, ease: "power2.out" }, CYCLE_BEAT)
+        .to(second, { x: 8, y: () => excursion("--vzc-cycle-drop", 22), duration: MOVE_IN, ease: "power2.out" }, CYCLE_BEAT)
         .to(second, { x: 0, y: 0, duration: MOVE_OUT, ease: "power2.inOut" }, CYCLE_BEAT + RETURN_AT);
       if (Math.abs(tl.duration() - CYCLE) > 1e-6) console.warn("[hero-cards] ciclo com duração inesperada:", tl.duration());
     }
@@ -109,6 +117,12 @@
       evaluate();
     };
     const onChange = () => evaluate();
+    // Desktop ↔ celular: volta à pose de repouso e relê a excursão do CSS na próxima volta do ciclo
+    const onLayout = () => {
+      resetPose();
+      tl?.invalidate();
+      evaluate();
+    };
     const onReduced = () => {
       if (reduced.matches) resetPose();
       evaluate();
@@ -126,6 +140,7 @@
     root.addEventListener("pointerenter", onEnter);
     root.addEventListener("pointerleave", onLeave);
     eligible.addEventListener("change", onChange);
+    mobile.addEventListener("change", onLayout);
     reduced.addEventListener("change", onReduced);
     root.hidden = true;
 
@@ -150,6 +165,7 @@
         root.removeEventListener("pointerenter", onEnter);
         root.removeEventListener("pointerleave", onLeave);
         eligible.removeEventListener("change", onChange);
+        mobile.removeEventListener("change", onLayout);
         reduced.removeEventListener("change", onReduced);
         tl?.kill();
         tl = null;

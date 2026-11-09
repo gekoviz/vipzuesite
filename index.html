@@ -98,7 +98,7 @@
   <main id="conteudo">
     <!-- 01 — HERO: ~3 telas de rolagem (apresentação → transformação → passagem ao conteúdo) -->
     <section class="hero" aria-labelledby="hero-title" data-hero>
-      <div class="hero__stage" data-vz-mesh="dark">
+      <div class="hero__stage" data-vz-mesh="dark" data-vz-mesh-calm="[data-visao-shade]">
         <!-- Ambiente low-key de estúdio: parede, luz principal superior-esquerda, sombra e textura (CSS) -->
         <div class="hero__bg" aria-hidden="true">
           <div class="hero__light" data-hero-light></div>
@@ -332,6 +332,8 @@
          Abaixo de 1024px a composição não muda (§66): as linhas da headline ficam em linha e a subheadline antiga continua;
          o .why__aside só existe no desktop. O fundo deixou o campo WebGL e é CSS em todas as larguras. -->
     <section class="section surface-dark why" id="metodo" aria-labelledby="method-title" data-vz-mesh="dark">
+      <!-- V7: luz do ambiente escuro presa à tela durante toda a seção (decorativa; css/sections.css, "04 — Método, fundo") -->
+      <span class="vz-env" aria-hidden="true"></span>
       <div class="container">
         <header class="why__head">
           <h2 class="t-display-l why__title" id="method-title" data-reveal="fade-up"><span class="why__title-line">O que entregamos é</span> <span class="why__title-line">uma página.</span></h2>
