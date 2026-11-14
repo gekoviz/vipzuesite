@@ -368,8 +368,9 @@ void main() {
   // Mocha/Páprica em CSS, estático (css/sections.css, "06 — CTA final · V4.0"), pelo mesmo motivo.
   // 07 — FAQ saiu da lista em 08/11/2026 (prompt V5.0 da FAQ): o fundo dela passou a ser o campo Mocha/Páprica em CSS,
   // estático (css/sections.css, "07 — FAQ · V5.0"), pelo mesmo motivo.
+  // 05 — Para quem é saiu da lista em 14/11/2026 (prompt "Para quem é" V1): o fundo dela passou a ser a atmosfera V4
+  // (Jade + Paper) com os focos da referência e duas curvas de luz em SVG (css/sections.css, "05 — Para quem é · V1").
   const FIELD_SECTIONS = [
-    ["#para-quem-e", "light"], // 05 — Para quem é
     ["[data-beam-footer]", "dark"], // 08 — Rodapé
   ];
   // Teto de brilho do campo escuro (u_state.z do shader, §4.1a). 0 = a Hero idêntica, mas o texto pequeno reprova nos focos

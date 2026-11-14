@@ -3,7 +3,7 @@
 @font-face { font-family: "Switzer"; src: url("../fonts/switzer-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
 @font-face { font-family: "Switzer"; src: url("../fonts/switzer-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
 /* Seção 04 V2.0 (14/11/2026): Bold 700 e Medium Italic 500 da mesma Switzer (Fontshare), numa família à parte para
-   não mudar o peso nem o itálico de nenhum outro texto do site. Só o #metodo no desktop usa (css/sections.css). */
+   não mudar o peso nem o itálico de nenhum outro texto do site. Usam: o #metodo no desktop e a headline do #para-quem-e (css/sections.css). */
 @font-face { font-family: "Switzer S4"; src: url("../fonts/switzer-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 @font-face { font-family: "Switzer S4"; src: url("../fonts/switzer-500-italic.woff2") format("woff2"); font-weight: 500; font-style: italic; font-display: swap; }
 @font-face { font-family: "Switzer S4"; src: url("../fonts/switzer-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }

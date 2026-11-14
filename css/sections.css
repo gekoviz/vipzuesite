@@ -1217,174 +1217,364 @@ html:not(.s03-motion) .vz-s3-glass-card {
 }
 
 /* =========================================================
-   05 — Para quem é · cards (rodada 4)
-   Card: o do 21st.dev "feature-sections" (@prebuiltui): imagem em cima, texto embaixo, sobe no hover. Aqui: janela
-   escura com a ilustração (a "cara" da referência: painel escuro + base clara), sobre uma base marfim, na paleta e nas
-   fontes da VIPZUE.
-   Desktop ≥ 1024px: mosaico 2 × 2 como a referência (título e subtítulo no alto à esquerda; os cards 1 e 3 na coluna da
-   direita, o 2 embaixo à esquerda). Celular e tablet: uma coluna, card por card.
+   05 — Para quem é · V1 (14/11/2026, prompt mestre "Para quem é — nova composição editorial tech")
+   SUBSTITUI o bloco "05 — Para quem é · cards (rodada 4)". Referência aprovada (1688 × 932, comparada em 1536 × 848):
+   headline no alto à esquerda; embaixo, três colunas — tríade / painel da águia com visor / título + parágrafo + CTA.
+   Fundo: a atmosfera V4 da própria seção (Jade + Paper, js/vz-atmosphere.js) com os focos desta referência; o canvas do
+   light-field saiu desta seção (js/light-field.js), como na 04/06/07. Duas curvas de luz em SVG estático (.vz-aud__lines).
+   Tipografia: Switzer — headline 700 ("Switzer S4", css/fonts.css), título da direita 400, tríade/parágrafo 400, CTA 600.
+   Medidas do desktop em vw (a composição escala com a largura, como a imagem); abaixo de 1180 px, tablet; abaixo de
+   768 px, coluna única na ordem headline → tríade → painel → título → parágrafo → CTA.
    ========================================================= */
-.pq {
-  --pq-ink: var(--color-text-on-light);
-  --pq-gap: clamp(20px, 3vw, 32px);
-  --pq-veil: var(--veil-long, 0px); /* altura do véu de cima (dobra 04 → 05): o título começa abaixo dele */
+#para-quem-e.vz-aud { /* com o id: o preset [data-vz-atmosphere="dark"] vem depois e tem a mesma especificidade da classe */
+  --aud-ivory: var(--color-ivory, #f3ede3);
+  --aud-paprika: #d7673f;
+  /* os quatro campos da referência, na Jade desta seção (a receita V4 não muda): A canto superior esquerdo · B base,
+     à direita do centro · C Mocha fraco no centro · D Páprica Profunda na borda direita */
+  --vz-atm-a-x: 0%;
+  --vz-atm-a-y: 3%;
+  --vz-atm-a-rx: 34%;
+  --vz-atm-a-ry: 50%;
+  --vz-atm-a-k: 1;
+  --vz-atm-b-x: 66%;
+  --vz-atm-b-y: 100%;
+  --vz-atm-b-rx: 28%;
+  --vz-atm-b-ry: 22%;
+  --vz-atm-b-k: 0.55;
+  --vz-atm-c-x: 40%;
+  --vz-atm-c-y: 46%;
+  --vz-atm-c-rx: 0.1%; /* sem o calor central (os stops fixos do C pintavam o meio de marrom) */
+  --vz-atm-c-ry: 0.1%;
+  --vz-atm-c-k: 0;
+  --vz-atm-d-x: 100%;
+  --vz-atm-d-y: 70%;
+  --vz-atm-d-rx: 22%;
+  --vz-atm-d-ry: 30%;
+  --vz-atm-d-k: 0.2;
+  --vz-atm-mesh-opacity: 0.1; /* o Paper discreto: a referência é escura, quase vinho */
   position: relative;
-  padding-block: calc(var(--pq-veil) + var(--space-xl, 48px)) var(--section-space-default, 96px);
+  color: var(--aud-ivory);
 }
 
-.pq__inner {
+/* o espaço vertical é do .vz-aud__inner (o .section dava 96 px em cima e embaixo). A base mais funda que a das outras
+   seções (sombra V4 #1A100C → #140806): a referência é quase preto-vinho */
+#para-quem-e.vz-aud {
+  padding-block: 0;
+  /* nas bordas volta à sombra V4 (#1A100C) das vizinhas: emenda sem faixa */
+  background: linear-gradient(180deg, #1a100c 0%, #140806 14%, #140806 86%, #1a100c 100%);
+}
+
+/* Curvas: atrás do conteúdo, acima da atmosfera (z −1, depois dela no DOM) */
+.vz-aud__lines {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.vz-aud__lines path {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.vz-aud__halo {
+  stroke: rgb(236 84 30 / 0.95);
+  stroke-width: 20;
+  filter: url(#vz-aud-halo);
+}
+
+.vz-aud__glow {
+  stroke: rgb(255 112 52);
+  stroke-width: 7;
+  filter: url(#vz-aud-glow);
+}
+
+.vz-aud__core {
+  stroke: rgb(255 232 214);
+  stroke-width: 2.8;
+  vector-effect: non-scaling-stroke;
+}
+
+.vz-aud__inner {
+  position: relative;
+  z-index: 0; /* contexto próprio: as curvas (z −1) ficam atrás do texto e à frente da atmosfera */
   box-sizing: border-box;
   width: 100%;
-  max-width: 1240px;
-  margin-inline: auto;
-  padding-inline: var(--page-margin, 24px);
+  padding: var(--aud-pad-top, 72px) var(--aud-pad-x, 22px) var(--aud-pad-bottom, 88px);
 }
 
-.pq__head {
-  max-width: 36rem;
-}
-
-.pq__title {
+.vz-aud__title {
   margin: 0;
+  font-family: "Switzer S4", var(--font-body);
+  font-weight: 700;
+  font-synthesis: none;
+  font-size: clamp(26px, 7.9vw, 42px); /* "Páginas com propósitos." cabe em uma linha de 360 a 767 px */
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--aud-ivory);
   text-wrap: balance;
 }
 
-.pq__lead {
-  max-width: 28rem;
-  margin: var(--space-md, 20px) 0 0;
+/* duas linhas fixas em todos os tamanhos (no celular estreito o fluxo corrido quebrava "Negócios / diferentes. Páginas") */
+.vz-aud__title-line {
+  display: block;
+}
+
+.vz-aud__words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 36px 0 16px;
   font-family: var(--font-body);
-  font-size: clamp(1.125rem, 1.02rem + 0.45vw, 1.375rem);
-  line-height: 1.4;
-  font-weight: var(--font-weight-medium, 500);
-  color: var(--text-2);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--aud-ivory);
 }
 
-.pq__cards {
-  display: grid;
-  gap: var(--pq-gap);
-  margin: var(--space-2xl, 40px) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* O <li> só se posiciona e entra (data-reveal: opacity/transform são do reveal do site). A base marfim, a sombra e o
-   hover são do .pq-card__plate, DENTRO dele: assim a entrada e o hover nunca disputam o mesmo transform nem o mesmo
-   transition. */
-.pq-card {
-  display: flex;
-}
-
-.pq-card__plate {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 10px;
-  /* Superfície Mocha sobre o ambiente Marfim (§5). A base Areia media 1,25:1
-     contra o Marfim — era superfície clara sobre fundo claro, e o card não
-     tinha presença nenhuma. Em Mocha são 7,62:1 com a tinta Marfim.
-     O contorno é o acento Páprica que o §5 pede; a borda Grafite a 10% que
-     estava aqui não existiria sobre o escuro. */
-  border: 1px solid color-mix(in srgb, var(--color-paprika) 58%, transparent); /* V4: 0,38 → 0,58 no escuro */
-  border-radius: 28px;
-  /* V4: o card era Mocha sobre o Marfim; no escuro, o meio-tom V4 com 12% de Páprica Profunda → base V4 */
-  background: linear-gradient(160deg, color-mix(in srgb, #40261C 88%, #9F3930) 0%, #2A1913 100%);
-  box-shadow: inset 0 1px 0 rgb(243 237 227 / 0.14), 0 32px 60px -38px rgb(34 32 29 / 0.55);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.pq-card__visual {
-  position: relative;
-  aspect-ratio: 16 / 10;
+.vz-aud__visual {
+  margin: 0;
   overflow: hidden;
+  aspect-ratio: 786 / 372;
   border-radius: 20px;
-  background:
-    /* reflexo do canto: era #8D5337 (Mocha/Páprica); rodada 03, §25/§88 — o mesmo radial (posição, raio, alfa) no
-       pigmento Páprica escura #B04C27, o anchor 0.78 da rampa do Método */
-    radial-gradient(120% 90% at 88% 0%, rgb(176 76 39 / 0.6), transparent 58%),
-    linear-gradient(165deg, var(--color-mocha) 0%, var(--color-graphite) 72%);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-paprika) 24%, transparent);
+  background: #f1d6bf; /* o bege da foto, enquanto ela carrega (sem salto de layout: proporção fixa) */
 }
 
-.pq-card__visual svg {
-  position: absolute;
-  inset: 0;
+.vz-aud__visual img {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
 }
 
-.pq-card__text {
+.vz-aud__aside {
+  margin-top: 36px;
+}
+
+.vz-aud__subtitle {
   margin: 0;
-  padding: 22px 16px 16px;
   font-family: var(--font-body);
-  font-size: clamp(1.125rem, 1.02rem + 0.45vw, 1.375rem);
-  line-height: 1.35;
-  font-weight: var(--font-weight-medium, 500);
-  letter-spacing: -0.01em;
-  /* A tinta da SEÇÃO é Grafite, porque o ambiente é Marfim. Dentro do card a
-     superfície virou Mocha, então a tinta aqui vira Marfim (§5). */
-  color: var(--color-text-on-dark);
+  font-weight: 400; /* a decisão tipográfica do projeto para esta frase: Switzer Regular */
+  font-synthesis: none;
+  font-size: clamp(27px, 7.3vw, 36px);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: var(--aud-ivory);
 }
 
-.pq-card__text strong {
+.vz-aud__text {
+  margin: 16px 0 0;
+  max-width: 34em;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15.5px;
+  line-height: 1.5;
+  color: var(--aud-ivory);
+}
+
+.vz-aud__cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 24px;
+  font-family: var(--font-body);
   font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--aud-ivory);
+  text-decoration: none;
+  text-underline-offset: 5px;
+  transition: color 0.2s ease;
 }
 
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .pq-card__plate:hover {
-    transform: translateY(-4px);
-    box-shadow: inset 0 1px 0 rgb(243 237 227 / 0.55), 0 40px 70px -36px rgb(34 32 29 / 0.62);
+.vz-aud__arrow {
+  flex: none;
+  width: 24px;
+  height: 14px;
+  color: var(--aud-paprika);
+  transition: transform 0.2s ease;
+}
+
+/* área de toque de 44 px de altura (o texto tem 19–27 px), sem mexer no layout */
+.vz-aud__cta::after {
+  content: "";
+  position: absolute;
+  inset: -12px -8px;
+}
+
+.vz-aud__cta:hover,
+.vz-aud__cta:focus-visible {
+  text-decoration: underline;
+  text-decoration-color: rgb(215 103 63 / 0.7);
+}
+
+.vz-aud__cta:hover .vz-aud__arrow,
+.vz-aud__cta:focus-visible .vz-aud__arrow {
+  transform: translateX(3px);
+}
+
+/* celular: a geometria da Jade (as curvas já ficam fora abaixo de 1180 px) */
+@media (max-width: 767.98px) {
+  #para-quem-e.vz-aud {
+    --vz-atm-a-y: -2%;
+    --vz-atm-a-rx: 70%;
+    --vz-atm-a-ry: 26%;
+    --vz-atm-b-x: 70%;
+    --vz-atm-b-y: 104%;
+    --vz-atm-b-rx: 80%;
+    --vz-atm-b-ry: 30%;
+    --vz-atm-c-x: 30%;
+    --vz-atm-c-y: 52%;
+    --vz-atm-c-rx: 80%;
+    --vz-atm-c-ry: 36%;
+    --vz-atm-d-x: 100%;
+    --vz-atm-d-y: 70%;
+    --vz-atm-d-rx: 60%;
+    --vz-atm-d-ry: 40%;
   }
 }
 
-/* Tablet: uma coluna, cards com largura de leitura */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .pq__cards {
-    max-width: 620px;
+/* as curvas são só do desktop: abaixo de 1180 px a grade muda e elas cruzariam a headline e o CTA */
+@media (max-width: 1179.98px) {
+  .vz-aud__lines {
+    display: none;
   }
 }
 
-/* Desktop: mosaico 2 × 2 da referência. A ordem no HTML (título, cards 1, 2, 3) é a ordem de leitura e de tabulação; o
-   grid só reposiciona: 1 em cima à direita, 2 embaixo à esquerda, 3 embaixo à direita (um pouco mais baixo, para o
-   degrau). */
-@media (min-width: 1024px) {
-  .pq__inner {
+/* Tablet (768–1179): headline no topo; a tríade numa linha acima; painel e texto lado a lado */
+@media (min-width: 768px) {
+  .vz-aud__inner {
+    --aud-pad-top: clamp(64px, 8vw, 96px);
+    --aud-pad-x: 6vw;
+    --aud-pad-bottom: clamp(72px, 9vw, 110px);
+  }
+
+  .vz-aud__title {
+    font-size: clamp(44px, 5.6vw, 62px);
+  }
+
+  .vz-aud__grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: clamp(48px, 6vw, 96px);
-    row-gap: var(--pq-gap);
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    column-gap: 28px;
     align-items: start;
+    margin-top: clamp(48px, 7vw, 80px);
   }
 
-  .pq__head {
-    grid-column: 1;
-    grid-row: 1;
-    padding-block-start: clamp(8px, 2vw, 32px);
+  .vz-aud__words {
+    grid-column: 1 / -1;
+    margin: 0 0 18px;
+    font-size: 16px;
+    gap: 8px 28px;
   }
 
-  .pq__cards {
-    display: contents;
+  .vz-aud__visual {
+    border-radius: 22px;
   }
 
-  .pq-card:nth-child(1) {
-    grid-column: 2;
-    grid-row: 1;
+  .vz-aud__aside {
+    margin-top: 0;
   }
 
-  .pq-card:nth-child(2) {
-    grid-column: 1;
-    grid-row: 2;
+  .vz-aud__subtitle {
+    font-size: clamp(26px, 3.3vw, 34px);
   }
 
-  .pq-card:nth-child(3) {
-    grid-column: 2;
-    grid-row: 2;
-    margin-block-start: clamp(24px, 4vw, 56px);
+  .vz-aud__subtitle-line {
+    display: block;
+  }
+
+  .vz-aud__text {
+    font-size: 16px;
+  }
+}
+
+/* Desktop (≥ 1180): três colunas — tríade / painel / coluna direita — com as medidas da referência em 1536 × 848 */
+@media (min-width: 1180px) {
+  #para-quem-e.vz-aud {
+    justify-content: flex-start;
+  }
+
+  .vz-aud__inner {
+    --aud-pad-top: 2.97vw; /* topo da tinta da headline a 61 px em 1536 */
+    --aud-pad-x: 0px;
+    --aud-pad-bottom: 11.2vw;
+    margin-block: auto; /* sobra de altura (telas mais altas que 1,81:1) dividida em cima e embaixo */
+  }
+
+  .vz-aud__title {
+    margin-left: 8.4vw;
+    font-size: clamp(44px, 4.5vw, 88px); /* 69 px em 1536: a largura da tinta da referência (758 px na 2ª linha) */
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+  }
+
+  .vz-aud__grid {
+    grid-template-columns: 10.2vw 46.85vw minmax(0, 1fr);
+    column-gap: 0;
+    align-items: center;
+    margin-top: 9.4vw;
+    padding-left: 7.15vw;
+    padding-right: 2.4vw;
+  }
+
+  .vz-aud__words {
+    grid-column: auto;
+    flex-direction: column;
+    gap: 0;
+    margin: -1.5vw 0 0;
+    font-size: clamp(16px, 1.5vw, 28px); /* 23 px: a largura de "Experiência" na referência */
+    line-height: 2.35; /* 54 px entre as linhas, como na referência */
+  }
+
+  .vz-aud__visual {
+    border-radius: 2.4vw;
+  }
+
+  .vz-aud__aside {
+    align-self: start;
+    margin-top: -1vw;
+    padding-left: 3.3vw;
+  }
+
+  .vz-aud__subtitle {
+    font-size: clamp(30px, 3.37vw, 62px); /* 52 px: "A estratégia começa" com 454 px de tinta, como na referência */
+    line-height: 1.04;
+  }
+
+  /* duas linhas fixas no desktop (a coluna comporta a 1ª linha de 1180 px para cima) */
+  .vz-aud__subtitle-line {
+    white-space: nowrap;
+  }
+
+  .vz-aud__text {
+    margin-top: 1.5vw;
+    max-width: 28.2vw;
+    font-size: clamp(15px, 1.25vw, 24px);
+    line-height: 1.38;
+  }
+
+  .vz-aud__cta {
+    margin-top: 1.75vw;
+    gap: 0.95vw;
+    font-size: clamp(15px, 1.45vw, 27px); /* 22 px */
+  }
+
+  .vz-aud__arrow {
+    width: 1.6vw;
+    height: auto;
+    min-width: 20px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pq-card__plate {
+  .vz-aud__cta,
+  .vz-aud__arrow {
     transition: none;
   }
 }
