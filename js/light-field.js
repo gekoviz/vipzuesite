@@ -51,13 +51,22 @@
   // 07/11/2026 (prompt mestre de implementação cromática): rampa refinada definitiva. Anchors 0–2 iguais (profundidade e
   // Mocha); os de luz passam a derivados Mocha→Páprica (#8D4B34) e Páprica escurecida (#C65D3C), para o caráter Páprica
   // aparecer já nos meios-tons sem depender do último anchor. Paradas e FIELD_CAP não mudam.
-  const PALETTE_REFINED = ["#332B23", "#47392B", "#5B4632", "#8D4B34", "#C65D3C", "#D7673F"];
+  // 14/11/2026 (Atmosphere Fusion V4.0): a rampa refinada passa à escala escura da V4 — sombra #1A100C, base #2A1913,
+  // meio-tom #40261C, realce #563326 (derivados de Mocha + Páprica Profunda com preto) e a luz Páprica Profunda → Páprica.
+  // Mesmo número de anchors, mesmas paradas, mesma interpolação OKLab, mesmo FIELD_CAP: só a cor de saída do campo
+  // (Hero e rodapé) desce para a sombra profunda da referência; a luz localizada fica com a Jade Sky (css/vz-atmosphere.css).
+  // O perfil legado (PALETTE, o close da seção 02 / Deep Zoom) não muda.
+  const PALETTE_REFINED = ["#1A100C", "#2A1913", "#40261C", "#563326", "#9F3930", "#D7673F"];
   // Contexto claro (seções claras): BASE = Marfim #F3EDE3, o fundo; DEEP = Páprica Profunda #9F3930, o pigmento dos
   // focos (= --color-paprika-deep em tokens.css: a mesma decisão nos dois arquivos).
   // Rodada 03: a transferência foi invertida. Antes, a SOMBRA do campo era pigmentada (#C98468 a 32%: um rosado na
   // parte baixa da seção) e os FOCOS subiam para reflexos quase brancos (#F4EFE6, #F7F2EB) — o acento ficava onde não
   // há luz e sumia onde há. Agora o fundo é Marfim e os máximos locais do campo recebem a Páprica Profunda.
-  const LIGHT = { BASE: "#F3EDE3", DEEP: "#9F3930" };
+  // 14/11/2026 (Atmosphere Fusion V4.0): as duas seções claras (03 e 05) passam a DARK. O "contexto claro" do shader fica
+  // com o mesmo nome e a mesma lógica (frente, BEIGE, composição do close), mas assenta na sombra V4 #1A100C em vez do
+  // Marfim, e os focos do campo recebem o realce Mocha V4 #563326 (com a Páprica Profunda virava uma esfera vermelha no
+  // meio da 03; a luz Páprica localizada é da Jade). Só as duas cores mudam.
+  const LIGHT = { BASE: "#1A100C", DEEP: "#563326" };
 
   // Posições originais das paradas. A rodada 02 as tinha puxado para [0, .17, .34, .52, .72, 1]; a rodada 03 as
   // declara invariantes e põe o acento na cor dos anchors alcançáveis (acima).

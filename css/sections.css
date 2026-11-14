@@ -66,17 +66,23 @@
 
 /* Clara (nome histórico "beige"): fundo Marfim; texto secundário Grafite a 0,75 (6,6:1 sobre o Marfim). */
 .surface-beige {
-  background: var(--color-bg-secondary);
-  color: var(--color-text-on-light);
-  --text-2: rgb(34 32 29 / var(--color-text-secondary-opacity));
-  --rule: rgb(34 32 29 / 0.2);
+  /* V4 (Atmosphere Fusion, 14/11/2026): única consumidora, a 05, é DARK. Base = sombra V4; tinta Marfim (secundário a
+     0,88: ≥ 4,5:1 também sobre os focos da Jade) */
+  background: #1A100C;
+  color: var(--color-text-on-dark);
+  --text-2: rgb(243 237 227 / 0.88);
+  --rule: rgb(243 237 227 / 0.16);
 }
 
 /* Foco visível em superfícies claras: o anel Marfim (do escuro) não contrasta com o Marfim; aqui ele é Grafite */
-.surface-ivory :focus-visible,
+.surface-ivory :focus-visible {
+  outline-color: var(--color-focus-on-light);
+}
+
+/* V4 (Atmosphere Fusion, 14/11/2026): a 03 (.next-section) e a 05 (.surface-beige) passaram a DARK; o anel volta ao Marfim */
 .surface-beige :focus-visible,
 .next-section :focus-visible {
-  outline-color: var(--color-focus-on-light);
+  outline-color: var(--color-focus-on-dark);
 }
 
 .grid-12 {
@@ -226,7 +232,7 @@ html:not(.s03-motion) .s03__stage {
   font-size: var(--s03-title);
   line-height: var(--s03-title-lh, 1.1);
   letter-spacing: -0.02em;
-  color: var(--color-text-on-light);
+  color: var(--color-text-on-dark); /* V4: era a tinta do claro */
 }
 
 /* Espaço de leitura: alinhado à mesma margem da headline */
@@ -259,7 +265,7 @@ html:not(.s03-motion) .s03__stage {
   font-size: var(--s03-text);
   line-height: var(--s03-text-lh, 1.5);
   letter-spacing: -0.005em;
-  color: rgb(34 32 29 / var(--s03-text-alpha, var(--color-text-secondary-opacity)));
+  color: rgb(243 237 227 / var(--s03-text-alpha, var(--color-text-secondary-opacity))); /* V4: Marfim (era Grafite) */
   text-wrap: pretty;
 }
 
@@ -670,16 +676,30 @@ html:not(.s03-motion) .s03__stage {
    devolvia a placa cinza que o prompt proíbe. Por isso a tinta inverte: títulos e descrições em Grafite e números em
    Páprica Profunda (paleta), sobre o mesmo vidro claro — na narrativa, títulos ≥ 7,8:1, descrições ≥ 6,6:1, números ≥ 3,2:1.
    Versão literal: números #D7673F, títulos/descrições #F3EDE3 com text-shadow 0 1px 3px rgb(34 32 29 / .55). */
+/* V4 (Atmosphere Fusion, 14/11/2026): o fundo atrás do vidro é escuro. A tinta volta à versão literal do prompt da 03
+   (números Páprica #D7673F, títulos e descrições Marfim); o reflexo do texto passa a sombra espresso (mesmo deslocamento). */
 .vz-s3-glass-card [data-vz-s3-number] {
-  color: #9F3930 !important;
+  color: #D7673F !important;
   opacity: 1 !important;
   filter: none !important;
 }
 
-.vz-s3-glass-card [data-vz-s3-title],
+.vz-s3-glass-card [data-vz-s3-title] {
+  color: #D7673F;
+  text-shadow: 0 1px 0 rgb(26 16 12 / 0.35);
+}
+
 .vz-s3-glass-card [data-vz-s3-copy] {
-  color: #22201D;
-  text-shadow: 0 1px 0 rgb(255 248 237 / 0.35);
+  color: #F3EDE3;
+  text-shadow: 0 1px 0 rgb(26 16 12 / 0.35);
+}
+
+/* V4: película e contorno do vidro da 03 no escuro — Mocha escuro transparente com 12% de Páprica Profunda e contorno
+   Marfim discreto (o 0,76 era para o vidro sobre o Marfim). Desfoque, saturação, reflexos, onda e raio não mudam. */
+#o-que-fazemos {
+  --vz-glass-fill: linear-gradient(128deg, rgb(72 38 27 / 0.42) 0%, rgb(48 27 20 / 0.32) 47%, rgb(64 34 25 / 0.4) 100%);
+  --vz-glass-fill-fallback: linear-gradient(128deg, rgb(64 38 28 / 0.9), rgb(42 25 19 / 0.88) 50%, rgb(56 32 24 / 0.9));
+  --vz-glass-border: rgb(255 226 204 / 0.24);
 }
 
 /* Véu de leitura, só no fluxo (celular, tablet, desktop baixo ou com movimento reduzido). O campo de luz é fixo na tela
@@ -689,7 +709,8 @@ html:not(.s03-motion) .s03__stage {
    baixo fica na película (abaixo da onda, que continua inteira) e clareia só a parte do texto: com ele, nenhum texto
    abaixo do mínimo em nenhuma posição de rolagem. Não escurece o vidro. */
 html:not(.s03-motion) .vz-s3-glass-card {
-  --vz-s3-read-veil: linear-gradient(172deg, rgb(243 237 227 / 0.52) 0%, rgb(243 237 227 / 0.42) 42%, rgb(243 237 227 / 0.18) 74%, rgb(243 237 227 / 0) 100%);
+  /* V4: no escuro o véu de leitura é sombra espresso (mesma geometria e alfas) */
+  --vz-s3-read-veil: linear-gradient(172deg, rgb(26 16 12 / 0.52) 0%, rgb(26 16 12 / 0.42) 42%, rgb(26 16 12 / 0.18) 74%, rgb(26 16 12 / 0) 100%);
 }
 
 /* Celular (V7, Tarefa E): o material é EXATAMENTE o do desktop. Saíram os três ajustes que o diferenciavam — o véu de
@@ -927,11 +948,11 @@ html:not(.s03-motion) .vz-s3-glass-card {
 }
 
 .has-field[data-field="light"] {
-  background: var(--color-bg-secondary); /* a base clara da 03 (Marfim #F3EDE3), sob o canvas */
+  /* V4 (Atmosphere Fusion, 14/11/2026): o "campo claro" assenta na sombra V4 (js/light-field.js, LIGHT.BASE #1A100C) */
+  background: #1A100C;
   --field-opacity: 1;
-  /* texto secundário sobre o campo claro (Marfim aquecido por #C98468 nas sombras): grafite a 0,92 */
-  --text-2: rgb(34 32 29 / 0.92);
-  --rule: rgb(34 32 29 / 0.22);
+  --text-2: rgb(243 237 227 / 0.92);
+  --rule: rgb(243 237 227 / 0.18);
 }
 
 .section-light-field {
@@ -1263,9 +1284,10 @@ html:not(.s03-motion) .vz-s3-glass-card {
      tinha presença nenhuma. Em Mocha são 7,62:1 com a tinta Marfim.
      O contorno é o acento Páprica que o §5 pede; a borda Grafite a 10% que
      estava aqui não existiria sobre o escuro. */
-  border: 1px solid color-mix(in srgb, var(--color-paprika) 38%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-paprika) 58%, transparent); /* V4: 0,38 → 0,58 no escuro */
   border-radius: 28px;
-  background: var(--color-mocha);
+  /* V4: o card era Mocha sobre o Marfim; no escuro, o meio-tom V4 com 12% de Páprica Profunda → base V4 */
+  background: linear-gradient(160deg, color-mix(in srgb, #40261C 88%, #9F3930) 0%, #2A1913 100%);
   box-shadow: inset 0 1px 0 rgb(243 237 227 / 0.14), 0 32px 60px -38px rgb(34 32 29 / 0.55);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -1386,29 +1408,28 @@ html:not(.s03-motion) .vz-s3-glass-card {
   /* V7 (08/11/2026, tarefa A): a base era uma "noite" de Mocha com 75–83% de preto (#17120D, sombras medidas em #19110C,
      contra #352821 na Hero) e destoava das outras seções escuras. Passa ao ambiente da Hero (tokens.css, 01c): diagonal
      sombra dos cantos → profundidade → sombra dos cantos, sob a sombra quente lateral. As luzes ficam onde estavam. */
-  --vz-cta-night: var(--env-dark-night);
-  --vz-cta-base:
-    linear-gradient(90deg, rgb(var(--env-dark-shade) / 0.5) 0%, rgb(var(--env-dark-shade) / 0.3) 48%, rgb(var(--env-dark-shade) / 0.08) 100%),
-    linear-gradient(112deg, var(--env-dark-night) 0%, var(--env-dark-deep) 51%, var(--env-dark-night) 100%);
+  /* V4 (Atmosphere Fusion, 14/11/2026): a base passa à sombra V4; a luz principal e a baixa saíram (eram focos
+     próprios somados aos da Jade, a lavagem laranja). Ficam definidas como none para quem as consome. */
+  --vz-cta-night: var(--vz-atm-shadow, #1A100C);
+  --vz-cta-base: var(--vz-atm-ground);
   /* luz principal atrás da águia e do card (à direita) e um calor baixo, largo e fraco. Calibrada contra a REFERENCIA_01
      (centro, raio e intensidade; base e paleta do prompt): ponto de partida 57% 69% at 73% 39%, .38/.15 */
-  --vz-cta-glow: radial-gradient(ellipse 52% 66% at 70% 32%, rgb(var(--env-dark-glow) / 0.56) 0%, rgb(var(--env-dark-depth) / 0.25) 42%, transparent 78%);
-  --vz-cta-glow-low: radial-gradient(ellipse 70% 83% at 54% 86%, rgb(var(--env-dark-depth) / 0.13) 0%, transparent 73%);
+  --vz-cta-glow: none;
+  --vz-cta-glow-low: none;
   /* pé da CTA → topo da FAQ (decisão de 08/11/2026: suavizar a emenda 06 → 07, que o fundo escuro deixou em corte seco;
      reajustado no mesmo dia para a FAQ V5.0, cujo topo é escuro). Nos últimos 22% a noite se dissolve no tom da 1ª faixa
      da FAQ, medida coluna a coluna de 768 a 1920px: rgb(33 19 15) à esquerda (o #21130F do gradiente dela). Para a direita
      a faixa esquenta: primeiro Mocha (até ~50% da largura), depois Páprica (pico a ~79%). Duas luzes baixas, uma de cada,
      refazem essa curva no pé (ajuste numérico; resíduo ≤ 8 de soma RGB por coluna). No celular, valor próprio logo abaixo. A FAQ não muda. */
+  /* V4: o pé dissolve na sombra V4, que é o topo da FAQ V4 (a base das duas termina e começa em #1A100C) */
   --vz-cta-fade: linear-gradient(
     to bottom,
     transparent 78%,
-    rgb(33 19 15 / 0.22) 86%,
-    rgb(33 19 15 / 0.62) 94%,
-    rgb(33 19 15) 100%
+    rgb(26 16 12 / 0.22) 86%,
+    rgb(26 16 12 / 0.62) 94%,
+    rgb(26 16 12) 100%
   );
-  --vz-cta-fade-warm:
-    radial-gradient(ellipse 65% 24% at 79% 100%, rgb(var(--env-dark-glow) / 0.19) 0%, rgb(var(--env-dark-glow) / 0.05) 50%, transparent 100%),
-    radial-gradient(ellipse 69% 24% at 47% 100%, rgb(var(--env-dark-mocha) / 0.19) 0%, rgb(var(--env-dark-mocha) / 0.04) 50%, transparent 100%);
+  --vz-cta-fade-warm: none;
   --vz-cta-card-bg: linear-gradient(
     155deg,
     color-mix(in srgb, var(--vz-cta-mocha) 47%, black 53%),
@@ -1621,8 +1642,8 @@ html:not(.s03-motion) .vz-s3-glass-card {
     --vz-cta-btn-gap: 24px;
     /* a mesma família de luz, recentrada atrás da águia e do card */
     /* ponto de partida: 92% 49% at 50% 43%, .30/.11; calibrado contra a REFERENCIA_02 */
-    --vz-cta-glow: radial-gradient(ellipse 100% 46% at 50% 45%, rgb(var(--env-dark-glow) / 0.44) 0%, rgb(var(--env-dark-depth) / 0.2) 46%, transparent 80%);
-    --vz-cta-glow-low: radial-gradient(ellipse 90% 34% at 50% 80%, rgb(var(--env-dark-depth) / 0.16) 0%, transparent 72%);
+    --vz-cta-glow: none; /* V4: a luz é da Jade */
+    --vz-cta-glow-low: none;
   }
 
   .vz-cta--v4 .vz-cta__layout {
@@ -1784,12 +1805,10 @@ html:not(.s03-motion) .vz-s3-glass-card {
   overflow: clip;
   padding-block: clamp(94px, 8vw, 130px);
   color: var(--vz-faq-ivory);
-  /* camadas: luz Páprica (centro-direita) → Mocha no meio → base escura em diagonal */
-  background-color: var(--vz-faq-mocha);
-  background-image:
-    radial-gradient(ellipse 67% 70% at 72% 50%, rgb(var(--env-dark-glow) / var(--vz-faq-glow-a)) 0%, rgb(var(--env-dark-depth) / 0.43) 42%, rgb(var(--env-dark-depth) / 0) 82%),
-    radial-gradient(ellipse 69% 71% at 38% 61%, rgb(var(--env-dark-mocha) / 0.27) 0%, rgb(44 27 20 / 0) 78%),
-    linear-gradient(116deg, #20120E 0%, #312219 39%, #391F16 68%, #21130F 100%);
+  /* V4 (Atmosphere Fusion, 14/11/2026): só a base V4. A luz Páprica própria (--vz-faq-glow-a até 0,72) somava-se à Jade
+     e lavava o fundo atrás dos accordions; a luz é da Jade (css/vz-atmosphere.css). */
+  background-color: var(--vz-atm-shadow, #1A100C);
+  background-image: var(--vz-atm-ground);
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -1941,9 +1960,7 @@ html:not(.s03-motion) .vz-s3-glass-card {
     height: auto;
     box-sizing: border-box;
     padding-block: clamp(66px, 12vw, 92px);
-    background-image:
-      radial-gradient(ellipse 115% 62% at 56% 52%, rgb(var(--env-dark-glow) / var(--vz-faq-glow-a)) 0%, rgb(var(--env-dark-depth) / 0.39) 38%, rgb(var(--env-dark-depth) / 0) 79%),
-      linear-gradient(178deg, #190D0A 0%, #321810 28%, #462016 58%, #24120F 100%);
+    background-image: var(--vz-atm-ground); /* V4: só a base */
   }
 
   .faq.vz-faq .vz-faq__title {
@@ -1994,7 +2011,7 @@ html:not(.s03-motion) .vz-s3-glass-card {
 .site-footer {
   --bf-acc: var(--color-brand-accent);
   --bf-ink: var(--color-text-on-dark);
-  --bf-bg: var(--color-bg-primary);
+  --bf-bg: #1A100C; /* V4 (Atmosphere Fusion, 14/11/2026): a sombra V4 (era o Mocha #5B4632 chapado) */
   --bf-ang: 118deg;
   --bf-b: 58%;
   --bf-px: 50%;
@@ -2713,7 +2730,7 @@ html:not(.s03-motion) .vz-s3-glass-card {
 
   /* headline: o h2 original, Gloock, três linhas literais */
   #o-que-fazemos.s03 .s03-mobile__headline {
-    color: var(--color-graphite);
+    color: var(--color-text-on-dark); /* V4: a 03 é DARK (era Grafite) */
     letter-spacing: -0.025em; /* o −0,045em do prompt funde as serifas do Gloock ("encontrar", "Apenas"); −0,025em as separa (desktop: −0,02em) */
     text-align: left;
     -webkit-hyphens: none;
@@ -2789,7 +2806,7 @@ html:not(.s03-motion) .vz-s3-glass-card {
      parágrafo e das palavras (js/scroll-narrative.js) e termina em 1; aqui só a cor de repouso. */
   #o-que-fazemos.s03 .s03-mobile__narrative .s03__text {
     max-width: none;
-    color: rgb(34 32 29 / var(--s03-text-alpha, var(--color-text-secondary-opacity)));
+    color: rgb(243 237 227 / var(--s03-text-alpha, var(--color-text-secondary-opacity))); /* V4: Marfim (era Grafite) */
     font-weight: var(--font-weight-regular);
     text-align: left;
   }
@@ -2814,7 +2831,7 @@ html:not(.s03-motion) .vz-s3-glass-card {
     inset: -10px -6px;
     z-index: -1;
     border-radius: 30px;
-    background: rgb(243 237 227 / 0.3);
+    background: rgb(26 16 12 / 0.3); /* V4: no escuro, sombra espresso (era Marfim) — mesma geometria e alfa */
     filter: blur(14px);
     pointer-events: none;
   }
@@ -3253,8 +3270,8 @@ html.has-curtain .footer-curtain .site-footer {
 #metodo {
   /* o valor que o campo escuro dava ao texto secundário: com ele, celular e tablet ficam como estavam */
   --text-2: rgb(243 237 227 / 0.95);
-  /* a sombra dos cantos da Hero: com a profundidade (#332B23) as sombras do desktop subiam a #472D24 (Hero: #33251F) */
-  background-color: var(--env-dark-night);
+  /* V4 (Atmosphere Fusion, 14/11/2026): base = sombra V4 (era a sombra dos cantos da Hero, #2C201B) */
+  background-color: var(--vz-atm-shadow, #1A100C);
 }
 
 #metodo > .vz-env {
@@ -3277,20 +3294,9 @@ html.has-curtain .footer-curtain .site-footer {
   height: 100vh;
   height: 100lvh;
   max-height: 100%;
-  background-image:
-    radial-gradient(ellipse 50% 85% at 0% 38%, color-mix(in srgb, var(--env-dark-night) 62%, transparent) 0%, transparent 100%),
-    radial-gradient(ellipse 30% 44% at 61% 25%, rgb(var(--env-dark-glow) / 1) 0%, rgb(var(--env-dark-glow) / 0.6) 42%, transparent 100%),
-    radial-gradient(ellipse 26% 34% at 79% 18%, rgb(var(--env-dark-glow) / 0.42) 0%, transparent 100%),
-    radial-gradient(
-      ellipse 72% 92% at 62% 22%,
-      rgb(var(--env-dark-depth) / 0.95) 0%,
-      rgb(var(--env-dark-depth) / 0.62) 38%,
-      rgb(var(--env-dark-depth) / 0.26) 70%,
-      transparent 100%
-    ),
-    radial-gradient(ellipse 50% 70% at 97% 40%, rgb(var(--env-dark-depth) / 0.4) 0%, transparent 80%),
-    radial-gradient(ellipse 80% 55% at 50% 100%, rgb(var(--env-dark-depth) / 0.16) 0%, transparent 100%),
-    linear-gradient(114deg, rgb(var(--env-dark-depth) / 0.1) 0%, rgb(var(--env-dark-mocha) / 0.26) 50%, transparent 100%);
+  /* V4 (Atmosphere Fusion, 14/11/2026): os sete radiais Páprica daqui repetiam os focos da Jade e lavavam a seção de
+     laranja. A camada (sticky, do tamanho da tela) fica, só com a BASE V4; a luz é da Jade (css/vz-atmosphere.css). */
+  background-image: var(--vz-atm-ground);
   background-repeat: no-repeat;
 }
 
@@ -3299,15 +3305,7 @@ html.has-curtain .footer-curtain .site-footer {
    V7: o linear de 165° vai da profundidade ao Mocha e volta (antes, do Grafite), sob a sombra quente lateral da Hero. */
 @media (max-width: 1023.98px) {
   #metodo > .vz-env::before {
-    background-image:
-      radial-gradient(
-        ellipse 112% 56% at 77% 17%,
-        rgb(var(--env-dark-glow) / 0.67) 0%,
-        rgb(var(--env-dark-depth) / 0.5) 38%,
-        transparent 82%
-      ),
-      linear-gradient(90deg, rgb(var(--env-dark-shade) / 0.5) 0%, rgb(var(--env-dark-shade) / 0.3) 48%, rgb(var(--env-dark-shade) / 0.08) 100%),
-      linear-gradient(165deg, var(--env-dark-deep) 0%, rgb(var(--env-dark-mocha)) 48%, var(--env-dark-deep) 100%);
+    background-image: var(--vz-atm-ground); /* V4: só a base, como no desktop */
   }
 }
 

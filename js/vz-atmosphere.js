@@ -1,5 +1,5 @@
 // =========================================================
-// VIPZUE — Atmosfera V2.0 (prompt mestre definitivo V2.0, 13/11/2026)
+// VIPZUE — Atmosfera V4.0 "Atmosphere Fusion" (14/11/2026), sobre a V2.0 (13/11/2026)
 // Gerenciador do Paper MeshGradient (@paper-design/shaders 0.0.82, vendorizado em assets/vendor/) dentro de
 // .vz-atmosphere__mesh em cada seção [data-vz-atmosphere]. A camada estática Jade Sky (css/vz-atmosphere.css) é o fundo
 // garantido; este script só acrescenta o movimento por cima dela, com opacidade baixa.
@@ -9,6 +9,9 @@
 // - teto de contextos WebGL NOVOS: 2 no desktop, 1 no celular (até 767,98px). As vagas vão para as seções mais visíveis
 //   na tela e MIGRAM entre elas (o mesmo contexto muda de seção); vaga a mais (ex.: a tela encolheu para celular) é
 //   descartada com dispose(), que perde o contexto de propósito;
+// - prioridade pela ÁREA visível na tela (altura visível / altura da tela), não pela razão de interseção (o Método tem
+//   várias telas); quem já tem a vaga só a perde para outra seção com 10 pontos de tela a mais (sem oscilar nas emendas);
+// - o rodapé em cortina conta pelo invólucro [data-footer-curtain] (o trecho já revelado), não pelo rodapé fixo coberto;
 // - vaga sem seção visível para (setSpeed(0)); o próprio ShaderMount também para fora da tela e com a aba oculta;
 // - resolução: celular até DPR 1,25 e 700 mil pixels; desktop até DPR 1,5 e 1,4 milhão;
 // - qualquer falha (sem WebGL2, erro de shader, contexto perdido 3 vezes) deixa só a camada estática;
@@ -22,7 +25,8 @@ const mobileQuery = window.matchMedia("(max-width: 767.98px)");
 const budget = () => (mobileQuery.matches ? 1 : 2);
 
 const PRESETS = {
-  dark: { colors: ["#5B4632", "#9F3930", "#D7673F", "#5B4632"], speed: 0.12 },
+  // V4: sombra → meio-tom Mocha → Páprica Profunda → Páprica (o canvas é opaco; a mistura é a opacidade da camada, no CSS)
+  dark: { colors: ["#1A100C", "#40261C", "#9F3930", "#D7673F"], speed: 0.12 },
   // claro: derivadas do token claro real da seção (--vz-atm-base), ver lightColors()
   light: { speed: 0.08 },
 };
@@ -59,11 +63,14 @@ const entries = [...document.querySelectorAll("[data-vz-atmosphere]")]
     index,
     tone: root.getAttribute("data-vz-atmosphere") === "light" ? "light" : "dark",
     mesh: root.querySelector(":scope > .vz-atmosphere .vz-atmosphere__mesh"),
+    // quem a IntersectionObserver mede: o rodapé fixo da cortina conta pelo invólucro (só o que já foi revelado)
+    watch: root.closest("[data-footer-curtain]") || root,
     slot: null,
     share: 0, // fração da altura da tela ocupada pela seção
   }))
   .filter((e) => e.mesh);
 
+const HOLD = 0.1;
 let unavailable = false;
 let losses = 0;
 let created = 0;
@@ -164,7 +171,9 @@ function reconcile() {
   }
   const n = budget();
   while (slots.length > n) release(slots.reduce((a, b) => ((a.entry ? a.entry.share : 0) <= (b.entry ? b.entry.share : 0) ? a : b)));
-  const wanted = entries.filter((e) => e.share > 0).sort((a, b) => b.share - a.share).slice(0, n);
+  // quem já tem vaga ganha 10 pontos de tela no desempate: a troca só acontece com vantagem clara
+  const score = (e) => e.share + (e.slot ? HOLD : 0);
+  const wanted = entries.filter((e) => e.share > 0).sort((a, b) => score(b) - score(a)).slice(0, n);
   // vagas de seções que saíram da lista: param (setSpeed(0)) e ficam livres para migrar
   const free = slots.filter((s) => !s.entry || !wanted.includes(s.entry));
   free.forEach((s) => s.mount.setSpeed(0));
@@ -187,7 +196,7 @@ if (entries.length) {
     (list) => {
       const vh = window.innerHeight || 1;
       for (const it of list) {
-        const e = entries.find((x) => x.root === it.target);
+        const e = entries.find((x) => x.watch === it.target);
         if (!e) continue;
         e.share = it.isIntersecting ? Math.min(1, it.intersectionRect.height / vh) : 0;
         // fora da tela: para já (a migração, se preciso, vem no reconcile)
@@ -198,7 +207,7 @@ if (entries.length) {
     { threshold: Array.from({ length: 21 }, (_, i) => i / 20) }
   );
   // a 1ª película só nasce com a página ociosa: não disputa o carregamento da Hero
-  const start = () => entries.forEach((e) => io.observe(e.root));
+  const start = () => entries.forEach((e) => io.observe(e.watch));
   if ("requestIdleCallback" in window) requestIdleCallback(start, { timeout: 2500 });
   else setTimeout(start, 1200);
 

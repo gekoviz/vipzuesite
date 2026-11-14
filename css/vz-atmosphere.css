@@ -1,35 +1,95 @@
 /* =========================================================
-   VIPZUE — Atmosfera V2.0 (prompt mestre definitivo V2.0, 13/11/2026)
-   Fusão de duas camadas atrás do conteúdo de cada seção marcada com data-vz-atmosphere="dark|light":
-   1. Jade Sky: quatro radiais estáticos em CSS (.vz-atmosphere__jade::before). É o fundo garantido: funciona sem JS,
-      sem WebGL e com movimento reduzido.
-   2. Paper MeshGradient: shader WebGL lento (js/vz-atmosphere.js + assets/vendor/paper-shaders-mesh-0.0.82.mjs), num
-      canvas dentro de .vz-atmosphere__mesh, com opacidade baixa (--vz-atm-mesh-opacity).
-   Nenhum fundo, token, altura, display, position ou overflow dos roots é tocado aqui: a camada é absoluta dentro do root,
-   que já é position: relative + isolation: isolate (css/vz-mesh-overlay.css, [data-vz-mesh], estado publicado).
-   Tirar o atributo, o markup ou este arquivo devolve cada seção ao aspecto anterior.
+   VIPZUE — Atmosfera V4.0 "Atmosphere Fusion" (prompt mestre V4.0, 14/11/2026; sobre a V2.0 de 13/11/2026)
+   Fusão de duas camadas atrás do conteúdo de cada seção marcada com data-vz-atmosphere="dark":
+   1. Jade Sky: quatro radiais elípticos estáticos em CSS (.vz-atmosphere__jade::before). É a ILUMINAÇÃO garantida:
+      funciona sem JS, sem WebGL e com movimento reduzido. Nunca define a base (fica transparente fora dos focos).
+   2. Paper MeshGradient: shader WebGL lento (js/vz-atmosphere.js + assets/vendor/paper-shaders-mesh-0.0.82.js), num
+      canvas dentro de .vz-atmosphere__mesh--live, a --vz-atm-mesh-opacity sobre a Jade.
+   A BASE escura (sombra espresso-Mocha) é do próprio host (fundo da seção ou do palco) e usa --vz-atm-ground, definido
+   aqui como token de ambiente. V4: as sete regiões são DARK; o preset LIGHT fica só como salvaguarda (nenhum host o usa).
+   Nenhuma altura, display, position ou overflow dos roots é tocado aqui: a camada é absoluta dentro do root, que já é
+   position: relative + isolation: isolate (css/vz-mesh-overlay.css, [data-vz-mesh], estado publicado).
    ========================================================= */
 
-/* ---------- Presets ---------- */
+/* ---------- Preset DARK (V4) ---------- */
 [data-vz-atmosphere="dark"] {
-  --vz-atm-a: rgba(215, 103, 63, 0.28);  /* Páprica */
-  --vz-atm-b: rgba(159, 57, 48, 0.26);   /* Páprica Profunda */
-  --vz-atm-c: rgba(91, 70, 50, 0.55);    /* Mocha Profundo */
-  --vz-atm-d: rgba(215, 103, 63, 0.10);  /* Páprica */
-  --vz-atm-mesh-opacity: 0.14;           /* teto 0.18 */
+  /* âncoras institucionais (não são tokens novos de marca: os mesmos HEX de css/tokens.css) */
+  --vz-atm-brand-mocha: #5B4632;
+  --vz-atm-brand-paprika: #D7673F;
+  --vz-atm-brand-deep: #9F3930;
+  /* derivados técnicos de ambiente: Mocha + 28% de Páprica Profunda (#6E4231) misturado ao preto a 24/38/58/78% */
+  --vz-atm-shadow: #1A100C;
+  --vz-atm-base-dark: #2A1913;
+  --vz-atm-mid-dark: #40261C;
+  --vz-atm-lift-dark: #563326;
+  /* base de cada host: sombra profunda com meio-tom quente em diagonal (sem foco: a luz é da Jade) */
+  /* simétrica na vertical: o pé de uma seção e o topo da seguinte têm o mesmo tom (emenda sem faixa) */
+  --vz-atm-ground: linear-gradient(180deg, var(--vz-atm-shadow) 0%, #22150F 34%, var(--vz-atm-base-dark) 52%, #22150F 70%, var(--vz-atm-shadow) 100%);
+
+  /* Jade, desktop: A luz de borda no alto à esquerda · B foco inferior central, além do quadro · C calor secundário à
+     direita · D ponte difusa */
+  --vz-atm-a-x: 0%;
+  --vz-atm-a-y: 2%;   /* calibrado: −6% → 2% (≤ 10 pontos), para o núcleo ficar abaixo da emenda dissolvida */
+  --vz-atm-a-rx: 41%; /* +15% */
+  --vz-atm-a-ry: 50%; /* +15% */
+  --vz-atm-b-x: 50%;
+  --vz-atm-b-y: 103%;  /* calibrado: 110% → 103% (o pé da seção dissolve os últimos 96px) */
+  --vz-atm-b-rx: 52%;  /* +13% */
+  --vz-atm-b-ry: 48%;  /* +9% */
+  --vz-atm-c-x: 76%;
+  --vz-atm-c-y: 44%;
+  --vz-atm-c-rx: 40%;
+  --vz-atm-c-ry: 55%;
+  --vz-atm-d-x: 28%;
+  --vz-atm-d-y: 70%;
+  --vz-atm-d-rx: 58%;
+  --vz-atm-d-ry: 66%;
+  /* intensidade dos núcleos (faixas do prompt: A/B .80–1, C .45–.70, D .20–.38) */
+  --vz-atm-a-k: 0.95;
+  --vz-atm-b-k: 0.98;
+  --vz-atm-c-k: 0.45; /* calibrado: 0,62 virava uma esfera vermelha à direita; fica no piso da faixa */
+  --vz-atm-d-k: 0.32;
+  --vz-atm-mesh-opacity: 0.24; /* faixa .20–.30 */
 }
+
+/* O celular mantém a mesma força: só muda a geometria (elipses largas, focos nas bordas) */
+@media (max-width: 767.98px) {
+  [data-vz-atmosphere="dark"] {
+    --vz-atm-a-x: 0%;
+    --vz-atm-a-y: -5%;
+    --vz-atm-a-rx: 70%;
+    --vz-atm-a-ry: 32%;
+    --vz-atm-b-x: 54%;
+    --vz-atm-b-y: 108%;
+    --vz-atm-b-rx: 80%;
+    --vz-atm-b-ry: 40%;
+    --vz-atm-c-x: 90%;
+    --vz-atm-c-y: 54%;
+    --vz-atm-c-rx: 58%;
+    --vz-atm-c-ry: 48%;
+    --vz-atm-d-x: 15%;
+    --vz-atm-d-y: 72%;
+    --vz-atm-d-rx: 90%;
+    --vz-atm-d-ry: 62%;
+  }
+}
+
+/* ---------- Preset LIGHT: salvaguarda de migração (V2.0), sem host na V4 ---------- */
 [data-vz-atmosphere="light"] {
-  --vz-atm-a: rgba(215, 103, 63, 0.075); /* Páprica */
-  --vz-atm-b: rgba(159, 57, 48, 0.04);   /* Páprica Profunda */
-  --vz-atm-c: rgba(91, 70, 50, 0.025);   /* Mocha */
-  --vz-atm-d: rgba(215, 103, 63, 0.035); /* Páprica */
-  --vz-atm-mesh-opacity: 0.055;          /* teto 0.075 */
-  /* token claro REAL da seção: o shader deriva dele as quatro cores (js/vz-atmosphere.js) */
+  --vz-atm-mesh-opacity: 0.055;
   --vz-atm-base: var(--color-bg-secondary);
 }
 
 /* ---------- Estrutura ---------- */
 [data-vz-atmosphere] > .vz-atmosphere {
+  /* Emendas: a Jade e o Paper chegam às bordas de cima e de baixo da SEÇÃO já dissolvidos (o quadro sticky continua
+     inteiro no meio de seções longas). Sem isso, o foco B de uma seção encostava no topo escuro da seguinte (linha).
+     A Hero (wipe da Visão) e a FAQ (entrada própria) compõem as suas abaixo. */
+  --vz-atm-edge-top: 32px;
+  --vz-atm-edge-bottom: 96px;
+  --vz-atm-edges: linear-gradient(to bottom, transparent 0, #000 var(--vz-atm-edge-top), #000 calc(100% - var(--vz-atm-edge-bottom)), transparent 100%);
+  -webkit-mask-image: var(--vz-atm-edges);
+  mask-image: var(--vz-atm-edges);
   position: absolute;
   inset: 0;
   z-index: -1; /* atrás do conteúdo; acima do fundo do root isolado e das camadas -1 que vêm antes no DOM */
@@ -37,6 +97,10 @@
   user-select: none;
   overflow: hidden;
   overflow: clip; /* recorta sem virar contêiner de rolagem: o quadro abaixo consegue ficar preso */
+}
+.vz-atmosphere,
+.vz-atmosphere * {
+  pointer-events: none;
 }
 /* O quadro: do tamanho da tela (ou da seção, se ela for mais baixa), preso ao topo enquanto a seção passa. Assim as
    seções longas (Método) têm atmosfera em toda a rolagem, com a composição medida na tela e um canvas do tamanho da tela. */
@@ -57,25 +121,60 @@
   position: absolute;
   pointer-events: none;
 }
+/* suavização só da Jade (nunca do shader, do conteúdo, da águia ou do vidro) */
 .vz-atmosphere__jade {
-  inset: -0.8cqmin;
-  filter: blur(0.4cqmin);
+  inset: -8px;
+  filter: blur(8px);
+}
+@supports (width: 1cqmin) {
+  .vz-atmosphere__jade {
+    inset: -0.8cqmin;
+    filter: blur(0.4cqmin);
+  }
 }
 .vz-atmosphere__jade::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image:
-    radial-gradient(at 65.34% 44.62%, var(--vz-atm-a) 0px, transparent 34.1%),
-    radial-gradient(at 28.07% 74.48%, var(--vz-atm-b) 0px, transparent 45.65%),
-    radial-gradient(at 52.42% 19.94%, var(--vz-atm-c) 0px, transparent 57.55%),
-    radial-gradient(at 80.31% 84.47%, var(--vz-atm-d) 0px, transparent 69.1%);
+  background-color: transparent;
 }
+[data-vz-atmosphere="dark"] .vz-atmosphere__jade::before {
+  background-image:
+    radial-gradient(
+      ellipse var(--vz-atm-a-rx) var(--vz-atm-a-ry) at var(--vz-atm-a-x) var(--vz-atm-a-y),
+      rgb(215 103 63 / var(--vz-atm-a-k)) 0%,
+      rgb(215 103 63 / 0.5) 12%,
+      rgb(159 57 48 / 0.22) 38%,
+      rgb(159 57 48 / 0) 72%
+    ),
+    radial-gradient(
+      ellipse var(--vz-atm-b-rx) var(--vz-atm-b-ry) at var(--vz-atm-b-x) var(--vz-atm-b-y),
+      rgb(215 103 63 / var(--vz-atm-b-k)) 0%,
+      rgb(215 103 63 / 0.65) 12%,
+      rgb(159 57 48 / 0.38) 38%,
+      rgb(159 57 48 / 0) 76%
+    ),
+    radial-gradient(
+      ellipse var(--vz-atm-c-rx) var(--vz-atm-c-ry) at var(--vz-atm-c-x) var(--vz-atm-c-y),
+      rgb(159 57 48 / var(--vz-atm-c-k)) 0%,
+      rgb(215 103 63 / 0.2) 24%,
+      rgb(159 57 48 / 0.12) 50%,
+      rgb(159 57 48 / 0) 80%
+    ),
+    radial-gradient(
+      ellipse var(--vz-atm-d-rx) var(--vz-atm-d-ry) at var(--vz-atm-d-x) var(--vz-atm-d-y),
+      rgb(159 57 48 / var(--vz-atm-d-k)) 0%,
+      rgb(159 57 48 / 0.12) 45%,
+      rgb(159 57 48 / 0) 86%
+    );
+}
+/* Paper: o placeholder do markup fica vazio e transparente; a camada viva (criada pelo script, irmã dele) entra a
+   --vz-atm-mesh-opacity depois do 1º quadro válido */
 .vz-atmosphere__mesh {
   inset: 0;
-  opacity: 0; /* só aparece com o shader vivo (classe posta pelo script); sem ele fica a Jade */
-  color: var(--vz-atm-base, transparent); /* o script lê o token claro já resolvido em rgb() */
-  transition: opacity 1.2s ease;
+  opacity: 0;
+  color: var(--vz-atm-base, transparent); /* o script lê o token claro já resolvido em rgb() (preset LIGHT) */
+  transition: opacity 0.7s ease;
 }
 .vz-atmosphere__mesh.is-live {
   opacity: var(--vz-atm-mesh-opacity);
@@ -88,13 +187,12 @@
 
 /* ---------- Por seção ---------- */
 /* Proteção de leitura (legibilidade acima da referência): onde a headline tem palavras em Páprica, a atmosfera recua
-   atrás do bloco do texto (fica a --vz-atm-guard da força) e volta inteira em volta dele. Os valores do preset não
-   mudam; só a máscara da camada. Medido: sem ela, "presença digital"/"forte" da CTA caíam para 2,6–2,9:1 a 1440. */
+   atrás do bloco do texto (fica --vz-atm-guard da força) e volta inteira em volta dele. Só a máscara da camada. */
 [data-vz-atmosphere] {
   --vz-atm-guard: rgba(0, 0, 0, 0.22);
 }
-/* Hero: sem foco atrás da headline (§ Hero do prompt) e, na passagem para a Seção 03, a mesma máscara do halo
-   (--wipe-hide, posta por js/hero.js no palco). Headline: coluna esquerda no desktop, topo no celular. */
+/* Hero: sem foco atrás da headline e, na passagem para a Seção 03, a mesma máscara do halo (--wipe-hide, posta por
+   js/hero.js no palco). Headline: coluna esquerda no desktop, topo no celular. */
 .hero__stage > .vz-atmosphere {
   --vz-atm-hole: radial-gradient(ellipse 34% 24% at 26% 45%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
   -webkit-mask-image: var(--vz-atm-hole), var(--wipe-hide, linear-gradient(#000, #000));
@@ -104,33 +202,37 @@
 }
 /* CTA: headline e subheadline à esquerda (≥ 1024px: 7–55% × 34–69% da seção) ou no topo (abaixo: 5–36%) */
 #contato > .vz-atmosphere {
-  -webkit-mask-image: radial-gradient(ellipse 36% 28% at 30% 50%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
-  mask-image: radial-gradient(ellipse 36% 28% at 30% 50%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+  --vz-atm-hole: radial-gradient(ellipse 36% 28% at 30% 50%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+  -webkit-mask-image: var(--vz-atm-hole), var(--vz-atm-edges);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--vz-atm-hole), var(--vz-atm-edges);
+  mask-composite: intersect;
 }
 @media (max-width: 1023.98px) {
   .hero__stage > .vz-atmosphere {
     --vz-atm-hole: radial-gradient(ellipse 70% 16% at 50% 14%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
   }
   #contato > .vz-atmosphere {
-    -webkit-mask-image: radial-gradient(ellipse 70% 18% at 50% 27%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
-    mask-image: radial-gradient(ellipse 70% 18% at 50% 27%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+    --vz-atm-hole: radial-gradient(ellipse 70% 18% at 50% 27%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
   }
 }
 @media (max-width: 767.98px) {
   #contato > .vz-atmosphere {
-    -webkit-mask-image: radial-gradient(ellipse 72% 16% at 50% 13%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
-    mask-image: radial-gradient(ellipse 72% 16% at 50% 13%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+    --vz-atm-hole: radial-gradient(ellipse 72% 16% at 50% 13%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
   }
 }
-/* FAQ: a única emenda escuro/escuro (CTA → FAQ). Como a película V6.1 (correção V7, tarefa I), a atmosfera nasce do
-   escuro: transparente na borda de cima, inteira depois de --vz-faq-atm-in. */
+/* FAQ: a atmosfera nasce do escuro na emenda CTA → FAQ (transparente na borda de cima, inteira depois de
+   --vz-faq-atm-in), sem linha nem faixa. */
 #faq > .vz-atmosphere {
   --vz-faq-atm-in: clamp(160px, 28svh, 280px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, calc(var(--vz-faq-atm-in) * 0.6), #000 var(--vz-faq-atm-in));
-  mask-image: linear-gradient(to bottom, transparent 0, calc(var(--vz-faq-atm-in) * 0.6), #000 var(--vz-faq-atm-in));
+  --vz-atm-edges: linear-gradient(to bottom, transparent 0, calc(var(--vz-faq-atm-in) * 0.6), #000 var(--vz-faq-atm-in), #000 calc(100% - var(--vz-atm-edge-bottom)), transparent 100%);
+}
+/* rodapé: é o fim da página — a luz do pé fica inteira */
+.site-footer > .vz-atmosphere {
+  --vz-atm-edge-bottom: 0px;
 }
 
-/* ---------- Movimento reduzido: só a camada estática ---------- */
+/* ---------- Movimento reduzido: só a camada estática (o Paper não nasce; os efeitos antigos não mudam) ---------- */
 @media (prefers-reduced-motion: reduce) {
   .vz-atmosphere__mesh { display: none; }
 }

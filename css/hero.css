@@ -615,8 +615,9 @@
 .next-section {
   position: relative;
   z-index: 1;
-  background: var(--color-bg-secondary);
-  color: var(--color-text-on-light);
+  /* V4 (Atmosphere Fusion, 14/11/2026): a 03 é DARK — sem o campo de luz, a sombra profunda da V4 (era o Marfim) */
+  background: #1A100C;
+  color: var(--color-text-on-dark);
   padding-block: var(--section-space-default);
 }
 
@@ -1517,12 +1518,12 @@
 /* ---------- Fundo: base espresso que recebe a luz (campo de luz, Jade Sky + Paper MeshGradient da atmosfera V2.0) ----------
    Camadas: campo de luz (página) → .hero__bg (base espresso translúcida + luz quente no canto e embaixo) → atmosfera
    V2.0 (Jade + mesh) → véu tonal → grade → águia → texto → cards → cabeçalho. */
+/* V4 (Atmosphere Fusion, 14/11/2026): .hero__bg é só a BASE — sombra espresso translúcida sobre o campo de luz (que
+   continua respirando por baixo). A luz de canto e a do pé deixaram de ser pintadas aqui e no véu: o dono delas é a
+   Jade Sky (focos A e B, css/vz-atmosphere.css). Sem WebGL o campo some e esta base fica sobre o fundo sólido do palco. */
 .hero .hero__bg,
 .has-light-field .hero__bg {
-  background:
-    radial-gradient(ellipse 50% 46% at 0% 0%, rgb(215 103 63 / 0.55) 0%, rgb(159 57 48 / 0.22) 42%, transparent 72%),
-    radial-gradient(ellipse 58% 40% at 55% 108%, rgb(215 103 63 / 0.5) 0%, rgb(159 57 48 / 0.24) 45%, transparent 74%),
-    linear-gradient(135deg, rgb(52 17 8 / 0.88) 0%, rgb(30 10 5 / 0.9) 50%, rgb(56 18 9 / 0.88) 100%);
+  background: linear-gradient(160deg, rgb(42 25 19 / 0.86) 0%, rgb(26 16 12 / 0.92) 46%, rgb(32 20 15 / 0.9) 74%, rgb(26 16 12 / 0.92) 100%);
 }
 
 /* halo atrás da cabeça: quente e discreto (sem auréola neon) */
@@ -1541,12 +1542,9 @@
 }
 
 .hero__veil {
-  /* acima da atmosfera: a luz quente da referência (canto superior esquerdo e pé da tela) e um véu espresso avermelhado
-     de 16% (dentro da faixa 0–22% do prompt). A atmosfera continua visível por baixo. */
-  background:
-    radial-gradient(ellipse 46% 44% at 0% 0%, rgb(232 98 50 / 0.42) 0%, rgb(159 57 48 / 0.16) 45%, transparent 72%),
-    radial-gradient(ellipse 46% 30% at 52% 104%, rgb(232 98 50 / 0.5) 0%, rgb(159 57 48 / 0.2) 48%, transparent 76%),
-    rgb(48 12 4 / 0.16);
+  /* acima da atmosfera: só o véu tonal espresso de 10% (faixa 0–22% da Hero V3). V4: os dois focos que ele repetia
+     (canto e pé) saíram; quem os pinta é a Jade. Elemento, ordem e máscara de saída (--wipe-hide) iguais. */
+  background: rgb(26 16 12 / 0.1);
 }
 
 .hero__grid {
@@ -1561,9 +1559,8 @@
 /* base: a plumagem afunda no espresso e a luz Páprica sobe do pé da tela */
 .hero__atmosphere {
   height: 42%;
-  background:
-    radial-gradient(ellipse 40% 32% at 52% 106%, rgb(215 103 63 / 0.46) 0%, rgb(215 103 63 / 0) 72%),
-    linear-gradient(0deg, rgb(23 10 6 / 0.82) 0%, rgb(23 10 6 / 0.4) 32%, rgb(23 10 6 / 0) 100%);
+  /* V4: só o afundamento da plumagem na sombra; a luz do pé é a Jade B */
+  background: linear-gradient(0deg, rgb(26 16 12 / 0.78) 0%, rgb(26 16 12 / 0.36) 32%, rgb(26 16 12 / 0) 100%);
 }
 
 /* ---------- Display Cards: geometria (desktop) ---------- */
