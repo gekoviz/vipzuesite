@@ -1,0 +1,136 @@
+/* =========================================================
+   VIPZUE — Atmosfera V2.0 (prompt mestre definitivo V2.0, 13/11/2026)
+   Fusão de duas camadas atrás do conteúdo de cada seção marcada com data-vz-atmosphere="dark|light":
+   1. Jade Sky: quatro radiais estáticos em CSS (.vz-atmosphere__jade::before). É o fundo garantido: funciona sem JS,
+      sem WebGL e com movimento reduzido.
+   2. Paper MeshGradient: shader WebGL lento (js/vz-atmosphere.js + assets/vendor/paper-shaders-mesh-0.0.82.mjs), num
+      canvas dentro de .vz-atmosphere__mesh, com opacidade baixa (--vz-atm-mesh-opacity).
+   Nenhum fundo, token, altura, display, position ou overflow dos roots é tocado aqui: a camada é absoluta dentro do root,
+   que já é position: relative + isolation: isolate (css/vz-mesh-overlay.css, [data-vz-mesh], estado publicado).
+   Tirar o atributo, o markup ou este arquivo devolve cada seção ao aspecto anterior.
+   ========================================================= */
+
+/* ---------- Presets ---------- */
+[data-vz-atmosphere="dark"] {
+  --vz-atm-a: rgba(215, 103, 63, 0.28);  /* Páprica */
+  --vz-atm-b: rgba(159, 57, 48, 0.26);   /* Páprica Profunda */
+  --vz-atm-c: rgba(91, 70, 50, 0.55);    /* Mocha Profundo */
+  --vz-atm-d: rgba(215, 103, 63, 0.10);  /* Páprica */
+  --vz-atm-mesh-opacity: 0.14;           /* teto 0.18 */
+}
+[data-vz-atmosphere="light"] {
+  --vz-atm-a: rgba(215, 103, 63, 0.075); /* Páprica */
+  --vz-atm-b: rgba(159, 57, 48, 0.04);   /* Páprica Profunda */
+  --vz-atm-c: rgba(91, 70, 50, 0.025);   /* Mocha */
+  --vz-atm-d: rgba(215, 103, 63, 0.035); /* Páprica */
+  --vz-atm-mesh-opacity: 0.055;          /* teto 0.075 */
+  /* token claro REAL da seção: o shader deriva dele as quatro cores (js/vz-atmosphere.js) */
+  --vz-atm-base: var(--color-bg-secondary);
+}
+
+/* ---------- Estrutura ---------- */
+[data-vz-atmosphere] > .vz-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1; /* atrás do conteúdo; acima do fundo do root isolado e das camadas -1 que vêm antes no DOM */
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+  overflow: clip; /* recorta sem virar contêiner de rolagem: o quadro abaixo consegue ficar preso */
+}
+/* O quadro: do tamanho da tela (ou da seção, se ela for mais baixa), preso ao topo enquanto a seção passa. Assim as
+   seções longas (Método) têm atmosfera em toda a rolagem, com a composição medida na tela e um canvas do tamanho da tela. */
+[data-vz-atmosphere] > .vz-atmosphere > .vz-atmosphere__frame {
+  position: sticky;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 100vh;
+  max-height: 100lvh;
+  overflow: hidden;
+  overflow: clip;
+  container-type: size;
+}
+.vz-atmosphere__jade,
+.vz-atmosphere__mesh {
+  position: absolute;
+  pointer-events: none;
+}
+.vz-atmosphere__jade {
+  inset: -0.8cqmin;
+  filter: blur(0.4cqmin);
+}
+.vz-atmosphere__jade::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(at 65.34% 44.62%, var(--vz-atm-a) 0px, transparent 34.1%),
+    radial-gradient(at 28.07% 74.48%, var(--vz-atm-b) 0px, transparent 45.65%),
+    radial-gradient(at 52.42% 19.94%, var(--vz-atm-c) 0px, transparent 57.55%),
+    radial-gradient(at 80.31% 84.47%, var(--vz-atm-d) 0px, transparent 69.1%);
+}
+.vz-atmosphere__mesh {
+  inset: 0;
+  opacity: 0; /* só aparece com o shader vivo (classe posta pelo script); sem ele fica a Jade */
+  color: var(--vz-atm-base, transparent); /* o script lê o token claro já resolvido em rgb() */
+  transition: opacity 1.2s ease;
+}
+.vz-atmosphere__mesh.is-live {
+  opacity: var(--vz-atm-mesh-opacity);
+}
+.vz-atmosphere__mesh canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Por seção ---------- */
+/* Proteção de leitura (legibilidade acima da referência): onde a headline tem palavras em Páprica, a atmosfera recua
+   atrás do bloco do texto (fica a --vz-atm-guard da força) e volta inteira em volta dele. Os valores do preset não
+   mudam; só a máscara da camada. Medido: sem ela, "presença digital"/"forte" da CTA caíam para 2,6–2,9:1 a 1440. */
+[data-vz-atmosphere] {
+  --vz-atm-guard: rgba(0, 0, 0, 0.22);
+}
+/* Hero: sem foco atrás da headline (§ Hero do prompt) e, na passagem para a Seção 03, a mesma máscara do halo
+   (--wipe-hide, posta por js/hero.js no palco). Headline: coluna esquerda no desktop, topo no celular. */
+.hero__stage > .vz-atmosphere {
+  --vz-atm-hole: radial-gradient(ellipse 34% 24% at 26% 45%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+  -webkit-mask-image: var(--vz-atm-hole), var(--wipe-hide, linear-gradient(#000, #000));
+  -webkit-mask-composite: source-in;
+  mask-image: var(--vz-atm-hole), var(--wipe-hide, linear-gradient(#000, #000));
+  mask-composite: intersect;
+}
+/* CTA: headline e subheadline à esquerda (≥ 1024px: 7–55% × 34–69% da seção) ou no topo (abaixo: 5–36%) */
+#contato > .vz-atmosphere {
+  -webkit-mask-image: radial-gradient(ellipse 36% 28% at 30% 50%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+  mask-image: radial-gradient(ellipse 36% 28% at 30% 50%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+}
+@media (max-width: 1023.98px) {
+  .hero__stage > .vz-atmosphere {
+    --vz-atm-hole: radial-gradient(ellipse 70% 16% at 50% 14%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+  }
+  #contato > .vz-atmosphere {
+    -webkit-mask-image: radial-gradient(ellipse 70% 18% at 50% 27%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+    mask-image: radial-gradient(ellipse 70% 18% at 50% 27%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+  }
+}
+@media (max-width: 767.98px) {
+  #contato > .vz-atmosphere {
+    -webkit-mask-image: radial-gradient(ellipse 72% 16% at 50% 13%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+    mask-image: radial-gradient(ellipse 72% 16% at 50% 13%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+  }
+}
+/* FAQ: a única emenda escuro/escuro (CTA → FAQ). Como a película V6.1 (correção V7, tarefa I), a atmosfera nasce do
+   escuro: transparente na borda de cima, inteira depois de --vz-faq-atm-in. */
+#faq > .vz-atmosphere {
+  --vz-faq-atm-in: clamp(160px, 28svh, 280px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, calc(var(--vz-faq-atm-in) * 0.6), #000 var(--vz-faq-atm-in));
+  mask-image: linear-gradient(to bottom, transparent 0, calc(var(--vz-faq-atm-in) * 0.6), #000 var(--vz-faq-atm-in));
+}
+
+/* ---------- Movimento reduzido: só a camada estática ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .vz-atmosphere__mesh { display: none; }
+}

@@ -49,6 +49,8 @@
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/sections.css">
   <link rel="stylesheet" href="css/vz-mesh-overlay.css">
+  <link rel="stylesheet" href="css/vz-atmosphere.css">
+  <link rel="modulepreload" href="assets/vendor/paper-shaders-mesh-0.0.82.js">
 </head>
 <body>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -98,7 +100,7 @@
   <main id="conteudo">
     <!-- 01 — HERO: ~3 telas de rolagem (apresentação → transformação → passagem ao conteúdo) -->
     <section class="hero" aria-labelledby="hero-title" data-hero>
-      <div class="hero__stage" data-vz-mesh="dark" data-vz-mesh-calm="[data-visao-shade]">
+      <div class="hero__stage" data-vz-mesh="dark" data-vz-atmosphere="dark" data-vz-mesh-calm="[data-visao-shade]">
         <!-- Ambiente low-key de estúdio: parede, luz principal superior-esquerda, sombra e textura (CSS) -->
         <div class="hero__bg" aria-hidden="true">
           <div class="hero__light" data-hero-light></div>
@@ -107,6 +109,9 @@
           <div class="hero__vignette"></div>
           <div class="hero__grain"></div>
         </div>
+
+        <!-- Atmosfera V2.0: Jade Sky estática + Paper MeshGradient (css/vz-atmosphere.css, js/vz-atmosphere.js) -->
+        <div class="vz-atmosphere" aria-hidden="true"><div class="vz-atmosphere__frame"><div class="vz-atmosphere__jade"></div><div class="vz-atmosphere__mesh"></div></div></div>
 
         <div class="hero__figure" aria-hidden="true" data-hero-figure>
           <div class="hero__eagle" data-hero-eagle>
@@ -213,7 +218,9 @@
          Celular (≤ 767px, 08/11/2026): composição editorial com a MESMA narrativa do desktop — headline em três linhas
          (os três spans abaixo; no desktop eles são inline e a quebra continua a do <br>), a mesma águia no galho no alto
          à direita, os três textos sem placa no lugar dos painéis e os quatro cards na coluna 1 × 4 já publicada, depois do palco (V3.1). -->
-    <section class="next-section s03 s03--editorial-mobile" id="o-que-fazemos" aria-labelledby="s03-title" data-next data-s03 data-vz-mesh="light">
+    <section class="next-section s03 s03--editorial-mobile" id="o-que-fazemos" aria-labelledby="s03-title" data-next data-s03 data-vz-mesh="light" data-vz-atmosphere="light">
+      <!-- Atmosfera V2.0: Jade Sky estática + Paper MeshGradient (css/vz-atmosphere.css, js/vz-atmosphere.js) -->
+      <div class="vz-atmosphere" aria-hidden="true"><div class="vz-atmosphere__frame"><div class="vz-atmosphere__jade"></div><div class="vz-atmosphere__mesh"></div></div></div>
       <div class="s03__stage" data-s03-stage>
         <div class="s03__figure" data-s03-figure aria-hidden="true">
           <img class="s03__eagle s03-mobile__eagle" src="assets/secao03/aguia-galho-960.webp" srcset="assets/secao03/aguia-galho-960.webp 960w, assets/secao03/aguia-galho-1536.webp 1536w" sizes="52vw" width="1536" height="1024" alt="" decoding="async" loading="lazy" draggable="false">
@@ -331,9 +338,11 @@
          ("O que entregamos é" / "uma página.") e, à direita, o parágrafo .why__aside no lugar da subheadline antiga.
          Abaixo de 1024px a composição não muda (§66): as linhas da headline ficam em linha e a subheadline antiga continua;
          o .why__aside só existe no desktop. O fundo deixou o campo WebGL e é CSS em todas as larguras. -->
-    <section class="section surface-dark why" id="metodo" aria-labelledby="method-title" data-vz-mesh="dark">
+    <section class="section surface-dark why" id="metodo" aria-labelledby="method-title" data-vz-mesh="dark" data-vz-atmosphere="dark">
       <!-- V7: luz do ambiente escuro presa à tela durante toda a seção (decorativa; css/sections.css, "04 — Método, fundo") -->
       <span class="vz-env" aria-hidden="true"></span>
+      <!-- Atmosfera V2.0: Jade Sky estática + Paper MeshGradient (css/vz-atmosphere.css, js/vz-atmosphere.js) -->
+      <div class="vz-atmosphere" aria-hidden="true"><div class="vz-atmosphere__frame"><div class="vz-atmosphere__jade"></div><div class="vz-atmosphere__mesh"></div></div></div>
       <div class="container">
         <header class="why__head">
           <h2 class="t-display-l why__title" id="method-title" data-reveal="fade-up"><span class="why__title-line">O que entregamos é</span> <span class="why__title-line">uma página.</span></h2>
@@ -364,7 +373,9 @@
     </section>
 
     <!-- 05 — PARA QUEM É (rodada 4): copy nova (E-b) e três cards com ilustração; mosaico no desktop. -->
-    <section id="para-quem-e" class="section surface-beige audience pq" aria-labelledby="pq-title" data-vz-mesh="light">
+    <section id="para-quem-e" class="section surface-beige audience pq" aria-labelledby="pq-title" data-vz-mesh="light" data-vz-atmosphere="light">
+      <!-- Atmosfera V2.0: Jade Sky estática + Paper MeshGradient (css/vz-atmosphere.css, js/vz-atmosphere.js) -->
+      <div class="vz-atmosphere" aria-hidden="true"><div class="vz-atmosphere__frame"><div class="vz-atmosphere__jade"></div><div class="vz-atmosphere__mesh"></div></div></div>
       <span class="veil veil--long veil--start" aria-hidden="true"></span>
       <div class="pq__inner">
         <header class="pq__head">
@@ -455,7 +466,9 @@
 
     <!-- 06 — CTA FINAL (8.7). V4.0 (08/11/2026): headline, subheadline e botão do prompt "SEÇÃO CTA FINAL"; o aviso do
          WhatsApp saiu. Quebras: <br> por largura (desktop 4 linhas, celular 3), um único título; o texto lido é a frase inteira. -->
-    <section class="section surface-dark closing vz-cta--v4" id="contato" aria-labelledby="closing-title" data-vz-mesh="dark">
+    <section class="section surface-dark closing vz-cta--v4" id="contato" aria-labelledby="closing-title" data-vz-mesh="dark" data-vz-atmosphere="dark">
+      <!-- Atmosfera V2.0: Jade Sky estática + Paper MeshGradient (css/vz-atmosphere.css, js/vz-atmosphere.js) -->
+      <div class="vz-atmosphere" aria-hidden="true"><div class="vz-atmosphere__frame"><div class="vz-atmosphere__jade"></div><div class="vz-atmosphere__mesh"></div></div></div>
       <div class="container closing__grid vz-cta__layout">
         <div class="vz-cta__copy">
           <h2 class="t-display-xl closing__title vz-cta__headline" id="closing-title" data-reveal>Tenha agora uma<br class="vz-cta__br--desktop"> <span class="vz-cta__accent">presença digital</span><br class="vz-cta__br--mobile"> <span class="vz-cta__forte">forte</span><br class="vz-cta__br--desktop"> que informa e gera mais<br class="vz-cta__br--both"> interesse pros seus clientes.</h2>
@@ -484,7 +497,9 @@
     <!-- 07 — FAQ · V5.0 (08/11/2026, prompt "VIPZUE — PROMPT MESTRE DE IMPLEMENTAÇÃO V5.0"): cinco perguntas com a copy literal
          do prompt (saíram a pergunta sobre design e site e a do orçamento; entraram prazo e processo). O título já vem em
          duas palavras (a entrada as revela uma a uma, js/sections.js); o espaço entre elas é texto real, então a frase é lida inteira. -->
-    <section class="section surface-dark faq vz-faq" id="faq" aria-labelledby="faq-title" data-vz-mesh="dark">
+    <section class="section surface-dark faq vz-faq" id="faq" aria-labelledby="faq-title" data-vz-mesh="dark" data-vz-atmosphere="dark">
+      <!-- Atmosfera V2.0: Jade Sky estática + Paper MeshGradient (css/vz-atmosphere.css, js/vz-atmosphere.js) -->
+      <div class="vz-atmosphere" aria-hidden="true"><div class="vz-atmosphere__frame"><div class="vz-atmosphere__jade"></div><div class="vz-atmosphere__mesh"></div></div></div>
       <span class="veil veil--short veil--start" aria-hidden="true"></span>
       <div class="container faq__grid">
         <h2 class="t-display-l faq__title vz-faq__title" id="faq-title" data-faq-title><span class="faq__word vz-faq__title-word">Perguntas</span> <span class="faq__word vz-faq__title-word">frequentes</span></h2>
@@ -556,7 +571,9 @@
        pendentes: sem destino real, os itens ficam visíveis mas não simulam links funcionais (ver js/config.js).
        Páginas legais próprias: /privacidade e /termos-de-uso (pasta/index.html, estilo em css/legal.css). -->
   <div class="footer-curtain" data-footer-curtain>
-  <footer class="site-footer" data-beam-footer data-vz-mesh="dark">
+  <footer class="site-footer" data-beam-footer data-vz-mesh="dark" data-vz-atmosphere="dark">
+    <!-- Atmosfera V2.0: Jade Sky estática + Paper MeshGradient (css/vz-atmosphere.css, js/vz-atmosphere.js) -->
+    <div class="vz-atmosphere" aria-hidden="true"><div class="vz-atmosphere__frame"><div class="vz-atmosphere__jade"></div><div class="vz-atmosphere__mesh"></div></div></div>
     <div class="site-footer__rule" aria-hidden="true"></div>
     <div class="site-footer__sky" aria-hidden="true">
       <div class="site-footer__wash"></div>
@@ -625,7 +642,9 @@
   <script src="js/journey-lamp.js" defer></script>
   <script src="js/beam-footer.js" defer></script>
   <script src="js/footer-curtain.js" defer></script>
-  <script src="js/vz-mesh-overlay.js" defer></script>
+  <!-- Atmosfera V2.0 substitui a película Mesh Drift V6.1 "Fitas" (js/vz-mesh-overlay.js fica no projeto, sem carregar;
+       css/vz-mesh-overlay.css continua: dá aos roots [data-vz-mesh] o position/isolation publicados) -->
+  <script type="module" src="js/vz-atmosphere.js"></script>
   <script src="js/motion-debug.js" defer></script>
 </body>
 </html>
