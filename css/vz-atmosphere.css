@@ -202,7 +202,11 @@
 }
 /* CTA: headline e subheadline à esquerda (≥ 1024px: 7–55% × 34–69% da seção) ou no topo (abaixo: 5–36%) */
 #contato > .vz-atmosphere {
-  --vz-atm-hole: radial-gradient(ellipse 36% 28% at 30% 50%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
+  /* CTA final V1.0: a referência deixa a luz do canto chegar perto da headline; o abrigo fica menor e mais leve.
+     A luz nasce do escuro nos primeiros 140 px (emenda com o pé escuro da 05 sem linha) */
+  --vz-atm-edge-top: 140px;
+  --vz-atm-guard: rgba(0, 0, 0, 0.5);
+  --vz-atm-hole: radial-gradient(ellipse 30% 22% at 30% 52%, var(--vz-atm-guard) 0%, var(--vz-atm-guard) 50%, #000 100%);
   -webkit-mask-image: var(--vz-atm-hole), var(--vz-atm-edges);
   -webkit-mask-composite: source-in;
   mask-image: var(--vz-atm-hole), var(--vz-atm-edges);

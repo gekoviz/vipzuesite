@@ -1580,88 +1580,105 @@ html:not(.s03-motion) .vz-s3-glass-card {
 }
 
 /* =========================================================
-   06 — CTA final · V4.0 (08/11/2026)
-   Prompt "VIPZUE — PROMPT MESTRE DE EXECUÇÃO V4.0 · SEÇÃO CTA FINAL". Este bloco SUBSTITUI o "06 — CTA final (rodada 6)".
-   Os nós são os mesmos de antes (título, águia, card, texto, botão .shiny-cta com o efeito de base.css), com as classes
-   .vz-cta__* acrescentadas. Só a copy, a malha e as medidas mudam; o aviso do WhatsApp saiu do HTML.
-     Desktop (≥ 1024px): headline de 4 linhas e subheadline à esquerda; águia + card à direita.
-     Celular e tablet (< 1024px): headline de 3 linhas, subheadline, águia e card numa coluna centralizada.
-   Fundo: campo abstrato ESTÁTICO em CSS (Mocha escurecido com preto + luz Páprica atrás da águia e do card). O campo
-   WebGL da 06 saiu de js/light-field.js: o canvas cobriria este fundo (o mesmo caso da 04 em 07/11).
+   06 — CTA final · V1.0 (14/11/2026)
+   Prompt "VIPZUE — PROMPT MESTRE DEFINITIVO | CTA FINAL V1.0". Este bloco SUBSTITUI o "06 — CTA final · V4.0".
+   Os nós continuam os mesmos (título, águia, card, texto, botão com data-cta="whatsapp" e data-cta-final); o botão deixa
+   de ser .shiny-cta (a borda que gira e a cintilância) e vira uma pílula Páprica estática, como pede o prompt.
+     Desktop (≥ 1024px): headline Boska em 3 linhas e subheadline à esquerda; águia apoiada no card à direita.
+     Tablet e celular (< 1024px): headline, subheadline e o conjunto águia + card numa coluna.
+   Fundo: o sistema da Hero (base V4 + Jade com os focos desta seção + o Paper do pool) e a grade Grafite Quente.
+   Medidas do desktop em vw: calibradas na referência a 1536 × 864 (1 vw = 15,36 px).
    ========================================================= */
-.closing.vz-cta--v4 {
-  --vz-cta-mocha: var(--color-mocha);
-  --vz-cta-paprika: var(--color-paprika);
-  --vz-cta-paprika-deep: var(--color-paprika-deep);
-  --vz-cta-ivory: var(--color-ivory);
-  --vz-cta-ink: var(--color-graphite);
-  /* V7 (08/11/2026, tarefa A): a base era uma "noite" de Mocha com 75–83% de preto (#17120D, sombras medidas em #19110C,
-     contra #352821 na Hero) e destoava das outras seções escuras. Passa ao ambiente da Hero (tokens.css, 01c): diagonal
-     sombra dos cantos → profundidade → sombra dos cantos, sob a sombra quente lateral. As luzes ficam onde estavam. */
-  /* V4 (Atmosphere Fusion, 14/11/2026): a base passa à sombra V4; a luz principal e a baixa saíram (eram focos
-     próprios somados aos da Jade, a lavagem laranja). Ficam definidas como none para quem as consome. */
-  --vz-cta-night: var(--vz-atm-shadow, #1A100C);
-  --vz-cta-base: var(--vz-atm-ground);
-  /* luz principal atrás da águia e do card (à direita) e um calor baixo, largo e fraco. Calibrada contra a REFERENCIA_01
-     (centro, raio e intensidade; base e paleta do prompt): ponto de partida 57% 69% at 73% 39%, .38/.15 */
-  --vz-cta-glow: none;
-  --vz-cta-glow-low: none;
-  /* pé da CTA → topo da FAQ (decisão de 08/11/2026: suavizar a emenda 06 → 07, que o fundo escuro deixou em corte seco;
-     reajustado no mesmo dia para a FAQ V5.0, cujo topo é escuro). Nos últimos 22% a noite se dissolve no tom da 1ª faixa
-     da FAQ, medida coluna a coluna de 768 a 1920px: rgb(33 19 15) à esquerda (o #21130F do gradiente dela). Para a direita
-     a faixa esquenta: primeiro Mocha (até ~50% da largura), depois Páprica (pico a ~79%). Duas luzes baixas, uma de cada,
-     refazem essa curva no pé (ajuste numérico; resíduo ≤ 8 de soma RGB por coluna). No celular, valor próprio logo abaixo. A FAQ não muda. */
-  /* V4: o pé dissolve na sombra V4, que é o topo da FAQ V4 (a base das duas termina e começa em #1A100C) */
-  --vz-cta-fade: linear-gradient(
-    to bottom,
-    transparent 78%,
-    rgb(26 16 12 / 0.22) 86%,
-    rgb(26 16 12 / 0.62) 94%,
-    rgb(26 16 12) 100%
-  );
-  --vz-cta-fade-warm: none;
-  --vz-cta-card-bg: linear-gradient(
-    155deg,
-    color-mix(in srgb, var(--vz-cta-mocha) 47%, black 53%),
-    color-mix(in srgb, var(--vz-cta-mocha) 30%, black 70%)
-  );
-  --vz-cta-inset: clamp(40px, 7.3vw, 120px);
-  /* o botão é o .shiny-cta de base.css: Páprica com tinta Grafite (as variáveis dele, sem mexer no efeito) */
-  --shiny-bg: var(--vz-cta-paprika);
-  --shiny-fg: var(--vz-cta-ink);
-  /* águia: o arquivo (1200 × 804, recorte justo pelo alfa) tem a base do corpo a 85% da altura; as garras ocupam os 15%
-     finais e descem para dentro do card (--vz-cta-perch). A largura é uma fração da largura do card. */
-  --vz-cta-eagle-w: 0.7;
-  --vz-cta-eagle-ratio: 0.67;
-  --vz-cta-perch: 0.15;
-  /* card: respiro abaixo das garras, laterais, embaixo do botão, e o vão texto → botão */
-  --vz-cta-pad-top: 32px;
-  --vz-cta-pad-x: 36px;
-  --vz-cta-pad-bottom: 40px;
-  --vz-cta-btn-gap: 32px;
+#contato.vz-cta--v4 {
+  --vz-cta-mocha: #5b4632;
+  --vz-cta-paprika: #d7673f;
+  --vz-cta-ivory: #f3ede3;
+  --vz-cta-espresso: #241009;
+  --vz-cta-graphite-warm: 34 32 29; /* Grafite Quente #22201D, em canais para a grade */
+  /* pé da CTA → topo da FAQ: dissolve na sombra V4 (#1A100C), a mesma base com que a FAQ começa */
+  --vz-cta-fade: linear-gradient(to bottom, transparent 80%, rgb(26 16 12 / 0.24) 87%, rgb(26 16 12 / 0.66) 95%, rgb(26 16 12) 100%);
+  /* Jade desta seção (a receita V4 não muda; só os focos): A canto superior esquerdo · B baixo, à esquerda do centro ·
+     C atrás da águia e do card · D Mocha difuso */
+  --vz-atm-a-x: 0%;
+  --vz-atm-a-y: 10%;
+  --vz-atm-a-rx: 44%;
+  --vz-atm-a-ry: 66%;
+  --vz-atm-a-k: 1;
+  --vz-atm-b-x: 46%;
+  --vz-atm-b-y: 98%;
+  --vz-atm-b-rx: 30%;
+  --vz-atm-b-ry: 40%;
+  --vz-atm-b-k: 1;
+  --vz-atm-c-x: 62%;
+  --vz-atm-c-y: 30%;
+  --vz-atm-c-rx: 34%;
+  --vz-atm-c-ry: 54%;
+  --vz-atm-c-k: 0.7;
+  --vz-atm-d-x: 82%;
+  --vz-atm-d-y: 56%;
+  --vz-atm-d-rx: 40%;
+  --vz-atm-d-ry: 52%;
+  --vz-atm-d-k: 0.2;
+  --vz-atm-mesh-opacity: 0.2;
   position: relative;
   isolation: isolate;
   min-width: 0;
   overflow-x: clip;
   padding-block: 0;
   color: var(--vz-cta-ivory);
-  background-color: var(--vz-cta-night);
-  background-image: var(--vz-cta-fade-warm), var(--vz-cta-fade), var(--vz-cta-glow), var(--vz-cta-glow-low), var(--vz-cta-base);
+  /* base mais funda que a das outras seções (a referência é quase preta), voltando à sombra V4 #1A100C nas emendas */
+  background-color: #170a06;
+  background-image: linear-gradient(180deg, #1a100c 0%, #170a06 10%, #170a06 88%, #1a100c 100%);
   background-repeat: no-repeat;
 }
 
-/* navegador sem color-mix: as mesmas misturas em hex (Mocha #5B4632 com preto a 47/30%; a base já é hex, V7) */
-@supports not (color: color-mix(in srgb, red, blue)) {
-  .closing.vz-cta--v4 {
-    --vz-cta-card-bg: linear-gradient(155deg, #2B2118, #1B150F);
-  }
+/* grade Grafite Quente: 1 px, sem pontos nas interseções, por toda a seção; acima da Jade/Paper e atrás do conteúdo.
+   Grafite sobre o espresso quase não aparece: a linha fica um pouco mais clara que o fundo escuro e mais escura que a
+   luz Páprica, só em segunda leitura (alfa calibrado contra a referência) */
+#contato .vz-cta__grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-size: 64px 64px; /* herdado pelo ::after, onde estão as linhas */
+}
+
+/* luz local da CTA (abaixo da grade, acima da Jade/Paper): os três núcleos quentes da referência, que a receita da Jade
+   (no máximo 50% de Páprica fora do centro) não alcança. Canto superior esquerdo · atrás da águia · flare que sobe do pé,
+   à esquerda do centro. As bordas de cima e de baixo esfumam (emendas com a 05 e a FAQ sem linha). */
+#contato .vz-cta__grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(ellipse 24% 40% at 0% 13%, rgb(215 103 63 / 0.92) 0%, rgb(215 103 63 / 0.5) 28%, rgb(159 57 48 / 0.2) 58%, rgb(159 57 48 / 0) 100%),
+    radial-gradient(ellipse 22% 36% at 61% 27%, rgb(215 103 63 / 0.72) 0%, rgb(215 103 63 / 0.32) 34%, rgb(159 57 48 / 0.16) 62%, rgb(159 57 48 / 0) 100%),
+    radial-gradient(ellipse 17% 30% at 47% 100%, rgb(215 103 63 / 0.95) 0%, rgb(215 103 63 / 0.5) 32%, rgb(159 57 48 / 0.18) 62%, rgb(159 57 48 / 0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 140px, #000 calc(100% - 64px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 140px, #000 calc(100% - 64px), transparent 100%);
+}
+
+/* as linhas: por cima da luz local */
+#contato .vz-cta__grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgb(var(--vz-cta-graphite-warm) / 0.7) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--vz-cta-graphite-warm) / 0.7) 1px, transparent 1px);
+  background-size: inherit;
+  background-position: center center;
+  opacity: 0.3; /* 0,7 × 0,3 ≈ 21% de grafite: some no escuro e só desenha sobre a luz, em segunda leitura */
 }
 
 .vz-cta--v4 .vz-cta__layout {
-  width: min(calc(100% - 2 * var(--vz-cta-inset)), 1440px);
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
   max-width: none;
-  margin-inline: auto;
-  padding-inline: 0;
+  margin: 0;
+  padding: 72px 22px 88px;
 }
 
 .vz-cta--v4 .vz-cta__copy,
@@ -1669,73 +1686,101 @@ html:not(.s03-motion) .vz-s3-glass-card {
   min-width: 0;
 }
 
-/* um título só: as quebras são <br> que aparecem ou somem por largura (o texto lido é a frase inteira) */
+/* um h2 só; as linhas são spans (no celular elas fluem, do tablet para cima viram blocos) */
 .vz-cta--v4 .vz-cta__headline {
   margin: 0;
+  font-family: "Boska", Georgia, serif;
+  font-weight: 700;
+  font-style: normal;
+  font-synthesis: none;
+  font-size: clamp(37px, 9.2vw, 47px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
   color: var(--vz-cta-ivory);
+  text-shadow: none;
+  text-align: left;
   hyphens: none;
-  text-wrap: wrap;
 }
 
-.vz-cta--v4 .vz-cta__accent,
-.vz-cta--v4 .vz-cta__forte {
+.vz-cta--v4 .vz-cta__accent {
+  font-family: "Boska", Georgia, serif;
+  font-weight: 500;
+  font-style: italic;
+  font-synthesis: none;
   color: var(--vz-cta-paprika);
 }
 
-.vz-cta--v4 .vz-cta__subheadline {
-  margin: 0;
-  font-family: var(--font-body);
-  font-weight: var(--font-weight-regular);
-  color: rgb(243 237 227 / 0.86);
-  text-wrap: balance;
+.vz-cta--v4 .vz-cta__forte {
+  font-weight: 700;
+  font-style: normal;
+  color: var(--vz-cta-ivory);
 }
 
-/* águia + card: uma unidade; a águia fica em fluxo, acima do card, e desce por cima da borda dele */
+.vz-cta--v4 .vz-cta__subheadline {
+  margin: 26px 0 0;
+  font-family: "Switzer", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 16.5px;
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+  color: var(--vz-cta-ivory);
+  text-align: left;
+}
+
+/* águia + card: uma unidade; a águia fica em fluxo, acima do card, e as garras descem sobre a borda dele */
 .vz-cta--v4 .vz-cta__visual {
+  --eagle-w: 0.7; /* largura da águia / largura do card */
+  --eagle-ratio: 0.67; /* o arquivo é 1200 × 804 */
+  --eagle-perch: 0.15; /* os 15% de baixo do arquivo são as garras, que entram no card */
   position: relative;
-  width: min(100%, 540px);
+  width: 100%;
+  margin-top: 56px;
 }
 
 .vz-cta--v4 .vz-cta__eagle {
   position: relative;
   z-index: 3;
   display: block;
-  width: calc(var(--vz-cta-eagle-w) * 100%);
+  width: calc(var(--eagle-w) * 100%);
   height: auto;
-  /* as garras (os 15% de baixo do arquivo) entram no card: a margem negativa puxa o card para cima, sem espaço vazio acima
-     da águia (a % de margem é da largura do grupo, por isso largura × proporção × poleiro) */
-  margin: 0 auto calc(-1 * var(--vz-cta-eagle-w) * var(--vz-cta-eagle-ratio) * var(--vz-cta-perch) * 100%);
+  aspect-ratio: 1200 / 804;
+  margin: 0 auto calc(-1 * var(--eagle-w) * var(--eagle-ratio) * var(--eagle-perch) * 100%);
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
-  filter: drop-shadow(0 16px 18px rgb(34 32 29 / 0.32));
+  filter: drop-shadow(0 14px 16px rgb(17 7 4 / 0.34));
 }
 
+/* card Mocha Profundo: o token #5B4632 sob uma tonalização espresso (não é vidro); borda fina Páprica, brilho mínimo */
 .vz-cta--v4 .vz-cta__card {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* topo: a parte da águia que entra no card (largura × proporção × poleiro, em % da largura) + o respiro até o texto */
+  justify-content: center;
   padding:
-    calc(var(--vz-cta-eagle-w) * var(--vz-cta-eagle-ratio) * var(--vz-cta-perch) * 100% + var(--vz-cta-pad-top))
-    var(--vz-cta-pad-x)
-    var(--vz-cta-pad-bottom);
-  border: 1px solid rgb(215 103 63 / 0.52);
-  border-radius: 30px;
-  background: var(--vz-cta-card-bg);
-  box-shadow: 0 15px 50px rgb(0 0 0 / 0.18);
+    calc(var(--eagle-w) * var(--eagle-ratio) * var(--eagle-perch) * 100% + var(--card-pad-top, 18px))
+    var(--card-pad-x, 22px)
+    var(--card-pad-bottom, 26px);
+  border: 1px solid rgb(215 103 63 / 0.72);
+  border-radius: 26px;
+  background:
+    linear-gradient(155deg, rgb(36 16 9 / 0.5), rgb(23 10 6 / 0.74)),
+    var(--vz-cta-mocha);
+  box-shadow: 0 16px 44px rgb(17 7 4 / 0.23), 0 0 16px rgb(215 103 63 / 0.24); /* o filete Páprica da referência, sem neon */
   color: var(--vz-cta-ivory);
   text-align: center;
 }
 
 .vz-cta--v4 .vz-cta__card-copy {
-  max-width: 440px;
+  max-width: 22em;
   margin: 0;
-  font-size: clamp(19px, 1.6vw, 25px);
-  line-height: 1.4;
-  letter-spacing: -0.005em;
+  font-family: "Switzer", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.43;
+  letter-spacing: -0.018em;
   color: var(--vz-cta-ivory);
   text-wrap: balance;
 }
@@ -1744,225 +1789,205 @@ html:not(.s03-motion) .vz-s3-glass-card {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: var(--vz-cta-btn-gap);
+  margin-top: var(--card-btn-gap, 22px);
 }
 
-/* o mesmo .shiny-cta (borda que gira, pontinhos, cintilância, hover/foco de base.css); aqui só largura, texto e altura.
-   A quebra "Quero fortalecer minha / presença digital" é um <br> dentro do rótulo. */
+/* pílula Páprica estática (sem borda que gira nem cintilância); o texto quebra pela largura em duas linhas */
 .vz-cta--v4 .vz-cta__button {
-  width: 92%;
-  max-width: 100%;
-  min-height: 54px;
-  padding: 0.8em 1.2em;
-  font-size: clamp(18px, 1.45vw, 23px);
-  line-height: 1.15;
-  white-space: normal;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 58px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0) 55%), var(--vz-cta-paprika);
+  box-shadow: 0 10px 26px rgb(17 7 4 / 0.28);
+  color: var(--vz-cta-espresso);
+  font-family: "Switzer", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
   text-align: center;
-  text-wrap: wrap;
+  text-decoration: none;
+  text-wrap: wrap; /* quebra pela largura: "Quero fortalecer minha / presença digital" */
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-/* Sem número de WhatsApp (js/config.js vazio) o JS tira o href e põe aria-disabled: o botão não é clicável, mas não
-   muda de aparência */
+.vz-cta--v4 .vz-cta__button[href]:hover {
+  background-color: #df7550;
+  box-shadow: 0 12px 30px rgb(17 7 4 / 0.34);
+}
+
+.vz-cta--v4 .vz-cta__button:focus-visible {
+  outline: 2px solid var(--vz-cta-ivory);
+  outline-offset: 3px;
+}
+
+/* Sem número de WhatsApp (js/config.js vazio) o JS tira o href e põe aria-disabled: não clicável, mesma aparência */
 .vz-cta--v4 .vz-cta__button[aria-disabled="true"] {
   cursor: default;
 }
 
-/* ---------- desktop: duas colunas ---------- */
-@media (min-width: 1024px) {
+/* ---------- tablet (768–1023px): a mesma coluna, em escala maior ---------- */
+@media (min-width: 768px) {
   .vz-cta--v4 .vz-cta__layout {
-    min-height: min(100svh, 900px);
-    padding-block: clamp(48px, 8svh, 96px);
-    display: grid;
-    grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr);
-    column-gap: clamp(36px, 4vw, 72px);
-    align-items: center;
+    padding: clamp(72px, 9vw, 96px) 6vw clamp(88px, 10vw, 112px);
   }
 
   .vz-cta--v4 .vz-cta__headline {
-    /* 4,15vw do prompt deixava a 4ª linha a 2–3px da borda da coluna (1280 e 1536); 4,05vw dá ~25px de folga */
-    font-size: clamp(45px, 4.05vw, 66px);
-    line-height: 0.95;
-    letter-spacing: -0.035em;
-    text-align: left;
+    font-size: clamp(50px, 6.6vw, 64px);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
   }
 
-  .vz-cta--v4 .vz-cta__br--mobile {
-    display: none;
+  .vz-cta--v4 .vz-cta__line {
+    display: block;
   }
 
-  /* 26em (≤ 690px do prompt): a 1ª linha termina em "em contato,", como na REFERENCIA_01, em qualquer escala */
   .vz-cta--v4 .vz-cta__subheadline {
-    max-width: min(26em, 690px);
-    margin-top: 28px;
-    font-size: clamp(17px, 1.65vw, 24px);
-    line-height: 1.42;
-    text-align: left;
-    text-wrap: pretty;
+    max-width: 36em;
+    margin-top: 30px;
+    font-size: 19px;
+    line-height: 1.48;
   }
 
   .vz-cta--v4 .vz-cta__visual {
-    justify-self: end;
-  }
-}
-
-/* desktop compacto (1024–1199px): as mesmas duas colunas, com margem menor e headline/card um pouco menores */
-@media (min-width: 1024px) and (max-width: 1199.98px) {
-  .closing.vz-cta--v4 {
-    --vz-cta-inset: clamp(32px, 4.6vw, 56px);
-    --vz-cta-pad-x: 28px;
+    width: min(100%, 520px);
+    margin: 64px auto 0;
   }
 
-  .vz-cta--v4 .vz-cta__headline {
-    font-size: clamp(42px, 4.2vw, 50px);
+  .vz-cta--v4 .vz-cta__card {
+    --card-pad-top: 22px;
+    --card-pad-x: 40px;
+    --card-pad-bottom: 40px;
+    --card-btn-gap: 28px;
+    border-radius: 32px;
   }
 
   .vz-cta--v4 .vz-cta__card-copy {
+    font-size: 20px;
+    line-height: 1.42;
+  }
+
+  .vz-cta--v4 .vz-cta__button {
+    width: min(100%, 400px);
+    min-height: 70px;
+    padding: 14px 26px;
     font-size: 18px;
   }
 }
 
-/* ---------- celular e tablet: uma coluna centralizada ---------- */
-@media (max-width: 1023.98px) {
-  .closing.vz-cta--v4 {
-    --vz-cta-inset: clamp(16px, 4.1vw, 22px);
-    --vz-cta-eagle-w: 0.8;
-    --vz-cta-pad-top: 16px;
-    --vz-cta-pad-x: clamp(18px, 6vw, 28px);
-    --vz-cta-pad-bottom: 28px;
-    --vz-cta-btn-gap: 24px;
-    /* a mesma família de luz, recentrada atrás da águia e do card */
-    /* ponto de partida: 92% 49% at 50% 43%, .30/.11; calibrado contra a REFERENCIA_02 */
-    --vz-cta-glow: none; /* V4: a luz é da Jade */
-    --vz-cta-glow-low: none;
-  }
-
+/* ---------- desktop (≥ 1024px): duas colunas, medidas da referência a 1536 × 864 ---------- */
+@media (min-width: 1024px) {
   .vz-cta--v4 .vz-cta__layout {
+    display: grid;
+    /* margem esquerda 7% · coluna do texto · card a partir de 57,2% com 33,85% · margem direita */
+    grid-template-columns: 7.03vw minmax(0, 1fr) 33.85vw 8.95vw;
+    align-items: start;
+    align-content: center;
     min-height: 100svh;
-    padding-block: clamp(24px, 5svh, 48px) 36px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+    padding: 7.7vw 0 11.33vw;
   }
 
   .vz-cta--v4 .vz-cta__copy {
-    width: 100%;
-    text-align: center;
+    grid-column: 2;
+    margin-top: 7.4vw; /* topo da headline (a águia, à direita, começa 7,7 vw abaixo do topo) */
   }
 
   .vz-cta--v4 .vz-cta__headline {
-    font-size: clamp(19px, 5.15vw, 24px);
-    line-height: 1;
-    letter-spacing: -0.025em;
-    text-align: center;
-  }
-
-  /* no celular o destaque é só "presença digital"; "forte" abre a segunda linha em Marfim */
-  .vz-cta--v4 .vz-cta__forte {
-    color: var(--vz-cta-ivory);
-  }
-
-  /* V7 (correção visual, 08/11/2026): aqui a headline tem 19–24 px (texto normal para o WCAG: pede 4,5:1). Com o fundo
-     da CTA unificado ao ambiente da Hero (sombra #2C201B → profundidade #332B23, não mais o quase-preto #19110C), a
-     Páprica pura ficou em 3,88:1 em 390 px. O destaque passa a Páprica com 20% de Marfim (mistura da paleta, sem cor
-     nova): ≥ 4,8:1 no mesmo ponto. A partir de 768 px a headline é texto grande e o destaque segue Páprica pura. */
-  .vz-cta--v4 .vz-cta__accent {
-    color: color-mix(in srgb, var(--vz-cta-paprika) 80%, var(--vz-cta-ivory));
-  }
-
-  .vz-cta--v4 .vz-cta__br--desktop {
-    display: none;
+    max-width: none; /* a coluna (vw) manda: 760 px fixos quebravam a 3ª linha em 1920 */
+    font-size: clamp(44px, 4.17vw, 82px); /* 64 px em 1536 */
+    line-height: 0.96;
+    letter-spacing: -0.004em; /* o −0,035em do prompt deixava a Boska 9% mais estreita que a referência */
   }
 
   .vz-cta--v4 .vz-cta__subheadline {
-    width: min(100%, 350px);
-    margin: 16px auto 0;
-    font-size: clamp(14px, 3.9vw, 16.5px);
-    line-height: 1.43;
-    text-align: center;
+    max-width: 42.5vw; /* a 1ª linha termina em "em contato,", como na referência */
+    margin-top: 2.75vw;
+    font-size: clamp(17px, 1.62vw, 31px); /* 25 px em 1536 */
+    line-height: 1.46;
+    letter-spacing: 0;
   }
 
-  /* o card ocupa ~80% da largura, como na referência (320px em 390) */
   .vz-cta--v4 .vz-cta__visual {
-    width: min(100%, clamp(288px, 82vw, 352px));
-    margin-top: clamp(20px, 3.2svh, 32px);
-    margin-inline: auto;
-  }
-
-  .vz-cta--v4 .vz-cta__card {
-    border-radius: 23px;
-  }
-
-  .vz-cta--v4 .vz-cta__card-copy {
-    font-size: clamp(15px, 4vw, 18px);
-    line-height: 1.4;
-  }
-
-  .vz-cta--v4 .vz-cta__button {
+    --eagle-w: 0.69;
+    grid-column: 3;
     width: 100%;
-    min-height: 50px;
-    padding: 9px 16px;
-    font-size: clamp(15px, 4.1vw, 17px);
-  }
-}
-
-/* celular: a 1ª faixa da FAQ é uniforme, rgb(26 14 10) (o #190D0A do gradiente dela), então o pé esfuma nela sem calor.
-   De 768px para cima a faixa da FAQ é a mesma em proporção, e vale o pé do bloco principal. */
-@media (max-width: 767.98px) {
-  .closing.vz-cta--v4 {
-    --vz-cta-fade: linear-gradient(
-      to bottom,
-      transparent 78%,
-      rgb(26 14 10 / 0.22) 86%,
-      rgb(26 14 10 / 0.62) 94%,
-      rgb(26 14 10) 100%
-    );
-    --vz-cta-fade-warm: none;
-  }
-}
-
-/* tablet (768–1023px): a mesma coluna do celular, em escala maior */
-@media (min-width: 768px) and (max-width: 1023.98px) {
-  .closing.vz-cta--v4 {
-    --vz-cta-eagle-w: 0.76;
-    --vz-cta-pad-top: 22px;
-    --vz-cta-pad-x: 36px;
-    --vz-cta-pad-bottom: 36px;
-    --vz-cta-btn-gap: 28px;
-  }
-
-  /* no tablet a coluna fica no meio da tela (sem referência própria; no celular ela começa no alto, como a REFERENCIA_02) */
-  .vz-cta--v4 .vz-cta__layout {
-    justify-content: center;
-  }
-
-  .vz-cta--v4 .vz-cta__headline {
-    font-size: clamp(30px, 4.4vw, 40px);
-  }
-
-  .vz-cta--v4 .vz-cta__subheadline {
-    width: min(100%, 540px);
-    margin-top: 20px;
-    font-size: 18px;
-  }
-
-  .vz-cta--v4 .vz-cta__visual {
-    width: min(100%, 460px);
+    margin: 0;
   }
 
   .vz-cta--v4 .vz-cta__card {
-    border-radius: 28px;
+    --card-pad-top: 1.7vw;
+    --card-pad-x: 2.9vw;
+    --card-pad-bottom: 3vw;
+    --card-btn-gap: 1.56vw;
+    border-radius: clamp(26px, 2.2vw, 42px);
   }
 
   .vz-cta--v4 .vz-cta__card-copy {
-    font-size: 19px;
+    max-width: 25vw;
+    font-size: clamp(16px, 1.56vw, 30px); /* 24 px em 1536 */
+    line-height: 1.5;
+    letter-spacing: 0;
   }
 
   .vz-cta--v4 .vz-cta__button {
-    width: 92%;
-    min-height: 56px;
-    padding: 14px 20px;
-    font-size: 18px;
+    width: 26.8vw;
+    max-width: 100%;
+    min-height: clamp(60px, 6vw, 112px);
+    padding: 0.9vw 2.4vw;
+    font-size: clamp(15px, 1.6vw, 31px); /* 24,5 px em 1536: duas linhas, como na referência */
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+  }
+}
+
+/* celular e tablet: as luzes da Jade nas bordas, longe do texto (a coluna é longa) */
+@media (max-width: 1023.98px) {
+  /* na coluna estreita o rótulo quebra equilibrado ("Quero fortalecer / minha presença digital"), sem palavra órfã */
+  .vz-cta--v4 .vz-cta__button {
+    text-wrap: balance;
+  }
+
+  #contato.vz-cta--v4 {
+    --vz-atm-a-x: 0%;
+    --vz-atm-a-y: -2%;
+    --vz-atm-a-rx: 70%;
+    --vz-atm-a-ry: 22%;
+    --vz-atm-b-x: 40%;
+    --vz-atm-b-y: 104%;
+    --vz-atm-b-rx: 80%;
+    --vz-atm-b-ry: 22%;
+    --vz-atm-c-x: 62%;
+    --vz-atm-c-y: 62%;
+    --vz-atm-c-rx: 70%;
+    --vz-atm-c-ry: 26%;
+    --vz-atm-d-x: 100%;
+    --vz-atm-d-y: 40%;
+    --vz-atm-d-rx: 50%;
+    --vz-atm-d-ry: 30%;
+  }
+
+  #contato .vz-cta__grid {
+    background-size: 52px 52px;
+  }
+
+  /* a luz local em elipses largas (em % de uma coluna alta, as do desktop viravam faixas verticais): canto de cima mais
+     fraca (a headline está logo abaixo), atrás da águia e no pé */
+  #contato .vz-cta__grid::before {
+    background-image:
+      radial-gradient(ellipse 80% 18% at 0% 2%, rgb(215 103 63 / 0.62) 0%, rgb(215 103 63 / 0.3) 30%, rgb(159 57 48 / 0.12) 60%, rgb(159 57 48 / 0) 100%),
+      radial-gradient(ellipse 70% 20% at 50% 58%, rgb(215 103 63 / 0.5) 0%, rgb(159 57 48 / 0.2) 50%, rgb(159 57 48 / 0) 100%),
+      radial-gradient(ellipse 80% 16% at 44% 100%, rgb(215 103 63 / 0.8) 0%, rgb(215 103 63 / 0.38) 34%, rgb(159 57 48 / 0.14) 64%, rgb(159 57 48 / 0) 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vz-cta--v4 .vz-cta__button {
+    transition: none;
   }
 }
 
