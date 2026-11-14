@@ -2,6 +2,12 @@
 @font-face { font-family: "Switzer"; src: url("../fonts/switzer-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "Switzer"; src: url("../fonts/switzer-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
 @font-face { font-family: "Switzer"; src: url("../fonts/switzer-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+/* Seção 04 V2.0 (14/11/2026): Bold 700 e Medium Italic 500 da mesma Switzer (Fontshare), numa família à parte para
+   não mudar o peso nem o itálico de nenhum outro texto do site. Só o #metodo no desktop usa (css/sections.css). */
+@font-face { font-family: "Switzer S4"; src: url("../fonts/switzer-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Switzer S4"; src: url("../fonts/switzer-500-italic.woff2") format("woff2"); font-weight: 500; font-style: italic; font-display: swap; }
+@font-face { font-family: "Switzer S4"; src: url("../fonts/switzer-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Switzer S4"; src: url("../fonts/switzer-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
 /* Playfair Display (SIL OFL 1.1, @fontsource/playfair-display 5.3.0, subconjunto latin): headline da Hero V3.0.
    Só os dois cortes usados: Bold 700 normal e Black 900 itálico (itálico real, sem síntese). */
 @font-face { font-family: "Playfair Display"; src: url("../fonts/playfair-display-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }

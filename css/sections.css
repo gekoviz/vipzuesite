@@ -3317,6 +3317,185 @@ html.has-curtain .footer-curtain .site-footer {
 }
 
 /* =========================================================
+   04 — Método, desktop — V2.0 (14/11/2026, prompt mestre definitivo da Seção 04)
+   Referência aprovada: REFERENCIA_SECAO_04_DESKTOP_APROVADA (1536 × 865, card 02 sob o ponteiro). Só aparência:
+   cabeçalho centrado em Switzer (headline 700 numa linha; subtítulo 400 com "está no processo." em Medium Italic
+   500 real, Páprica), grade de 60 px no fundo, cards mais largos e de raio maior, tipografia interna maior e o
+   material dos cards. Intocados: o destaque por --hl (nasce no 02, passa ao card sob o ponteiro ou com foco), o tilt
+   e o spotlight do js/journey-lamp.js (transform, --sx/--sy, .is-tilting), o reveal, a transição de 0,45 s, a altura
+   do palco e o celular/tablet (< 1024 px). Fonte "Switzer S4": css/fonts.css.
+   A 2ª frase do parágrafo ("O que faz a diferença…") sai do desktop (decisão do dono, 14/11): fica no HTML.
+   ========================================================= */
+@media (min-width: 1024px) {
+  #metodo {
+    --why-pad-x: clamp(40px, 4.56vw, 76px); /* 70 px em 1536: grade de ≈ 1396 px, de x 70 a 1466 */
+    /* topo da tinta da headline a 109 px e base dos cards a 745 px em 865 de altura (a referência) */
+    --why-top: clamp(40px, 11.3svh, 124px);
+    --why-bottom: clamp(56px, 13.9svh, 132px);
+    --s4-ink: var(--color-ivory, #f3ede3);
+    --s4-paprika: #d7673f;
+    /* Os quatro campos da referência, na Jade da própria seção (só as variáveis; a receita V4 não muda): A no canto
+       superior esquerdo, mais firme · C Páprica Profunda atrás do subtítulo e do alto dos cards 02–03 · B quente na
+       base, um pouco à direita do centro · D Mocha avermelhado na borda direita */
+    --vz-atm-a-x: 1%;
+    --vz-atm-a-y: 6%; /* o núcleo abaixo da emenda dissolvida do topo (32 px), como o canto aceso da referência */
+    --vz-atm-a-rx: 40%;
+    --vz-atm-a-ry: 60%;
+    --vz-atm-a-k: 1;
+    --vz-atm-b-x: 62%;
+    --vz-atm-b-y: 92%;
+    --vz-atm-b-rx: 34%;
+    --vz-atm-b-ry: 30%;
+    --vz-atm-c-x: 64%;
+    --vz-atm-c-y: 33%;
+    --vz-atm-c-rx: 30%;
+    --vz-atm-c-ry: 24%;
+    --vz-atm-c-k: 0.72;
+    --vz-atm-d-x: 100%;
+    --vz-atm-d-y: 52%;
+    --vz-atm-d-rx: 24%;
+    --vz-atm-d-ry: 40%;
+    --vz-atm-d-k: 0.22;
+    --vz-atm-mesh-opacity: 0.14; /* o Paper mais baixo aqui: a referência é escura e saturada, sem véu Mocha */
+  }
+
+  /* Cabeçalho: uma coluna centrada (a grade de duas colunas da V6 sai) */
+  #metodo .why__head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  #metodo .why__title {
+    max-width: none; /* uma linha até 1920 (88 px ≈ 1300 px de frase); abaixo de ≈ 1100 px quebra naturalmente */
+    font-family: "Switzer S4", var(--font-body);
+    font-size: clamp(44px, 5.11vw, 88px); /* 78,5 px em 1536: a largura da tinta da referência (1147 px) */
+    font-weight: 700;
+    font-synthesis: none;
+    line-height: 1.02;
+    letter-spacing: -0.015em; /* a referência é menos apertada que o −0,035em de partida */
+    text-align: center;
+    color: var(--s4-ink);
+  }
+
+  /* as duas linhas do markup viram uma frase só; a quebra (abaixo de ≈ 1300 px) é a natural do navegador */
+  #metodo .why__title-line {
+    display: inline;
+  }
+
+  #metodo .why__aside {
+    max-width: none;
+    margin: 0.14em 0 0;
+    padding-top: 0;
+    font-family: "Switzer S4", var(--font-body);
+    font-size: clamp(31px, 3.71vw, 64px); /* 57 px em 1536: a largura da tinta da referência (848 px) */
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    font-weight: 400;
+    text-align: center;
+    color: var(--s4-ink);
+  }
+
+  #metodo .why__aside strong {
+    display: block;
+    margin: 0;
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  #metodo .why__aside em {
+    font-style: italic;
+    font-weight: 500; /* Switzer Medium Italic real (switzer-500-italic.woff2) */
+    font-synthesis: none;
+    color: var(--s4-paprika);
+  }
+
+  #metodo .why__aside span {
+    display: none;
+  }
+
+  /* Grade: uma camada passiva, atrás do conteúdo e acima da Jade/Paper (z −1, último filho da seção) */
+  #metodo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgb(243 237 227 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(243 237 227 / 0.045) 1px, transparent 1px);
+    background-size: 60px 60px;
+    background-position: center center;
+    opacity: 0.38;
+  }
+
+  .journey {
+    gap: clamp(14px, 1.1vw, 20px); /* 17 px em 1536 */
+  }
+
+  .journey__stage {
+    min-height: clamp(300px, 49.4svh, 460px); /* 427 px em 865 de altura */
+    --journey-radius: clamp(28px, 2.5vw, 42px); /* 38 px em 1536 */
+    --journey-pad: clamp(20px, 1.75vw, 30px); /* 27 px */
+    --journey-pad-x: clamp(18px, 1.82vw, 32px); /* 28 px */
+  }
+
+  /* Material: espresso translúcido, contorno acobreado discreto em repouso; aceso (--hl), contorno Páprica pleno,
+     halo mais firme e a mesma luz Páprica no alto do card (a rampa da V6, sem mudança) */
+  .journey__stage::before {
+    border: 1px solid rgb(215 103 63 / calc(0.26 + 0.74 * var(--hl)));
+    background:
+      /* a rampa da V6 um pouco mais curta e baixa: com a tipografia maior, o nome e a descrição sobem para dentro da
+         luz; assim o nome fica ≥ 3:1 e a descrição ≥ 4,5:1 mesmo com o spotlight do ponteiro em cima */
+      radial-gradient(
+        ellipse 160% var(--hl-ry, 80%) at 30% 0%,
+        rgb(215 103 63 / calc(0.94 * var(--hl))) 0%,
+        rgb(215 103 63 / calc(0.8 * var(--hl))) 20%,
+        rgb(215 103 63 / calc(0.46 * var(--hl))) 35%,
+        rgb(159 57 48 / calc(0.42 * var(--hl))) 54%,
+        rgb(159 57 48 / calc(0.16 * var(--hl))) 76%,
+        transparent 100%
+      ),
+      linear-gradient(160deg, rgb(54 24 15 / 0.86) 0%, rgb(54 26 18 / 0.78) 48%, rgb(46 22 15 / 0.86) 100%);
+    box-shadow:
+      0 0 0 1px rgb(236 102 48 / calc(0.95 * var(--hl))),
+      0 0 16px rgb(236 98 44 / calc(0.85 * var(--hl))),
+      0 0 48px rgb(215 103 63 / calc(0.38 * var(--hl))),
+      0 15px 38px rgb(159 57 48 / calc(0.26 * var(--hl))),
+      0 18px 44px rgb(19 7 4 / 0.12),
+      inset 0 1px 0 rgb(243 237 227 / calc(0.06 + 0.12 * var(--hl)));
+  }
+
+  #metodo .journey__stage {
+    --step-name-size: clamp(1.5rem, 2.08vw, 2.1rem); /* 32 px em 1536 (tinta de "Diagnóstico": 175 px, a da referência) */
+  }
+
+  #metodo .journey__name {
+    font-family: "Switzer S4", var(--font-body);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+
+  #metodo .journey__name::before {
+    margin-bottom: clamp(8px, 0.72vw, 13px); /* 11 px */
+    font-size: clamp(2.25rem, 3.125vw, 3.25rem); /* 48 px */
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  #metodo .journey__detail {
+    margin-block-start: 0.68em;
+    font-size: clamp(0.9375rem, 1.237vw, 1.25rem); /* 19 px: as linhas por card da referência (10 no 01, 11 no 04) */
+    line-height: 1.28;
+    letter-spacing: -0.012em;
+  }
+}
+
+
+/* =========================================================
    Emendas — rodada 03 de cor (06/11/2026)
 
    Rodada 6 (desktop): os véus curtos do lado escuro das emendas 04 → 05 e
