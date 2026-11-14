@@ -40,8 +40,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&display=swap">
 
-  <link rel="preload" as="image" href="assets/hero/aguia-1400.webp" media="(min-width: 768px)">
-  <link rel="preload" as="image" href="assets/hero/aguia-900.webp" media="(max-width: 767px)">
+  <link rel="preload" as="image" href="assets/hero/aguia-frontal-918.webp" fetchpriority="high">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/playfair-display-700.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/playfair-display-900-italic.woff2" crossorigin>
 
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/tokens.css">
@@ -112,13 +113,14 @@
 
         <!-- Atmosfera V2.0: Jade Sky estática + Paper MeshGradient (css/vz-atmosphere.css, js/vz-atmosphere.js) -->
         <div class="vz-atmosphere" aria-hidden="true"><div class="vz-atmosphere__frame"><div class="vz-atmosphere__jade"></div><div class="vz-atmosphere__mesh"></div></div></div>
+        <!-- Hero V3.0: véu tonal passivo e grade geométrica discreta (acima da atmosfera, abaixo da águia) -->
+        <div class="hero__veil" aria-hidden="true"></div>
+        <div class="hero__grid" aria-hidden="true"></div>
 
         <div class="hero__figure" aria-hidden="true" data-hero-figure>
           <div class="hero__eagle" data-hero-eagle>
-            <picture>
-              <source media="(max-width: 767px)" srcset="assets/hero/aguia-900.webp">
-              <img src="assets/hero/aguia-1400.webp" width="1043" height="1377" alt="" decoding="async" fetchpriority="high">
-            </picture>
+            <!-- Hero V3.0 (13/11/2026): águia frontal fornecida pelo usuário, fundo branco recortado (assets/source/hero/aguia-frontal-recorte.png) -->
+            <img src="assets/hero/aguia-frontal-918.webp" width="916" height="921" alt="" decoding="async" fetchpriority="high">
           </div>
         </div>
 
@@ -134,7 +136,7 @@
           <!-- CTA da Hero (ShinyButton na identidade VIPZUE). Destino real do projeto: data-cta="whatsapp"
                (wa.me quando o número estiver em js/config.js; até lá, leva à seção #contato). -->
           <div class="hero__cta">
-            <a class="shiny-cta" href="#contato" data-cta="whatsapp" data-hero-cta><span>Quero uma Landing Page estratégica</span></a>
+            <a class="shiny-cta" href="#contato" data-cta="whatsapp" data-hero-cta><span>Quero uma página na altura do meu negócio</span></a>
           </div>
 
           <!-- Subheadline e CTA preservados para reintrodução futura (template não é renderizado,
@@ -154,10 +156,14 @@
              da Seção 03, texto num bloco só alinhado à esquerda (o 1º card em caixa baixa) e os mesmos cards no celular.
              Informativos, não clicáveis. Só aparecem com a Hero pronta (depois do voo e da entrada) e saem antes da Visão; o
              estado vem de js/hero.js, o movimento de js/hero-display-cards.js. -->
+        <!-- Hero V3.0: filtro óptico do Liquid Glass (uma única definição, usada só pela camada .vz-lg__optical dos dois cards) -->
+        <svg class="vz-lg__svg-defs" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" focusable="false"><defs><filter id="vz-hero-liquid-refraction" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.001 0.005" numOctaves="1" seed="17" result="noise"/><feComponentTransfer in="noise" result="mappedNoise"><feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5"/><feFuncG type="gamma" amplitude="0" exponent="1" offset="0"/><feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5"/></feComponentTransfer><feGaussianBlur in="mappedNoise" stdDeviation="3" result="smoothNoise"/><feSpecularLighting in="smoothNoise" surfaceScale="5" specularConstant="1" specularExponent="100" lighting-color="white" result="specular"><fePointLight x="-200" y="-200" z="300"/></feSpecularLighting><feDisplacementMap in="SourceGraphic" in2="smoothNoise" scale="12" xChannelSelector="R" yChannelSelector="G" result="displaced"/><feComposite in="displaced" in2="specular" operator="arithmetic" k1="0" k2="1" k3="0.035" k4="0"/></filter></defs></svg>
+
         <div class="vz-hero-cards" id="vzHeroCards" role="group" aria-label="Benefícios de uma presença digital estratégica" hidden data-hero-cards>
           <div class="vz-hero-cards__stack" data-active="first">
             <div class="vz-hero-cards__motion vz-hero-cards__motion--first">
-              <article class="vz-hero-cards__surface">
+              <article class="vz-hero-cards__surface vz-lg">
+                <div class="vz-lg__backdrop" aria-hidden="true"></div><div class="vz-lg__optical" aria-hidden="true"></div><div class="vz-lg__tint" aria-hidden="true"></div><div class="vz-lg__rim" aria-hidden="true"></div>
                 <div class="vz-hero-cards__body">
                   <p class="vz-hero-cards__statement">
                     <span>Presença forte</span>
@@ -168,7 +174,8 @@
               </article>
             </div>
             <div class="vz-hero-cards__motion vz-hero-cards__motion--second">
-              <article class="vz-hero-cards__surface">
+              <article class="vz-hero-cards__surface vz-lg">
+                <div class="vz-lg__backdrop" aria-hidden="true"></div><div class="vz-lg__optical" aria-hidden="true"></div><div class="vz-lg__tint" aria-hidden="true"></div><div class="vz-lg__rim" aria-hidden="true"></div>
                 <div class="vz-hero-cards__body">
                   <p class="vz-hero-cards__argument">
                     <span class="vz-hero-cards__argument-lead">Seu cliente já pesquisa, compara e decide no digital.</span>

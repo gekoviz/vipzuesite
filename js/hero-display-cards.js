@@ -46,22 +46,27 @@
       const v = parseFloat(getComputedStyle(root).getPropertyValue(name));
       return Number.isFinite(v) ? v : fallback;
     };
+    // Hero V3.0 (13/11/2026): o card em destaque também avança em profundidade e cresce um pouco (desktop 28 px / 1,025;
+    // celular 14 px / 1,015; --vzc-cycle-depth/--vzc-cycle-scale no CSS). O stack tem a perspectiva; o invólucro continua
+    // sendo o único elemento animado (a inclinação fica na superfície).
+    const depth = () => excursion("--vzc-cycle-depth", 0);
+    const lift = () => excursion("--vzc-cycle-scale", 1);
     let tl = null;
     if (gsap) {
       const setActive = (v) => () => (stack.dataset.active = v);
       tl = gsap.timeline({ paused: true, repeat: -1 });
       tl.call(setActive("first"), null, 0)
-        .to(first, { x: -4, y: () => -excursion("--vzc-cycle-rise", 36), duration: MOVE_IN, ease: "power2.out" }, 0)
-        .to(first, { x: 0, y: 0, duration: MOVE_OUT, ease: "power2.inOut" }, RETURN_AT)
+        .to(first, { x: -5, y: () => -excursion("--vzc-cycle-rise", 36), z: depth, scale: lift, duration: MOVE_IN, ease: "power2.out" }, 0)
+        .to(first, { x: 0, y: 0, z: 0, scale: 1, duration: MOVE_OUT, ease: "power2.inOut" }, RETURN_AT)
         .call(setActive("second"), null, CYCLE_BEAT)
-        .to(second, { x: 8, y: () => excursion("--vzc-cycle-drop", 22), duration: MOVE_IN, ease: "power2.out" }, CYCLE_BEAT)
-        .to(second, { x: 0, y: 0, duration: MOVE_OUT, ease: "power2.inOut" }, CYCLE_BEAT + RETURN_AT);
+        .to(second, { x: 8, y: () => excursion("--vzc-cycle-drop", 22), z: depth, scale: lift, duration: MOVE_IN, ease: "power2.out" }, CYCLE_BEAT)
+        .to(second, { x: 0, y: 0, z: 0, scale: 1, duration: MOVE_OUT, ease: "power2.inOut" }, CYCLE_BEAT + RETURN_AT);
       if (Math.abs(tl.duration() - CYCLE) > 1e-6) console.warn("[hero-cards] ciclo com duração inesperada:", tl.duration());
     }
 
     const resetPose = () => {
       tl?.pause(0);
-      if (gsap) gsap.set([first, second], { x: 0, y: 0 });
+      if (gsap) gsap.set([first, second], { x: 0, y: 0, z: 0, scale: 1 });
       stack.dataset.active = "first";
     };
 

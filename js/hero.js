@@ -60,13 +60,14 @@
   let store = null;
   let live = null; // instância montada do prólogo (coordenador, desenho, canvas)
   // Olho esquerdo (do observador) da águia estática, em frações do arquivo (o direito é EYE, abaixo)
-  const EYE_L = { x: 0.257, y: 0.237 };
+  // Hero V3.0 (13/11/2026): águia frontal nova (aguia-frontal-918.webp, 916×921)
+  const EYE_L = { x: 0.368, y: 0.304 };
   let OFF = 0;
   const at = (svh) => (svh + OFF) / TOTAL;
   const len = (svh) => svh / TOTAL;
 
-  // Olho direito da águia no arquivo recortado (1043×1377): centro da íris e diâmetro, em frações.
-  const EYE = { x: 0.562, y: 0.234, d: 0.081 };
+  // Olho direito da águia no arquivo recortado (916×921, Hero V3.0): centro da íris e diâmetro, em frações.
+  const EYE = { x: 0.656, y: 0.306, d: 0.0655 };
   // Fases (em svh da timeline)
   const ZOOM = { start: 6, end: 146 };
   const WIPE_AT = 222;
