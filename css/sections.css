@@ -741,6 +741,243 @@ html:not(.s03-motion) .vz-s3-glass-card {
   }
 }
 
+/* =========================================================
+   VIPZUE — SEÇÃO 03 · V4.0 (15/11/2026) · fundo cinematográfico + Liquid Glass óptico
+   Prompt "VIPZUE_PROMPT_MESTRE_SECAO_03_V4_0". Só pintura: nenhuma regra daqui mexe em dimensão, padding, gap, grid,
+   transform, opacidade de entrada, keyframes ou play-state. Narrativa (js/scroll-narrative.js), onda (vz-s3-wave.svg +
+   vz-s3-wave-drift + js/section3-liquid-glass.js), águia e layout continuam nas regras acima.
+   FUNDO — o mesmo sistema da CTA final, adaptado: a Jade (css/vz-atmosphere.css) com os focos desta seção, o Paper do
+   pool (js/vz-atmosphere.js, sem canvas novo) e, por cima, luz Páprica local e grade Grafite Quente. Tudo mora no
+   quadro sticky da atmosfera (.vz-atmosphere__frame, do tamanho da tela): a 03 é um trilho de 420svh com o palco
+   preso, e a luz/grade ficam presas junto com ele. A seção em si continua transparente (a passagem da Hero depende disso).
+   Camadas: base do quadro → Jade → Paper → luz (::before) → grade (::after) → conteúdo.
+   ========================================================= */
+#o-que-fazemos.s03 {
+  --vz-s3-graphite-warm: 34 32 29; /* Grafite Quente #22201D, em canais para a grade */
+  /* Jade: A canto superior esquerdo · B pé, no centro · C calor atrás da águia · D Mocha difuso; o meio fica escuro */
+  --vz-atm-a-x: 0%;
+  --vz-atm-a-y: 4%;
+  --vz-atm-a-rx: 38%;
+  --vz-atm-a-ry: 54%;
+  --vz-atm-a-k: 1;
+  --vz-atm-b-x: 48%;
+  --vz-atm-b-y: 102%;
+  --vz-atm-b-rx: 36%;
+  --vz-atm-b-ry: 40%;
+  --vz-atm-b-k: 1;
+  --vz-atm-c-x: 76%;
+  --vz-atm-c-y: 34%;
+  --vz-atm-c-rx: 30%;
+  --vz-atm-c-ry: 46%;
+  --vz-atm-c-k: 0.45;
+  --vz-atm-d-x: 30%;
+  --vz-atm-d-y: 62%;
+  --vz-atm-d-rx: 46%;
+  --vz-atm-d-ry: 52%;
+  --vz-atm-d-k: 0.16;
+  --vz-atm-mesh-opacity: 0.2;
+  /* V4.0: headline e os três textos em Marfim Quente pleno (era Marfim a 88%) */
+  --s03-text-alpha: 1;
+}
+
+/* base: espresso avermelhado, quase preto (a mesma da CTA), sob a Jade e o Paper */
+#o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame {
+  background-color: #170a06;
+  background-size: 56px 56px; /* herdado pelo ::after, onde estão as linhas */
+}
+
+#o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame::before,
+#o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* luz Páprica local: canto superior esquerdo e o foco que sobe do pé, no centro; dissipação longa, sem borda */
+#o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame::before {
+  z-index: 1;
+  background-image:
+    radial-gradient(ellipse 26% 42% at 0% 4%, rgb(215 103 63 / 0.9) 0%, rgb(215 103 63 / 0.46) 28%, rgb(159 57 48 / 0.18) 58%, rgb(159 57 48 / 0) 100%),
+    radial-gradient(ellipse 24% 30% at 48% 100%, rgb(215 103 63 / 0.92) 0%, rgb(215 103 63 / 0.46) 32%, rgb(159 57 48 / 0.16) 62%, rgb(159 57 48 / 0) 100%);
+}
+
+/* grade: 1 px, sem pontos nas interseções, por cima da luz (a mesma da CTA, passo de 56 px) */
+#o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame::after {
+  z-index: 2;
+  background-image:
+    linear-gradient(to right, rgb(var(--vz-s3-graphite-warm) / 0.7) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--vz-s3-graphite-warm) / 0.7) 1px, transparent 1px);
+  background-size: inherit;
+  background-position: center top;
+  opacity: 0.3;
+}
+
+/* Abaixo de 1024px: elipse larga (em % de uma tela alta, as do desktop virariam faixas verticais) e só o foco do canto.
+   O foco local do pé sai: aqui os cards passam pela base da tela, e Páprica sobre luz Páprica derrubava números e
+   títulos (card 03 a 2,98:1 no 390 × 844); o calor de baixo fica com a Jade (foco B). */
+@media (max-width: 1023.98px) {
+  #o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame {
+    background-size: 48px 48px;
+  }
+
+  #o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame::before {
+    background-image:
+      radial-gradient(ellipse 62% 26% at 0% 0%, rgb(215 103 63 / 0.82) 0%, rgb(215 103 63 / 0.4) 28%, rgb(159 57 48 / 0.16) 58%, rgb(159 57 48 / 0) 100%);
+  }
+}
+
+@media (max-width: 767.98px) {
+  #o-que-fazemos.s03 {
+    --vz-atm-a-x: 0%;
+    --vz-atm-a-y: -4%;
+    --vz-atm-a-rx: 72%;
+    --vz-atm-a-ry: 30%;
+    --vz-atm-b-x: 52%;
+    --vz-atm-b-y: 106%;
+    --vz-atm-b-rx: 80%;
+    --vz-atm-b-ry: 34%;
+    --vz-atm-c-x: 92%;
+    --vz-atm-c-y: 18%;
+    --vz-atm-c-rx: 54%;
+    --vz-atm-c-ry: 24%;
+    --vz-atm-d-x: 15%;
+    --vz-atm-d-y: 70%;
+    --vz-atm-d-rx: 90%;
+    --vz-atm-d-ry: 56%;
+  }
+
+  #o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame {
+    background-size: 44px 44px;
+  }
+}
+
+/* ---------- Liquid Glass óptico dos quatro cards ----------
+   A técnica da Hero (css/hero.css, .vz-lg__*), com a definição SVG própria da 03 (#vz-s03-liquid-refraction, no
+   index.html, logo antes do <ol> dos cards). Camadas por card: material (o existente, blur 9px) → óptica (o filtro SVG,
+   só nela) → película Mocha → janela da onda ORIGINAL → contorno (o existente, agora em gradiente) → conteúdo. */
+.vz-s3-lg__svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#o-que-fazemos .vz-s3-glass-card {
+  --vz-s3-lg-blur: 9px;
+  --vz-s3-lg-optical-opacity: 0.13;
+  --vz-s3-lg-rim-opacity: 0.45;
+}
+
+/* material existente: tinta Mocha baixa + blur; o véu de leitura do fluxo (tablet/movimento reduzido) continua por cima */
+#o-que-fazemos .vz-s3-glass-card > .vz-s3-glass__material {
+  background:
+    var(--vz-s3-read-veil, none),
+    linear-gradient(rgb(79 42 30 / 0.1), rgb(79 42 30 / 0.1));
+  -webkit-backdrop-filter: blur(var(--vz-s3-lg-blur)) saturate(118%);
+  backdrop-filter: blur(var(--vz-s3-lg-blur)) saturate(118%);
+}
+
+#o-que-fazemos .vz-s3-glass-card > .vz-s3-lg__optical,
+#o-que-fazemos .vz-s3-glass-card > .vz-s3-lg__tint {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* reflexo especular e refração discreta: o filtro fica SÓ nesta camada (nunca no card, no texto ou na onda) */
+#o-que-fazemos .vz-s3-glass-card > .vz-s3-lg__optical {
+  z-index: 1;
+  opacity: var(--vz-s3-lg-optical-opacity);
+  background:
+    radial-gradient(ellipse at 12% 5%, rgb(255 244 229 / 0.2), transparent 35%),
+    linear-gradient(130deg, rgb(255 244 229 / 0.08), transparent 34%, rgb(215 103 63 / 0.035) 74%, transparent);
+  filter: url("#vz-s03-liquid-refraction");
+}
+
+/* película Mocha translúcida */
+#o-que-fazemos .vz-s3-glass-card > .vz-s3-lg__tint {
+  z-index: 2;
+  background: linear-gradient(145deg, rgb(105 61 42 / 0.3) 0%, rgb(58 32 24 / 0.17) 48%, rgb(30 14 11 / 0.25) 100%);
+}
+
+/* onda ORIGINAL acima da película (só a ordem; janela, máscara, keyframes e play-state intactos) */
+#o-que-fazemos .vz-s3-glass-card > .vz-s3-glass__wave-window {
+  z-index: 3;
+}
+
+/* contorno existente, em gradiente Marfim recortado no anel de 1 px (máscara padding-box × border-box) */
+#o-que-fazemos .vz-s3-glass-card > .vz-s3-glass__rim {
+  z-index: 4;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgb(243 237 227 / 0.21), rgb(243 237 227 / 0.045) 38%, rgb(243 237 227 / 0.075) 75%, rgb(243 237 227 / 0.17)) border-box;
+  box-shadow: none;
+  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: var(--vz-s3-lg-rim-opacity);
+}
+
+/* conteúdo acima de todas as camadas ópticas (mesma posição relativa de antes; só o z-index) */
+#o-que-fazemos .vz-s3-glass-card > .s03-insight__content {
+  z-index: 5;
+}
+
+/* números e títulos em Páprica sólida (sem gradiente, glow nem sombra); descrições em Marfim Quente */
+#o-que-fazemos .vz-s3-glass-card [data-vz-s3-number],
+#o-que-fazemos .vz-s3-glass-card [data-vz-s3-title] {
+  color: #D7673F;
+  text-shadow: none;
+  -webkit-text-fill-color: currentColor;
+  background: none;
+}
+
+#o-que-fazemos .vz-s3-glass-card [data-vz-s3-copy] {
+  color: #F3EDE3;
+}
+
+/* sem backdrop-filter: película mais densa, sem perder o tom */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  #o-que-fazemos .vz-s3-glass-card > .vz-s3-glass__material {
+    background:
+      var(--vz-s3-read-veil, none),
+      linear-gradient(rgb(48 25 19 / 0.82), rgb(48 25 19 / 0.82));
+  }
+}
+
+/* transparência reduzida: vidro quase opaco e sem a camada óptica */
+@media (prefers-reduced-transparency: reduce) {
+  #o-que-fazemos .vz-s3-glass-card > .vz-s3-glass__material {
+    background: rgb(48 25 19 / 0.94);
+  }
+
+  #o-que-fazemos .vz-s3-glass-card > .vz-s3-lg__optical {
+    display: none;
+  }
+}
+
+/* tablet em fluxo (768–1023 px): os títulos têm 22 px (abaixo do "texto grande" do WCAG) e Páprica só passa de 4,5:1 sobre
+   um fundo quase preto; o véu de leitura do vidro (mesma geometria) fica mais denso no alto do card, onde estão número e título */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  html:not(.s03-motion) #o-que-fazemos .vz-s3-glass-card {
+    --vz-s3-read-veil: linear-gradient(172deg, rgb(18 9 6 / 0.72) 0%, rgb(18 9 6 / 0.6) 42%, rgb(18 9 6 / 0.26) 74%, rgb(18 9 6 / 0) 100%);
+  }
+}
+
+/* celular: só os parâmetros ópticos */
+@media (max-width: 767.98px) {
+  #o-que-fazemos .vz-s3-glass-card {
+    --vz-s3-lg-blur: 7px;
+    --vz-s3-lg-optical-opacity: 0.11;
+  }
+}
+/* movimento reduzido: o acabamento óptico não tem animação própria; a política da onda é a do bloco do vidro, acima */
+
 /* Tablet e desktop sem a narrativa até 1199px: duas colunas (01 — 02 / 03 — 04), altura pelo conteúdo */
 @media (max-width: 1199px) {
   html:not(.s03-motion) .s03-insights {
