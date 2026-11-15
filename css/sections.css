@@ -2383,419 +2383,274 @@ html:not(.s03-motion) .vz-s3-glass-card {
 }
 
 /* =========================================================
-   08 — Footer (UI.12). Porte sem React do "Beam Wordmark Footer" (21st.dev, kedhareswer) na paleta VIPZUE.
-   Carvão profundo atravessado por um feixe dourado lento, com a marca em wordmark gigante cortada na base. Cada letra
-   pinta o mesmo feixe e o mesmo brilho do ponteiro do fundo, alinhados às coordenadas do rodapé, então a luz se lê como
-   um só feixe que passa atrás das colunas e através das letras. js/beam-footer.js grava as variáveis: --bf-b (posição
-   do feixe, % da largura), --bf-px/--bf-py (ponteiro), --bf-g (intensidade do brilho), --bf-rw/--bf-rh (tamanho do
-   rodapé), --bf-x/--bf-y (posição de cada letra) e --bf-top/--bf-bot (degradê de repouso da wordmark).
-   Sem JS: fundo, feixe parado a 58% e wordmark em tamanho de reserva; tudo legível.
+   08 — Footer · V1.0 (15/11/2026)
+   Prompt "VIPZUE_Prompt_Mestre_Footer" + referência aprovada (31, 1536×865): a superfície escura da CTA final e da FAQ
+   (Jade Sky + Paper MeshGradient do pool, luz Páprica local e grade Grafite Quente), duas colunas de texto em Switzer
+   400 com as linhas na mesma grade e a assinatura VIPZUE monumental na base, na forma de sempre (Gloock, −0,02em).
+   Este bloco SUBSTITUI o "08 — Footer (UI.12)" (feixe, ícones, wordmark letra a letra, campo WebGL próprio).
+   A cortina (bloco "Rodapé em cortina", js/footer-curtain.js) continua: o rodapé é revelado fixo por baixo da FAQ.
    ========================================================= */
-.site-footer {
-  --bf-acc: var(--color-brand-accent);
-  --bf-ink: var(--color-text-on-dark);
-  --bf-bg: #1A100C; /* V4 (Atmosphere Fusion, 14/11/2026): a sombra V4 (era o Mocha #5B4632 chapado) */
-  --bf-ang: 118deg;
-  --bf-b: 58%;
-  --bf-px: 50%;
-  --bf-py: 50%;
-  --bf-g: 0;
-  --bf-top: 0px;
-  --bf-bot: 100%;
+.site-footer.vz-foot {
+  --vz-foot-ivory: var(--color-ivory);
+  --vz-foot-graphite-warm: 34 32 29; /* Grafite Quente #22201D, em canais para a grade */
+  --vz-foot-pad-x: 6.25vw;
+  --vz-foot-row: 56px; /* passo entre as linhas das duas colunas (referência: 122 · 177 · 233 · 291) */
+  /* Jade do rodapé (a receita V4 não muda; só os focos): A canto superior esquerdo · B pé, à esquerda do centro ·
+     C centro-direita · D Mocha difuso */
+  --vz-atm-a-x: 0%;
+  --vz-atm-a-y: 0%;
+  --vz-atm-a-rx: 30%;
+  --vz-atm-a-ry: 46%;
+  --vz-atm-a-k: 1;
+  --vz-atm-b-x: 46%;
+  --vz-atm-b-y: 102%;
+  --vz-atm-b-rx: 34%;
+  --vz-atm-b-ry: 44%;
+  --vz-atm-b-k: 1;
+  --vz-atm-c-x: 63%;
+  --vz-atm-c-y: 40%;
+  --vz-atm-c-rx: 30%;
+  --vz-atm-c-ry: 40%;
+  --vz-atm-c-k: 0.7;
+  --vz-atm-d-x: 20%;
+  --vz-atm-d-y: 60%;
+  --vz-atm-d-rx: 44%;
+  --vz-atm-d-ry: 50%;
+  --vz-atm-d-k: 0.2;
+  --vz-atm-mesh-opacity: 0.14;
   position: relative;
   isolation: isolate;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: max(720px, 100svh);
   overflow: hidden;
-  container-type: inline-size;
-  background: var(--bf-bg);
-  color: var(--bf-ink);
-  touch-action: pan-y;
+  overflow: clip;
+  color: var(--vz-foot-ivory);
+  /* base espresso avermelhada da referência (#240702–#370800 nas sombras) */
+  background-color: #210703;
+  background-image: none;
 }
 
-/* linha do topo: fio dourado, mais claro onde o feixe a cruza */
-.site-footer__rule {
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: 3;
-  height: 1px;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--bf-acc) 15%, transparent), color-mix(in srgb, var(--bf-acc) 55%, transparent) var(--bf-b), color-mix(in srgb, var(--bf-acc) 15%, transparent));
-}
-
-/* fundo: lavagem quente, faixas verticais tênues, o feixe (e um segundo, mais fraco), o brilho do ponteiro e grão */
-.site-footer__sky,
-.site-footer__sky > div {
+/* luz Páprica local + grade: absolutas, cobrem o rodapé inteiro, atrás do texto e da assinatura */
+.vz-foot__bg {
   position: absolute;
   inset: 0;
+  z-index: -1;
   pointer-events: none;
+  background-size: 56px 56px; /* herdado pelo ::after, onde estão as linhas */
 }
 
-.site-footer__sky {
-  z-index: 0;
-}
-
-.site-footer__wash {
-  background:
-    radial-gradient(120% 90% at 8% 0%, color-mix(in srgb, var(--bf-acc) 14%, transparent), transparent 55%),
-    radial-gradient(90% 70% at 92% 8%, color-mix(in srgb, var(--bf-acc) 10%, transparent), transparent 60%),
-    linear-gradient(180deg, color-mix(in srgb, var(--bf-acc) 4%, transparent), transparent 70%);
-}
-
-.site-footer__bands {
-  background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--bf-acc) 4%, transparent) 0 1.6cqw, transparent 1.6cqw 4.2cqw);
-  -webkit-mask-image: linear-gradient(100deg, #000 0%, transparent 55%);
-  mask-image: linear-gradient(100deg, #000 0%, transparent 55%);
-  opacity: 0.9;
-}
-
-.site-footer__beam {
-  filter: blur(calc(1px + 1.6cqw));
-  background:
-    linear-gradient(var(--bf-ang), transparent calc(var(--bf-b) - 11%), color-mix(in srgb, var(--bf-acc) 8%, transparent) calc(var(--bf-b) - 5%), color-mix(in srgb, var(--bf-acc) 26%, transparent) var(--bf-b), color-mix(in srgb, var(--bf-acc) 6%, transparent) calc(var(--bf-b) + 4%), transparent calc(var(--bf-b) + 9%)),
-    linear-gradient(var(--bf-ang), transparent calc(var(--bf-b) - 34%), color-mix(in srgb, var(--bf-acc) 8%, transparent) calc(var(--bf-b) - 27%), transparent calc(var(--bf-b) - 20%));
-}
-
-.site-footer__glow {
-  opacity: var(--bf-g);
-  background: radial-gradient(circle 26cqw at var(--bf-px) var(--bf-py), color-mix(in srgb, var(--bf-acc) 13%, transparent), transparent 70%);
-}
-
-.site-footer__grain {
-  opacity: 0.12;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-}
-
-/* colunas */
-.site-footer__grid {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  grid-template-columns: minmax(0, 1.62fr) minmax(0, 0.86fr);
-  column-gap: var(--grid-gutter);
-  row-gap: var(--space-2xl);
-  padding-top: clamp(48px, 8.5cqw, 104px);
-}
-
-.site-footer__col {
-  min-width: 0;
-}
-
-.site-footer__col--brand {
-  max-width: 420px;
-}
-
-.site-footer__label {
-  position: relative;
-  display: block;
-  padding-bottom: 13px;
-  font-size: var(--font-size-small);
-  line-height: 1;
-  letter-spacing: 0.01em;
-  color: var(--bf-ink); /* label pequeno: tinta Marfim. Refino cromático (07/11): sem o filete abaixo; o padding fica */
-}
-
-.site-footer__fade {
-  transition:
-    opacity 0.9s ease var(--bf-d, 0ms),
-    translate 0.9s cubic-bezier(0.2, 0.7, 0.1, 1) var(--bf-d, 0ms);
-}
-
-/* entrada (uma vez, quando o rodapé aparece): só com movimento permitido; o JS liga data-in="false" ao iniciar */
-.site-footer[data-in="false"] .site-footer__fade {
-  opacity: 0;
-  translate: 0 14px;
-}
-
-/* redes: quadrados de vidro com a borda de cima acesa */
-.site-footer__social {
-  display: flex;
-  gap: var(--space-sm);
-  margin: 13px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.social-link {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-sm);
-  color: color-mix(in srgb, var(--bf-ink) 62%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--bf-ink) 9%, transparent), color-mix(in srgb, var(--bf-ink) 2.5%, transparent));
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--bf-ink) 16%, transparent),
-    inset 0 1px 0 color-mix(in srgb, var(--bf-ink) 14%, transparent);
-  transition:
-    color 0.25s,
-    box-shadow 0.35s,
-    translate 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-    background 0.35s;
-}
-
-.social-link[href]:hover,
-.social-link[href]:focus-visible {
-  color: var(--bf-ink);
-  translate: 0 -2px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--bf-acc) 32%, transparent), color-mix(in srgb, var(--bf-acc) 8%, transparent));
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--bf-acc) 75%, transparent),
-    inset 0 1px 0 color-mix(in srgb, var(--bf-ink) 30%, transparent),
-    0 10px 26px -8px color-mix(in srgb, var(--bf-acc) 75%, transparent);
-}
-
-.site-footer__tip {
-  position: absolute;
-  z-index: 5;
-  left: 50%;
-  top: calc(100% + 9px);
-  translate: -50% -4px;
-  padding: 6px 8px;
-  border-radius: 4px;
-  background: var(--bf-acc);
-  color: var(--color-graphite); /* Grafite sobre Páprica: 4,6:1 */
-  font-size: 11px;
-  line-height: 1;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s, translate 0.25s;
-}
-
-.site-footer__tip::after {
+/* os três focos da referência: canto superior esquerdo (intenso), centro-direita (difuso) e o pé, à esquerda do centro
+   (o mais intenso, sobe para a assinatura). Tokens Páprica e Páprica Profunda, sem contorno. */
+.vz-foot__bg::before {
   content: "";
   position: absolute;
-  left: 50%;
-  bottom: 100%;
-  margin-left: -4px;
-  border: 4px solid transparent;
-  border-bottom-color: var(--bf-acc);
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 15% 26% at 0% 0%, rgb(215 103 63 / 1) 0%, rgb(215 103 63 / 0.62) 24%, rgb(159 57 48 / 0.3) 50%, rgb(159 57 48 / 0.1) 74%, rgb(159 57 48 / 0) 100%),
+    radial-gradient(ellipse 26% 34% at 63% 41%, rgb(215 103 63 / 0.7) 0%, rgb(215 103 63 / 0.36) 30%, rgb(159 57 48 / 0.14) 60%, rgb(159 57 48 / 0) 100%),
+    radial-gradient(ellipse 26% 36% at 45% 100%, rgb(215 103 63 / 1) 0%, rgb(215 103 63 / 0.7) 22%, rgb(159 57 48 / 0.36) 48%, rgb(159 57 48 / 0.1) 74%, rgb(159 57 48 / 0) 100%);
 }
 
-.social-link[href]:hover .site-footer__tip,
-.social-link[href]:focus-visible .site-footer__tip {
-  opacity: 1;
-  translate: -50% 0;
-}
-
-.site-footer__copy {
-  margin-top: 21px;
-  font-size: var(--font-size-small);
-  line-height: 1.5;
-  /* 95%: sobre o Mocha com a lavagem Páprica (sem WebGL), 70% caía a 3,6:1; 95% dá ≥ 5:1 (migração cromática) */
-  color: color-mix(in srgb, var(--bf-ink) 95%, transparent);
-}
-
-/* links legais: um fio dourado entra, o texto desliza e a seta aparece */
-.site-footer__legal {
-  display: flex;
-  flex-direction: column;
-  margin: 13px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.footer-link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 0;
-  font-size: var(--font-size-small);
-  line-height: 21px;
-  color: color-mix(in srgb, var(--bf-ink) 95%, transparent); /* 78% caía a 4,2:1 sobre o Mocha + lavagem Páprica */
-  text-decoration: none; /* com destino real o sublinhado padrão do navegador apareceria; o traço do ::before é o indicador */
-  transition: color 0.25s;
-}
-
-.footer-link__t {
-  display: inline-block;
-  transition: translate 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.footer-link::before {
+/* a grade: 1 px, sem pontos nas interseções, a mesma técnica da CTA e da FAQ (passo de 56 px, como pede o prompt) */
+.vz-foot__bg::after {
   content: "";
   position: absolute;
-  left: 0;
-  top: 50%;
-  width: 6px;
-  height: 1px;
-  background: var(--bf-acc);
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgb(var(--vz-foot-graphite-warm) / 0.7) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--vz-foot-graphite-warm) / 0.7) 1px, transparent 1px);
+  background-size: inherit;
+  background-position: center top;
+  opacity: 0.2; /* 0,7 × 0,2 ≈ 14% de grafite: só aparece em segunda leitura sobre a luz */
 }
 
-.footer-link svg {
-  width: 12px;
-  height: 12px;
-  color: var(--bf-acc);
-  opacity: 0;
-  translate: -6px 0;
-  transition: opacity 0.25s, translate 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.footer-link[href]:hover,
-.footer-link[href]:focus-visible {
-  color: var(--bf-ink);
-}
-
-.footer-link[href]:hover::before,
-.footer-link[href]:focus-visible::before {
-  transform: scaleX(1);
-}
-
-.footer-link[href]:hover .footer-link__t,
-.footer-link[href]:focus-visible .footer-link__t {
-  translate: 12px 0;
-}
-
-.footer-link[href]:hover svg,
-.footer-link[href]:focus-visible svg {
-  opacity: 1;
-  translate: 10px 0;
-}
-
-/* wordmark: cada letra pinta o fundo do tamanho do rodapé, deslocado pela posição dela, então feixe e brilho
-   coincidem com os do fundo */
-.site-footer__word {
+/* ---------- duas colunas; as linhas das duas são a mesma grade (passo fixo), então se alinham por construção ---------- */
+.vz-foot__cols {
   position: relative;
   z-index: 1;
-  overflow: hidden;
-  height: calc(0.94 * 26cqw); /* reserva sem JS (o JS ajusta pela métrica real da fonte) */
-  margin-top: clamp(28px, 7cqw, 96px);
+  display: grid;
+  grid-template-columns: calc(63.8vw - var(--vz-foot-pad-x)) auto;
+  align-items: start;
+  padding: 116px var(--vz-foot-pad-x) 0;
 }
 
-.site-footer__word-in {
-  display: inline-flex;
+.vz-foot__col {
+  display: grid;
+  grid-auto-rows: var(--vz-foot-row);
+  align-content: start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vz-foot__list {
+  display: contents;
+}
+
+.vz-foot__list,
+.vz-foot__col li {
+  list-style: none;
+}
+
+.vz-foot__item {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 21.4px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--vz-foot-ivory);
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* a 4ª linha da esquerda fica 2 px abaixo do passo, como na referência */
+.vz-foot__col--brand .vz-foot__item:last-child {
+  transform: translateY(2px);
+}
+
+.vz-foot__link {
+  color: inherit;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: color 0.2s ease-out;
+}
+
+.vz-foot__link[href]:hover {
+  color: rgb(243 237 227 / 0.72);
+}
+
+.vz-foot__link:focus-visible {
+  outline: 2px solid var(--vz-foot-ivory);
+  outline-offset: 4px;
+}
+
+/* destino ainda não configurado (js/sections.js marca .is-pending): texto igual, sem parecer clicável */
+.vz-foot__link.is-pending {
+  cursor: default;
+}
+
+/* ---------- assinatura monumental: a mesma Gloock e o mesmo espaçamento da wordmark anterior; 88% da largura,
+   centrada, com a base a ~6% da altura. Páprica escurecida nas pontas e acesa onde a luz do pé sobe. ---------- */
+.vz-foot__mark {
+  position: absolute;
+  left: 50%;
+  bottom: 3.7%; /* a base das letras a ~6% da altura, como na referência (810 de 865) */
+  z-index: 0;
+  margin: 0;
+  transform: translateX(-50%);
   font-family: var(--font-display);
-  font-size: 26cqw;
-  font-weight: var(--font-weight-regular);
-  line-height: 1;
+  font-weight: 400;
+  font-size: 26.45vw;
+  line-height: 0.88;
   letter-spacing: -0.02em;
   white-space: nowrap;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.site-footer__lw {
-  display: inline-block;
-  transition: translate 1.25s cubic-bezier(0.16, 0.84, 0.2, 1) var(--bf-d, 0ms);
-}
-
-.site-footer[data-in="false"] .site-footer__lw {
-  translate: 0 85%;
-}
-
-.site-footer__l {
-  display: inline-block;
-  cursor: pointer;
-  color: transparent;
+  color: #7b1d0c; /* sem background-clip: a cor sólida de reserva */
+  background-image:
+    radial-gradient(ellipse 26% 58% at 45% 106%, rgb(240 86 30) 0%, rgb(226 64 20 / 0.85) 30%, rgb(211 49 11 / 0.4) 56%, rgb(211 49 11 / 0) 80%),
+    radial-gradient(ellipse 22% 60% at 64% 0%, rgb(211 49 11 / 0.45) 0%, rgb(211 49 11 / 0) 70%),
+    linear-gradient(90deg, #6a180a 0%, #7b1d0c 18%, #a7250d 46%, #9a230c 64%, #7b1d0c 84%, #64170a 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  background-repeat: no-repeat;
-  background-size: var(--bf-rw, 100%) var(--bf-rh, 100%);
-  background-position: calc(var(--bf-x, 0px) * -1) calc(var(--bf-y, 0px) * -1);
-  background-image:
-    radial-gradient(circle 22cqw at var(--bf-px) var(--bf-py), color-mix(in srgb, var(--bf-acc) calc(var(--bf-g) * 85%), transparent), transparent 70%),
-    linear-gradient(var(--bf-ang), transparent calc(var(--bf-b) - 9%), color-mix(in srgb, var(--bf-acc) 55%, transparent) calc(var(--bf-b) - 1.5%), color-mix(in srgb, var(--bf-acc) 70%, transparent) var(--bf-b), color-mix(in srgb, var(--bf-acc) 20%, transparent) calc(var(--bf-b) + 3.5%), transparent calc(var(--bf-b) + 8%)),
-    linear-gradient(180deg, var(--color-mocha-glint) var(--bf-top), var(--color-deep) var(--bf-bot));
-  transform-origin: 50% 100%;
-  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.25, 1.2), filter 0.4s;
-}
-
-.site-footer__l:hover {
-  transform: translateY(-0.045em);
-  filter: brightness(1.35) saturate(1.1);
-}
-
-.site-footer__l.is-hop {
-  animation: site-footer-hop 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-@keyframes site-footer-hop {
-  0% { transform: translateY(0) scale(1, 1); }
-  18% { transform: translateY(0.02em) scale(1.06, 0.9); }
-  45% { transform: translateY(-0.14em) scale(0.97, 1.05); }
-  70% { transform: translateY(0.01em) scale(1.02, 0.97); }
-  100% { transform: translateY(-0.045em) scale(1, 1); }
-}
-
-/* a base da wordmark afunda no escuro */
-.site-footer__foot {
-  position: absolute;
-  inset: auto 0 0;
-  z-index: 2;
-  height: 34%;
+  -webkit-text-fill-color: transparent;
   pointer-events: none;
-  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bf-bg) 55%, transparent) 55%, var(--bf-bg));
+  user-select: none;
 }
 
-/* ---------- Rodapé sobre o campo da Hero (rodada 3) ----------
-   O canvas do campo escuro (modo "dark", js/light-field.js) substitui a lavagem, as faixas e o grão do fundo original.
-   Ficam: o fio do topo, o feixe (mais fraco, para não riscar o texto) e o brilho do ponteiro. */
-.site-footer.has-field .site-footer__wash,
-.site-footer.has-field .site-footer__bands,
-.site-footer.has-field .site-footer__grain {
-  display: none;
+/* ---------- tablet ---------- */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .site-footer.vz-foot {
+    --vz-foot-pad-x: 5vw;
+    --vz-foot-row: 44px;
+    min-height: 100svh;
+  }
+
+  .vz-foot__cols {
+    grid-template-columns: calc(58vw - var(--vz-foot-pad-x)) auto;
+    padding-top: 88px;
+  }
+
+  .vz-foot__item {
+    font-size: 17px;
+  }
+
+  .vz-foot__bg {
+    background-size: 48px 48px;
+  }
+
+  /* coluna mais alta que larga: as luzes em elipses largas, como no celular */
+  .site-footer.vz-foot {
+    --vz-atm-a-rx: 56%;
+    --vz-atm-a-ry: 26%;
+    --vz-atm-b-rx: 60%;
+    --vz-atm-b-ry: 26%;
+    --vz-atm-c-rx: 46%;
+    --vz-atm-c-ry: 22%;
+  }
+
+  .vz-foot__bg::before {
+    background-image:
+      radial-gradient(ellipse 40% 20% at 0% 0%, rgb(215 103 63 / 0.95) 0%, rgb(215 103 63 / 0.55) 24%, rgb(159 57 48 / 0.22) 54%, rgb(159 57 48 / 0) 100%),
+      radial-gradient(ellipse 42% 20% at 63% 42%, rgb(215 103 63 / 0.6) 0%, rgb(215 103 63 / 0.28) 34%, rgb(159 57 48 / 0) 100%),
+      radial-gradient(ellipse 50% 24% at 45% 100%, rgb(215 103 63 / 1) 0%, rgb(215 103 63 / 0.66) 24%, rgb(159 57 48 / 0.3) 52%, rgb(159 57 48 / 0) 100%);
+  }
 }
 
-.site-footer.has-field .site-footer__beam {
-  opacity: 0.6;
-}
+/* ---------- celular: uma coluna (marca, depois Legal); a assinatura continua na base ---------- */
+@media (max-width: 767.98px) {
+  .site-footer.vz-foot {
+    --vz-foot-pad-x: 24px;
+    --vz-foot-row: 42px;
+    min-height: 100vh;
+    min-height: 100lvh;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --vz-atm-a-rx: 70%;
+    --vz-atm-a-ry: 22%;
+    --vz-atm-b-rx: 80%;
+    --vz-atm-b-ry: 24%;
+    --vz-atm-c-x: 80%;
+    --vz-atm-c-y: 46%;
+    --vz-atm-c-rx: 60%;
+    --vz-atm-c-ry: 20%;
+  }
 
-/* V7 (08/11/2026, tarefa A): sobre o mesmo campo da Hero, a mesma sombra quente lateral da Hero (.hero__bg::before,
-   tokens do ambiente escuro). Sem ela, as sombras do rodapé ficavam em marrom-oliva claro (#463527 medido, contra
-   #352821 na Hero). Uma camada de pintura, sem canvas nem movimento; fica abaixo da lavagem, do feixe e do brilho. */
-.site-footer.has-field .site-footer__sky::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgb(var(--env-dark-shade) / 0.5) 0%, rgb(var(--env-dark-shade) / 0.3) 48%, rgb(var(--env-dark-shade) / 0.08) 100%);
-}
+  .vz-foot__cols {
+    grid-template-columns: 1fr;
+    row-gap: 38px;
+    padding-top: 64px;
+  }
 
-/* O rodapé é mais baixo que a tela: o canvas dele preenche o rodapé (e não os 100lvh dos canvases das outras seções) */
-.site-footer .section-light-field canvas {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-}
+  .vz-foot__item {
+    font-size: 16px;
+  }
 
-/* Texto pequeno sobre o campo: tinta Marfim (a Páprica não serve de tinta para texto pequeno) */
-.site-footer.has-field .site-footer__label {
-  color: var(--bf-ink);
-}
+  .vz-foot__col--brand .vz-foot__item:last-child {
+    transform: none;
+  }
 
-.site-footer.has-field .site-footer__copy {
-  color: color-mix(in srgb, var(--bf-ink) 95%, transparent); /* sobre o pico Páprica do campo, 88% dava 4,4:1; 95% dá ≥ 4,8:1 */
-}
+  .vz-foot__mark {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 2.4%);
+  }
 
-/* Links legais: com a luz Páprica do campo (migração cromática), 88% cai a 4,35:1 no foco mais claro (1440 × 900); a 95%, como a
-   copy, ficam ≥ 4,8:1. Especificidade baixa (0,2,0) de propósito: o hover/foco (.footer-link[href]:hover) continua acendendo
-   para --bf-ink. */
-.has-field .footer-link {
-  color: color-mix(in srgb, var(--bf-ink) 95%, transparent);
-}
+  .vz-foot__bg {
+    background-size: 44px 44px;
+  }
 
-/* Wordmark: o preenchimento de repouso passa de Mocha com reflexo → profundidade (pensado para o fundo chapado) para uma Páprica translúcida,
-   que se lê sobre qualquer ponto do campo e afunda no escuro na base, como na referência. As duas primeiras camadas
-   (brilho do ponteiro e feixe) são as mesmas de .site-footer__l; só a terceira muda. */
-.site-footer.has-field .site-footer__l {
-  background-image:
-    radial-gradient(circle 22cqw at var(--bf-px) var(--bf-py), color-mix(in srgb, var(--bf-acc) calc(var(--bf-g) * 85%), transparent), transparent 70%),
-    linear-gradient(var(--bf-ang), transparent calc(var(--bf-b) - 9%), color-mix(in srgb, var(--bf-acc) 55%, transparent) calc(var(--bf-b) - 1.5%), color-mix(in srgb, var(--bf-acc) 70%, transparent) var(--bf-b), color-mix(in srgb, var(--bf-acc) 20%, transparent) calc(var(--bf-b) + 3.5%), transparent calc(var(--bf-b) + 8%)),
-    linear-gradient(180deg, color-mix(in srgb, var(--bf-acc) 36%, transparent) var(--bf-top), color-mix(in srgb, var(--bf-acc) 9%, transparent) var(--bf-bot));
+  /* a luz em elipses largas (em % de uma coluna alta as do desktop viram faixas) */
+  .vz-foot__bg::before {
+    background-image:
+      radial-gradient(ellipse 60% 20% at 0% 0%, rgb(215 103 63 / 0.9) 0%, rgb(215 103 63 / 0.5) 26%, rgb(159 57 48 / 0.2) 56%, rgb(159 57 48 / 0) 100%),
+      radial-gradient(ellipse 60% 18% at 80% 46%, rgb(215 103 63 / 0.5) 0%, rgb(215 103 63 / 0.24) 36%, rgb(159 57 48 / 0) 100%),
+      radial-gradient(ellipse 70% 20% at 45% 100%, rgb(215 103 63 / 1) 0%, rgb(215 103 63 / 0.6) 26%, rgb(159 57 48 / 0.24) 56%, rgb(159 57 48 / 0) 100%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-footer__lw,
-  .site-footer__fade,
-  .site-footer__l,
-  .social-link,
-  .footer-link__t,
-  .footer-link svg {
+  .vz-foot__link {
     transition: none;
-    animation: none;
   }
 }
 
@@ -3074,14 +2929,6 @@ html:not(.s03-motion) .vz-s3-glass-card {
   /* Os pontos acesos do celular (antes "tubelight-navbar", .journey--lamp) agora são da linha viva: bloco
      "S04 MOBILE · linha viva", no fim do arquivo. */
 
-  .site-footer__grid {
-    grid-template-columns: 1fr;
-    row-gap: var(--space-xl);
-  }
-
-  .site-footer__col--brand {
-    max-width: none;
-  }
 }
 
 /* =========================================================
@@ -3381,51 +3228,10 @@ html.has-curtain .footer-curtain .site-footer {
 }
 
 /* =========================================================
-   08 — Rodapé: altura de tela em TODAS as larguras + wordmark centralizada (rodada 6)
-   Antes (rodada 5): a altura de tela valia só até 767 px. No desktop o rodapé era mais baixo que a tela e a FAQ aparecia acima dele
-   no fim da página ("duas seções juntas"). Agora o rodapé é uma coluna da altura da tela: marca no alto, "Legal" ao lado,
-   wordmark na base, e nada da FAQ aparece. Este bloco SUBSTITUI o bloco "Rodapé no celular (rodada 5)" (sem o @media).
+   08 — Rodapé: altura de tela (rodada 6) e lvh no celular (V7)
+   Footer V1.0 (15/11/2026): as duas regras (altura mínima de uma tela; no celular a tela GRANDE, lvh, com a área
+   segura) passaram para o bloco "08 — Footer · V1.0", junto com o resto do rodapé.
    ========================================================= */
-.site-footer {
-  display: flex;
-  flex-direction: column;
-  min-height: 100svh;
-}
-
-.site-footer__grid {
-  flex: 1 1 auto;
-  align-content: space-between;
-  padding-top: clamp(72px, 14svh, 128px);
-}
-
-.site-footer__word {
-  flex: none;
-}
-
-/* wordmark no meio da página: a caixa é o .container (centrada); o texto dentro dela também */
-.site-footer__word-box {
-  text-align: center;
-}
-
-.site-footer__word-in {
-  justify-content: center;
-}
-
-/* V7 (correção visual, 08/11/2026, Tarefa H) — só celular: o rodapé cobre a tela GRANDE (lvh: barra do Safari
-   recolhida). Com 100svh, no fim da página com a barra recolhida sobravam ~80 px da FAQ no topo da tela (reproduzido
-   em docs/qa/correcao-v7/G-antes, simulação "safari"). Com a barra aberta o excedente fica no respiro de cima do
-   rodapé (≥ 72 px), sem cortar conteúdo. A cortina (js/footer-curtain.js) já só liga quando o rodapé cabe na tela
-   pequena: onde a barra do navegador é dinâmica (lvh > svh) ela não liga e o rodapé fica no fluxo — a sobreposição
-   fixa não consegue cobrir as duas alturas; onde não há barra dinâmica (lvh = svh) a cortina continua igual. O fim
-   respeita a área segura do iPhone (a página usa viewport-fit=cover). */
-@media (max-width: 767.98px) {
-  .site-footer {
-    min-height: 100vh;
-    min-height: 100lvh;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    box-sizing: border-box;
-  }
-}
 
 /* =========================================================
    04 — Método, desktop (≥ 1024 px) — V6 (07/11/2026, prompt mestre da Seção 04)
