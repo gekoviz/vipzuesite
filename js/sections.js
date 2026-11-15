@@ -39,15 +39,15 @@
     }
   });
 
-  // ---------- FAQ (07) · V5.0 (08/11/2026) ----------
-  // Accordion: o de antes (botão + região, aria-expanded, setas/Home/End, um item aberto por vez = type="single" collapsible).
-  // Entrada: prompt V5.0, comportamento do 21st.dev "frequently-asked-questions-with-accordion" (ScrollX UI), com o GSAP que
-  // a página já carrega. UMA timeline e UM ScrollTrigger no root (start "top 82%"): as duas palavras do título (opacidade,
-  // 12px e desfoque de 6px; 0,40s, +0,08s, power2.inOut) e, a 0,36s, as cinco perguntas em cascata (opacidade e 10px;
-  // 0,35s, +0,07s, power2.out). Roda uma vez e não é presa à rolagem: parou de rolar, ela termina sozinha.
-  // Os estados escondidos só entram DEPOIS que o gatilho existe; sem GSAP, com movimento reduzido ou se algo falhar, tudo
-  // fica visível. Usa opacidade (não visibility): as perguntas continuam alcançáveis pelo Tab, e o foco termina a entrada.
-  // Ao terminar, os estilos inline saem (nenhuma opacidade, transform ou filtro residual) e o gatilho é desfeito.
+  // ---------- FAQ (07) · V1.0 (15/11/2026) ----------
+  // Accordion: o de antes (botão + região, aria-expanded, setas/Home/End, um item aberto por vez = type="single" collapsible,
+  // comportamento intencional da FAQ aprovada, preservado).
+  // Entrada: porte sem React do FaqTitle/FaqCard (Hirael/21st.dev, Motion "whileInView", once). Título: cada palavra de
+  // opacidade 0 e +16 px a 1 e 0, 0,50 s easeOut, atraso 0,20 s + 0,08 s por palavra. Barras: opacidade 0 e +20 px, 0,45 s
+  // easeOut, atraso índice × 0,10 s. Cada elemento é observado sozinho (IntersectionObserver) e revela quando ELE entra na
+  // tela, uma vez; as transições são CSS (css/sections.css, "07 — FAQ final · V1.0"), só opacidade e transform.
+  // O estado escondido (is-rv) só entra depois que o observador existe; sem IntersectionObserver, com movimento reduzido ou
+  // se algo falhar, tudo fica visível. As barras continuam clicáveis e alcançáveis pelo Tab; o foco revela tudo na hora.
   const faq = document.getElementById("faq");
   if (faq) {
     const list = faq.querySelector("[data-accordion]");
@@ -80,48 +80,53 @@
     }
 
     // 2) entrada
-    const gsap = window.gsap;
-    const ST = window.ScrollTrigger;
     const words = [...faq.querySelectorAll(".vz-faq__title-word")];
+    const title = faq.querySelector(".vz-faq__title");
     const still = !window.matchMedia || matchMedia("(prefers-reduced-motion: reduce)").matches;
     const passed = faq.getBoundingClientRect().bottom <= 0; // recarga já abaixo da FAQ: nada a revelar
-    if (gsap && ST && !still && !passed && words.length === 2 && items.length === 5) {
+    if ("IntersectionObserver" in window && !still && !passed && title && words.length && items.length) {
       const targets = [...words, ...items];
-      let tl = null;
-      let st = null;
-      const finish = () => {
-        if (tl && tl.progress() < 1) tl.progress(1);
+      const clean = (el) => {
+        el.classList.remove("is-rv", "is-in");
+        el.style.removeProperty("--rv-d");
+      };
+      const reveal = (el, delay) => {
+        if (!el.classList.contains("is-rv") || el.classList.contains("is-in")) return;
+        el.style.setProperty("--rv-d", delay + "s");
+        el.classList.add("is-in");
+        // terminou a entrada: sai o estado (nenhuma opacidade ou transform residual)
+        const done = (e) => {
+          if (e.target !== el || e.propertyName !== "opacity") return;
+          el.removeEventListener("transitionend", done);
+          clean(el);
+        };
+        el.addEventListener("transitionend", done);
+        setTimeout(() => clean(el), (delay + 0.6) * 1000 + 200); // garantia se o transitionend não vier
+      };
+      let io = null;
+      const finishAll = () => {
+        if (io) io.disconnect();
+        targets.forEach(clean);
+        faq.removeEventListener("focusin", finishAll);
       };
       try {
-        tl = gsap.timeline({
-          paused: true,
-          defaults: { overwrite: "auto" },
-          onComplete: () => {
-            gsap.set(targets, { clearProps: "opacity,transform,filter" });
-            faq.removeEventListener("focusin", finish);
-            if (st) st.kill();
+        io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((en) => {
+              if (!en.isIntersecting) return;
+              io.unobserve(en.target);
+              if (en.target === title) words.forEach((w, i) => reveal(w, 0.2 + i * 0.08));
+              else reveal(en.target, items.indexOf(en.target) * 0.1);
+            });
           },
-        });
-        tl.fromTo(words, { opacity: 0, y: 12, filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, stagger: 0.08, ease: "power2.inOut", immediateRender: false }, 0);
-        tl.fromTo(items, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.07, ease: "power2.out", immediateRender: false }, 0.36);
-        st = ST.create({
-          trigger: faq,
-          start: "top 82%",
-          refreshPriority: -1, // depois dos palcos que vêm antes na página
-          onEnter: () => tl.play(),
-          onLeave: finish, // passou direto (salto, âncora, recarga lá embaixo): termina na hora
-          onEnterBack: finish,
-        });
-        // só agora o estado inicial (se o gatilho já disparou, a timeline já está no começo e isto é o mesmo estado)
-        if (tl.progress() === 0) {
-          gsap.set(words, { opacity: 0, y: 12, filter: "blur(6px)" });
-          gsap.set(items, { opacity: 0, y: 10 });
-        }
-        faq.addEventListener("focusin", finish);
+          { rootMargin: "0px 0px -6% 0px", threshold: 0 }
+        );
+        targets.forEach((el) => el.classList.add("is-rv"));
+        io.observe(title);
+        items.forEach((item) => io.observe(item));
+        faq.addEventListener("focusin", finishAll);
       } catch (err) {
-        if (st) st.kill();
-        if (tl) tl.kill();
-        gsap.set(targets, { clearProps: "opacity,transform,filter" });
+        finishAll();
       }
     }
   }
