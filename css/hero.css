@@ -1773,3 +1773,228 @@
   }
 }
 
+/* =========================================================
+   HERO MOBILE V5.0 (prompt mestre V5.0, 21/11/2026) — cor, luz e hierarquia da Hero no celular
+   Só abaixo de 768 px; o desktop e o tablet não leem nada daqui. Nenhum elemento novo: as camadas existentes ganham
+   outra função. Ordem visual: base Shadow/Espresso (.hero__bg) → Jade Sky + Paper (.vz-atmosphere) → luz localizada
+   (.hero__veil: vinheta lateral, luz do topo, halo da cabeça e luz secundária da plumagem) → grade → águia → cards →
+   headline, CTA e cabeçalho. A luz fica no véu porque ele já está acima do shader e abaixo da águia e já sai com a
+   máscara da passagem para a 03 (--wipe-hide). O halo e a luz da plumagem são medidos nas mesmas variáveis que
+   posicionam a águia (--face-x, --eyes-y, --eagle-w, --eagle-h), então acompanham a águia em qualquer largura.
+   Nada anima aqui; Jade, Paper, Deep Zoom, ciclo dos cards e a luz da borda do CTA seguem os controladores de sempre.
+   ========================================================= */
+@media (max-width: 767.98px) {
+  .hero {
+    --hero-mobile-shadow: #170A06;
+    --hero-mobile-espresso: #241009;
+    --hero-mobile-mocha: #5B4632;
+    --hero-mobile-paprika-deep: #9F3930;
+    --hero-mobile-paprika: #D7673F;
+    --hero-mobile-ivory: #F3EDE3;
+    --hero-mobile-paprika-lit: #F0753F;
+    --hero-mobile-light-core: #EB4C18;
+  }
+
+  /* Jade: 1 aquece o canto do cabeçalho · 2 profundidade central (Espresso → Mocha, fraca) · 3 calor atrás da cabeça ·
+     4 fechamento do pé, contido (a base volta à sombra). Centros separados, intensidades diferentes. */
+  .hero__stage[data-vz-atmosphere="dark"] {
+    --vz-atm-a-x: 4%;
+    --vz-atm-a-y: -2%;
+    --vz-atm-a-rx: 62%;
+    --vz-atm-a-ry: 24%;
+    --vz-atm-a-k: 0.62;
+    --vz-atm-d-x: 32%;
+    --vz-atm-d-y: 64%;
+    --vz-atm-d-rx: 70%;
+    --vz-atm-d-ry: 40%;
+    --vz-atm-d-k: 0.12;
+    --vz-atm-c-x: 64%;
+    --vz-atm-c-y: 46%;
+    --vz-atm-c-rx: 62%;
+    --vz-atm-c-ry: 30%;
+    --vz-atm-c-k: 0.55;
+    --vz-atm-b-x: 52%;
+    --vz-atm-b-y: 110%;
+    --vz-atm-b-rx: 70%;
+    --vz-atm-b-ry: 22%;
+    --vz-atm-b-k: 0.32;
+    /* o Paper entra como matéria, sem lavar a Hero de marrom médio */
+    --vz-atm-mesh-opacity: 0.16;
+  }
+
+  /* base estrutural (atrás da Jade e do shader): Espresso → Shadow → Espresso → Shadow */
+  .hero .hero__bg,
+  .has-light-field .hero__bg {
+    background: linear-gradient(180deg, rgb(36 16 9 / 0.97) 0%, rgb(23 10 6 / 0.97) 42%, rgb(36 16 9 / 0.97) 74%, rgb(23 10 6 / 0.97) 100%);
+  }
+
+  /* o halo de antes (sob o Paper, a 0,55) passa para o véu, acima do shader: aqui ele zera para não somar duas luzes */
+  .hero__bg::before {
+    opacity: 0;
+  }
+
+  /* faixa do menu: Shadow em vez de Grafite, só do lado do menu (o canto esquerdo recebe a luz do topo) */
+  .has-light-field .hero__bg::after {
+    background: linear-gradient(270deg, rgb(23 10 6 / 0.6) 0%, rgb(23 10 6 / 0.3) 45%, rgb(23 10 6 / 0) 75%);
+  }
+
+  .hero__veil {
+    background:
+      /* vinheta lateral: as bordas continuam fundas mesmo com o halo aceso */
+      linear-gradient(90deg, rgb(23 10 6 / 0.38) 0%, rgb(23 10 6 / 0) 30%, rgb(23 10 6 / 0) 72%, rgb(23 10 6 / 0.4) 100%),
+      /* luz atmosférica do topo, no canto do logo; morre antes do menu */
+      radial-gradient(72% 32% at 4% 0%, rgb(215 103 63 / 0.54) 0%, rgb(159 57 48 / 0.3) 28%, rgb(159 57 48 / 0.12) 54%, rgb(23 10 6 / 0) 76%, transparent 100%),
+      /* halo principal: centro atrás da cabeça (50% × 32% do invólucro da águia). Raios de 95% × 90% do invólucro (o prompt
+         pede 70% × 47,5%): no celular a cabeça ocupa quase toda a largura e, com a elipse do prompt, só os stops fracos
+         (≤ 0,18) passavam do contorno — o halo ficava escondido atrás da própria águia. Mesmas cores e alfas; os stops
+         andam um pouco para fora (24/46/64/84% em vez de 18/38/56/76%) para o Páprica médio contornar a cabeça. */
+      radial-gradient(calc(var(--eagle-w) * 0.95) calc(var(--eagle-h) * 0.9) at var(--face-x) calc(var(--eyes-y) + var(--eagle-h) * 0.015), rgb(235 76 24 / 0.9) 0%, rgb(215 103 63 / 0.7) 24%, rgb(159 57 48 / 0.4) 46%, rgb(159 57 48 / 0.18) 64%, rgb(23 10 6 / 0) 84%, transparent 100%),
+      /* luz secundária da plumagem: 55% × 74% do invólucro, bem mais fraca */
+      radial-gradient(calc(var(--eagle-w) * 0.425) calc(var(--eagle-h) * 0.275) at calc(var(--face-x) + var(--eagle-w) * 0.038) calc(var(--eyes-y) + var(--eagle-h) * 0.435), rgb(159 57 48 / 0.22) 0%, rgb(159 57 48 / 0.12) 42%, rgb(23 10 6 / 0) 76%, transparent 100%);
+  }
+
+  /* grade: mesma geometria (82 px), linha Marfim a 0,045 */
+  .hero__grid {
+    opacity: 1;
+  }
+
+  /* proteção de leitura da headline: Shadow em vez de Grafite, mesma geometria (sem faixa: dissolve em 72 px) */
+  .hero__content::before {
+    background: linear-gradient(180deg, rgb(23 10 6 / 0.62) 0, rgb(23 10 6 / 0.42) var(--scrim-end), rgb(23 10 6 / 0) 100%);
+  }
+
+  /* ---------- CTA: proporcional à coluna, preenchimento Páprica aceso; a camada cônica (luz da borda) é a mesma ---------- */
+  .hero .shiny-cta {
+    --shiny-fg: #241009;
+    box-sizing: border-box;
+    width: clamp(268px, 75vw, 328px);
+    max-width: 100%;
+    min-height: 54px;
+    padding: 13px 14px;
+    font-family: "Switzer", sans-serif;
+    font-weight: 600;
+    font-size: clamp(11.75px, 3.3vw, 13.5px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    text-align: center;
+    white-space: normal;
+    background:
+      linear-gradient(110deg, #D7673F 0%, #F0753F 52%, #D7673F 100%) padding-box,
+      conic-gradient(
+        from calc(var(--shiny-angle) - var(--shiny-angle-offset)),
+        transparent,
+        var(--shiny-highlight) var(--shiny-percent),
+        var(--shiny-shine) calc(var(--shiny-percent) * 2),
+        var(--shiny-highlight) calc(var(--shiny-percent) * 3),
+        transparent calc(var(--shiny-percent) * 4)
+      )
+      border-box;
+    box-shadow:
+      0 12px 28px rgb(23 10 6 / 0.42),
+      0 0 24px rgb(215 103 63 / 0.22),
+      inset 0 1px 0 rgb(255 190 133 / 0.23);
+  }
+
+  .hero .shiny-cta:is(:hover, :focus-visible) {
+    box-shadow:
+      0 12px 28px rgb(23 10 6 / 0.42),
+      0 0 24px rgb(215 103 63 / 0.3),
+      inset 0 1px 0 rgb(255 190 133 / 0.23);
+  }
+
+  .hero .shiny-cta:focus-visible {
+    outline: 2px solid #F3EDE3;
+    outline-offset: 3px;
+  }
+}
+
+/* ---------- Cards no celular em retrato: ~30% menores, vidro escuro aquecido, ancorados na águia ---------- */
+@media (max-width: 767.98px) and (orientation: portrait) {
+  .vz-hero-cards {
+    /* passo = altura do 1º card (3 linhas a 11,5 px × 1,32 + 20 px de padding + borda) menos uma sobreposição discreta */
+    --vzc-m-c1-h: calc(11.5px * 1.32 * 3 + 22px);
+    --vzc-m-step: calc(var(--vzc-m-c1-h) - 4px);
+    /* início a 55% da altura do invólucro da águia (topo do invólucro = olhos − 30,5% da altura) */
+    top: calc(var(--eyes-y) + var(--eagle-h) * 0.245);
+    left: clamp(14px, 5.5vw, 25px);
+    width: calc(clamp(153px, 40vw, 182px) + 18px);
+  }
+
+  .vz-hero-cards__stack {
+    height: calc(var(--vzc-m-step) + 11.25px * 1.34 * 5 + 22px + 16px);
+  }
+
+  .vz-hero-cards__motion {
+    width: clamp(145px, 38vw, 170px);
+  }
+
+  .vz-hero-cards__motion--second {
+    left: 18px;
+    width: clamp(153px, 40vw, 182px);
+  }
+
+  .vz-hero-cards__surface.vz-lg,
+  .vz-hero-cards__motion--second .vz-hero-cards__surface.vz-lg {
+    box-sizing: border-box;
+    border: 1px solid rgb(255 169 119 / 0.42);
+    border-radius: 13px;
+    background: linear-gradient(145deg, rgb(91 44 28 / 0.94) 0%, rgb(48 20 13 / 0.91) 60%, rgb(36 16 9 / 0.94) 100%);
+    box-shadow:
+      0 12px 26px rgb(23 10 6 / 0.38),
+      0 0 18px rgb(215 103 63 / 0.18),
+      inset 0 1px 0 rgb(255 190 133 / 0.22),
+      inset 0 -1px 0 rgb(23 10 6 / 0.25);
+    transform: rotateX(5deg) rotateY(-14deg) rotateZ(-8deg);
+  }
+
+  .vz-hero-cards__motion--second .vz-hero-cards__surface.vz-lg {
+    box-shadow:
+      0 12px 26px rgb(23 10 6 / 0.38),
+      0 0 18px rgb(215 103 63 / 0.14),
+      inset 0 1px 0 rgb(255 190 133 / 0.18),
+      inset 0 -1px 0 rgb(23 10 6 / 0.25);
+    transform: rotateX(5deg) rotateY(-14deg) rotateZ(-6deg);
+  }
+
+  /* destaque do ciclo (o de sempre, mesma troca): só o contorno um pouco mais claro, sem halo novo */
+  .vz-hero-cards__stack[data-active="first"] .vz-hero-cards__motion--first .vz-hero-cards__surface.vz-lg,
+  .vz-hero-cards__stack[data-active="second"] .vz-hero-cards__motion--second .vz-hero-cards__surface.vz-lg {
+    border-color: rgb(255 169 119 / 0.58);
+  }
+
+  /* a superfície já é o vidro: sem a película e o contorno do Liquid Glass do desktop (bordas duplas, tom mais claro);
+     o backdrop real fica nos parâmetros do prompt (blur 8 px, saturação 115%) */
+  .vz-hero-cards__surface .vz-lg__tint,
+  .vz-hero-cards__surface .vz-lg__rim {
+    display: none;
+  }
+
+  .vz-hero-cards__surface .vz-lg__backdrop {
+    -webkit-backdrop-filter: blur(8px) saturate(115%);
+    backdrop-filter: blur(8px) saturate(115%);
+  }
+
+  .vz-hero-cards__body {
+    padding: 10px 12px;
+    font-family: "Switzer", sans-serif;
+    font-weight: 500;
+    color: #F3EDE3;
+    text-align: left;
+  }
+
+  .vz-hero-cards__statement {
+    font-size: 11.5px;
+    line-height: 1.32;
+  }
+
+  .vz-hero-cards__argument {
+    font-size: 11.25px;
+    line-height: 1.34;
+  }
+}
+
+@media (max-width: 767.98px) and (orientation: portrait) and (prefers-reduced-motion: reduce) {
+  .vz-hero-cards {
+    --vzc-m-step: calc(var(--vzc-m-c1-h) + 10px);
+  }
+}
