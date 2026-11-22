@@ -641,18 +641,44 @@
     buildPanels();
     return teardownPanels;
   });
-  // celular (08/11/2026): a narrativa do desktop, mesma montagem (build), com a geometria do celular. Mesma condição do
-  // <head>; abaixo de 560px de altura (celular deitado) a seção fica no fluxo editorial estático, tudo visível.
-  mm.add("(prefers-reduced-motion: no-preference) and (min-height: 560px) and (max-width: 767.98px)", () => {
+  // celular (S03 Mobile V1.0, 21/11/2026): fluxo nativo. Antes era a narrativa do desktop com o palco preso por ~2,4
+  // telas (scrub), o que dava a sensação de travamento e deixava os textos em opacidade de repouso. Agora nada fica
+  // preso: headline, águia, os três textos e os quatro cards estão no fluxo e cada um se revela UMA vez quando ~12% dele
+  // entra na tela (opacidade + translate curtos, css/sections.css "S03 MOBILE V1.0"). Depois disso fica visível,
+  // inclusive na volta. Sem listener de rolagem, sem pin, sem scrub; o que já passou acima da tela entra direto.
+  mm.add("(prefers-reduced-motion: no-preference) and (max-width: 767.98px)", () => {
     window.__vzS03Ready = true;
-    const added = !root.classList.contains("s03-motion-m");
-    root.classList.add("s03-motion-m");
-    build("mobile");
-    if (added) ScrollTrigger.refresh();
+    root.classList.add("s03-reveal-m");
+    revealS03Insights();
+    const cards = s03Insights ? [...s03Insights.children] : [];
+    const items = [title, eagle, ...paras, ...cards].filter(Boolean);
+    const show = (el) => {
+      el.classList.add("is-in");
+      io.unobserve(el);
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        // os que entram juntos seguem a ordem do documento, com no máximo 70 ms entre um e outro
+        let k = 0;
+        entries
+          .filter((en) => en.isIntersecting)
+          .sort((a, b) => items.indexOf(a.target) - items.indexOf(b.target))
+          .forEach((en) => {
+            if (cards.includes(en.target)) en.target.style.transitionDelay = `${Math.min(k++, 2) * 70}ms`;
+            show(en.target);
+          });
+      },
+      // topo estendido: o que já passou acima da tela conta como visto (um salto de rolagem não deixa nada oculto)
+      { threshold: 0.12, rootMargin: "100000px 0px -8% 0px" },
+    );
+    items.forEach((el) => io.observe(el));
     return () => {
-      teardown();
-      root.classList.remove("s03-motion-m");
-      ScrollTrigger.refresh();
+      io.disconnect();
+      root.classList.remove("s03-reveal-m");
+      items.forEach((el) => {
+        el.classList.remove("is-in");
+        el.style.removeProperty("transition-delay");
+      });
     };
   });
   // mesma condição do <head>: desktop, movimento permitido e altura que comporta headline + parágrafo juntos

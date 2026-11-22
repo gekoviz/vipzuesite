@@ -29,8 +29,10 @@
       // movimento permitido e altura ≥ 560px; se o script não assumir, volta ao fluxo normal. De 768 a 1023px a seção
       // segue em fluxo (painéis numerados).
       if (window.matchMedia && matchMedia("(prefers-reduced-motion: no-preference) and (min-height: 560px) and (min-width: 1024px)").matches) root.classList.add("s03-motion");
-      if (window.matchMedia && matchMedia("(prefers-reduced-motion: no-preference) and (min-height: 560px) and (max-width: 767.98px)").matches) root.classList.add("s03-motion-m");
-      setTimeout(function () { if (!window.__vzS03Ready) root.classList.remove("s03-motion", "s03-motion-m"); }, 3000);
+      // Celular (21/11/2026, S03 Mobile V1.0): sem palco preso; a seção rola no fluxo nativo e cada bloco só se revela
+      // uma vez ao entrar na tela (s03-reveal-m, js/scroll-narrative.js). Sem o script, a classe cai e tudo fica visível.
+      if (window.matchMedia && matchMedia("(prefers-reduced-motion: no-preference) and (max-width: 767.98px)").matches) root.classList.add("s03-reveal-m");
+      setTimeout(function () { if (!window.__vzS03Ready) root.classList.remove("s03-motion", "s03-motion-m", "s03-reveal-m"); }, 3000);
       // Segurança: nunca deixar o conteúdo oculto se o JS de motion não carregar.
       setTimeout(function () { root.classList.remove("is-loading"); }, 2500);
     })();

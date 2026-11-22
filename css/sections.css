@@ -4169,3 +4169,201 @@ html.has-curtain .footer-curtain .site-footer {
     stroke-dashoffset: 0 !important;
   }
 }
+
+/* =========================================================
+   S03 MOBILE V1.0 (prompt mestre, 21/11/2026) — rolagem nativa, profundidade cromática e cards mais definidos
+   Só abaixo de 768 px. A narrativa presa do celular (.s03-motion-m) deixou de ser ligada: a seção usa a base em fluxo
+   deste arquivo ("S03 MOBILE · composição editorial") e, com movimento permitido, .s03-reveal-m revela cada bloco uma
+   vez (js/scroll-narrative.js). A entrada usa a propriedade `translate`, independente dos transforms existentes.
+   ========================================================= */
+@media (max-width: 767.98px) and (prefers-reduced-motion: no-preference) {
+  .s03-reveal-m #o-que-fazemos.s03 :is(.s03__title, .s03__eagle, .s03__text, .s03-mobile__feature-card) {
+    opacity: 0;
+    translate: 0 12px;
+    transition:
+      opacity 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      translate 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .s03-reveal-m #o-que-fazemos.s03 .s03__title {
+    transition-duration: 350ms;
+  }
+
+  .s03-reveal-m #o-que-fazemos.s03 .s03__eagle {
+    transition-duration: 450ms;
+  }
+
+  .s03-reveal-m #o-que-fazemos.s03 .s03-mobile__feature-card {
+    translate: 0 14px;
+    transition-duration: 320ms;
+  }
+
+  .s03-reveal-m #o-que-fazemos.s03 :is(.s03__title, .s03__eagle, .s03__text, .s03-mobile__feature-card).is-in {
+    opacity: 1;
+    translate: none;
+  }
+}
+
+/* ---------- S03 Mobile V1.0 · fundo: base Shadow/Espresso na altura real da seção, luz localizada nas águias ----------
+   Ordem: base (.vz-atmosphere, altura da seção) → Jade + Paper (quadro preso à tela, agora transparente) → grade Marfim
+   (::after do quadro) → luz do topo e da águia no galho (::before da figura, sob o asset) → águia → texto → cards.
+   A luz Páprica presa à tela (canto do quadro) sai no celular: ela acompanhava a rolagem e caía atrás dos cards; a luz
+   do topo passa a pertencer ao início da seção. A segunda águia (divisa) ganha a luz secundária no ::before da divisa,
+   sob o asset, dissolvida antes da junção para não marcar a Seção 04. */
+@media (max-width: 767.98px) {
+  #o-que-fazemos.s03 {
+    --s03-shadow: #170A06;
+    --s03-espresso: #241009;
+    --s03-mocha: #5B4632;
+    --s03-paprika-deep: #9F3930;
+    --s03-paprika: #D7673F;
+    --s03-ivory: #F3EDE3;
+    --s03-card-top: #371C16;
+    --s03-card-bottom: #241009;
+    --s03-title-lit: #E37B56;
+    /* geometria da águia no galho (as mesmas medidas da regra .s03-mobile__eagle; recalibradas abaixo de 375/360 px) */
+    --s03m-ew: min(92vw, 400px);
+    --s03m-er: 39vw;
+    --s03m-et: 44px;
+    /* Jade mais contida: a luz principal passa a ser localizada; o meio volta à sombra */
+    --vz-atm-a-k: 0.4;
+    --vz-atm-b-k: 0.3;
+    --vz-atm-c-k: 0.22;
+    --vz-atm-d-k: 0.08;
+    --vz-atm-mesh-opacity: 0.14;
+  }
+
+  #o-que-fazemos > .vz-atmosphere {
+    background:
+      linear-gradient(180deg, var(--s03-espresso) 0%, var(--s03-shadow) 30%, var(--s03-espresso) 60%, var(--s03-shadow) 85%, var(--s03-espresso) 100%)
+      var(--s03-shadow);
+  }
+
+  #o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame {
+    background-color: transparent;
+  }
+
+  #o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame::before {
+    background-image: none;
+  }
+
+  /* grade: a mesma (44 px, 1 px), em Marfim a 0,045 — textura nas regiões escuras, nunca protagonista */
+  #o-que-fazemos > .vz-atmosphere > .vz-atmosphere__frame::after {
+    background-image:
+      linear-gradient(to right, rgb(243 237 227 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(243 237 227 / 0.045) 1px, transparent 1px);
+    opacity: 1;
+    /* o quadro assenta no fim da seção na divisa: a grade dissolve nos últimos 96 px em vez de parar seca na junção */
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 96px), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 96px), transparent 100%);
+  }
+
+  /* luz do topo (12% × 0, 78% × 36%) e luz da águia no galho, sob o asset (z −1 dentro da figura) */
+  #o-que-fazemos.s03 .s03__figure::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        calc(var(--s03m-ew) * 0.65) calc(var(--s03m-ew) * 0.367)
+          at calc(100% + var(--s03m-er) - var(--s03m-ew) * 0.64) calc(var(--s03m-et) + var(--s03m-ew) * 0.28),
+        rgb(215 103 63 / 0.62) 0%, rgb(159 57 48 / 0.42) 22%, rgb(159 57 48 / 0.18) 46%, rgb(159 57 48 / 0) 72%, transparent 100%
+      ),
+      radial-gradient(78% 36% at 12% 0%, rgb(159 57 48 / 0.45) 0%, rgb(159 57 48 / 0.25) 25%, rgb(91 70 50 / 0.1) 55%, rgb(91 70 50 / 0) 80%, transparent 100%);
+  }
+
+  /* luz secundária da águia em voo (divisa): sob o asset, ancorada na posição dela, some antes da junção */
+  .s03-seam::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 340px;
+    pointer-events: none;
+    background: radial-gradient(64% 60% at 77% 70%, rgb(159 57 48 / 0.42) 0%, rgb(159 57 48 / 0.25) 28%, rgb(91 70 50 / 0.1) 55%, rgb(91 70 50 / 0) 80%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+  }
+
+  /* textos: Marfim pleno, opacidade final 1 */
+  #o-que-fazemos.s03 .s03-mobile__narrative .s03__text {
+    color: var(--s03-ivory);
+  }
+}
+
+@media (max-width: 374.98px) {
+  #o-que-fazemos.s03 {
+    --s03m-er: 43vw;
+  }
+}
+
+@media (max-width: 359.98px) {
+  #o-que-fazemos.s03 {
+    --s03m-ew: 88vw;
+    --s03m-er: 47vw;
+    --s03m-et: 58px;
+  }
+}
+
+/* ---------- S03 Mobile V1.0 · cards: superfície escura definida, contorno Marfim discreto, mesma onda ----------
+   Dimensões, padding, raio, tipografia e conteúdo são os de antes; só o espaço entre os cards vai a 16 px. A película
+   (z 2) vira a superfície Espresso a 145°; a onda original (z 3), o contorno (z 4) e o conteúdo (z 5) continuam por cima. */
+@media (max-width: 767.98px) {
+  html:not(.s03-motion) #o-que-fazemos .s03-insights {
+    gap: 16px;
+  }
+
+  #o-que-fazemos .vz-s3-glass-card {
+    box-shadow:
+      0 14px 30px rgb(23 10 6 / 0.32),
+      0 0 18px rgb(215 103 63 / 0.06);
+  }
+
+  #o-que-fazemos .vz-s3-glass-card > .vz-s3-lg__tint {
+    background: linear-gradient(145deg, rgb(55 28 22 / 0.94) 0%, rgb(45 23 18 / 0.94) 52%, rgb(36 16 9 / 0.95) 100%);
+    box-shadow:
+      inset 0 1px 0 rgb(243 237 227 / 0.07),
+      inset 0 -1px 0 rgb(23 10 6 / 0.28);
+  }
+
+  #o-que-fazemos .vz-s3-glass-card > .vz-s3-glass__rim {
+    background: linear-gradient(rgb(243 237 227 / 0.18), rgb(243 237 227 / 0.18)) border-box;
+    opacity: 1;
+  }
+}
+
+/* ---------- S03 Mobile V1.0 · leitura sobre a onda e a cor do acento ----------
+   A onda continua a mesma (asset, janela, curva, keyframes, fases); só a parte dela que passa ATRÁS DO TEXTO fica mais
+   baixa, por máscara de faixa na própria janela (os cards têm altura fixa de 170 px e o texto, posição fixa: número
+   23–51, título 63–91, descrição 104–147). Nas janelas de baixo (85–169 px do card) a faixa do título e da descrição vai
+   a 0,3 e a borda inferior volta a 100%; na janela de cima à direita (1–85) só o rodapé dela, onde o título entra.
+   Número e título: a variação local #E37B56 (Páprica acesa), só aqui; a Páprica institucional não muda. */
+@media (max-width: 767.98px) {
+  /* a máscara original da janela (forma do reflexo) × a faixa de leitura, por interseção */
+  #o-que-fazemos .vz-s3-glass-card[data-vz-wave^="bottom"] > .vz-s3-glass__wave-window {
+    -webkit-mask-image: radial-gradient(ellipse 100% 106% at 14% 87%, #000 0%, #000 38%, rgb(0 0 0 / 0.7) 60%, transparent 100%), linear-gradient(to bottom, rgb(0 0 0 / 0.3) 0, rgb(0 0 0 / 0.3) 63px, #000 76px);
+    -webkit-mask-composite: source-in;
+    mask-image: radial-gradient(ellipse 100% 106% at 14% 87%, #000 0%, #000 38%, rgb(0 0 0 / 0.7) 60%, transparent 100%), linear-gradient(to bottom, rgb(0 0 0 / 0.3) 0, rgb(0 0 0 / 0.3) 63px, #000 76px);
+    mask-composite: intersect;
+  }
+
+  /* esta janela está girada 180°: o rodapé visual (onde o título entra) é o topo local dela */
+  #o-que-fazemos .vz-s3-glass-card[data-vz-wave="top-right"] > .vz-s3-glass__wave-window {
+    -webkit-mask-image: radial-gradient(ellipse 100% 106% at 14% 87%, #000 0%, #000 38%, rgb(0 0 0 / 0.7) 60%, transparent 100%), linear-gradient(to bottom, rgb(0 0 0 / 0.3) 0, rgb(0 0 0 / 0.3) 25px, #000 36px);
+    -webkit-mask-composite: source-in;
+    mask-image: radial-gradient(ellipse 100% 106% at 14% 87%, #000 0%, #000 38%, rgb(0 0 0 / 0.7) 60%, transparent 100%), linear-gradient(to bottom, rgb(0 0 0 / 0.3) 0, rgb(0 0 0 / 0.3) 25px, #000 36px);
+    mask-composite: intersect;
+  }
+
+  /* o número tem cor com !important na regra base do vidro (V4): o override local precisa do mesmo peso */
+  #o-que-fazemos .vz-s3-glass-card [data-vz-s3-number] {
+    color: var(--s03-title-lit) !important;
+  }
+
+  #o-que-fazemos .vz-s3-glass-card [data-vz-s3-title] {
+    color: var(--s03-title-lit);
+  }
+}
